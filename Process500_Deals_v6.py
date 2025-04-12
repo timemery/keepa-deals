@@ -28,6 +28,8 @@ PRODUCT_TYPES = {0: 'ABIS_BOOK', 1: 'ABIS_MUSIC'}
 # Chunk 1 ends
 
 # Chunk 2 starts
+import time
+
 def fetch_deals(page):
     selection = DEAL_FILTERS.copy()
     selection["page"] = page
@@ -40,11 +42,43 @@ def fetch_deals(page):
     return deals
 
 def fetch_product(asin, stats_period):
-    url = f'{BASE_URL}/product?key={api_key}&domain=1&asin={asin}&stats={stats_period}'
+    url = f'{BASE_URL}/product?key={api_key}&domain=1&asin={asin}&stats={stats_period}&offers=20&rating=1'
     print(f"Fetching product URL: {url}")
     response = requests.get(url, headers=headers)
     print(f"Product fetch status: {response.status_code}")
+    if response.status_code == 429:
+        print("Rate limit hit - sleeping for 5 seconds")
+        time.sleep(5)
+        return fetch_product(asin, stats_period)  # Retry
+    tokens_left = response.json().get('tokensLeft', -1)
+    print(f"Tokens left after fetch: {tokens_left}")
+    if tokens_left < 100:
+        sleep_time = max(5, (100 - tokens_left) // 5)
+        print(f"Low tokens ({tokens_left}) - sleeping for {sleep_time} seconds")
+        time.sleep(sleep_time)
     product = response.json().get('products', [])[0] if response.json().get('products') else {}
+    print(f"ASIN {asin} full response: {json.dumps(product, indent=2)}")
+    offers = product.get('offers', [])
+    print(f"Offers found: {len(offers)}")
+    buy_box_used = -1
+    if not offers:
+        print(f"No offers returned for ASIN {asin}")
+    for offer in offers:
+        is_bb = offer.get('isBuyBox', False)
+        cond = offer.get('condition', -1)
+        price = offer.get('price', -1)
+        print(f"Offer check: isBuyBox={is_bb}, condition={cond}, price={price}")
+        if is_bb and cond in [2, 3, 4, 5]:
+            buy_box_used = price
+            print(f"Found Buy Box Used: {buy_box_used}")
+            break
+    if 'stats' in product and 'current' in product['stats']:
+        print(f"Before update: stats.current = {product['stats']['current']}")
+        product['stats']['current'][11] = buy_box_used
+    else:
+        print(f"Warning: No stats.current for ASIN {asin} - using default")
+        product['stats'] = {'current': [-1] * 12}
+        product['stats']['current'][11] = buy_box_used
     print(f"ASIN {asin} stats ({stats_period}-day): {json.dumps(product.get('stats', {}), indent=2)}")
     return product
 # Chunk 2 ends
@@ -258,159 +292,66 @@ def get_field(data, deal_data, product_90, header, field):
     elif header == "Keepa Link":
         asin = data.get('asin', '')
         return f"https://keepa.com/#!product/1-{asin}" if asin else '-'
-    elif header.startswith("Sales Rank - "):
-        if header == "Sales Rank - Current":
-            value = current[3] if len(current) > 3 and current[3] is not None else -1
-            print(f"Sales Rank - Current: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - 30 days avg.":
-            value = stats_90.get('avg30', [-1] * 20)[3] if len(stats_90.get('avg30', [-1] * 20)) > 3 and stats_90.get('avg30', [-1] * 20)[3] is not None else -1
-            print(f"Sales Rank - 30 days avg.: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - 60 days avg.":
-            value = stats_90.get('avg', [-1] * 20)[3] if len(stats_90.get('avg', [-1] * 20)) > 3 and stats_90.get('avg', [-1] * 20)[3] is not None else -1
-            print(f"Sales Rank - 60 days avg.: value={value}")
-            return f"{value:,}" if value > 0 else 'DROP'
-        elif header == "Sales Rank - 90 days avg.":
-            value = stats_90.get('avg90', [-1] * 20)[3] if len(stats_90.get('avg90', [-1] * 20)) > 3 and stats_90.get('avg90', [-1] * 20)[3] is not None else -1
-            print(f"Sales Rank - 90 days avg.: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - 180 days avg.":
-            value = stats_365.get('avg180', [-1] * 20)[3] if len(stats_365.get('avg180', [-1] * 20)) > 3 and stats_365.get('avg180', [-1] * 20)[3] is not None else -1
-            print(f"Sales Rank - 180 days avg.: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - 365 days avg.":
-            value = stats_365.get('avg365', [-1] * 20)[3] if len(stats_365.get('avg365', [-1] * 20)) > 3 and stats_365.get('avg365', [-1] * 20)[3] is not None else -1
-            print(f"Sales Rank - 365 days avg.: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - Lowest":
-            value = stats_365.get('min', [-1] * 20)[3] if len(stats_365.get('min', [-1] * 20)) > 3 and stats_365.get('min', [-1] * 20)[3] is not None else -1
-            if isinstance(value, list):
-                value = min(value) if value else -1
-            print(f"Sales Rank - Lowest: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - Lowest 365 days":
-            value = stats_365.get('min365', [-1] * 20)[3] if len(stats_365.get('min365', [-1] * 20)) > 3 and stats_365.get('min365', [-1] * 20)[3] is not None else -1
-            if isinstance(value, list):
-                value = min(value) if value else -1
-            print(f"Sales Rank - Lowest 365 days: value={value}")
-            return f"{value:,}" if value > 0 else 'DROP'
-        elif header == "Sales Rank - Highest":
-            value = stats_365.get('max', [-1] * 20)[3] if len(stats_365.get('max', [-1] * 20)) > 3 and stats_365.get('max', [-1] * 20)[3] is not None else -1
-            if isinstance(value, list):
-                value = max(value) if value else -1
-            print(f"Sales Rank - Highest: value={value}")
-            return f"{value:,}" if value > 0 else '-'
-        elif header == "Sales Rank - Highest 365 days":
-            value = stats_365.get('max365', [-1] * 20)[3] if len(stats_365.get('max365', [-1] * 20)) > 3 and stats_365.get('max365', [-1] * 20)[3] is not None else -1
-            if isinstance(value, list):
-                value = max(value) if value else -1
-            print(f"Sales Rank - Highest 365 days: value={value}")
-            return f"{value:,}" if value > 0 else 'DROP'
-        elif header == "Sales Rank - Drops last 30 days":
-            value = stats_90.get('salesRankDrops30', -1)
-            print(f"Sales Rank - Drops last 30 days: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Sales Rank - Drops last 60 days":
-            value = stats_90.get('salesRankDrops60', -1)
-            print(f"Sales Rank - Drops last 60 days: value={value}")
-            return str(value) if value > 0 else 'DROP'
-        elif header == "Sales Rank - Drops last 90 days":
-            value = stats_90.get('salesRankDrops90', -1)
-            print(f"Sales Rank - Drops last 90 days: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Sales Rank - Drops last 180 days":
-            value = stats_365.get('salesRankDrops180', -1)
-            print(f"Sales Rank - Drops last 180 days: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Sales Rank - Drops last 365 days":
-            value = stats_365.get('salesRankDrops365', -1)
-            print(f"Sales Rank - Drops last 365 days: value={value}")
-            return str(value) if value > 0 else '-'
-    elif header.startswith("Reviews - "):
-        if header == "Reviews - Current":
-            value = current[18] if len(current) > 18 and current[18] is not None else -1
-            print(f"Reviews - Current: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Reviews - 30 days avg.":
-            value = stats_90.get('avg30', [-1] * 20)[18] if len(stats_90.get('avg30', [-1] * 20)) > 18 and stats_90.get('avg30', [-1] * 20)[18] is not None else -1
-            print(f"Reviews - 30 days avg.: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Reviews - 60 days avg.":
-            value = stats_90.get('avg', [-1] * 20)[18] if len(stats_90.get('avg', [-1] * 20)) > 18 and stats_90.get('avg', [-1] * 20)[18] is not None else -1
-            print(f"Reviews - 60 days avg.: value={value}")
-            return str(value) if value > 0 else 'DROP'
-        elif header == "Reviews - 90 days avg.":
-            value = stats_90.get('avg90', [-1] * 20)[18] if len(stats_90.get('avg90', [-1] * 20)) > 18 and stats_90.get('avg90', [-1] * 20)[18] is not None else -1
-            print(f"Reviews - 90 days avg.: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Reviews - 180 days avg.":
-            value = stats_365.get('avg180', [-1] * 20)[18] if len(stats_365.get('avg180', [-1] * 20)) > 18 and stats_365.get('avg180', [-1] * 20)[18] is not None else -1
-            print(f"Reviews - 180 days avg.: value={value}")
-            return str(value) if value > 0 else '-'
-        elif header == "Reviews - 365 days avg.":
-            value = stats_365.get('avg365', [-1] * 20)[18] if len(stats_365.get('avg365', [-1] * 20)) > 18 and stats_365.get('avg365', [-1] * 20)[18] is not None else -1
-            print(f"Reviews - 365 days avg.: value={value}")
-            return str(value) if value > 0 else '-'
-    elif header.startswith("Buy Box - "):
-        if header == "Buy Box - Current":
-            value = current[10] if len(current) > 10 and current[10] is not None else -1
-            print(f"Buy Box - Current: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - 30 days avg.":
-            value = stats_90.get('avg30', [-1] * 20)[10] if len(stats_90.get('avg30', [-1] * 20)) > 10 and stats_90.get('avg30', [-1] * 20)[10] is not None else -1
-            print(f"Buy Box - 30 days avg.: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - 60 days avg.":
-            value = stats_90.get('avg', [-1] * 20)[10] if len(stats_90.get('avg', [-1] * 20)) > 10 and stats_90.get('avg', [-1] * 20)[10] is not None else -1
-            print(f"Buy Box - 60 days avg.: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else 'DROP'
-        elif header == "Buy Box - 90 days avg.":
-            value = stats_90.get('avg90', [-1] * 20)[10] if len(stats_90.get('avg90', [-1] * 20)) > 10 and stats_90.get('avg90', [-1] * 20)[10] is not None else -1
-            print(f"Buy Box - 90 days avg.: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - 180 days avg.":
-            value = stats_365.get('avg180', [-1] * 20)[10] if len(stats_365.get('avg180', [-1] * 20)) > 10 and stats_365.get('avg180', [-1] * 20)[10] is not None else -1
-            print(f"Buy Box - 180 days avg.: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - 365 days avg.":
-            value = stats_365.get('avg365', [-1] * 20)[10] if len(stats_365.get('avg365', [-1] * 20)) > 10 and stats_365.get('avg365', [-1] * 20)[10] is not None else -1
-            print(f"Buy Box - 365 days avg.: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - Lowest":
-            value = stats_365.get('min', [-1] * 20)[10] if len(stats_365.get('min', [-1] * 20)) > 10 and stats_365.get('min', [-1] * 20)[10] is not None else -1
-            if isinstance(value, list):
-                value = min(value) if value else -1
-            print(f"Buy Box - Lowest: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - Lowest 365 days":
-            value = stats_365.get('min365', [-1] * 20)[10] if len(stats_365.get('min365', [-1] * 20)) > 10 and stats_365.get('min365', [-1] * 20)[10] is not None else -1
-            if isinstance(value, list):
-                value = min(value) if value else -1
-            print(f"Buy Box - Lowest 365 days: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else 'DROP'
-        elif header == "Buy Box - Highest":
-            value = stats_365.get('max', [-1] * 20)[10] if len(stats_365.get('max', [-1] * 20)) > 10 and stats_365.get('max', [-1] * 20)[10] is not None else -1
-            if isinstance(value, list):
-                value = max(value) if value else -1
-            print(f"Buy Box - Highest: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else '-'
-        elif header == "Buy Box - Highest 365 days":
-            value = stats_365.get('max365', [-1] * 20)[10] if len(stats_365.get('max365', [-1] * 20)) > 10 and stats_365.get('max365', [-1] * 20)[10] is not None else -1
-            if isinstance(value, list):
-                value = max(value) if value else -1
-            print(f"Buy Box - Highest 365 days: value={value}")
-            return f"${value / 100:.2f}" if value > 0 else 'DROP'
-        elif header == "Buy Box - 90 days OOS":
-            value = stats_90.get('outOfStockPercentage90', [-1] * 20)[10] if len(stats_90.get('outOfStockPercentage90', [-1] * 20)) > 10 and stats_90.get('outOfStockPercentage90', [-1] * 20)[10] is not None else -1
-            print(f"Buy Box - 90 days OOS: value={value}")
-            return f"{value}%" if value >= 0 else '-'
-        elif header == "Buy Box - Stock":
-            value = data.get('buyBoxStock', '')
-            print(f"Buy Box - Stock: value={value}")
-            return str(value) if value else "DROP"
 
-    # Generic field handling
+    # Generic stats handler (replaces Reviews -, Sales Rank -, Buy Box -)
+    elif field.startswith('stats.'):
+        if '[' in field:
+            key, idx_part = field.split('[')
+            idx = int(idx_part.rstrip(']'))
+            if 'current' in key:
+                value = stats_365.get('current', [-1] * 20)[idx] if len(stats_365.get('current', [-1] * 20)) > idx and stats_365.get('current', [-1] * 20)[idx] is not None else -1
+            elif 'avg30' in key:
+                value = stats_90.get('avg30', [-1] * 20)[idx] if len(stats_90.get('avg30', [-1] * 20)) > idx and stats_90.get('avg30', [-1] * 20)[idx] is not None else -1
+            elif 'avg' in key and '60 days' in header:  # Special case for 60-day default
+                value = stats_90.get('avg', [-1] * 20)[idx] if len(stats_90.get('avg', [-1] * 20)) > idx and stats_90.get('avg', [-1] * 20)[idx] is not None else -1
+            elif 'avg90' in key:
+                value = stats_90.get('avg90', [-1] * 20)[idx] if len(stats_90.get('avg90', [-1] * 20)) > idx and stats_90.get('avg90', [-1] * 20)[idx] is not None else -1
+            elif 'avg180' in key:
+                value = stats_365.get('avg180', [-1] * 20)[idx] if len(stats_365.get('avg180', [-1] * 20)) > idx and stats_365.get('avg180', [-1] * 20)[idx] is not None else -1
+            elif 'avg365' in key:
+                value = stats_365.get('avg365', [-1] * 20)[idx] if len(stats_365.get('avg365', [-1] * 20)) > idx and stats_365.get('avg365', [-1] * 20)[idx] is not None else -1
+            elif 'min' in key:
+                value = stats_365.get('min', [-1] * 20)[idx] if len(stats_365.get('min', [-1] * 20)) > idx and stats_365.get('min', [-1] * 20)[idx] is not None else -1
+                if isinstance(value, list):
+                    value = min(value) if value else -1
+            elif 'min365' in key:
+                value = stats_365.get('min365', [-1] * 20)[idx] if len(stats_365.get('min365', [-1] * 20)) > idx and stats_365.get('min365', [-1] * 20)[idx] is not None else -1
+                if isinstance(value, list):
+                    value = min(value) if value else -1
+            elif 'max' in key:
+                value = stats_365.get('max', [-1] * 20)[idx] if len(stats_365.get('max', [-1] * 20)) > idx and stats_365.get('max', [-1] * 20)[idx] is not None else -1
+                if isinstance(value, list):
+                    value = max(value) if value else -1
+            elif 'max365' in key:
+                value = stats_365.get('max365', [-1] * 20)[idx] if len(stats_365.get('max365', [-1] * 20)) > idx and stats_365.get('max365', [-1] * 20)[idx] is not None else -1
+                if isinstance(value, list):
+                    value = max(value) if value else -1
+            elif 'outOfStockPercentage90' in key:
+                value = stats_90.get('outOfStockPercentage90', [-1] * 20)[idx] if len(stats_90.get('outOfStockPercentage90', [-1] * 20)) > idx and stats_90.get('outOfStockPercentage90', [-1] * 20)[idx] is not None else -1
+            else:
+                value = -1
+        else:  # Non-indexed stats fields (e.g., salesRankDrops30)
+            key = field.split('.')[1]  # e.g., "salesRankDrops30"
+            if 'salesRankDrops' in key:
+                drop_period = key.split('salesRankDrops')[1]
+                value = stats_90.get(f'salesRankDrops{drop_period}', -1) if '90' in drop_period or '30' in drop_period or '60' in drop_period else stats_365.get(f'salesRankDrops{drop_period}', -1)
+            else:
+                value = -1
+        print(f"{header}: value={value}")
+        # Format based on field type
+        if header.startswith("Reviews - "):
+            return str(value) if value > 0 else '-' if '60 days' not in header else 'DROP'
+        elif header.startswith("Sales Rank - "):
+            if 'Drops' in header:
+                return str(value) if value > 0 else '-' if '60 days' not in header else 'DROP'
+            return f"{value:,}" if value > 0 else '-' if '60 days' not in header else 'DROP'
+        elif header.startswith("Buy Box - "):
+            if 'OOS' in header:
+                return f"{value}%" if value >= 0 else '-'
+            return f"${value / 100:.2f}" if value > 0 else '-' if '60 days' not in header else 'DROP'
+        return str(value) if value > 0 else '-'  # Default for other stats fields
+
+    # Generic field handling (unchanged)
     elif field.startswith('https'):
         return field.format(asin=data.get('asin', ''))
     elif field in ['dealAdded', 'lastUpdate', 'lastPriceChange']:
@@ -449,6 +390,7 @@ def get_field(data, deal_data, product_90, header, field):
             return f"${value / 100:.2f}" if value > 0 else '-'
         return str(value) if value > 0 else '-'
 
+    # Direct fields (unchanged)
     value = data.get(field, '')
     if value in [None, '', 'None', -1, 0] and header not in ['Package - Quantity']:
         if header in ['Variation Attributes', 'Buy Box - Stock', 'Amazon - Stock', 'New - Stock', 
