@@ -414,7 +414,7 @@ def extract_fields(deal, product_90, product_365):
 # Chunk 6 ends
 
 # Chunk 7 starts
-def write_csv(data, filename='/home/timscripts/keepa_api/keepa_full_deals_v6.csv'):
+def write_csv(data, filename='keepa_full_deals_v6.csv'):  # Changed path
     try:
         if os.path.exists(filename):
             os.remove(filename)
