@@ -226,16 +226,5 @@
   "Used Offer Count - 60 days avg.": "stats.avg60[7]",
   "Used Offer Count - 90 days avg.": "stats.avg90[7]",
   "Used Offer Count - 180 days avg.": "stats.avg180[7]",
-  "Used Offer Count - 365 days avg.": "stats.avg365[7]",
-  "Warehouse Deals - Current": "stats.current[8]",
-  "Warehouse Deals - 30 days avg.": "stats.avg30[8]",
-  "Warehouse Deals - 60 days avg.": "stats.avg60[8]",
-  "Warehouse Deals - 90 days avg.": "stats.avg90[8]",
-  "Warehouse Deals - 180 days avg.": "stats.avg180[8]",
-  "Warehouse Deals - 365 days avg.": "stats.avg365[8]",
-  "Warehouse Deals - Lowest": "stats.min[8]",
-  "Warehouse Deals - Lowest 365 days": "stats.min365[8]",
-  "Warehouse Deals - Highest": "stats.max[8]",
-  "Warehouse Deals - Highest 365 days": "stats.max365[8]",
-  "Warehouse Deals - 90 days OOS": "stats.outOfStockPercentage90[8]"
+  "Used Offer Count - 365 days avg.": "stats.avg365[7]"
 }

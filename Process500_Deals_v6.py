@@ -7,17 +7,17 @@ import urllib.parse
 from datetime import datetime, timedelta
 from pytz import timezone
 
-with open('/home/timscripts/keepa_api/config.json') as file:
+with open(os.path.join(os.path.dirname(__file__), 'config.json')) as file:
     config = json.load(file)
     api_key = config['api_key']
 
-with open('/home/timscripts/keepa_api/deal_filters.json') as file:
+with open(os.path.join(os.path.dirname(__file__), 'deal_filters.json')) as file:
     DEAL_FILTERS = json.load(file)
 
-with open('/home/timscripts/keepa_api/headers.json') as file:
+with open(os.path.join(os.path.dirname(__file__), 'headers.json')) as file:
     HEADERS = json.load(file)
 
-with open('/home/timscripts/keepa_api/field_mapping.json') as file:
+with open(os.path.join(os.path.dirname(__file__), 'field_mapping.json')) as file:
     FIELD_MAPPING = json.load(file)
 
 BASE_URL = 'https://api.keepa.com'
