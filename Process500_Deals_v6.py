@@ -35,56 +35,39 @@ def fetch_deals(page):
     selection["page"] = page
     selection_str = json.dumps(selection)
     url = f'{BASE_URL}/deal?key={api_key}&selection={urllib.parse.quote(selection_str)}'
-    print(f"DEBUG: Fetching deals URL: {url}")
-    start_time = time.time()
     response = requests.get(url, headers=headers)
-    elapsed = time.time() - start_time
-    print(f"DEBUG: Deal fetch took {elapsed:.2f}s, status: {response.status_code}")
     deals = response.json().get('deals', {}).get('dr', [])
-    print(f"DEBUG: Fetched {len(deals)} deals, tokens left: {response.json().get('tokensLeft')}")
     return deals
 
 def fetch_product(asin, stats_period):
     url = f'{BASE_URL}/product?key={api_key}&domain=1&asin={asin}&stats={stats_period}&offers=20&rating=1'
-    print(f"DEBUG: Fetching product URL: {url}")
-    start_time = time.time()
     response = requests.get(url, headers=headers)
-    elapsed = time.time() - start_time
-    print(f"DEBUG: Product fetch took {elapsed:.2f}s, status: {response.status_code}")
     if response.status_code == 429:
         print("Rate limit hit - sleeping for 5 seconds")
         time.sleep(5)
         return fetch_product(asin, stats_period)  # Retry
     tokens_left = response.json().get('tokensLeft', -1)
-    print(f"DEBUG: Tokens left after fetch: {tokens_left}")
     if tokens_left < 100:
         sleep_time = max(5, (100 - tokens_left) // 5)
         print(f"Low tokens ({tokens_left}) - sleeping for {sleep_time} seconds")
         time.sleep(sleep_time)
     product = response.json().get('products', [])[0] if response.json().get('products') else {}
-    print(f"DEBUG: ASIN {asin} response size: {len(json.dumps(product))} bytes")
     offers = product.get('offers', [])
-    print(f"DEBUG: Offers found: {len(offers)}")
     buy_box_used = -1
     if not offers:
-        print(f"DEBUG: No offers for ASIN {asin}")
+        pass
     for offer in offers:
         is_bb = offer.get('isBuyBox', False)
         cond = offer.get('condition', -1)
         price = offer.get('price', -1)
-        print(f"DEBUG: Offer check: isBuyBox={is_bb}, condition={cond}, price={price}")
         if is_bb and cond in [2, 3, 4, 5]:
             buy_box_used = price
-            print(f"DEBUG: Found Buy Box Used: {buy_box_used}")
             break
     if 'stats' in product and 'current' in product['stats']:
-        print(f"DEBUG: Before update: stats.current = {product['stats']['current']}")
         product['stats']['current'][11] = buy_box_used
     else:
-        print(f"DEBUG: No stats.current for ASIN {asin} - using default")
         product['stats'] = {'current': [-1] * 12}
         product['stats']['current'][11] = buy_box_used
-    print(f"DEBUG: ASIN {asin} stats ({stats_period}-day): {json.dumps(product.get('stats', {}))}")
     return product
 # Chunk 2 ends
 
