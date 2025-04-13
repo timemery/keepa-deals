@@ -1,4 +1,3 @@
-# test Git repo my modifying this file... did it work? 
 # Chunk 1 starts
 import requests
 import json
@@ -414,7 +413,9 @@ def extract_fields(deal, product_90, product_365):
 # Chunk 6 ends
 
 # Chunk 7 starts
-def write_csv(data, filename='keepa_full_deals_v6.csv'):  # Changed path
+import os
+def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'keepa_full_deals_v6.csv')):
+    print(f"DEBUG: CSV path = {filename}")
     try:
         if os.path.exists(filename):
             os.remove(filename)
