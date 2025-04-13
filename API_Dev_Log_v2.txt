@@ -1495,3 +1495,28 @@ Last Updated: April 8, 2025, 9:20 AM PDT
 **Notes**
 - Script ran successfully: 150 deals fetched, 3 processed (092621800X, 1580626130, 926862006).
 - FBA and referral fixes are live—formatting and timestamps need Tim’s green light for next iteration.
+
+# Keepa API Development Log (v2)
+
+## April 2025 Updates
+
+**2025-04-09: GitHub Desktop Setup**
+  - Installed GitHub Desktop on Chromebook (Crostini, ~10MB disk used).
+  - Cloned timemery/keepa-deals to ~/keepa_api/keepa-deals.
+  - Files: Process500_Deals_v6.py, deal_filters.json, field_mapping.json, config.json, headers.json, requirements.txt, API_Dev_Log_v2.txt.
+  - Commit "v6.1 - Stable CSV with offers logging, updated JSON configs and gitignor…".
+  - Issue: Edited ~/keepa_api/Process500_Deals_v6.py, but Git ignored it (outside repo).
+
+**2025-04-10: Fixed Git Tracking**
+  - Realized ~/keepa_api/keepa-deals is the Git repo, not ~/keepa_api.
+  - Edited ~/keepa_api/keepa-deals/Process500_Deals_v6.py (test comment).
+  - GitHub Desktop showed 1 changed file, ready to commit.
+  - .gitignore: Ignores keepa_venv/, *.txt, *.csv, keeping repo clean.
+
+**2025-04-13: Script Run in New Directory**
+  - Ran python Process500_Deals_v6.py from ~/keepa_api/keepa-deals.
+  - Used /home/timscripts/keepa_venv/bin/activate for Python 3.11.2.
+  - CSV wrote to ~/keepa_api/keepa_full_deals_v6.csv (~500 deals, no errors).
+  - No output.txt (no redirection used).
+  - Git change (test edit) pending commit in Desktop.
+  - Next: Commit change, plan Chunks 2 and 5 updates.
