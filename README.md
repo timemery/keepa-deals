@@ -13,7 +13,17 @@ Processes Keepa deals with `Process500_Deals_v6.py`.
 - Output: `keepa_full_deals_v6.csv`
 
 ## Setup
-```bash
-source keepa_venv/bin/activate
-pip install -r requirements.txt
-python3 Process500_Deals_v6.py
+- source keepa_venv/bin/activate
+- pip install -r requirements.txt
+- python3 Process500_Deals_v6.py
+
+## Development Setup
+Tools used for developing and maintaining the project:
+
+**Editor:** Sublime Text for editing `Process500_Deals_v6.py`, `field_mapping.json`, `stable_fields.py`, and other files. Preferred over nano or VS Code for its lightweight interface and syntax support.
+
+**Version Control:** GitHub Desktop for committing and pushing changes to the Git repository, instead of terminal commands like git commit or git push.
+
+**Environment:** Python 3.11 in `/home/timscripts/keepa_venv/`. Project files in `/home/timscripts/keepa_api/keepa-deals/`. Activate with source `keepa_venv/bin/activate`.
+
+**Execution:** Run python `Process500_Deals_v6.py 2>&1 | tee output.txt` to generate `keepa_full_deals_v6.csv` with 192 columns (e.g., Percent Down 365, ASIN, Type).
