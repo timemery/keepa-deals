@@ -1520,3 +1520,197 @@ Last Updated: April 8, 2025, 9:20 AM PDT
   - No output.txt (no redirection used).
   - Git change (test edit) pending commit in Desktop.
   - Next: Commit change, plan Chunks 2 and 5 updates.
+```
+# Keepa API Deals Dev Log
+**Date**: April 15, 2025  
+**Project**: Process500_Deals_v6.py  
+**Author**: Tim (with Grok 3 assist)  
+
+## Overview
+Tracking fixes for `keepa_full_deals_v6.csv` issues—missing stats like `Percent Down 90`, `Buy Box Used - Current`, `Amazon - Highest`. Focus on Chunk 7 (`process_product_data`), environment setup, and stability for non-dev workflow.
+
+## Recent Issues
+- **CSV Stats Missing** (0195170962):
+  - Expected: `Percent Down 90` ~79%, `Buy Box Used - Current` ~$24.23, `Amazon - Highest` ~$220.00.
+  - Got: All `-` for stats fields.
+  - Cause: `safe_get` rejecting valid `stats.current[11]`, `stats.max[0]`, etc., likely due to strict null checks or array bounds.
+- **Percent Down 90/365**:
+  - Earlier runs showed 150% (bug), now `-`.
+  - Cause: Faulty `avg90[11]`/`current[11]` logic in Chunk 7.
+- **Tokens**:
+  - Low tokens (29) caused pauses; now at 184—smooth sailing.
+- **Environment**:
+  - Added `python-dateutil` v2.9.0.post0, updated `requirements.txt`.
+  - No config for virtualenv path or Python version (unlike old scrape project).
+
+## Fixes Applied
+- **Chunk 7 Updates** (Process500_Deals_v6.py):
+  - **v1**: Fixed `safe_get` for array indices, capped `Percent Down` at 0-100%, added `relativedelta` import.
+    - Result: Still got `-` for stats; `avg90`/`current` checks too tight.
+  - **v2**: Relaxed `current >= 0`, added debug prints for `stats` keys, `avg90`, `current`.
+    - Result: No improvement; `stats.current[11]` likely missing.
+  - **v3 (Latest)**:
+    - Simplified `safe_get` with detailed debug (index, key, type errors).
+    - Direct `stats` access (`data.get('stats', {})`).
+    - Log `stats_keys`, `value` at index, formatted outputs.
+    - Kept `Percent Down` logic (`avg90 > 100`, `current >= 0`).
+    - Goal: Restore `79%`, `$24.23`, `$220.00`.
+- **Environment**:
+  - Updated `requirements.txt`: `keepa`, `requests`, `python-dateutil>=2.8.2`.
+  - Planned `README.md`:
+    - Virtualenv: `/home/timscripts/keepa_venv/`
+    - Python: 3.11
+    - Rules: Chunk markers, no auto-updates.
+- **Tokens**:
+  - Waited ~20 min for refill (~89 tokens); now 184.
+
+## Action Plan
+- Update Chunk 7 to v3 (pre-reboot).
+- Restart system to fix lag.
+- Post-reboot:
+  - Run: `timeout 7200 python3 Process500_Deals_v6.py 2>&1 | tee output.txt`
+  - Check CSV: `head -n 2 keepa_full_deals_v6.csv`
+  - Debug: `cat output.txt | grep -i "DEBUG.*safe_get\|DEBUG.*Percent Down\|DEBUG.*Price field"`
+- Create `README.md` post-run.
+
+## Expected CSV (0195170962)
+```
+Percent Down 90,Avg. Price 90,...,Referral Fee %,...,Buy Box Used - Current,Buy Box Used - Highest,...,Amazon - Highest,Amazon - 90 days OOS,...
+79%,$114.67,...,14.95%,...,$24.23,$114.67,...,$220.00,100%,...
+```
+
+## Notes
+- **Debug Focus**: Watch for `DEBUG: safe_get failed` or `DEBUG: Stats idx=11, value=2423` in `output.txt`.
+- **Stability**: System restart should clear lag; 184 tokens prevent pauses.
+- **Environment**: `README.md` locks in setup for future runs.
+- **Lessons**:
+  - Chunk markers critical for modular fixes.
+  - Debug prints save time vs. full log dumps.
+  - Keepa’s `stats` JSON is finicky—needs explicit checks.
+
+**Status**: Chunk 7 v3 pending run post-reboot. Should fix stats. If not, debug logs will guide next tweak.
+```
+
+Dev Log Update (April 15, 2025)
+Project: Agent Arbitrage Phase 1 - Keepa Deal Scraper
+
+Script: Process500_Deals_v6.py
+
+Goal: Pull 500+ used book deals into keepa_full_deals_v6.csv with 229 columns, matching "Keepa API Data Types" spec, including stats like Percent Down 90, Buy Box Used - Current, and Amazon - Highest.
+
+Status
+Latest Run: ~500 deals fetched, CSV written to ~/keepa_api/keepa_full_deals_v6.csv, but stats for ASIN 0195170962 (e.g., Percent Down 90 ~79%, Buy Box Used - Current ~$24.23, Amazon - Highest ~$220.00) show -.
+Output: No output.txt (no redirection used), CSV checked via head -n 2.
+Progress: Most headers (e.g., Percent Down 90, Price Now, FBA Pick&Pack Fee, Referral Fee %) format perfectly, but Chunk 7 (process_product_data) fails to extract stats. Tokens at 184—plenty for runs.
+Recent Issues
+Missing Stats: Percent Down 90, Buy Box Used - Current, Amazon - Highest are - for 0195170962. Expected: 79%,$114.67,$24.23,$220.00.
+Cause: Chunk 7’s safe_get likely rejects stats.current[11] (Buy Box Used) or stats.avg90[11] due to strict null checks or sparse API data. Older runs hit 150% for Percent Down (fixed), now overly cautious.
+Environment: Added python-dateutil v2.9.0.post0, updated requirements.txt. Runs in /home/timscripts/keepa_venv/ (Python 3.11).
+Fixes Applied
+Chunk 7 v3:
+Simplified safe_get with direct data.get('stats', {}) access.
+Added debug prints for stats_keys, index (e.g., idx=11), and values (e.g., value=2423).
+Kept Percent Down logic: avg90 > 100, current >= 0, capped at 0-100%.
+Goal: Log why stats.current[11] or avg90[11] fails (null, bounds, or missing key).
+Git: Test edit in ~/keepa_api/keepa-deals/Process500_Deals_v6.py pending commit. .gitignore skips .csv, .txt.
+Tokens: Waited ~20 min for refill (from 29 to 184)—no pauses needed now.
+Findings
+API Data: Keepa’s /product may return sparse stats (e.g., current lacks 11). Debug prints will confirm if stats_keys misses current or avg90.
+Headers: Nearly all columns (e.g., Price Now, Deal found, AMZ link, Referral Fee %) format correctly, per today’s run. Stats are the last hurdle.
+Stability: System lag fixed via reboot. timeout 7200 ensures clean runs.
+Next Steps
+Run: timeout 7200 python3 Process500_Deals_v6.py 2>&1 | tee output.txt
+Check: head -n 2 keepa_full_deals_v6.csv for 0195170962: 79%,$114.67,...,$24.23,$114.67,...,$220.00,100%.
+Debug: cat output.txt | grep -i "DEBUG.*safe_get\|DEBUG.*Percent Down\|DEBUG.*Price field" to spot safe_get failed or idx=11, value=2423.
+If Stuck:
+If stats.current[11] missing, add fallback (current.get(11, -1)).
+Test /product for 0195170962 (https://api.keepa.com/product?key=<key>&domain=1&asin=0195170962&stats=90).
+Document: Draft README.md: /home/timscripts/keepa_venv/, Python 3.11, chunk rules, no auto-updates.
+Notes
+Git: Commit test edit post-run to timemery/keepa-deals.
+Lessons: Debug prints > full logs; stats JSON needs explicit checks; tokens no longer a bottleneck.
+Vibes: Close to cracking stats—safe_get tweak should unlock 79% and beyond!
+
+Dev Log and Plan for Process500_Deals_v6.py (April 15, 2025)
+Status
+
+Script: Process500_Deals_v6.py  
+Issue: Headers like Percent Down 90, Avg. Price 90, Percent Down 365, Avg. Price 365, Price Now, Deal found show - in keepa_full_deals_v6.csv for ASIN 0195170962 after today’s update. Earlier today, they worked (e.g., Percent Down 90 ~79%, Price Now ~$24.23).  
+Cause: Chunk 7 (process_product_data) update (v3) likely over-tightened safe_get, breaking stats extraction (stats.current[11], avg90[11]).  
+Environment: /home/timscripts/keepa_venv/, Python 3.11, python-dateutil v2.9.0.post0, 184 tokens.
+
+Plan to Restore Headers
+Goal
+Restore headers to this morning’s state (e.g., 0195170962: 79%,$114.67,...,$24.23,2025-04-15) and protect working ones in a Python module.
+Steps
+
+Revert Chunk 7 to Morning State  
+Roll back safe_get to pre-v3 (looser checks, no strict nulls).  
+Run: timeout 7200 python3 Process500_Deals_v6.py 2>&1 | tee output.txt  
+Check: head -n 2 keepa_full_deals_v6.csv for 79%,$114.67,...,$24.23.
+
+
+Debug v3 Failure  
+Grep: cat output.txt | grep -i "DEBUG.*safe_get\|DEBUG.*Percent Down\|DEBUG.*Price field"  
+If stats.current[11] missing, log stats_keys.  
+Fix: Add fallback (current.get(11, -1)).
+
+
+Identify Working Headers  
+Test columns: FBA Pick&Pack Fee (~$3.43), Referral Fee % (14.95%), AMZ link, etc.  
+Log formats (e.g., $24.23, 2025-04-15).
+
+
+Protect in Module  
+Create stable_fields.py for working headers (e.g., Price Now, Deal found).  
+Non-consecutive headers OK—extract individually (see below).
+
+
+Document Chunks  
+Add comments to Process500_Deals_v6.py:  # Chunk 7: process_product_data
+# Purpose: Extracts stats (Percent Down 90, Price Now)
+# Stable: Price Now (current[2]), Deal found
+# Issues: stats.current[11] fails post-v3
+# Last Fixed: TBD
+
+
+Save in Git to persist.
+
+
+Git Commit  
+Commit to timemery/keepa-deals post-run.  
+Plan for branches (stable-v6, dev-v6) later.
+
+
+
+Modular Protection
+
+File: stable_fields.py  
+Headers: Can protect non-consecutive headers (e.g., Price Now, Deal found, skip Percent Down 90). Order doesn’t matter—each function is independent.  
+Example:def format_price_now(deal):
+    current = deal.get('current', [])[2] if len(deal.get('current', [])) > 2 else -1
+    return f"${current / 100:.2f}" if current != -1 else "-"
+
+def format_deal_found(deal):
+    return deal.get('last_update', '-') or '-'
+
+
+Usage:from stable_fields import format_price_now, format_deal_found
+
+def extract_fields(deal):
+    row = [
+        safe_get(deal, 'stats', 'percent_down_90'),  # Still in main script
+        format_price_now(deal),                      # Stable
+        format_deal_found(deal)                     # Stable
+    ]
+    return row
+
+
+Why: Locks Price Now, Deal found while debugging Percent Down 90. No backslides.
+
+Notes
+
+Comments: Persist via Git commits, not manual edits.  
+Git Branches: Defer to post-fix—focus on headers first.  
+Next: Run tomorrow, share output.txt or CSV snippet if stuck.
+
