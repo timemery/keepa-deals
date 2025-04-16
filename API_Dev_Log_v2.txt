@@ -1714,3 +1714,49 @@ Comments: Persist via Git commits, not manual edits.
 Git Branches: Defer to post-fix—focus on headers first.  
 Next: Run tomorrow, share output.txt or CSV snippet if stuck.
 
+## 2025-04-16 Dev Log Update
+
+**CSV Output Restored**
+- Fixed a ton of headers in `keepa_full_deals_v6.csv` with `Process500_Deals_v6.py`:
+  - **Percent Down 365**: Back to `73%`, `47%`, etc., using `stats_365['avg'][2]`.
+  - **ASIN**: Quoted, padded (`"0314274022"`), via `.zfill(10)`.
+  - **Type**: Solid at `ABIS_BOOK` with `PRODUCT_TYPES`.
+  - **Reviews - Review Count**: Correct counts (`21`, `356`), pulling `stats.current[17]`.
+  - **FBA Pick&Pack Fee**: Restored `$3.53`, `$6.21` with lb-based `calculate_fba_fee`.
+  - **Price Now**: Formatted as `$25.85`, `$23.31`.
+  - Others like **Contributors**, **Freq. Bought Together** also good.
+- Not all 192 headers confirmed yet—some may need tweaks.
+- Matches morning output (`79%,$25.85,"0314274022",Type,...`) from backup.
+
+**Script and Config Updates**
+- Updated `field_mapping.json` to nested structure (`basic`, `sales_ranks`, `reviews`).
+- Added `stable_fields.py` for modular fields (e.g., `Price Now`, `ASIN`).
+- Kept `headers.json`, `deal_filters.json`, `config.json` stable.
+- Script runs with `python Process500_Deals_v6.py 2>&1 | tee output.txt`.
+
+**Git and Backup**
+- Committed changes via GitHub Desktop:
+  - `Process500_Deals_v6.py`, `field_mapping.json`, `stable_fields.py`.
+  - `API_Dev_Log_v2.txt`, `requirements.txt`, `README.md`.
+- Backed up locally to timestamped folder (`backup_2025-04-16`).
+- Safe to proceed with header verification.
+
+**README Cleanup**
+- Updated `README.md` with **Development Setup**:
+  - **Editor**: Sublime Text for scripts, configs.
+  - **Version Control**: GitHub Desktop, not terminal.
+  - **Environment**: Python 3.11 in `/home/timscripts/keepa_venv/`, project in `/home/timscripts/keepa_api/keepa-deals/`.
+  - **Execution**: `python Process500_Deals_v6.py 2>&1 | tee output.txt`.
+- Hit Markdown snags (````bash` broke formatting without closing ` ```).
+- Final version uses `-`, `**`, no code blocks for consistency.
+
+**Next Steps**
+- Run script to generate fresh CSV.
+- Compare headers to live Keepa deals data (e.g., ASIN `0314274022`).
+- Sort headers:
+  - **Correct**: Move to `stable_fields.py` (start with `Price Now`, `ASIN`).
+  - **Close**: Tweak in `Process500_Deals_v6.py` (e.g., check dims for fees).
+  - **Wrong**: Flag for later fixes.
+- Keep backups and commits tight to protect progress.
+
+2025-04-16: Tested 37 headers against Keepa for ASINs 0718025199, 053123035X, 159802048X. 27 perfect (Price Now, ASIN, Type, etc.). Moved 8 to almost (Percent Down 90, last price change, etc.). Percent Down 365, Avg. Price 365 calculated, pending check. FBA Pick&Pack Fee off for 2 ASINs, stays almost.
