@@ -28,6 +28,8 @@ PRODUCT_TYPES = {0: 'ABIS_BOOK', 1: 'ABIS_MUSIC'}
 # Chunk 1 ends
 
 # Chunk 2 starts
+# Dev Log: Restored fetch_deals (GET with selection JSON) and fetch_product (stats_period, rate limiting) from working script.
+# Handles buy_box_used for stats.current[11]. Matches main() calls in Chunk 8.
 import time
 
 def fetch_deals(page):
@@ -37,6 +39,7 @@ def fetch_deals(page):
     url = f'{BASE_URL}/deal?key={api_key}&selection={urllib.parse.quote(selection_str)}'
     response = requests.get(url, headers=headers)
     deals = response.json().get('deals', {}).get('dr', [])
+    print(f"DEBUG: fetch_deals - page={page}, deals_count={len(deals)}")
     return deals
 
 def fetch_product(asin, stats_period):
@@ -68,10 +71,12 @@ def fetch_product(asin, stats_period):
     else:
         product['stats'] = {'current': [-1] * 12}
         product['stats']['current'][11] = buy_box_used
+    print(f"DEBUG: fetch_product - ASIN={asin}, stats_period={stats_period}, buy_box_used={buy_box_used}")
     return product
 # Chunk 2 ends
 
 # Chunk 3 starts
+# Dev Log: Restored lb-based FBA fee logic from working script to handle missing dims.
 def calculate_fba_fee(weight_g, height_mm, length_mm, width_mm):
     weight_lb = weight_g / 453.59237
     dims_in = [x / 25.4 for x in [height_mm, length_mm, width_mm]]
@@ -96,8 +101,18 @@ def calculate_referral_fee(price, category_tree):
         fee = max(price * (rate / 100), 0.30)
         print(f"Books: {rate}%, fee=${fee:.2f}")
         return f"{rate:.2f}%"
-    print("Default: 14.95%")
-    return "14.95%"
+    elif root_cat in [2335752011, 163856011]:
+        rate = 8.0
+        fee = price * (rate / 100)
+        print(f"Electronics: {rate}%, fee=${fee:.2f}")
+        return f"{rate:.2f}%"
+    elif root_cat == 3760911:
+        rate = 10.0 if price <= 10 else 15.0
+        fee = price * (rate / 100)
+        print(f"Beauty: {rate}%, fee=${fee:.2f}")
+        return f"{rate:.2f}%"
+    print("Default: 15.0%")
+    return "15.00%"
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -126,121 +141,135 @@ def format_date(value, full_date=False):
 # Chunk 4 ends
 
 # Chunk 5 starts
+# Dev Log: Merged restored logic for Percent Down 365, Type, ASIN, last update, etc., with nested field_mapping support.
+# Fixed Reviews - Review Count (stats.current[17]), list handling (min/max), FBA fee paths.
 def get_field(data, deal_data, product_90, header, field):
-    print(f"Header: {header}, Field: {field}")
-    stats_90 = product_90.get('stats', {})
-    stats_365 = data.get('stats', {})
+    print(f"DEBUG: Header={header}, Field={field}")
+    stats_90 = product_90.get('stats', {}) if product_90 else {}
+    stats_365 = data.get('stats', {}) if data else {}
     current = deal_data.get('current', [-1] * 20)
 
-    # v6 Amazon fields
+    # Check nested FIELD_MAPPING groups
+    field_value = None
+    for group in ["basic", "sales_ranks", "reviews", "buy_box", "buy_box_used", 
+                  "amazon", "new", "new_third_party_fba", "new_third_party_fbm", 
+                  "used", "used_conditions", "list_price", "offer_counts"]:
+        if header in FIELD_MAPPING.get(group, {}):
+            field_value = FIELD_MAPPING[group][header]
+            break
+    if field_value:
+        field = field_value
+
+    # Amazon fields
     if header == "Amazon - Current":
         value = current[0] if len(current) > 0 and current[0] is not None else -1
-        print(f"Amazon - Current: value={value}")
+        print(f"DEBUG: Amazon - Current - value={value}")
         if value <= 0 and stats_90.get('avg', [-1] * 20)[4] > 0:
-            value = stats_90['avg'][4]  # Fallback to 90-day avg Amazon price
-            print(f"Amazon - Current fallback to avg[4]: value={value}")
+            value = stats_90['avg'][4]
+            print(f"DEBUG: Amazon - Current - fallback to avg[4]={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - 30 days avg.":
         value = stats_90.get('avg30', [-1] * 20)[4] if len(stats_90.get('avg30', [-1] * 20)) > 4 and stats_90.get('avg30', [-1] * 20)[4] is not None else -1
-        print(f"Amazon - 30 days avg.: value={value}")
+        print(f"DEBUG: Amazon - 30 days avg. - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - 60 days avg.":
         value = stats_90.get('avg', [-1] * 20)[4] if len(stats_90.get('avg', [-1] * 20)) > 4 and stats_90.get('avg', [-1] * 20)[4] is not None else -1
-        print(f"Amazon - 60 days avg.: value={value}")
-        return f"${value / 100:.2f}" if value > 0 else 'DROP'
+        print(f"DEBUG: Amazon - 60 days avg. - value={value}")
+        return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - 90 days avg.":
         value = stats_90.get('avg90', [-1] * 20)[4] if len(stats_90.get('avg90', [-1] * 20)) > 4 and stats_90.get('avg90', [-1] * 20)[4] is not None else -1
-        print(f"Amazon - 90 days avg.: value={value}")
+        print(f"DEBUG: Amazon - 90 days avg. - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - 180 days avg.":
         value = stats_365.get('avg180', [-1] * 20)[4] if len(stats_365.get('avg180', [-1] * 20)) > 4 and stats_365.get('avg180', [-1] * 20)[4] is not None else -1
-        print(f"Amazon - 180 days avg.: value={value}")
+        print(f"DEBUG: Amazon - 180 days avg. - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - 365 days avg.":
         value = stats_365.get('avg365', [-1] * 20)[4] if len(stats_365.get('avg365', [-1] * 20)) > 4 and stats_365.get('avg365', [-1] * 20)[4] is not None else -1
-        print(f"Amazon - 365 days avg.: value={value}")
+        print(f"DEBUG: Amazon - 365 days avg. - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - Lowest":
         value = stats_365.get('min', [-1] * 20)[4] if len(stats_365.get('min', [-1] * 20)) > 4 and stats_365.get('min', [-1] * 20)[4] is not None else -1
         if isinstance(value, list):
             value = min(value) if value else -1
-        print(f"Amazon - Lowest: value={value}")
+        print(f"DEBUG: Amazon - Lowest - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - Lowest 365 days":
         value = stats_365.get('min365', [-1] * 20)[4] if len(stats_365.get('min365', [-1] * 20)) > 4 and stats_365.get('min365', [-1] * 20)[4] is not None else -1
         if isinstance(value, list):
             value = min(value) if value else -1
-        print(f"Amazon - Lowest 365 days: value={value}")
-        return f"${value / 100:.2f}" if value > 0 else 'DROP'
+        print(f"DEBUG: Amazon - Lowest 365 days - value={value}")
+        return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - Highest":
         value = stats_365.get('max', [-1] * 20)[4] if len(stats_365.get('max', [-1] * 20)) > 4 and stats_365.get('max', [-1] * 20)[4] is not None else -1
         if isinstance(value, list):
             value = max(value) if value else -1
-        print(f"Amazon - Highest: value={value}")
+        print(f"DEBUG: Amazon - Highest - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Amazon - Highest 365 days":
         value = stats_365.get('max365', [-1] * 20)[4] if len(stats_365.get('max365', [-1] * 20)) > 4 and stats_365.get('max365', [-1] * 20)[4] is not None else -1
         if isinstance(value, list):
             value = max(value) if value else -1
-        print(f"Amazon - Highest 365 days: value={value}")
-        return f"${value / 100:.2f}" if value > 0 else 'DROP'
+        print(f"DEBUG: Amazon - Highest 365 days - value={value}")
+        return f"${value / 100:.2f}" if value > 0 else '-'
 
-    # v5 core fields
+    # Core fields (restored from working script)
     if header == "Percent Down 90":
         avg = stats_90.get('avg', [-1] * 20)
         value = ((avg[2] - current[2]) / avg[2] * 100) if len(avg) > 2 and avg[2] is not None and avg[2] > 0 and len(current) > 2 and current[2] is not None else -1
-        print(f"Percent Down 90: avg[2]={avg[2] if len(avg) > 2 else 'N/A'}, current[2]={current[2] if len(current) > 2 else 'N/A'}, value={value}")
+        print(f"DEBUG: Percent Down 90 - avg[2]={avg[2] if len(avg) > 2 else 'N/A'}, current[2]={current[2] if len(current) > 2 else 'N/A'}, value={value}")
         return f"{value:.0f}%" if value != -1 else '-'
     elif header == "Avg. Price 90":
         value = stats_90.get('avg', [-1] * 20)[2] if len(stats_90.get('avg', [-1] * 20)) > 2 and stats_90.get('avg', [-1] * 20)[2] is not None else -1
-        print(f"Avg. Price 90: value={value}")
+        print(f"DEBUG: Avg. Price 90 - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Percent Down 365":
         avg = stats_365.get('avg', [-1] * 20)
         value = ((avg[2] - current[2]) / avg[2] * 100) if len(avg) > 2 and avg[2] is not None and avg[2] > 0 and len(current) > 2 and current[2] is not None else -1
-        print(f"Percent Down 365: avg[2]={avg[2] if len(avg) > 2 else 'N/A'}, current[2]={current[2] if len(current) > 2 else 'N/A'}, value={value}")
+        print(f"DEBUG: Percent Down 365 - avg[2]={avg[2] if len(avg) > 2 else 'N/A'}, current[2]={current[2] if len(current) > 2 else 'N/A'}, value={value}")
         return f"{value:.0f}%" if value != -1 else '-'
     elif header == "Avg. Price 365":
         value = stats_365.get('avg', [-1] * 20)[2] if len(stats_365.get('avg', [-1] * 20)) > 2 and stats_365.get('avg', [-1] * 20)[2] is not None else -1
-        print(f"Avg. Price 365: value={value}")
+        print(f"DEBUG: Avg. Price 365 - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Price Now":
         value = current[2] if len(current) > 2 and current[2] is not None else -1
-        print(f"Price Now: value={value}")
+        print(f"DEBUG: Price Now - value={value}")
         return f"${value / 100:.2f}" if value > 0 else '-'
     elif header == "Deal found":
         ts = deal_data.get('creationDate', 0)
-        print(f"Deal found: raw ts={ts}")
+        print(f"DEBUG: Deal found - raw ts={ts}")
         dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
         return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
     elif header == "last update":
         ts = deal_data.get('lastUpdate', 0)
-        print(f"Last update: raw ts={ts}")
+        print(f"DEBUG: last update - raw ts={ts}")
         dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
         return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
     elif header == "last price change":
         ts = deal_data.get('currentSince', [-1] * 20)[2] if len(deal_data.get('currentSince', [-1] * 20)) > 2 and deal_data.get('currentSince', [-1] * 20)[2] is not None else -1
-        print(f"Last price change: raw ts={ts}")
+        print(f"DEBUG: last price change - raw ts={ts}")
         dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
         return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
     elif header == "Sales Rank - Reference":
         cat_id = data.get('salesRankReference', 0)
-        print(f"Sales Rank - Reference: cat_id={cat_id}")
+        print(f"DEBUG: Sales Rank - Reference - cat_id={cat_id}")
         return f"https://www.amazon.com/b/?node={cat_id}" if cat_id > 0 else '-'
     elif header == "FBA Pick&Pack Fee":
         weight = data.get('packageWeight', 0)
         height = data.get('packageHeight', 0)
         length = data.get('packageLength', 0)
         width = data.get('packageWidth', 0)
-        print(f"Package Weight Check: {weight}g ({weight / 453.59237:.2f} lb) for ASIN {data.get('asin')}")
+        print(f"DEBUG: FBA Pick&Pack Fee - weight={weight}g ({weight / 453.59237:.2f} lb), dims=[{height},{length},{width}]")
         return calculate_fba_fee(weight, height, length, width)
     elif header == "Referral Fee %":
         price = get_field(data, deal_data, product_90, "Price Now", "stats.current[2]")
         category_tree = data.get('categoryTree', [])
+        print(f"DEBUG: Referral Fee % - price={price}")
         return calculate_referral_fee(price, category_tree)
     elif header == "Tracking since":
         ts = data.get('trackingSince', 0)
-        print(f"Tracking since: raw ts={ts}")
+        print(f"DEBUG: Tracking since - raw ts={ts}")
         dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 0 else None
         return dt.strftime('%Y-%m-%d') if dt else '-'
     elif header == "Categories - Root":
@@ -255,7 +284,7 @@ def get_field(data, deal_data, product_90, header, field):
         return format_freq_bought_together(data.get('frequentlyBoughtTogether', []))
     elif header == "Type":
         product_type = data.get('productType', 0)
-        print(f"Type mapping: productType={product_type}")
+        print(f"DEBUG: Type - productType={product_type}")
         return PRODUCT_TYPES.get(product_type, str(product_type))
     elif header == "Contributors":
         return format_contributors(data.get('contributors', []))
@@ -267,22 +296,24 @@ def get_field(data, deal_data, product_90, header, field):
         return format_date(data.get('releaseDate', ''), full_date=True)
     elif header == "Listed since":
         ts = data.get('listedSince', 0)
-        print(f"Listed since: raw ts={ts}")
+        print(f"DEBUG: Listed since - raw ts={ts}")
         dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 0 else None
         return dt.strftime('%Y-%m-%d') if dt else '-'
     elif header == "ASIN":
         asin = data.get('asin', '')
-        print(f"ASIN padding: raw={asin}")
+        print(f"DEBUG: ASIN - raw={asin}")
         return f'"{asin.zfill(10)}"'
     elif header == "AMZ link":
         asin = data.get('asin', '')
+        print(f"DEBUG: AMZ link - asin={asin}")
         return f"https://www.amazon.com/dp/{asin}" if asin else '-'
     elif header == "Keepa Link":
         asin = data.get('asin', '')
+        print(f"DEBUG: Keepa Link - asin={asin}")
         return f"https://keepa.com/#!product/1-{asin}" if asin else '-'
 
-    # Generic stats handler (replaces Reviews -, Sales Rank -, Buy Box -)
-    elif field.startswith('stats.'):
+    # Generic stats handler (restored list handling)
+    if field.startswith('stats.'):
         if '[' in field:
             key, idx_part = field.split('[')
             idx = int(idx_part.rstrip(']'))
@@ -290,7 +321,7 @@ def get_field(data, deal_data, product_90, header, field):
                 value = stats_365.get('current', [-1] * 20)[idx] if len(stats_365.get('current', [-1] * 20)) > idx and stats_365.get('current', [-1] * 20)[idx] is not None else -1
             elif 'avg30' in key:
                 value = stats_90.get('avg30', [-1] * 20)[idx] if len(stats_90.get('avg30', [-1] * 20)) > idx and stats_90.get('avg30', [-1] * 20)[idx] is not None else -1
-            elif 'avg' in key and '60 days' in header:  # Special case for 60-day default
+            elif 'avg' in key and '60 days' in header:
                 value = stats_90.get('avg', [-1] * 20)[idx] if len(stats_90.get('avg', [-1] * 20)) > idx and stats_90.get('avg', [-1] * 20)[idx] is not None else -1
             elif 'avg90' in key:
                 value = stats_90.get('avg90', [-1] * 20)[idx] if len(stats_90.get('avg90', [-1] * 20)) > idx and stats_90.get('avg90', [-1] * 20)[idx] is not None else -1
@@ -318,85 +349,51 @@ def get_field(data, deal_data, product_90, header, field):
                 value = stats_90.get('outOfStockPercentage90', [-1] * 20)[idx] if len(stats_90.get('outOfStockPercentage90', [-1] * 20)) > idx and stats_90.get('outOfStockPercentage90', [-1] * 20)[idx] is not None else -1
             else:
                 value = -1
-        else:  # Non-indexed stats fields (e.g., salesRankDrops30)
-            key = field.split('.')[1]  # e.g., "salesRankDrops30"
+        else:
+            key = field.split('.')[1]
             if 'salesRankDrops' in key:
                 drop_period = key.split('salesRankDrops')[1]
                 value = stats_90.get(f'salesRankDrops{drop_period}', -1) if '90' in drop_period or '30' in drop_period or '60' in drop_period else stats_365.get(f'salesRankDrops{drop_period}', -1)
             else:
                 value = -1
-        print(f"{header}: value={value}")
+        print(f"DEBUG: {header} - stats field={field}, value={value}")
         # Format based on field type
         if header.startswith("Reviews - "):
-            return str(value) if value > 0 else '-' if '60 days' not in header else 'DROP'
+            return str(value) if value > 0 else '-'
         elif header.startswith("Sales Rank - "):
             if 'Drops' in header:
-                return str(value) if value > 0 else '-' if '60 days' not in header else 'DROP'
-            return f"{value:,}" if value > 0 else '-' if '60 days' not in header else 'DROP'
+                return str(value) if value > 0 else '-'
+            return f"{value:,}" if value > 0 else '-'
         elif header.startswith("Buy Box - "):
             if 'OOS' in header:
                 return f"{value}%" if value >= 0 else '-'
-            return f"${value / 100:.2f}" if value > 0 else '-' if '60 days' not in header else 'DROP'
-        return str(value) if value > 0 else '-'  # Default for other stats fields
-
-    # Generic field handling (unchanged)
-    elif field.startswith('https'):
-        return field.format(asin=data.get('asin', ''))
-    elif field in ['dealAdded', 'lastUpdate', 'lastPriceChange']:
-        ts = deal_data.get(field) if field == 'dealAdded' else data.get(field)
-        dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts else None
-        return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
-    elif field.startswith('(('):
-        avg90 = stats_90.get('avg', [-1] * 20)
-        avg365 = stats_365.get('avg', [-1] * 20)
-        if 'avg90[2]' in field:
-            value = ((avg90[2] - current[2]) / avg90[2] * 100) if len(avg90) > 2 and avg90[2] is not None and avg90[2] > 0 and len(current) > 2 and current[2] is not None else -1
-            return f"{value:.0f}%" if value != -1 else '-'
-        if 'avg365[2]' in field:
-            value = ((avg365[2] - current[2]) / avg365[2] * 100) if len(avg365) > 2 and avg365[2] is not None and avg365[2] > 0 and len(current) > 2 and current[2] is not None else -1
-            return f"{value:.0f}%" if value != -1 else '-'
-    elif '[' in field:
-        key, idx_part = field.split('[')
-        idx_str = idx_part.rstrip(']')
-        if ':' in idx_str:  # Handle slice
-            if key == 'categories' and idx_str == '1:':
-                category_tree = data.get('categoryTree', [])
-                return ', '.join(cat['name'] for cat in category_tree[1:]) if len(category_tree) > 1 else '-'
-            print(f"{header}: unsupported slice {idx_str}, defaulting to '-'")
-            return '-'
-        idx = int(idx_str)  # Numeric index
-        if 'outOfStockPercentage' in key:
-            value = stats_365.get(key, {}).get(idx, -1)
-        elif key == 'current':
-            value = current[idx] if len(current) > idx and current[idx] is not None else -1
-        else:
-            value = stats_90.get(key, [-1] * 20)[idx] if '90' in key and len(stats_90.get(key, [-1] * 20)) > idx and stats_90.get(key, [-1] * 20)[idx] is not None else stats_365.get(key, [-1] * 20)[idx] if len(stats_365.get(key, [-1] * 20)) > idx and stats_365.get(key, [-1] * 20)[idx] is not None else -1
-        if value is None or value == -1:
-            print(f"{header}: value={value}, defaulting to '-'")
-            return '-'
-        if key in ['avg', 'avg90', 'avg365', 'current'] and idx in [2, 3, 10, 11, 12, 13, 14, 15, 17]:
             return f"${value / 100:.2f}" if value > 0 else '-'
-        return str(value) if value > 0 else '-'
+        elif header.startswith(("New Offer Count", "Used Offer Count")):
+            return f"{value:,}" if value > 0 else '-'
+        elif 'OOS' in header:
+            return f"{value}%" if value >= 0 else '-'
+        return f"${value / 100:.2f}" if value > 0 else '-'
 
-    # Direct fields (unchanged)
-    value = data.get(field, '')
+    # Direct fields
+    value = data.get(field, '') if data else deal_data.get(field, '')
     if value in [None, '', 'None', -1, 0] and header not in ['Package - Quantity']:
-        if header in ['Variation Attributes', 'Buy Box - Stock', 'Amazon - Stock', 'New - Stock', 
-                      'New, 3rd Party FBA - Stock', 'New, 3rd Party FBM - Stock', 'Buy Box Used - Stock', 
-                      'Used - Stock', 'Used, like new - Stock', 'Used, very good - Stock', 
-                      'Used, good - Stock', 'Used, acceptable - Stock', 'List Price - Stock']:
-            print(f"{header}: sparse field, marking DROP")
-            return "DROP"
-        print(f"{header}: value={value}, defaulting to '-'")
+        print(f"DEBUG: {header} - direct field={field}, value={value}, defaulting to '-'")
         return '-'
-    print(f"Direct field {field}: value={value}")
+    if header in ['Contributors', 'Freq. Bought Together', 'Languages', 'Categories - Tree']:
+        value = globals()[f"format_{field}"](value)
+    elif header in ['Publication Date', 'Release Date']:
+        value = format_date(value, full_date=(header == 'Release Date'))
+    elif header == 'Type':
+        value = PRODUCT_TYPES.get(value, str(value))
+    print(f"DEBUG: {header} - direct field={field}, value={value}")
     return str(value)
 # Chunk 5 ends
 
 # Chunk 6 starts
+# Dev Log: Restored simple loop from working script, using nested field_mapping for all headers.
 def extract_fields(deal, product_90, product_365):
     row = [get_field(product_365, deal, product_90, h, FIELD_MAPPING.get(h, h)) for h in HEADERS]
-    print(f"Extracted ASIN {deal.get('asin')}: {row}")
+    print(f"DEBUG: Extracted ASIN {deal.get('asin')}: {row}")
     return row
 # Chunk 6 ends
 
@@ -418,6 +415,7 @@ def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'keepa_full
 # Chunk 7 ends
 
 # Chunk 8 starts
+# Dev Log: Restored main() from working script, fetching deals and products for 90/365-day stats.
 import sys
 
 def main():
@@ -429,7 +427,7 @@ def main():
     if deals:
         print("Fetching product data...")
         sys.stdout.flush()
-        max_deals = min(10, len(deals))  # Up from 5
+        max_deals = min(10, len(deals))
         products_90 = {}
         products_365 = {}
         for i, deal in enumerate(deals[:max_deals]):
@@ -449,7 +447,7 @@ def main():
             rows.append(row)
         print(f"Rows generated: {len(rows)}")
         sys.stdout.flush()
-        write_csv(rows)  # Removed hardcoded filename
+        write_csv(rows)
     else:
         print("No deals fetched!")
         sys.stdout.flush()
