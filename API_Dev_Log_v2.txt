@@ -1760,3 +1760,9 @@ Next: Run tomorrow, share output.txt or CSV snippet if stuck.
 - Keep backups and commits tight to protect progress.
 
 2025-04-16: Tested 37 headers against Keepa for ASINs 0718025199, 053123035X, 159802048X. 27 perfect (Price Now, ASIN, Type, etc.). Moved 8 to almost (Percent Down 90, last price change, etc.). Percent Down 365, Avg. Price 365 calculated, pending check. FBA Pick&Pack Fee off for 2 ASINs, stays almost.
+
+2025-04-18: Fixed IndexError in extract_fields with stable_row fallback, merged backup get_field for 198 headers.
+
+2025-04-18: Fixed TypeError in get_field for Sales Rank - Lowest (NoneType) by adding None/list handling for min/max stats.
+
+2025-04-18: Fixed IndexError in extract_fields by adding missing handler for 'New, 3rd Party FBM - 90 days OOS' in stable_fields.py and strengthening stable_row fallback.
