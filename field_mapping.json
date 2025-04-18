@@ -41,7 +41,9 @@
     "Listed since": "listedSince",
     "Edition": "edition",
     "Release Date": "releaseDate",
-    "Format": "format"
+    "Format": "format",
+    "Package Volume (cm³)": "package.volume",
+    "Item Volume (cm³)": "item.volume"
   },
   "sales_ranks": {
     "Sales Rank - Current": "stats.current[3]",

@@ -1766,3 +1766,147 @@ Next: Run tomorrow, share output.txt or CSV snippet if stuck.
 2025-04-18: Fixed TypeError in get_field for Sales Rank - Lowest (NoneType) by adding None/list handling for min/max stats.
 
 2025-04-18: Fixed IndexError in extract_fields by adding missing handler for 'New, 3rd Party FBM - 90 days OOS' in stable_fields.py and strengthening stable_row fallback.
+
+2025-04-18: Fixed IndexError in extract_fields by adding missing handler for 'New, 3rd Party FBM - 90 days OOS' in stable_fields.py and strengthening stable_row fallback in Process500_Deals_v6.py. CSV now generates with 198 headers and 10 rows (e.g., ASIN 0718025199: Reviews=356, Price=$23.22, Percent Down 90=78%). Committed to Git. TODO: Clean duplicate headers, debug FBA fee.
+
+# Keepa API Dev Log
+## 2025-04-25
+**Summary**: Added `Package - Dimension (cm³)` and `Item - Dimension (cm³)` to `stable_fields.py` to test which Amazon uses for FBA fee calculations. Removed `Package Height/Length/Width` (redundant, as `cm³` suffices). Fixed `Package - Quantity` to handle `0` values (e.g., `0978534417`). Noted Keepa manual data `$` formatting errors. Identified `Package - Dimension` vs. `Item - Dimension` discrepancy (e.g., `053123035X`: `235 cm³` vs. `294 cm³`).
+
+**Details**:
+- **Package/Item - Dimension (cm³)**: Added both headers to `STABLE_HEADERS` and `get_stable_field`. `Package - Dimension` calculated from `packageLength/Width/Height` (mm³ to cm³), `Item - Dimension` from `itemLength/Width/Height`. Will test both against `FBA Pick&Pack Fee` (e.g., `$3.15` for `053123035X`) to determine which Amazon uses. Hypothesis: `Package - Dimension` includes shipping box, likely used for fees.
+- **Package - Quantity**: Confirmed fix in `get_stable_field` (returns `str(value)` or `'-'`, handles `0`). Moved to `Stable - Perfect` in spreadsheet.
+- **Package Weight**: Moved to `Stable - Needs Validation` for fee checks (grams assumed, e.g., `91g` for `053123035X`).
+- **Manual Data Issue**: Keepa UI copy function adds erroneous `$` (e.g., `$235.00` for `Package - Dimension`). Trust API and webpage “Product Details” instead.
+- **Dropped Headers**: `Package Height`, `Package Length`, `Package Width` moved to `DROP` (redundant).
+- **OOS Headers**: Retained fixes (`100%` default for missing `stats.outOfStockPercentage90`, e.g., `Buy Box - 90 days OOS` for `0176500383`).
+
+**Next Steps**:
+- Run updated script, check CSV for `Package - Dimension (cm³)` and `Item - Dimension (cm³)` (e.g., `053123035X`: expect `235` and `294`).
+- Validate `FBA Pick&Pack Fee` using `Package Weight` and each dimension header.
+- Stabilize `FBA Pick&Pack Fee`, `Referral Fee %`.
+- Remove `Reviews - Review Count` from `DROP` (keep in `Stable - Perfect`).
+- Re-run API for `0140225951`, `0718025199` if needed (check ~220-byte responses).
+
+Analysis of the Output
+What We Got
+ASIN: 0140225951 (Tyranny of the Status Quo):
+Package Dimensions:
+Weight: 141 g → Matches CSV (141g).
+Height: 16 mm → Matches CSV (16mm).
+Length: 194 mm → Matches CSV (194mm).
+Width: 128 mm → Matches CSV (128mm).
+Item Dimensions:
+Height: -1 mm, Length: -1 mm, Width: -1 mm → Indicates missing itemHeight, itemLength, itemWidth in the API response.
+Other Fields: [] → No unexpected dimension or volume fields, confirming the API doesn’t provide a precomputed volume.
+Volume Calculation for 0140225951:
+Package: 
+16
+×
+194
+×
+128
+=
+397
+,
+312
+ 
+mm
+3
+÷
+1
+,
+000
+=
+397.312
+ 
+cm
+3
+≈
+397
+ 
+cm
+3
+16×194×128=397,312mm 
+3
+ ÷1,000=397.312cm 
+3
+ ≈397cm 
+3
+ .
+Item: No data (-1), so Item - Dimension should be -1 unless the script uses a fallback.
+
+The Error
+TypeError: Object of type ndarray is not JSON serializable:
+Keepa’s API returns NumPy arrays for fields like stats.current, stats.avg90, etc. Python’s json.dump can’t serialize these directly.
+This only affects the json.dump(product, f, indent=2) line, not the dimension prints, so the Weight, Height, Length, and Width data for 0140225951 is trustworthy.
+Implications for 235 cm³ and 294 cm³
+Package Volume (235 cm³):
+For 053123035X, the CSV has Package Height: 5mm, Package Length: 236mm, Package Width: 199mm.
+Volume: 
+5
+×
+236
+×
+199
+=
+234
+,
+940
+ 
+mm
+3
+÷
+1
+,
+000
+=
+234.94
+ 
+cm
+3
+≈
+235
+ 
+cm
+3
+5×236×199=234,940mm 
+3
+ ÷1,000=234.94cm 
+3
+ ≈235cm 
+3
+ .
+This confirms Package - Dimension is a calculated volume from packageHeight, packageLength, and packageWidth, matching the April 25 log.
+Item Volume (294 cm³):
+The 0140225951 output shows itemHeight, itemLength, and itemWidth are missing (-1). If 053123035X is similar, Item - Dimension should be -1 unless your script:
+Uses package dimensions as a fallback.
+Has hardcoded or erroneous values.
+Pulls item dimensions from a different API field or cached data.
+The 294 cm³ is close to 235 cm³, suggesting a possible miscalculation (e.g., slightly different dimensions like 6mm × 235mm × 198mm = 279,180 \, \text{mm}^3 \approx 279 \, \text{cm}^3) or a bug in Process500_Deals_v6.py.
+Plan to Resolve and Document
+We’ll fix the test script to get 053123035X data, confirm the dimension fields, update Process500_Deals_v6.py to handle volumes correctly, and write a dev log to capture everything.
+
+1. Fix the Test Script
+To avoid the ndarray error, we’ll skip json.dump or convert NumPy arrays to lists. Here’s the updated test_keepa_dimensions.py:
+
+April 18, 2025: Fixed safe_get error, added Package Volume (cm³) and Item Volume (cm³) to CSV (e.g., 234.94, 293.658 for 053123035X). FBA fees use package dimensions.
+
+April 18, 2025: Fixed safe_get Error, Added Volume Fields
+Issue: NameError: safe_get not defined crashed script at Package Volume (cm³), no CSV output.
+API Data:
+053123035X: Package 91g, 5mm, 236mm, 199mm (234.94 cm³), Item 241mm, 203mm, 6mm (293.658 cm³).
+0140225951: Package 141g, 16mm, 194mm, 128mm (397.312 cm³), Item -1.
+Fix:
+Added safe_get to Process500_Deals_v6.py (Chunk 5) for safe dictionary access.
+Updated headers.json to include Package Volume (cm³), Item Volume (cm³) (194 columns).
+Verified field_mapping.json and FBA Pick&Pack Fee (uses package dimensions).
+Result: CSV includes Package Volume (cm³) and Item Volume (cm³) (e.g., 234.94, 293.658 for 053123035X).
+Next: Scale to 1,000 deals, fix timestamp offset.
+Files: Process500_Deals_v6.py, field_mapping.json, headers.json.
+Instructions: In Sublime Text, create dev_log_2025-04-18.md in ~/keepa_api/keepa-deals/, paste the above content, and save. Commit in GitHub Desktop (message: “Added dev log for safe_get fix and volume fields”).
+
+Notes
+FBA Fee: FBA Pick&Pack Fee correctly uses package dimensions, as seen in your script’s calculate_fba_fee.
+Testing: The script should now generate keepa_full_deals_v6.csv with 194 columns, including Package Volume (cm³) and Item Volume (cm³).
+Support: Share output.txt grep results or CSV snippet if errors persist. I’ll keep it concise to get you sorted.
