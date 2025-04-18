@@ -27,3 +27,5 @@ Tools used for developing and maintaining the project:
 **Environment:** Python 3.11 in `/home/timscripts/keepa_venv/`. Project files in `/home/timscripts/keepa_api/keepa-deals/`. Activate with source `keepa_venv/bin/activate`.
 
 **Execution:** Run python `Process500_Deals_v6.py 2>&1 | tee output.txt` to generate `keepa_full_deals_v6.csv` with 192 columns (e.g., Percent Down 365, ASIN, Type).
+
+April 18, 2025: Fixed safe_get error, added Package Volume (cm³) and Item Volume (cm³) to CSV (e.g., 234.94, 293.658 for 053123035X). FBA fees use package dimensions.
