@@ -1,0 +1,76 @@
+# Dev Log - Keepa Deals API - 2025-04-18
+
+**Project**: Agent Arbitrage Phase 1 - Keepa Deal Scraper  
+**Script**: Process500_Deals_v6.py  
+**Author**: Tim (with Grok 3 assist)  
+**Goal**: Pull 500+ used book deals into `keepa_full_deals_v6.csv` with 229 columns, matching the "Keepa API Data Types" spec, including accurate FBA Pick & Pack Fees, Referral Fee %, and volume calculations.
+
+## Fee Discrepancy Investigation
+
+### Context
+On 2025-04-18, ran `Process500_Deals_v6.py` and compared the script’s calculated FBA Pick & Pack Fees and Referral Fee % against Keepa’s deals page for three ASINs. Results showed varying discrepancies:
+- **Exact Match**: `1499810695` (FBA: `$3.15` vs. `$3.15`, Referral: `14.95%` vs. `15.01%`).
+- **Close**: `0060390697` (FBA: `$6.21` vs. `$5.37`, `$0.84` difference, ~15.6% off).
+- **Way Off**: `1789296773` (FBA: `$6.21` vs. `$4.99`, `$1.22` difference, ~24.5% off).
+
+Additionally, for ASIN `053123035X` (previously discussed), the item volume (`293.538 cm³`, `203 × 6 × 241 mm`) exceeds the package volume (`234.82 cm³`, `236 × 199 × 5 mm`), which is unusual and may indicate a misinterpretation of dimensions or packaging assumptions.
+
+### Theories on Fee Discrepancies
+1. **Size Tier Misclassification**:
+   - The script may assign incorrect size tiers (e.g., Large Standard instead of Small Standard) due to:
+     - Misinterpreting package dimensions or mistakenly using item dimensions for fee calculations.
+     - Incorrect dimensional weight calculation (`L × W × H ÷ 139` in inches) or using actual weight when dimensional weight applies.
+   - Example: For `1789296773` (hardcover, package weight `570 g` from prior CSV), the script’s `$6.21` suggests Large Standard (2025 fees: ~$5.50–$7.00 for 1–2 lb), while Keepa’s `$4.99` aligns with Small Standard or a lighter weight tier.
+2. **Missing Fee Components**:
+   - Books incur a media closing fee (~$1.80 in 2025). If Keepa includes this in its reported FBA fee but the script omits it, this could explain `$1–$2` overestimations.
+   - The script may miss weight-based surcharges or dimensional weight adjustments for certain size tiers.
+3. **Referral Fee Calculation**:
+   - Small differences (0.03%–0.06%) in referral fees (e.g., `14.95%` vs. `15.01%` for `1499810695`) may result from:
+     - Rounding errors in price inputs or category-specific rates.
+     - Incorrect category detection (books have a 15% rate with a `$1.00` minimum).
+   - Hypothesized that Keepa might apply a slightly adjusted rate based on Amazon’s real-time data.
+4. **Item vs. Package Volume**:
+   - For `053123035X`, the item volume (`293.538 cm³`) exceeds the package volume (`234.82 cm³`), which is counterintuitive as packages typically include the item plus padding.
+   - Possible causes:
+     - Mislabeling of item and package dimensions in the Keepa API response or script processing.
+     - Unusual packaging (e.g., a slim envelope compressing a paperback).
+   - Similar issues may affect `1789296773` and `0060390697`, potentially inflating size tiers and FBA fees if item dimensions are used instead of package dimensions.
+
+### User Clarifications
+- **On Keepa’s Adjusted Rate**:
+  - The theory that Keepa applies a slightly adjusted referral rate based on Amazon’s real-time data is **unlikely**, as Keepa is a trusted source that accurately reflects Amazon’s fees. Discrepancies are more likely due to errors in the script’s `calculate_referral_fee` logic.
+- **On Referral Fee Calculation**:
+  - **Critical Clarification**: The script incorrectly uses `Price Now` (the seller’s purchase price, e.g., `$26.24` for `053123035X`) for referral fee calculations. Amazon calculates referral fees based on the **selling price** (purchase price plus seller’s markup for profit). This misuse explains the consistent underestimation of referral fees (e.g., `14.95%` vs. `15.01%`).
+- **On Item vs. Package Volume**:
+  - The volume discrepancy for `053123035X` is a priority. Plan to compare CSV-reported dimensions with Keepa’s deals page dimensions for `053123035X`, `1499810695`, `1789296773`, and `0060390697` to confirm if the script misinterprets API fields or if dimensions are swapped.
+  - Will capture dimensions for additional ASINs to determine if the item vs. package volume issue is widespread.
+
+### Next Steps
+- **Collect Dimension Data**:
+  - Extract package and item dimensions, weights, and volumes for `1499810695`, `1789296773`, `0060390697`, and additional ASINs from `keepa_full_deals_v6.csv`.
+  - Compare with Keepa’s deals page “Product Details” section (avoiding UI copy errors, e.g., erroneous `$` in volume fields).
+- **Fix Referral Fee Logic**:
+  - Update `calculate_referral_fee` in Chunk 5 to use the seller’s **selling price** (e.g., estimate via `Price Now` plus typical markup or pull from Keepa’s API if available, such as `offer` data).
+  - Enforce the `$1.00` minimum referral fee for books and align with Amazon’s 15% rate (targeting Keepa’s `15.01%`–`15.03%` precision).
+- **Validate FBA Fees**:
+  - Add debug logs to `calculate_fba_fee` (Chunk 5) to output:
+    - Size tier (e.g., Small Standard, Large Standard).
+    - Actual vs. dimensional weight.
+    - Application of media closing fee (`$1.80`).
+  - Ensure the 2025 FBA fee schedule is used (e.g., Small Standard: `$3.06–$3.65` for 2–16 oz, Large Standard: `$4.63–$7.17` for 1–2 lb).
+- **Address Volume Discrepancy**:
+  - Add a validation check in `calculate_dimension` (Chunk 5): if `item_volume > package_volume`, log a warning and default to `package_volume` for fee calculations.
+  - Verify API field mappings for `packageLength`, `packageWidth`, `packageHeight` vs. `itemLength`, `itemWidth`, `itemHeight` using raw `/product` responses (e.g., for `053123035X`).
+- **Scale Data Collection**:
+  - Run the script with `--limit 10` to capture more ASINs from Keepa’s deals page, ensuring a broader sample to detect widespread volume or fee issues.
+  - Save output to `output.txt` via `timeout 7200 python3 Process500_Deals_v6.py 2>&1 | tee output.txt`.
+- **Document and Commit**:
+  - Save this dev log to `~/keepa_api/keepa-deals/dev_log_2025_04_18.md`.
+  - Commit changes to `timemery/keepa-deals` via GitHub Desktop (message: “Added dev log for fee discrepancy and volume investigation”).
+
+### Notes
+- **Source of Truth**: Keepa’s deals page is reliable for fees (e.g., `$3.15` FBA, `15.03%` referral for `053123035X`) and dimensions (use “Product Details” to avoid UI copy errors).
+- **Fee Logic**: Discrepancies suggest errors in `calculate_fba_fee` (e.g., size tier or missing closing fee) and `calculate_referral_fee` (using `Price Now` instead of selling price), not incorrect dimensions, as Amazon’s calculations use the same dimensions.
+- **Volume Priority**: The `item_volume > package_volume` issue for `053123035X` may indicate a script bug or API mislabeling—comparing CSV and Keepa data is critical.
+- **Environment**: Script runs in `/home/timscripts/keepa_venv/` (Python 3.11), project in `/home/timscripts/keepa_api/keepa-deals/`. Tokens at 184, sufficient for testing.
+- **Backup**: Continue saving outputs and CSVs to timestamped folders (e.g., `backup_2025-04-18`) to protect progress.
