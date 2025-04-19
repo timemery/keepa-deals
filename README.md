@@ -28,4 +28,5 @@ Tools used for developing and maintaining the project:
 
 **Execution:** Run python `Process500_Deals_v6.py 2>&1 | tee output.txt` to generate `keepa_full_deals_v6.csv` with 192 columns (e.g., Percent Down 365, ASIN, Type).
 
-April 18, 2025: Fixed safe_get error, added Package Volume (cm³) and Item Volume (cm³) to CSV (e.g., 234.94, 293.658 for 053123035X). FBA fees use package dimensions.
+### Code Sharing Preferences
+- Prefer **inline code shares** (e.g., code blocks directly in communication or documentation) for script snippets, logs, or fixes. Avoid artifact shares (e.g., external files, GitHub Gists) unless explicitly requested, as inline shares streamline review and integration.
