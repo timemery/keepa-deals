@@ -30,3 +30,8 @@ Tools used for developing and maintaining the project:
 
 ### Code Sharing Preferences
 - Prefer **inline code shares** (e.g., code blocks directly in communication or documentation) for script snippets, logs, or fixes. Avoid artifact shares (e.g., external files, GitHub Gists) unless explicitly requested, as inline shares streamline review and integration.
+
+### Backup Process
+- Backups are saved locally with random, descriptive names (e.g., `headers_backup_april25.json`, `field_mapping_test_mar20.json`).
+- Working files (`headers.json`, `field_mapping.json`, `Process500_Deals_v6.py`) are not renamed or versioned to maintain consistency.
+- Before updating files, manually copy them to a backup folder with a unique name.

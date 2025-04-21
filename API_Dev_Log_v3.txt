@@ -74,3 +74,134 @@ Additionally, for ASIN `053123035X` (previously discussed), the item volume (`29
 - **Volume Priority**: The `item_volume > package_volume` issue for `053123035X` may indicate a script bug or API mislabeling—comparing CSV and Keepa data is critical.
 - **Environment**: Script runs in `/home/timscripts/keepa_venv/` (Python 3.11), project in `/home/timscripts/keepa_api/keepa-deals/`. Tokens at 184, sufficient for testing.
 - **Backup**: Continue saving outputs and CSVs to timestamped folders (e.g., `backup_2025-04-18`) to protect progress.
+
+# Dev Log - Keepa Deals API - 2025-04-19
+
+**Project**: Agent Arbitrage Phase 1 - Keepa Deal Scraper  
+**Script**: Process500_Deals_v6.py  
+**Author**: Tim (with Grok 3 assist)  
+**Goal**: Pull 500+ used book deals into `keepa_full_deals_v6.csv` with 229 columns, ensuring accurate FBA Pick & Pack Fees, Referral Fee %, and package/item volume calculations.
+
+## Fee and Volume Comparison
+
+### Context
+On 2025-04-19, ran `Process500_Deals_v6.py` and compared CSV output with Keepa’s deals page for 10 ASINs (e.g., `1499810695`, `1789296773`, `053123035X`). FBA Pick & Pack Fees matched for some (`1499810695`: $3.15), were close for others (`0060390697`: $6.21 vs. $5.37), and way off for a few (`1789296773`: $6.21 vs. $4.99). Referral Fee % consistently underestimated (`14.95%` vs. `15.00%`–`15.03%`). Item volume exceeded package volume for some ASINs (e.g., `053123035X`: 294 cm³ vs. 235 cm³), which is unusual.
+
+### Observations
+- **FBA Fees**:
+  - Matches: `1499810695` ($3.15), `B08PXBCTPT` ($3.53), `031045476X` ($6.21).
+  - Close: `038536119X` ($3.53 vs. $3.90), `3642349870` ($6.21 vs. $5.52).
+  - Way Off: `1789296773` ($6.21 vs. $4.99), `937958166` ($6.21 vs. $4.99).
+- **Referral Fees**: CSV’s `14.95%` underestimates Keepa’s `15.00%`–`15.03%`, due to using `Price Now` instead of selling price.
+- **Volumes**: Item volume > package volume for `053123035X` (294 vs. 235 cm³), `031045476X` (2370 vs. 2202 cm³). CSV lacks raw item dimensions, relying on calculated `Package - Dimension (cm³)`.
+
+### Theories
+1. **FBA Fee Errors**:
+   - **Size Tier**: `calculate_fba_fee` may misclassify items (e.g., Large Standard for `1789296773` at $6.21 vs. Small Standard at $4.99).
+   - **Media Closing Fee**: Inconsistent application of ~$1.80 fee may inflate fees (e.g., `937958166`).
+   - **Dimensions**: Rare use of item dimensions could overestimate fees.
+2. **Referral Fee Errors**: Using `Price Now` instead of selling price underestimates fees. Keepa’s `15.01%` reflects 15% rate with real-time precision.
+3. **Volume Issues**:
+   - API may swap `itemLength/Width/Height` and `packageLength/Width/Height` (e.g., `053123035X`).
+   - Slim packaging (e.g., envelopes) may reduce package volume.
+   - Script may miscalculate `Item - Dimension (cm³)` when item data is incomplete.
+
+### Next Steps
+- **Collect Dimensions**:
+  - Log raw API fields (`packageLength`, `itemLength`, etc.) for `1499810695`, `1789296773`, `053123035X` in `output.txt`.
+  - Run: `timeout 7200 python3 Process500_Deals_v6.py --limit 10 2>&1 | tee output.txt`
+  - Compare: `cat output.txt | grep -i "DEBUG.*dimension\|DEBUG.*package\|DEBUG.*item"`
+- **Fix Referral Fees**:
+  - Update `calculate_referral_fee` (Chunk 5) to use selling price (e.g., `Price Now × 1.5`).
+  - Enforce: `max(selling_price * 0.15, 1.00)`.
+- **Validate FBA Fees**:
+  - Log size tier, weight, and closing fee in `calculate_fba_fee`.
+  - Use 2025 rates: Small Standard ($3.06–$3.65), Large Standard ($4.63–$7.17).
+- **Fix Volume Discrepancy**:
+  - Add validation: if `item_volume > package_volume`, use `package_volume`.
+  - Test API: `curl --compressed -G "https://api.keepa.com/product?key=<key>&domain=1&asin=053123035X"`
+- **Document**:
+  - Save this log to `~/keepa_api/keepa-deals/dev_log_2025_04_19.md`.
+  - Commit: Message “Fixed referral fee, validated FBA fees, addressed volume discrepancy”.
+
+### Notes
+- **Source of Truth**: Keepa’s “Product Details” for dimensions, fees (e.g., `$3.15`, `15.03%` for `053123035X`).
+- **Environment**: Python 3.11, `/home/timscripts/keepa_venv/`, 184 tokens.
+- **Backup**: Save CSV, `output.txt` to `backup_2025-04-19`.
+- **Vibes**: Closing in on stable fees and volumes—profit’s in sight!
+
+# Dev Log - Keepa Deals API - 2025-04-19
+
+**Project**: Agent Arbitrage Phase 1 - Keepa Deal Scraper  
+**Script**: Process500_Deals_v6.py  
+**Author**: Tim (with Grok 3 assist)  
+**Goal**: Pull 500+ used book deals into `keepa_full_deals_v6.csv` with 229 columns, ensuring accurate FBA Pick & Pack Fees, Referral Fee %, and package/item volume calculations.
+
+## Fee and Volume Updates
+
+### Context
+On 2025-04-19, compared CSV output with Keepa’s deals page for 10 ASINs (e.g., `1499810695`, `1789296773`, `053123035X`). FBA fees matched for some (`1499810695`: $3.15), were close for others (`038536119X`: $3.53 vs. $3.90), and off for a few (`1789296773`: $6.21 vs. $4.99). Referral fees underestimated (`14.95%` vs. `15.00%`–`15.03%`). Item volume exceeded package volume (e.g., `053123035X`: 294 vs. 235 cm³). User clarified: default to 15% referral fee, use package dimensions, handle binding-specific closing fees.
+
+### Observations
+- **FBA Fees**: Matches for `1499810695` ($3.15), `B08PXBCTPT` ($3.53); off for `1789296773` ($6.21 vs. $4.99), `937958166` ($6.21 vs. $4.99).
+- **Referral Fees**: CSV’s `14.95%` underestimates due to `Price Now`. Keepa’s `15.00%`–`15.03%` suggests 15% default.
+- **Dimensions**: Package dimensions always available; item dimensions missing for `937958166`, `553171615`. Item volume > package volume for `053123035X`, `031045476X`.
+- **Binding**: `038536119X` listed as “Book” but “Audio CD” binding, affecting closing fee ($1.80).
+- **Formatting**: `$` in volumes is a spreadsheet/copy-paste issue, not Keepa.
+
+### User Clarifications
+- **Referral Fee**: Default to `15.0%` for books, as selling price is unknown and Keepa’s formula is unclear. Log non-book bindings (e.g., Audio CD).
+- **Dimensions**: Keepa API provides raw dimensions, but cut-and-paste gives volumes. Package dimensions are always available, so use them for fees. Item dimensions are unreliable.
+- **Closing Fee**: Check `binding` (e.g., “Audio CD” for `038536119X`) to apply $1.80 closing fee only for media.
+- **API Reliability**: Unlikely Keepa swaps item/package fields. Fee discrepancies likely from script using item dimensions or incorrect size tiers.
+- **Script Bug**: `calculate_dimension` may inflate `Item - Dimension (cm³)` when item data is partial, affecting fees.
+
+### Next Steps
+- **Default Referral Fee**:
+  - Set `calculate_referral_fee` to return `15.0%` for books, log non-book bindings (e.g., `038536119X`).
+  - Run: `timeout 7200 python3 Process500_Deals_v6.py --limit 10 2>&1 | tee output.txt`
+  - Check: `cat output.txt | grep -i "referral_fee\|non-book"`
+- **Enforce Package Dimensions**:
+  - Update `calculate_dimension` to use `packageLength`, `packageWidth`, `packageHeight` only.
+  - Log item dimensions for debugging (e.g., `053123035X`: 294 cm³).
+  - Check: `cat output.txt | grep -i "volume\|dimension"`
+- **Handle Closing Fee**:
+  - Apply $1.80 closing fee in `calculate_fba_fee` for bindings like “Audio CD”.
+  - Check: `cat output.txt | grep -i "fba_fee\|closing_fee"`
+- **Debug FBA Fees**:
+  - Log size tier, weight, and volume for `1789296773`, `937958166`.
+  - Test API: `curl --compressed -G "https://api.keepa.com/product?key=<key>&domain=1&asin=1789296773"`
+  - Check: `cat output.txt | grep -i "size_tier\|weight\|fba_fee"`
+- **Document**:
+  - Save this log to `~/keepa_api/keepa-deals/dev_log_2025_04_19.md`.
+  - Commit: Message “Defaulted referral fee to 15%, enforced package dimensions, added binding-based closing fee”.
+  - Backup: Save CSV, `output.txt` to `backup_2025-04-19`.
+
+### Notes
+- **Source of Truth**: Keepa API (`/product`) for raw dimensions, fees. Avoid spreadsheet formatting issues (e.g., `$` in volumes).
+- **Environment**: Python 3.11, `/home/timscripts/keepa_venv/`, 184 tokens.
+- **Vibes**: Referral fee fix is a quick win; package dimensions and closing fee logic will tighten fees. Profit’s close!
+
+## Update 2025-04-19
+- Fixed CSV formatting for Package Weight, Height, Length, Width (removed $).
+- Removed redundant --limit 10 flag; script limits to 10 rows via max_deals.
+- Debugged FBA fees for 937958166, 1789296773 (size tier, binding).
+- Next: Compare fixed CSV with Keepa, verify binding logic for 038536119X.
+
+## Update 2025-04-19
+- Fixed CSV formatting for Package Weight, Height, Length, Width (added get_field handlers).
+- Changed write_csv to QUOTE_MINIMAL.
+- Next: Verify FBA fees, compare with Keepa.
+
+# Dev Log: Updated 2025-04-19 to default referral fee to 15% for books, enforce package dimensions, and apply $1.80 closing fee for non-book bindings (e.g., Audio CD).
+# Added explicit get_field handlers for Package Weight, Height, Length, Width, Quantity to fix $ formatting (2025-04-19).
+# Merged restored logic for Percent Down 365, Type, ASIN, last update, etc., with nested field_mapping support.
+# Fixed Reviews - Review Count (stats.current[17]), list handling (min/max), FBA fee paths.
+# Updated 2025-04-20 to change dimensional weight divisor to 166 and remove Item Volume (cm³).
+# Updated 2025-04-21 to update FBA fee rates (aligned with Amazon 2025) and format ASIN as ="..." for Google Sheets/Excel.
+
+# Dev Log: Implements get_field to map headers to data fields using nested field_mapping.json (2025-04-19).
+# Added explicit handlers for Package Weight, Height, Length, Width, Quantity to avoid $ formatting (2025-04-19).
+# Formats ASIN as ="..." for Google Sheets/Excel (2025-04-21). Enforces DROP for sparse fields (e.g., Author,
+# Variation Attributes) and invalid stats (e.g., Amazon - 60 days avg.). Handles stats fields (current, avg30, avg90,
+# min, max, etc.) with proper formatting ($X.XX, %, commas).
