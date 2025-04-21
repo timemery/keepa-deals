@@ -28,8 +28,9 @@ PRODUCT_TYPES = {0: 'ABIS_BOOK', 1: 'ABIS_MUSIC'}
 # Chunk 1 ends
 
 # Chunk 2 starts
-# Dev Log: Restored fetch_deals (GET with selection JSON) and fetch_product (stats_period, rate limiting) from working script.
-# Handles buy_box_used for stats.current[11]. Matches main() calls in Chunk 8.
+# Dev Log: Implements fetch_deals to retrieve deals from Keepa API using JSON selection and pagination.
+# fetch_product retrieves product data for a given ASIN and stats period, handles rate limiting (429 status, low tokens),
+# and calculates buy_box_used for stats.current[11]. Called by main() for 90 and 365-day stats.
 import time
 
 def fetch_deals(page):
@@ -76,42 +77,46 @@ def fetch_product(asin, stats_period):
 # Chunk 2 ends
 
 # Chunk 3 starts
-# Dev Log: Restored lb-based FBA fee logic from working script to handle missing dims.
-def calculate_fba_fee(weight_g, height_mm, length_mm, width_mm):
+# Dev Log: Implements calculate_fba_fee with 2025 FBA rates ($3.15, $3.53, $6.21, $7.45, $10.53), dimensional weight
+# (divisor 166), and $1.80 closing fee for non-book bindings (Audio CD, DVD, Vinyl) (2025-04-21). Handles missing
+# dimensions by defaulting to zero. calculate_referral_fee sets 15% for books, with warnings for non-book bindings
+# (2025-04-19).
+def calculate_fba_fee(weight_g, height_mm, length_mm, width_mm, binding):
     weight_lb = weight_g / 453.59237
     dims_in = [x / 25.4 for x in [height_mm, length_mm, width_mm]]
     dims_in.sort()
-    print(f"FBA Calc: weight={weight_lb:.2f} lb, dims={dims_in}")
-    if weight_lb <= 15 and dims_in[2] <= 18 and dims_in[1] <= 14 and dims_in[0] <= 8:
-        if weight_lb <= 0.25: total_fee = 3.15
-        elif weight_lb <= 1: total_fee = 3.53
-        elif weight_lb <= 3: total_fee = 6.21
-        else: total_fee = 6.21 + (weight_lb - 3) * 0.15
-        print(f"Small Standard (2025): total=${total_fee:.2f}")
-        return f"${total_fee:.2f}"
-    print("Oversize: defaulting to $10.53 base (2025)")
-    return "$10.53"
+    volume_cm3 = (height_mm * length_mm * width_mm) / 1000
+    dim_weight_lb = (volume_cm3 / 166) / 453.59237 if volume_cm3 > 0 else 0
+    effective_weight = max(weight_lb, dim_weight_lb) if dim_weight_lb > 0 else weight_lb
+    print(f"DEBUG: FBA Calc: weight={weight_lb:.2f} lb, dims={dims_in}, dim_weight={dim_weight_lb:.2f} lb, effective_weight={effective_weight:.2f} lb, volume={volume_cm3:.2f} cm³")
+    
+    if effective_weight <= 15 and dims_in[2] <= 18 and dims_in[1] <= 14 and dims_in[0] <= 8:
+        if effective_weight <= 0.25:
+            base_fee = 3.15
+            size_tier = "Small Standard (<=4 oz)"
+        elif effective_weight <= 1:
+            base_fee = 3.53
+            size_tier = "Small Standard (4-16 oz)"
+        elif effective_weight <= 3:
+            base_fee = 6.21
+            size_tier = "Large Standard (<=3 lb)"
+        else:
+            base_fee = 7.45 + (effective_weight - 3) * 0.15
+            size_tier = "Large Standard (3-15 lb)"
+    else:
+        base_fee = 10.53
+        size_tier = "Oversize"
+    
+    closing_fee = 1.80 if binding in ["Audio CD", "DVD", "Vinyl"] else 0.0
+    total_fee = base_fee + closing_fee
+    print(f"DEBUG: FBA Fee: size_tier={size_tier}, base_fee=${base_fee:.2f}, closing_fee=${closing_fee:.2f}, total=${total_fee:.2f}")
+    return f"${total_fee:.2f}"
 
-def calculate_referral_fee(price, category_tree):
-    price = float(price.replace('$', '')) if isinstance(price, str) else price
-    root_cat = category_tree[0]['catId'] if category_tree else 0
-    print(f"Referral Calc: price=${price}, root_cat={root_cat}")
-    if root_cat == 283155:
-        rate = 14.95
-        fee = max(price * (rate / 100), 0.30)
-        print(f"Books: {rate}%, fee=${fee:.2f}")
-        return f"{rate:.2f}%"
-    elif root_cat in [2335752011, 163856011]:
-        rate = 8.0
-        fee = price * (rate / 100)
-        print(f"Electronics: {rate}%, fee=${fee:.2f}")
-        return f"{rate:.2f}%"
-    elif root_cat == 3760911:
-        rate = 10.0 if price <= 10 else 15.0
-        fee = price * (rate / 100)
-        print(f"Beauty: {rate}%, fee=${fee:.2f}")
-        return f"{rate:.2f}%"
-    print("Default: 15.0%")
+def calculate_referral_fee(asin, product_type, binding):
+    if product_type == "ABIS_BOOK" and binding not in ["Audio CD", "DVD", "Vinyl"]:
+        print(f"DEBUG: ASIN {asin}: Referral fee set to 15.0% (Book)")
+        return "15.00%"
+    print(f"WARNING: ASIN {asin}: Non-book binding ({binding}), verify category")
     return "15.00%"
 # Chunk 3 ends
 
@@ -141,9 +146,11 @@ def format_date(value, full_date=False):
 # Chunk 4 ends
 
 # Chunk 5 starts
-# Dev Log: Merged restored logic for Percent Down 365, Type, ASIN, last update, etc., with nested field_mapping support.
-# Fixed Reviews - Review Count (stats.current[17]), list handling (min/max), FBA fee paths.
-# Added calculate_dimension for Package/Item Volume (cm³) and safe_get for dictionary access.
+# Dev Log: Implements get_field to map headers to data fields using nested field_mapping.json (2025-04-19).
+# Added explicit handlers for Package Weight, Height, Length, Width, Quantity to avoid $ formatting (2025-04-19).
+# Formats ASIN as ="..." for Google Sheets/Excel (2025-04-21). Enforces DROP for sparse fields (e.g., Author,
+# Variation Attributes) and invalid stats (e.g., Amazon - 60 days avg.). Handles stats fields (current, avg30, avg90,
+# min, max, etc.) with proper formatting ($X.XX, %, commas).
 def safe_get(data, key, default=None):
     try:
         for k in key.split('.'):
@@ -151,14 +158,6 @@ def safe_get(data, key, default=None):
         return data if data is not None else default
     except (KeyError, TypeError):
         return default
-
-def calculate_dimension(data, prefix):
-    length = safe_get(data, f"{prefix}Length", default=0)
-    width = safe_get(data, f"{prefix}Width", default=0)
-    height = safe_get(data, f"{prefix}Height", default=0)
-    volume = (length * width * height) / 1000
-    print(f"DEBUG: {prefix}Volume={volume} cm³, L={length} mm, W={width} mm, H={height} mm, ASIN={data.get('asin')}")
-    return volume if volume > 0 else -1
 
 def get_field(data, deal_data, product_90, header, field):
     print(f"DEBUG: Header={header}, Field={field}")
@@ -177,6 +176,20 @@ def get_field(data, deal_data, product_90, header, field):
     if field_value:
         field = field_value
 
+    # Sparse fields that should return DROP
+    sparse_fields = [
+        "Variation Attributes", "Author", "Buy Box - Stock", "Amazon - Stock",
+        "New - Stock", "New, 3rd Party FBA - Stock", "New, 3rd Party FBM - Stock",
+        "Buy Box Used - Stock", "Used - Stock", "Used, like new - Stock",
+        "Used, very good - Stock", "Used, good - Stock", "Used, acceptable - Stock",
+        "List Price - Stock"
+    ]
+    if header in sparse_fields:
+        value = data.get(field, '') if data else deal_data.get(field, '')
+        if value in [None, '', 'None', -1, 0]:
+            print(f"DEBUG: {header} - sparse field, marking DROP")
+            return "DROP"
+
     # Amazon fields
     if header == "Amazon - Current":
         value = current[0] if len(current) > 0 and current[0] is not None else -1
@@ -192,7 +205,7 @@ def get_field(data, deal_data, product_90, header, field):
     elif header == "Amazon - 60 days avg.":
         value = stats_90.get('avg', [-1] * 20)[4] if len(stats_90.get('avg', [-1] * 20)) > 4 and stats_90.get('avg', [-1] * 20)[4] is not None else -1
         print(f"DEBUG: Amazon - 60 days avg. - value={value}")
-        return f"${value / 100:.2f}" if value > 0 else '-'
+        return f"${value / 100:.2f}" if value > 0 else 'DROP'
     elif header == "Amazon - 90 days avg.":
         value = stats_90.get('avg90', [-1] * 20)[4] if len(stats_90.get('avg90', [-1] * 20)) > 4 and stats_90.get('avg90', [-1] * 20)[4] is not None else -1
         print(f"DEBUG: Amazon - 90 days avg. - value={value}")
@@ -216,7 +229,7 @@ def get_field(data, deal_data, product_90, header, field):
         if isinstance(value, list):
             value = min(value) if value else -1
         print(f"DEBUG: Amazon - Lowest 365 days - value={value}")
-        return f"${value / 100:.2f}" if value > 0 else '-'
+        return f"${value / 100:.2f}" if value > 0 else 'DROP'
     elif header == "Amazon - Highest":
         value = stats_365.get('max', [-1] * 20)[4] if len(stats_365.get('max', [-1] * 20)) > 4 and stats_365.get('max', [-1] * 20)[4] is not None else -1
         if isinstance(value, list):
@@ -228,9 +241,9 @@ def get_field(data, deal_data, product_90, header, field):
         if isinstance(value, list):
             value = max(value) if value else -1
         print(f"DEBUG: Amazon - Highest 365 days - value={value}")
-        return f"${value / 100:.2f}" if value > 0 else '-'
+        return f"${value / 100:.2f}" if value > 0 else 'DROP'
 
-    # Core fields (restored from working script)
+    # Core fields
     if header == "Percent Down 90":
         avg = stats_90.get('avg', [-1] * 20)
         value = ((avg[2] - current[2]) / avg[2] * 100) if len(avg) > 2 and avg[2] is not None and avg[2] > 0 and len(current) > 2 and current[2] is not None else -1
@@ -277,13 +290,15 @@ def get_field(data, deal_data, product_90, header, field):
         height = data.get('packageHeight', 0)
         length = data.get('packageLength', 0)
         width = data.get('packageWidth', 0)
-        print(f"DEBUG: FBA Pick&Pack Fee - weight={weight}g ({weight / 453.59237:.2f} lb), dims=[{height},{length},{width}]")
-        return calculate_fba_fee(weight, height, length, width)
+        binding = data.get('binding', '')
+        print(f"DEBUG: FBA Pick&Pack Fee - weight={weight}g ({weight / 453.59237:.2f} lb), dims=[{height},{length},{width}], binding={binding}")
+        return calculate_fba_fee(weight, height, length, width, binding)
     elif header == "Referral Fee %":
-        price = get_field(data, deal_data, product_90, "Price Now", "stats.current[2]")
-        category_tree = data.get('categoryTree', [])
-        print(f"DEBUG: Referral Fee % - price={price}")
-        return calculate_referral_fee(price, category_tree)
+        asin = data.get('asin', '')
+        product_type = data.get('productType', 0)
+        binding = data.get('binding', '')
+        print(f"DEBUG: Referral Fee % - asin={asin}, product_type={PRODUCT_TYPES.get(product_type, str(product_type))}, binding={binding}")
+        return calculate_referral_fee(asin, PRODUCT_TYPES.get(product_type, str(product_type)), binding)
     elif header == "Tracking since":
         ts = data.get('trackingSince', 0)
         print(f"DEBUG: Tracking since - raw ts={ts}")
@@ -319,7 +334,7 @@ def get_field(data, deal_data, product_90, header, field):
     elif header == "ASIN":
         asin = data.get('asin', '')
         print(f"DEBUG: ASIN - raw={asin}")
-        return f'"{asin.zfill(10)}"'
+        return f'="{asin.zfill(10)}"'
     elif header == "AMZ link":
         asin = data.get('asin', '')
         print(f"DEBUG: AMZ link - asin={asin}")
@@ -328,12 +343,28 @@ def get_field(data, deal_data, product_90, header, field):
         asin = data.get('asin', '')
         print(f"DEBUG: Keepa Link - asin={asin}")
         return f"https://keepa.com/#!product/1-{asin}" if asin else '-'
-    elif header == "Package Volume (cm³)":
-        return f"{calculate_dimension(data, 'package'):.3f}" if calculate_dimension(data, 'package') > 0 else '-'
-    elif header == "Item Volume (cm³)":
-        return f"{calculate_dimension(data, 'item'):.3f}" if calculate_dimension(data, 'item') > 0 else '-'
+    elif header == "Package - Quantity":
+        value = data.get('packageQuantity', 0)
+        print(f"DEBUG: Package - Quantity - value={value}")
+        return str(value)
+    elif header == "Package Weight":
+        value = data.get('packageWeight', 0)
+        print(f"DEBUG: Package Weight - value={value}g")
+        return str(value) if value > 0 else '-'
+    elif header == "Package Height":
+        value = data.get('packageHeight', 0)
+        print(f"DEBUG: Package Height - value={value}mm")
+        return str(value) if value > 0 else '-'
+    elif header == "Package Length":
+        value = data.get('packageLength', 0)
+        print(f"DEBUG: Package Length - value={value}mm")
+        return str(value) if value > 0 else '-'
+    elif header == "Package Width":
+        value = data.get('packageWidth', 0)
+        print(f"DEBUG: Package Width - value={value}mm")
+        return str(value) if value > 0 else '-'
 
-    # Generic stats handler (restored list handling)
+    # Generic stats handler
     if field.startswith('stats.'):
         if '[' in field:
             key, idx_part = field.split('[')
@@ -378,22 +409,21 @@ def get_field(data, deal_data, product_90, header, field):
             else:
                 value = -1
         print(f"DEBUG: {header} - stats field={field}, value={value}")
-        # Format based on field type
         if header.startswith("Reviews - "):
-            return str(value) if value > 0 else '-'
+            return str(value) if value > 0 else 'DROP' if '60 days' in header else '-'
         elif header.startswith("Sales Rank - "):
             if 'Drops' in header:
-                return str(value) if value > 0 else '-'
-            return f"{value:,}" if value > 0 else '-'
+                return str(value) if value > 0 else 'DROP' if '60 days' in header else '-'
+            return f"{value:,}" if value > 0 else 'DROP' if '60 days' in header else '-'
         elif header.startswith("Buy Box - "):
             if 'OOS' in header:
                 return f"{value}%" if value >= 0 else '-'
-            return f"${value / 100:.2f}" if value > 0 else '-'
+            return f"${value / 100:.2f}" if value > 0 else 'DROP' if '60 days' in header else '-'
         elif header.startswith(("New Offer Count", "Used Offer Count")):
             return f"{value:,}" if value > 0 else '-'
         elif 'OOS' in header:
             return f"{value}%" if value >= 0 else '-'
-        return f"${value / 100:.2f}" if value > 0 else '-'
+        return f"${value / 100:.2f}" if value > 0 else 'DROP' if '60 days' in header else '-'
 
     # Direct fields
     value = data.get(field, '') if data else deal_data.get(field, '')
@@ -411,7 +441,8 @@ def get_field(data, deal_data, product_90, header, field):
 # Chunk 5 ends
 
 # Chunk 6 starts
-# Dev Log: Restored simple loop from working script, using nested field_mapping for all headers.
+# Dev Log: Implements extract_fields to generate CSV rows by mapping all headers from headers.json using get_field.
+# Uses nested field_mapping.json for field lookups.
 def extract_fields(deal, product_90, product_365):
     row = [get_field(product_365, deal, product_90, h, FIELD_MAPPING.get(h, h)) for h in HEADERS]
     print(f"DEBUG: Extracted ASIN {deal.get('asin')}: {row}")
@@ -420,13 +451,13 @@ def extract_fields(deal, product_90, product_365):
 
 # Chunk 7 starts
 import os
-def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'keepa_full_deals_v6.csv')):
+def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'keepa_full_deals_v8.csv')):
     print(f"DEBUG: CSV path = {filename}")
     try:
         if os.path.exists(filename):
             os.remove(filename)
         with open(filename, 'w', newline='') as file:
-            writer = csv.writer(file, delimiter=',', quoting=csv.QUOTE_ALL)
+            writer = csv.writer(file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(HEADERS)
             writer.writerows(data)
         print(f"File size: {os.path.getsize(filename)} bytes")
@@ -436,11 +467,12 @@ def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'keepa_full
 # Chunk 7 ends
 
 # Chunk 8 starts
-# Dev Log: Restored main() from working script, fetching deals and products for 90/365-day stats.
+# Dev Log: Implements main() to fetch deals, retrieve product data for 90 and 365-day stats, process up to 10 deals,
+# and write CSV using headers from headers.json.
 import sys
 
 def main():
-    print("Starting Process500_Deals_v6...")
+    print("Starting Process500_Deals_v8...")
     sys.stdout.flush()
     deals = fetch_deals(0)
     print(f"Deals returned: {len(deals)}")
