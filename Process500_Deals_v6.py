@@ -242,10 +242,10 @@ def get_field(data, deal_data, product_90, header, field):
         logging.debug(f"Avg. Price 90 (ASIN {product_90.get('asin')}): value={value}")
         return f"${value / 100:.2f}" if value is not None and value > 0 else '-'
     elif header == "Percent Down 365":
-        avg = stats_365.get('avg365', [-1] * 20)[3]  # Buy Box Used
-        curr = stats_365.get('current', [-1] * 20)[3]  # Buy Box Used
+        avg = stats_365.get('avg365', [-1] * 20)[2]  # Used
+        curr = stats_365.get('current', [-1] * 20)[2]  # Used
         value = ((avg - curr) / avg * 100) if avg is not None and curr is not None and avg > 0 and curr >= 0 else -1
-        logging.debug(f"Percent Down 365 (ASIN {product_90.get('asin')}): avg[3]={avg}, current[3]={curr}, value={value}")
+        logging.debug(f"Percent Down 365 (ASIN {product_90.get('asin')}): avg[2]={avg}, current[2]={curr}, value={value}")
         return f"{value:.0f}%" if value >= 0 else '-'
     elif header == "Avg. Price 365":
         value = stats_365.get('avg365', [-1] * 20)[2]  # Used
