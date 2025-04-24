@@ -2231,3 +2231,5 @@ Known Issues:
 stats.current[11] may be mislabeled (offer count, not price).
 Fee calculations in stable_fields.py reference outdated Process500_Deals_v6.py.
 Risk of utils.py changes breaking columns (mitigated by versioning).
+
+made a small change just to push the most updated version of this to GitHub. 
