@@ -1,0 +1,11 @@
+INFO:keepa.interface:Connecting to keepa using key ending in p7b08b
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.keepa.com:443
+DEBUG:urllib3.connectionpool:https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 146
+DEBUG:keepa.interface:0 tokens consumed
+INFO:keepa.interface:260 tokens remain
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.keepa.com:443
+DEBUG:urllib3.connectionpool:https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 146
+DEBUG:keepa.interface:0 tokens consumed
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.keepa.com:443
+DEBUG:urllib3.connectionpool:https://api.keepa.com:443 "GET /deal/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&selection=%7B%22page%22%3A+0%2C+%22domainId%22%3A+1%2C+%22includeCategories%22%3A+%5B283155%5D%2C+%22priceTypes%22%3A+%5B2%5D%2C+%22currentRange%22%3A+%5B2000%2C+30100%5D%2C+%22warehouseConditions%22%3A+%5B2%2C+3%2C+4%2C+5%5D%7D HTTP/1.1" 200 105411
+DEBUG:keepa.interface:5 tokens consumed
