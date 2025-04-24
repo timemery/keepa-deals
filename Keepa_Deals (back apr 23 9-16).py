@@ -179,12 +179,11 @@ def safe_get(data, key, default=None):
     except (KeyError, TypeError):
         return default
 
-# Replace with this:
 def get_field(data, deal_data, product_90, header, field):
     logging.debug(f"Header={header}, Field={field}")
     stats_90 = product_90.get('stats', {}) if product_90 else {}
     stats_365 = data.get('stats', {}) if data else {}
-    current = stats_365.get('current', [-1] * 30)  # Extended for condition prices
+    current = stats_365.get('current', [-1] * 20)
 
     # Check nested FIELD_MAPPING groups
     field_value = None
@@ -196,22 +195,6 @@ def get_field(data, deal_data, product_90, header, field):
             break
     if field_value:
         field = field_value
-
-    # Handle array indices (e.g., stats.current[3])
-    if field.startswith('stats.') and '[' in field:
-        try:
-            key, idx_part = field.split('[')
-            idx = int(idx_part.rstrip(']'))
-            parts = key.split('.')
-            value = stats_90 if '90' in header else stats_365
-            for part in parts[1:]:  # Skip 'stats'
-                value = value.get(part, [-1] * 30)
-            value = value[idx] if isinstance(value, list) and idx < len(value) else -1
-            logging.debug(f"{header} - stats field={field}, value={value}")
-            return value
-        except (ValueError, TypeError) as e:
-            logging.error(f"{header} - stats field={field}, error={str(e)}")
-            return '-'
 
     # Sparse fields that should return DROP
     sparse_fields = [
@@ -274,22 +257,15 @@ def get_field(data, deal_data, product_90, header, field):
         if value is not None and value >= 2000 and value <= 30100:  # $20-$301
             return f"${value / 100:.2f}"
         return '-'
-# Replace with this:
     elif header == "Price Now Source":
-        price_now = stats_90.get('current', [-1] * 30)[2]  # Used
-        conditions = [
-            ("Buy Box Used", stats_90.get('current', [-1] * 30)[11]),
-            ("Used, like new", stats_90.get('current', [-1] * 30)[19]),
-            ("Used, very good", stats_90.get('current', [-1] * 30)[20]),
-            ("Used, good", stats_90.get('current', [-1] * 30)[21]),
-            ("Used, acceptable", stats_90.get('current', [-1] * 30)[22])
-        ]
-        logging.debug(f"Price Now Source (ASIN {product_90.get('asin')}): price_now={price_now}")
-        for cond_name, cond_value in conditions:
-            if cond_value is not None and cond_value >= 2000 and cond_value <= 30100 and cond_value == price_now:
-                return cond_name
-        return "Used" if price_now >= 2000 and price_now <= 30100 else "-"
-# end replace here
+        buy_box_used = stats_90.get('current', [-1] * 20)[11]  # Buy Box Used
+        used = stats_90.get('current', [-1] * 20)[2]  # Used
+        logging.debug(f"Price Now Source (ASIN {product_90.get('asin')}): buy_box_used={buy_box_used}, used={used}")
+        if buy_box_used is not None and buy_box_used >= 2000 and buy_box_used <= 30100:  # $20-$301
+            return "Buy Box Used"
+        if used is not None and used >= 2000 and used <= 30100:  # $20-$301
+            return "Used"
+        return "-"
     elif header == "Deal found":
         ts = deal_data.get('creationDate', 0)
         logging.debug(f"Deal found - raw ts={ts}")
@@ -388,18 +364,51 @@ def get_field(data, deal_data, product_90, header, field):
         logging.debug(f"Package Width - value={value}mm")
         return str(value) if value > 0 else '-'
 
-# Replace with this:
     # Generic stats handler
-    if field.startswith('stats.') and '[' not in field:
-        key = field.split('.')[1]
-        if 'salesRankDrops' in key:
-            drop_period = key.split('salesRankDrops')[1]
-            value = stats_90.get(f'salesRankDrops{drop_period}', -1) if '90' in drop_period or '30' in drop_period or '60' in drop_period else stats_365.get(f'salesRankDrops{drop_period}', -1)
+    if field.startswith('stats.'):
+        if '[' in field:
+            key, idx_part = field.split('[')
+            idx = int(idx_part.rstrip(']'))
+            if 'current' in key:
+                value = stats_365.get('current', [-1] * 20)[idx]
+            elif 'avg30' in key:
+                value = stats_90.get('avg30', [-1] * 20)[idx]
+            elif 'avg' in key and '60 days' in header:
+                value = stats_90.get('avg', [-1] * 20)[idx]
+            elif 'avg90' in key:
+                value = stats_90.get('avg90', [-1] * 20)[idx]
+            elif 'avg180' in key:
+                value = stats_365.get('avg180', [-1] * 20)[idx]
+            elif 'avg365' in key:
+                value = stats_365.get('avg365', [-1] * 20)[idx]
+            elif 'min' in key:
+                value = stats_365.get('min', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = min(value) if value else -1
+            elif 'min365' in key:
+                value = stats_365.get('min365', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = min(value) if value else -1
+            elif 'max' in key:
+                value = stats_365.get('max', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = max(value) if value else -1
+            elif 'max365' in key:
+                value = stats_365.get('max365', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = max(value) if value else -1
+            elif 'outOfStockPercentage90' in key:
+                value = stats_90.get('outOfStockPercentage90', [-1] * 20)[idx]
+            else:
+                value = -1
         else:
-            value = -1
+            key = field.split('.')[1]
+            if 'salesRankDrops' in key:
+                drop_period = key.split('salesRankDrops')[1]
+                value = stats_90.get(f'salesRankDrops{drop_period}', -1) if '90' in drop_period or '30' in drop_period or '60' in drop_period else stats_365.get(f'salesRankDrops{drop_period}', -1)
+            else:
+                value = -1
         logging.debug(f"{header} - stats field={field}, value={value}")
-# end replace here
-
         if header.startswith("Reviews - "):
             return str(value) if value > 0 else 'DROP' if '60 days' in header else '-'
         elif header.startswith("Sales Rank - "):
