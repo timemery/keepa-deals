@@ -179,12 +179,20 @@ def safe_get(data, key, default=None):
     except (KeyError, TypeError):
         return default
 
+# Add at top of get_field:
+    from stable_fields import get_stable_price_field
+
+# Replace with this (Extended for condition prices):
+# Replace with this (removing Extended for condition prices):
 # Replace with this:
 def get_field(data, deal_data, product_90, header, field):
     logging.debug(f"Header={header}, Field={field}")
     stats_90 = product_90.get('stats', {}) if product_90 else {}
     stats_365 = data.get('stats', {}) if data else {}
-    current = stats_365.get('current', [-1] * 30)  # Extended for condition prices
+    current = stats_90.get('current', [-1] * 30)  # Use Deals API for condition prices
+    if not current or current[2] <= 0:
+        logging.debug(f"ASIN {product_90.get('asin')}: stats.current missing or invalid: {current}")
+    from stable_fields import get_stable_price_field
 
     # Check nested FIELD_MAPPING groups
     field_value = None
@@ -254,42 +262,53 @@ def get_field(data, deal_data, product_90, header, field):
         value = ((avg - curr) / avg * 100) if avg is not None and curr is not None and avg > 0 and curr >= 0 else -1
         logging.debug(f"Percent Down 90 (ASIN {product_90.get('asin')}): avg[2]={avg}, current[2]={curr}, value={value}")
         return f"{value:.0f}%" if value >= 0 else '-'
+
+# Replace with this:
     elif header == "Avg. Price 90":
-        value = stats_90.get('avg90', [-1] * 20)[2]  # Used
-        logging.debug(f"Avg. Price 90 (ASIN {product_90.get('asin')}): value={value}")
-        return f"${value / 100:.2f}" if value is not None and value > 0 else '-'
+        value = stats_90.get('stats', {}).get('avg90', [-1] * 20)[2]
+        logging.debug(f"Avg. Price 90 (ASIN {product_90.get('asin')}): stats={stats_90.get('stats')}, value={value}")
+        return f"${value / 100:.2f}" if value > 0 else '-'
+# end replace
+
     elif header == "Percent Down 365":
         avg = stats_365.get('avg365', [-1] * 20)[2]  # Used
         curr = stats_365.get('current', [-1] * 20)[2]  # Used
         value = ((avg - curr) / avg * 100) if avg is not None and curr is not None and avg > 0 and curr >= 0 else -1
         logging.debug(f"Percent Down 365 (ASIN {product_90.get('asin')}): avg[2]={avg}, current[2]={curr}, value={value}")
         return f"{value:.0f}%" if value >= 0 else '-'
-    elif header == "Avg. Price 365":
-        value = stats_365.get('avg365', [-1] * 20)[2]  # Used
-        logging.debug(f"Avg. Price 365 (ASIN {product_90.get('asin')}): used={value}")
-        return f"${value / 100:.2f}" if value is not None and value > 0 else '-'
-    elif header == "Price Now":
-        value = stats_90.get('current', [-1] * 20)[2]  # Used
-        logging.debug(f"Price Now (ASIN {product_90.get('asin')}): used={value}")
-        if value is not None and value >= 2000 and value <= 30100:  # $20-$301
-            return f"${value / 100:.2f}"
-        return '-'
+
 # Replace with this:
+    elif header == "Avg. Price 365":
+        value = stats_365.get('stats', {}).get('avg365', [-1] * 20)[2]
+        logging.debug(f"Avg. Price 365 (ASIN {product_90.get('asin')}): stats={stats_365.get('stats')}, value={value}")
+        return f"${value / 100:.2f}" if value > 0 else '-'
+# end replace
+
+# Replace the "Used - Current", "Buy Box Used", "Used, good - Current" block with:
+# Replace with this (if headers change later):
+# Replace with this (another update - but unexplained):
+    elif header in ["Used - Current", "Buy Box Used - Current", "Used, like new - Current", "Used, very good - Current", "Used, good - Current"]:
+        index = {
+            'Used - Current': 2, 'Buy Box Used - Current': 11, 'Used, like new - Current': 19,
+            'Used, very good - Current': 20, 'Used, good - Current': 21
+        }[header]
+        return get_stable_price_field(stats_90, header, index)
+# end replace
+
+# Replace with this (temporary disable to avoid interference):
     elif header == "Price Now Source":
-        price_now = stats_90.get('current', [-1] * 30)[2]  # Used
-        conditions = [
-            ("Buy Box Used", stats_90.get('current', [-1] * 30)[11]),
-            ("Used, like new", stats_90.get('current', [-1] * 30)[19]),
-            ("Used, very good", stats_90.get('current', [-1] * 30)[20]),
-            ("Used, good", stats_90.get('current', [-1] * 30)[21]),
-            ("Used, acceptable", stats_90.get('current', [-1] * 30)[22])
-        ]
-        logging.debug(f"Price Now Source (ASIN {product_90.get('asin')}): price_now={price_now}")
-        for cond_name, cond_value in conditions:
-            if cond_value is not None and cond_value >= 2000 and cond_value <= 30100 and cond_value == price_now:
-                return cond_name
-        return "Used" if price_now >= 2000 and price_now <= 30100 else "-"
+        return '-'
 # end replace here
+
+# Add after it (new block for condition prices):
+    elif header in ["Used - Current", "Buy Box Used - Current", "Used, like new - Current", "Used, very good - Current", "Used, good - Current"]:
+        index = {
+            'Used - Current': 2, 'Buy Box Used - Current': 11, 'Used, like new - Current': 19,
+            'Used, very good - Current': 20, 'Used, good - Current': 21
+        }[header]
+        return get_stable_price_field(stats_90, header, index)
+# end replace here
+
     elif header == "Deal found":
         ts = deal_data.get('creationDate', 0)
         logging.debug(f"Deal found - raw ts={ts}")
