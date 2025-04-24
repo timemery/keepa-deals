@@ -2204,3 +2204,30 @@ On 2025-04-19, compared CSV output with Keepa’s deals page for 10 ASINs (e.g.,
 - Fixed price fields to use Buy Box Used (stats.current[11], stats.avg90[11], stats.avg365[11]) for Used book focus, per user requirement for Used-only deals.
 - Preserved stable FBA and referral fee calculations.
 - Externalized validated fields to stable_fields.py to prevent regressions.
+
+Development Log Update
+Date: April 23, 2025
+
+Current State:
+
+Script Version: Process500_Deals_v8.py.
+Issue: Price Now and Price Now Source return '-' after the fourteenth update due to incorrect assumption of deal_data.get('price', -1). Reverted to v8 logic (stats.current[2] for Used), which works but doesn’t match Keepa’s Price Now (lowest price across conditions).
+Backslides: Accidental disuse of stable_fields.py caused loss of working logic (e.g., format_deal_found, format_amz_link). External files (field_mapping.json, deal_filters.json) introduced fragility.
+API Insight: Deals API response lacks a price field. stats.current[11] (Buy Box Used) is unreliable (e.g., 1 = $0.01, likely an offer count). Price Now requires computing the lowest price from stats.current[18, 19, 20, 1, 10, 8, 9].
+Progress:
+
+Price Now Solution: Developed a formula to compute the lowest price across Used conditions (Good, Very Good, Like New) and optionally New/Collectible, with source labeling. Removed redundant range filter, minimized invalid price filter to expose errors.
+Modularization Plan: Proposed merging field_mapping.json, deal_filters.json, and stable_fields.py into the main script, splitting get_field into per-column functions, and moving stable columns to working_fields.py. Added utils.py for shared functions with versioning to mitigate risks.
+Stable Fields: Analyzed stable_fields.py. Will integrate format_deal_found, format_amz_link, format_keepa_link, and updated format_percent_down_90. Discarding outdated format_price_now and fee functions (due to v6 dependency).
+Next Steps:
+
+Apply new Price Now and Price Now Source code.
+Merge external files, starting with stable_fields.py functions.
+Test CSV output for ASIN 1499810695.
+Create “Keepa Deals Debug” workspace and upload files.
+Investigate stats.current[11] errors if $0.01 prices appear.
+Known Issues:
+
+stats.current[11] may be mislabeled (offer count, not price).
+Fee calculations in stable_fields.py reference outdated Process500_Deals_v6.py.
+Risk of utils.py changes breaking columns (mitigated by versioning).
