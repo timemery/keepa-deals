@@ -2232,4 +2232,17 @@ stats.current[11] may be mislabeled (offer count, not price).
 Fee calculations in stable_fields.py reference outdated Process500_Deals_v6.py.
 Risk of utils.py changes breaking columns (mitigated by versioning).
 
-made a small change just to push the most updated version of this to GitHub. 
+Date: April 24, 2025
+Confirmed Learnings:
+1. stats_90 vs. stats_365 (Source: Browser test, test_fields_log.txt, debug_log.txt)
+   - stats_90: Derived from Deals API dr objects (product_90.get('stats', {})). Often missing stats.current or returns 0/-1 (e.g., stats.current[2]=0 for ASIN 1954966032).
+   - stats_365: Derived from Product API (data.get('stats', {})). Reliable for stats.current[2,11,19–21] (e.g., stats.current[2]=2099 for ASIN 1499810695).
+   - Issue: get_field incorrectly used stats_365.current for Used - Current, Buy Box Used - Current, etc., causing 0/-1 in CSV.
+   - Resolution: Use stats_90.current for Deals API consistency, log missing/invalid stats.current.
+2. No Fallbacks (Source: Strategy discussion, Apr 23, 2025)
+   - Fallbacks (e.g., querying Product API when Deals API lacks stats.current) risk pulling data from different timestamps or contexts, leading to inaccuracies.
+   - Strategy: Let get_field fail and log missing stats.current to identify correct Deals API source (e.g., adjust priceTypes: [2] or warehouseConditions).
+3. Unlisted Conditions (Source: User feedback, Apr 24, 2025)
+   - stats.current[2,11,19–21] (Used, Buy Box Used, Used, like new, etc.) return -1 when no book is listed in that condition (e.g., stats.current[20]=-1 for Used, very good on ASIN 1499810695).
+   - Impact: Must distinguish between API failures (missing stats.current) and valid unlisted conditions (-1).
+   - Resolution: Log stats.current when current[2] <= 0 to debug unlisted vs. missing data.
