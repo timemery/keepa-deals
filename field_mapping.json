@@ -44,7 +44,7 @@
     "Format": "format"
   },
   "sales_ranks": {
-    "Sales Rank - Current": "stats.current[0]",
+    "Sales Rank - Current": "stats.current[3]",
     "Sales Rank - 30 days avg.": "stats.avg30[0]",
     "Sales Rank - 60 days avg.": "stats.avg[0]",
     "Sales Rank - 90 days avg.": "stats.avg90[0]",
@@ -167,7 +167,7 @@
     "Used - Stock": "usedStock"
   },
   "used_conditions": {
-    "Used, like new - Current": "stats.current[12]",
+    "Used, like new - Current": "stats.current[19]",
     "Used, like new - 30 days avg.": "stats.avg30[12]",
     "Used, like new - 60 days avg.": "stats.avg[12]",
     "Used, like new - 90 days avg.": "stats.avg90[12]",
@@ -179,7 +179,7 @@
     "Used, like new - Highest 365 days": "stats.max365[12]",
     "Used, like new - 90 days OOS": "stats.outOfStockPercentage90[12]",
     "Used, like new - Stock": "usedLikeNewStock",
-    "Used, very good - Current": "stats.current[13]",
+    "Used, very good - Current": "stats.current[20]",
     "Used, very good - 30 days avg.": "stats.avg30[13]",
     "Used, very good - 60 days avg.": "stats.avg[13]",
     "Used, very good - 90 days avg.": "stats.avg90[13]",
@@ -191,7 +191,7 @@
     "Used, very good - Highest 365 days": "stats.max365[13]",
     "Used, very good - 90 days OOS": "stats.outOfStockPercentage90[13]",
     "Used, very good - Stock": "usedVeryGoodStock",
-    "Used, good - Current": "stats.current[14]",
+    "Used, good - Current": "stats.current[21]",
     "Used, good - 30 days avg.": "stats.avg30[14]",
     "Used, good - 60 days avg.": "stats.avg[14]",
     "Used, good - 90 days avg.": "stats.avg90[14]",
@@ -203,7 +203,7 @@
     "Used, good - Highest 365 days": "stats.max365[14]",
     "Used, good - 90 days OOS": "stats.outOfStockPercentage90[14]",
     "Used, good - Stock": "usedGoodStock",
-    "Used, acceptable - Current": "stats.current[15]",
+    "Used, acceptable - Current": "stats.current[22]",
     "Used, acceptable - 30 days avg.": "stats.avg30[15]",
     "Used, acceptable - 60 days avg.": "stats.avg[15]",
     "Used, acceptable - 90 days avg.": "stats.avg90[15]",
