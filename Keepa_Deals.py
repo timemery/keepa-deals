@@ -1,7 +1,6 @@
 # Chunk 1 starts
-# Dev Log: Loads configuration, API key, deal filters, headers, and field mappings from JSON files (2025-04-27).
+# Dev Log: Loads configuration, API key, deal filters, headers, and field mappings from JSON files (2025-04-19).
 # Defines constants for Keepa API base URL, headers, epoch (2011-01-01), Toronto timezone, and product types (Books, Music).
-# Uses logging format with level for debugging (2025-04-27).
 import requests
 import json
 import csv
@@ -11,11 +10,7 @@ from datetime import datetime, timedelta
 from pytz import timezone
 import logging
 
-logging.basicConfig(
-    filename='debug_log.txt',
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(message)s'
-)
+logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 with open(os.path.join(os.path.dirname(__file__), 'config.json')) as file:
     config = json.load(file)
@@ -173,134 +168,275 @@ def format_date(value, full_date=False):
 # Chunk 4 ends
 
 # Chunk 5 starts
-import logging
-import json
-import csv
-from typing import Any, Dict, List
-from keepa import Keepa
-import config  # Assuming config.py has API key
-
-# Setup logging
-logging.basicConfig(
-    filename='debug_log.txt',
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(message)s'
-)
-
-def get_field(product: Dict[str, Any], field_map: str, default: str = '-') -> Any:
-    """Extract field value from product data using field_map expression."""
+# Dev Log: Implements get_field to map headers to data fields using nested field_mapping.json (2025-04-21).
+# Fixes Amazon fields to use stats.current[4], adds robust checks for Percent Down calculations, and ensures proper price scaling (/100).
+# Handles sparse fields with DROP, formats ASIN for Excel, and logs debug info (2025-04-21).
+def safe_get(data, key, default=None):
     try:
-        # Handle simple attributes (e.g., 'asin', 'title')
-        if '.' not in field_map and '[' not in field_map:
-            value = product.get(field_map, default)
-            logging.debug(f"Field {field_map}: value={value}")
-            return value if value != default else default
-
-        # Handle nested attributes and calculations
-        parts = field_map.replace(']', '').split('[')
-        base = parts[0].split('.')
-        value = product
-
-        # Navigate nested dictionary
-        for part in base:
-            value = value.get(part, default)
-            if value == default:
-                logging.debug(f"Field {field_map}: missing key {part}")
-                return default
-
-        # Handle array indices
-        for part in parts[1:]:
-            try:
-                index = int(part)
-                value = value[index] if isinstance(value, list) and index < len(value) else default
-                if value == default:
-                    logging.debug(f"Field {field_map}: invalid index {index}")
-                    return default
-            except (ValueError, TypeError):
-                logging.debug(f"Field {field_map}: error parsing index {part}")
-                return default
-
-        # Handle calculations (e.g., Percent Down 90)
-        if 'stats' in field_map and '(' in field_map:
-            try:
-                # Replace stats expressions with evaluated values
-                expr = field_map
-                for key in ['stats.current', 'stats.avg', 'stats.avg365']:
-                    if key in expr:
-                        keys = key.split('.')
-                        val = product.get(keys[0], {}).get(keys[1], [default])[int(expr[expr.index(key)+len(key)+1])]
-                        expr = expr.replace(f"{key}[{expr[expr.index(key)+len(key)+1]}]", str(val))
-                value = eval(expr, {}, {})
-                logging.debug(f"Field {field_map}: evaluated value={value}")
-                return value
-            except Exception as e:
-                logging.debug(f"Field {field_map}: eval error {str(e)}")
-                return default
-
-        logging.debug(f"Field {field_map}: value={value}")
-        return value if value != default else default
-
-    except Exception as e:
-        logging.error(f"Field {field_map}: error {str(e)}")
+        for k in key.split('.'):
+            data = data[k]
+        return data if data is not None else default
+    except (KeyError, TypeError):
         return default
 
-def write_csv(products: List[Dict[str, Any]], field_mapping: Dict[str, Any], output_file: str = 'Keepa_Deals_Export.csv'):
-    """Write product data to CSV."""
-    headers = []
-    for section in field_mapping.values():
-        headers.extend(section.keys())
+def get_field(data, deal_data, product_90, header, field):
+    logging.debug(f"Header={header}, Field={field}")
+    stats_90 = product_90.get('stats', {}) if product_90 else {}
+    stats_365 = data.get('stats', {}) if data else {}
+    current = stats_365.get('current', [-1] * 20)
 
-    with open(output_file, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=headers, quoting=csv.QUOTE_MINIMAL)
-        writer.writeheader()
+    # Check nested FIELD_MAPPING groups
+    field_value = None
+    for group in ["basic", "sales_ranks", "reviews", "buy_box", "buy_box_used", 
+                  "amazon", "new", "new_third_party_fba", "new_third_party_fbm", 
+                  "used", "used_conditions", "list_price", "offer_counts"]:
+        if header in FIELD_MAPPING.get(group, {}):
+            field_value = FIELD_MAPPING[group][header]
+            break
+    if field_value:
+        field = field_value
 
-        for product in products:
-            row = {}
-            asin = product.get('asin', 'unknown')
-            logging.debug(f"Processing ASIN {asin}")
+    # Sparse fields that should return DROP
+    sparse_fields = [
+        "Variation Attributes", "Author", "Buy Box - Stock", "Amazon - Stock",
+        "New - Stock", "New, 3rd Party FBA - Stock", "New, 3rd Party FBM - Stock",
+        "Buy Box Used - Stock", "Used - Stock", "Used, like new - Stock",
+        "Used, very good - Stock", "Used, good - Stock", "Used, acceptable - Stock",
+        "List Price - Stock"
+    ]
+    if header in sparse_fields:
+        value = data.get(field, '') if data else deal_data.get(field, '')
+        if value in [None, '', 'None', -1, 0]:
+            logging.debug(f"{header} - sparse field, marking DROP")
+            return "DROP"
 
-            for section_name, section in field_mapping.items():
-                for field_name, field_map in section.items():
-                    # Handle URL formatting for AMZ link and Keepa Link
-                    if '{asin}' in field_map:
-                        value = field_map.format(asin=asin) if asin != 'unknown' else '-'
-                    else:
-                        value = get_field(product, field_map)
+    # Amazon fields
+    if header.startswith("Amazon - "):
+        periods = {
+            "Current": ("current", stats_365), "30 days avg.": ("avg30", stats_90),
+            "60 days avg.": ("avg", stats_90), "90 days avg.": ("avg90", stats_90),
+            "180 days avg.": ("avg180", stats_365), "365 days avg.": ("avg365", stats_365),
+            "Lowest": ("min", stats_365), "Lowest 365 days": ("min365", stats_365),
+            "Highest": ("max", stats_365), "Highest 365 days": ("max365", stats_365),
+            "90 days OOS": ("outOfStockPercentage90", stats_90)
+        }
+        period_key, stats_source = periods.get(header.replace("Amazon - ", ""), (None, None))
+        if period_key and stats_source:
+            value = stats_source.get(period_key, [-1] * 20)[4] if len(stats_source.get(period_key, [-1] * 20)) > 4 else -1
+            if period_key in ["min", "max", "min365", "max365"] and isinstance(value, list):
+                value = min(value) if "min" in period_key else max(value) if value else -1
+            logging.debug(f"{header} - value={value}")
+            if period_key == "outOfStockPercentage90":
+                return f"{value}%" if value >= 0 else '-'
+            return f"${value / 100:.2f}" if value is not None and value > 0 else 'DROP' if "60 days" in header or "365 days" in header else '-'
 
-                    # Handle Price Now Source and condition prices
-                    if field_name == 'Price Now Source':
-                        conditions = [
-                            ('Used, like new - Current', 'stats.current[20]'),
-                            ('Used, very good - Current', 'stats.current[19]'),
-                            ('Used, good - Current', 'stats.current[18]'),
-                            ('Used, acceptable - Current', 'stats.current[15]'),
-                            ('Used - Current', 'stats.current[3]')
-                        ]
-                        for cond_name, cond_map in conditions:
-                            cond_value = get_field(product, cond_map)
-                            if cond_value != '-' and float(cond_value) == float(row.get('Price Now', '-')):
-                                value = cond_name.replace(' - Current', '')
-                                break
-                        else:
-                            value = 'Used' if row.get('Price Now') != '-' else '-'
+    # Core fields
+    if header == "Percent Down 90":
+        avg = stats_90.get('avg90', [-1] * 20)[2]  # Used
+        curr = stats_90.get('current', [-1] * 20)[2]  # Used
+        value = ((avg - curr) / avg * 100) if avg is not None and curr is not None and avg > 0 and curr >= 0 else -1
+        logging.debug(f"Percent Down 90 (ASIN {product_90.get('asin')}): avg[2]={avg}, current[2]={curr}, value={value}")
+        return f"{value:.0f}%" if value >= 0 else '-'
+    elif header == "Avg. Price 90":
+        value = stats_90.get('avg90', [-1] * 20)[2]  # Used
+        logging.debug(f"Avg. Price 90 (ASIN {product_90.get('asin')}): value={value}")
+        return f"${value / 100:.2f}" if value is not None and value > 0 else '-'
+    elif header == "Percent Down 365":
+        avg = stats_365.get('avg365', [-1] * 20)[2]  # Used
+        curr = stats_365.get('current', [-1] * 20)[2]  # Used
+        value = ((avg - curr) / avg * 100) if avg is not None and curr is not None and avg > 0 and curr >= 0 else -1
+        logging.debug(f"Percent Down 365 (ASIN {product_90.get('asin')}): avg[2]={avg}, current[2]={curr}, value={value}")
+        return f"{value:.0f}%" if value >= 0 else '-'
+    elif header == "Avg. Price 365":
+        value = stats_365.get('avg365', [-1] * 20)[2]  # Used
+        logging.debug(f"Avg. Price 365 (ASIN {product_90.get('asin')}): used={value}")
+        return f"${value / 100:.2f}" if value is not None and value > 0 else '-'
+    elif header == "Price Now":
+        value = stats_90.get('current', [-1] * 20)[2]  # Used
+        logging.debug(f"Price Now (ASIN {product_90.get('asin')}): used={value}")
+        if value is not None and value >= 2000 and value <= 30100:  # $20-$301
+            return f"${value / 100:.2f}"
+        return '-'
+    elif header == "Price Now Source":
+        buy_box_used = stats_90.get('current', [-1] * 20)[11]  # Buy Box Used
+        used = stats_90.get('current', [-1] * 20)[2]  # Used
+        logging.debug(f"Price Now Source (ASIN {product_90.get('asin')}): buy_box_used={buy_box_used}, used={used}")
+        if buy_box_used is not None and buy_box_used >= 2000 and buy_box_used <= 30100:  # $20-$301
+            return "Buy Box Used"
+        if used is not None and used >= 2000 and used <= 30100:  # $20-$301
+            return "Used"
+        return "-"
+    elif header == "Deal found":
+        ts = deal_data.get('creationDate', 0)
+        logging.debug(f"Deal found - raw ts={ts}")
+        dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
+        return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
+    elif header == "last update":
+        ts = deal_data.get('lastUpdate', 0)
+        logging.debug(f"last update - raw ts={ts}")
+        dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
+        return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
+    elif header == "last price change":
+        ts = deal_data.get('currentSince', [-1] * 20)[11]
+        logging.debug(f"last price change - raw ts={ts}")
+        dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
+        return TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'
+    elif header == "Sales Rank - Reference":
+        cat_id = data.get('salesRankReference', 0)
+        logging.debug(f"Sales Rank - Reference - cat_id={cat_id}")
+        return f"https://www.amazon.com/b/?node={cat_id}" if cat_id > 0 else '-'
+    elif header == "FBA Pick&Pack Fee":
+        weight = data.get('packageWeight', 0)
+        height = data.get('packageHeight', 0)
+        length = data.get('packageLength', 0)
+        width = data.get('packageWidth', 0)
+        binding = data.get('binding', '')
+        logging.debug(f"FBA Pick&Pack Fee - weight={weight}g, dims=[{height},{length},{width}], binding={binding}")
+        return calculate_fba_fee(weight, height, length, width, binding)
+    elif header == "Referral Fee %":
+        asin = data.get('asin', '')
+        product_type = data.get('productType', 0)
+        binding = data.get('binding', '')
+        logging.debug(f"Referral Fee % - asin={asin}, product_type={PRODUCT_TYPES.get(product_type, str(product_type))}, binding={binding}")
+        return calculate_referral_fee(asin, PRODUCT_TYPES.get(product_type, str(product_type)), binding)
+    elif header == "Tracking since":
+        ts = data.get('trackingSince', 0)
+        logging.debug(f"Tracking since - raw ts={ts}")
+        dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 0 else None
+        return dt.strftime('%Y-%m-%d') if dt else '-'
+    elif header == "Categories - Root":
+        category_tree = data.get('categoryTree', [])
+        return category_tree[0]['name'] if category_tree else '-'
+    elif header == "Categories - Sub":
+        category_tree = data.get('categoryTree', [])
+        return ', '.join(cat['name'] for cat in category_tree[2:]) if len(category_tree) > 2 else '-'
+    elif header == "Categories - Tree":
+        return format_categories_tree(data.get('categoryTree', []))
+    elif header == "Freq. Bought Together":
+        return format_freq_bought_together(data.get('frequentlyBoughtTogether', []))
+    elif header == "Type":
+        product_type = data.get('productType', 0)
+        logging.debug(f"Type - productType={product_type}")
+        return PRODUCT_TYPES.get(product_type, str(product_type))
+    elif header == "Contributors":
+        return format_contributors(data.get('contributors', []))
+    elif header == "Languages":
+        return format_languages(data.get('languages', []))
+    elif header == "Publication Date":
+        return format_date(data.get('publicationDate', ''), full_date=False)
+    elif header == "Release Date":
+        return format_date(data.get('releaseDate', ''), full_date=True)
+    elif header == "Listed since":
+        ts = data.get('listedSince', 0)
+        logging.debug(f"Listed since - raw ts={ts}")
+        dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 0 else None
+        return dt.strftime('%Y-%m-%d') if dt else '-'
+    elif header == "ASIN":
+        asin = data.get('asin', '')
+        logging.debug(f"ASIN - raw={asin}")
+        return f'="{asin.zfill(10)}"'
+    elif header == "AMZ link":
+        asin = data.get('asin', '')
+        logging.debug(f"AMZ link - asin={asin}")
+        return f"https://www.amazon.com/dp/{asin}" if asin else '-'
+    elif header == "Keepa Link":
+        asin = data.get('asin', '')
+        logging.debug(f"Keepa Link - asin={asin}")
+        return f"https://keepa.com/#!product/1-{asin}" if asin else '-'
+    elif header == "Package - Quantity":
+        value = data.get('packageQuantity', 0)
+        logging.debug(f"Package - Quantity - value={value}")
+        return str(value)
+    elif header == "Package Weight":
+        value = data.get('packageWeight', 0)
+        logging.debug(f"Package Weight - value={value}g")
+        return str(value) if value > 0 else '-'
+    elif header == "Package Height":
+        value = data.get('packageHeight', 0)
+        logging.debug(f"Package Height - value={value}mm")
+        return str(value) if value > 0 else '-'
+    elif header == "Package Length":
+        value = data.get('packageLength', 0)
+        logging.debug(f"Package Length - value={value}mm")
+        return str(value) if value > 0 else '-'
+    elif header == "Package Width":
+        value = data.get('packageWidth', 0)
+        logging.debug(f"Package Width - value={value}mm")
+        return str(value) if value > 0 else '-'
 
-                    row[field_name] = value
-                    logging.debug(f"Field {field_name} (ASIN {asin}): field_map={field_map}, value={value}")
+    # Generic stats handler
+    if field.startswith('stats.'):
+        if '[' in field:
+            key, idx_part = field.split('[')
+            idx = int(idx_part.rstrip(']'))
+            if 'current' in key:
+                value = stats_365.get('current', [-1] * 20)[idx]
+            elif 'avg30' in key:
+                value = stats_90.get('avg30', [-1] * 20)[idx]
+            elif 'avg' in key and '60 days' in header:
+                value = stats_90.get('avg', [-1] * 20)[idx]
+            elif 'avg90' in key:
+                value = stats_90.get('avg90', [-1] * 20)[idx]
+            elif 'avg180' in key:
+                value = stats_365.get('avg180', [-1] * 20)[idx]
+            elif 'avg365' in key:
+                value = stats_365.get('avg365', [-1] * 20)[idx]
+            elif 'min' in key:
+                value = stats_365.get('min', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = min(value) if value else -1
+            elif 'min365' in key:
+                value = stats_365.get('min365', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = min(value) if value else -1
+            elif 'max' in key:
+                value = stats_365.get('max', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = max(value) if value else -1
+            elif 'max365' in key:
+                value = stats_365.get('max365', [-1] * 20)[idx]
+                if isinstance(value, list):
+                    value = max(value) if value else -1
+            elif 'outOfStockPercentage90' in key:
+                value = stats_90.get('outOfStockPercentage90', [-1] * 20)[idx]
+            else:
+                value = -1
+        else:
+            key = field.split('.')[1]
+            if 'salesRankDrops' in key:
+                drop_period = key.split('salesRankDrops')[1]
+                value = stats_90.get(f'salesRankDrops{drop_period}', -1) if '90' in drop_period or '30' in drop_period or '60' in drop_period else stats_365.get(f'salesRankDrops{drop_period}', -1)
+            else:
+                value = -1
+        logging.debug(f"{header} - stats field={field}, value={value}")
+        if header.startswith("Reviews - "):
+            return str(value) if value > 0 else 'DROP' if '60 days' in header else '-'
+        elif header.startswith("Sales Rank - "):
+            if 'Drops' in header:
+                return str(value) if value > 0 else 'DROP' if '60 days' in header else '-'
+            return f"{value:,}" if value is not None and value > 0 else 'DROP' if '60 days' in header else '-'
+        elif header.startswith("Buy Box - ") or header.startswith("Buy Box Used - ") or header.startswith("Used, ") or header.startswith("New - ") or header.startswith("New, 3rd Party"):
+            if 'OOS' in header:
+                return f"{value}%" if value >= 0 else '-'
+            return f"${value / 100:.2f}" if value is not None and value > 0 else 'DROP' if '60 days' in header else '-'
+        elif header.startswith(("New Offer Count", "Used Offer Count")):
+            return f"{value:,}" if value > 0 else '-'
+        elif 'OOS' in header:
+            return f"{value}%" if value >= 0 else '-'
 
-            writer.writerow(row)
-
-# Example usage (adjust based on your script)
-def main():
-    api = Keepa(config.KEEPA_API_KEY)
-    # Example: Fetch products (replace with your product fetching logic)
-    products = api.query(['B08J4FFK38'], domain='US', stats=90)  # Adjust ASINs and params
-    with open('field_mapping.json', 'r') as file:
-        field_mapping = json.load(file)
-    write_csv(products, field_mapping)
-
-if __name__ == '__main__':
-    main()
-
+    # Direct fields
+    value = data.get(field, '') if data else deal_data.get(field, '')
+    if value in [None, '', 'None', -1, 0] and header not in ['Package - Quantity']:
+        logging.debug(f"{header} - direct field={field}, value={value}, defaulting to '-'")
+        return '-'
+    if header in ['Contributors', 'Freq. Bought Together', 'Languages', 'Categories - Tree']:
+        value = globals()[f"format_{field}"](value)
+    elif header in ['Publication Date', 'Release Date']:
+        value = format_date(value, full_date=(header == 'Release Date'))
+    elif header == 'Type':
+        value = PRODUCT_TYPES.get(value, str(value))
+    logging.debug(f"{header} - direct field={field}, value={value}")
+    return str(value)
 # Chunk 5 ends
 
 # Chunk 6 starts
@@ -314,7 +450,7 @@ def extract_fields(deal, product_90, product_365):
 
 # Chunk 7 starts
 # Dev Log: Writes CSV with headers and rows, deletes existing file to avoid appending, logs file size (2025-04-19).
-def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'Keepa_Deals_Export.csv')):
+def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'keepa_full_deals_v6.csv')):
     logging.debug(f"CSV path = {filename}")
     try:
         if os.path.exists(filename):
@@ -335,7 +471,7 @@ def write_csv(data, filename=os.path.join(os.path.dirname(__file__), 'Keepa_Deal
 import sys
 
 def main():
-    logging.info("Starting Keepa_Deals...")
+    logging.info("Starting Process500_Deals_v8...")
     print("Initializing script...")
     sys.stdout.flush()
     try:
