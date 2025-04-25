@@ -82171,3 +82171,2301 @@
 2025-04-24 20:55:17,635 CSV path = /home/timscripts/keepa_api/keepa-deals/Keepa_Deals_Export.csv
 2025-04-24 20:55:17,639 File size: 15656 bytes
 2025-04-24 20:55:17,639 Script completed successfully!
+2025-04-24 21:08:28,328 Starting Process500_Deals_v8...
+2025-04-24 21:08:28,328 Connecting to keepa using key ending in p7b08b
+2025-04-24 21:08:28,331 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:29,139 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 138
+2025-04-24 21:08:29,141 0 tokens consumed
+2025-04-24 21:08:29,142 300 tokens remain
+2025-04-24 21:08:29,142 Fetching deals (page 0)...
+2025-04-24 21:08:29,149 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:30,474 https://api.keepa.com:443 "GET /deal?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&selection=%7B%22page%22%3A%200%2C%20%22domainId%22%3A%20%221%22%2C%20%22excludeCategories%22%3A%20%5B%5D%2C%20%22includeCategories%22%3A%20%5B283155%5D%2C%20%22priceTypes%22%3A%20%5B2%5D%2C%20%22deltaRange%22%3A%20%5B1950%2C%209900%5D%2C%20%22deltaPercentRange%22%3A%20%5B50%2C%202147483647%5D%2C%20%22salesRankRange%22%3A%20%5B50000%2C%201500000%5D%2C%20%22currentRange%22%3A%20%5B2000%2C%2030100%5D%2C%20%22minRating%22%3A%2010%2C%20%22isLowest%22%3A%20false%2C%20%22isLowest90%22%3A%20false%2C%20%22isLowestOffer%22%3A%20false%2C%20%22isOutOfStock%22%3A%20false%2C%20%22titleSearch%22%3A%20%22%22%2C%20%22isRangeEnabled%22%3A%20true%2C%20%22isFilterEnabled%22%3A%20true%2C%20%22filterErotic%22%3A%20false%2C%20%22singleVariation%22%3A%20true%2C%20%22hasReviews%22%3A%20false%2C%20%22isPrimeExclusive%22%3A%20false%2C%20%22mustHaveAmazonOffer%22%3A%20false%2C%20%22mustNotHaveAmazonOffer%22%3A%20false%2C%20%22sortType%22%3A%204%2C%20%22dateRange%22%3A%20%223%22%2C%20%22warehouseConditions%22%3A%20%5B2%2C%203%2C%204%2C%205%5D%7D HTTP/1.1" 200 121574
+2025-04-24 21:08:31,085 fetch_deals - page=0, deals_count=150
+2025-04-24 21:08:31,086 Deals returned: 150
+2025-04-24 21:08:31,086 Fetching product data...
+2025-04-24 21:08:31,086 Fetching ASIN 1954966032 (1/10)...
+2025-04-24 21:08:31,086 Fetching ASIN 1954966032 for 365 days...
+2025-04-24 21:08:31,086 Executing single product query
+2025-04-24 21:08:31,086 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:31,087 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:31,099 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:31,702 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-04-24 21:08:31,704 0 tokens consumed
+2025-04-24 21:08:31,706 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:33,228 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=1954966032&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 45723
+2025-04-24 21:08:33,551 1 tokens consumed
+2025-04-24 21:08:33,562 Fetching ASIN 1440245010 (2/10)...
+2025-04-24 21:08:33,563 Fetching ASIN 1440245010 for 365 days...
+2025-04-24 21:08:33,563 Executing single product query
+2025-04-24 21:08:33,563 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:33,563 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:33,565 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:34,093 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-04-24 21:08:34,094 0 tokens consumed
+2025-04-24 21:08:34,096 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:34,622 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=1440245010&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 191457
+2025-04-24 21:08:35,158 1 tokens consumed
+2025-04-24 21:08:35,181 Fetching ASIN 0914671227 (3/10)...
+2025-04-24 21:08:35,181 Fetching ASIN 0914671227 for 365 days...
+2025-04-24 21:08:35,182 Executing single product query
+2025-04-24 21:08:35,182 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:35,182 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:35,185 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:35,732 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 138
+2025-04-24 21:08:35,733 0 tokens consumed
+2025-04-24 21:08:35,735 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:37,201 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=0914671227&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 217394
+2025-04-24 21:08:37,867 1 tokens consumed
+2025-04-24 21:08:37,886 Fetching ASIN 1784962686 (4/10)...
+2025-04-24 21:08:37,886 Fetching ASIN 1784962686 for 365 days...
+2025-04-24 21:08:37,887 Executing single product query
+2025-04-24 21:08:37,887 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:37,887 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:37,889 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:38,415 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 146
+2025-04-24 21:08:38,416 0 tokens consumed
+2025-04-24 21:08:38,418 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:39,486 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=1784962686&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 67068
+2025-04-24 21:08:39,845 1 tokens consumed
+2025-04-24 21:08:39,860 Fetching ASIN 0891950257 (5/10)...
+2025-04-24 21:08:39,861 Fetching ASIN 0891950257 for 365 days...
+2025-04-24 21:08:39,861 Executing single product query
+2025-04-24 21:08:39,861 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:39,861 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:39,865 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:40,382 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 138
+2025-04-24 21:08:40,384 0 tokens consumed
+2025-04-24 21:08:40,385 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:41,490 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=0891950257&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 52946
+2025-04-24 21:08:41,830 1 tokens consumed
+2025-04-24 21:08:41,845 Fetching ASIN 9353166217 (6/10)...
+2025-04-24 21:08:41,846 Fetching ASIN 9353166217 for 365 days...
+2025-04-24 21:08:41,846 Executing single product query
+2025-04-24 21:08:41,846 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:41,846 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:41,851 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:43,684 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-04-24 21:08:43,685 0 tokens consumed
+2025-04-24 21:08:43,687 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:44,299 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=9353166217&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 61276
+2025-04-24 21:08:44,714 1 tokens consumed
+2025-04-24 21:08:44,728 Fetching ASIN 053123035X (7/10)...
+2025-04-24 21:08:44,729 Fetching ASIN 053123035X for 365 days...
+2025-04-24 21:08:44,729 Executing single product query
+2025-04-24 21:08:44,729 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:44,729 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:44,744 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:45,319 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-04-24 21:08:45,321 0 tokens consumed
+2025-04-24 21:08:45,325 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:46,551 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=053123035X&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 101059
+2025-04-24 21:08:47,184 1 tokens consumed
+2025-04-24 21:08:47,202 Fetching ASIN 0785718168 (8/10)...
+2025-04-24 21:08:47,202 Fetching ASIN 0785718168 for 365 days...
+2025-04-24 21:08:47,202 Executing single product query
+2025-04-24 21:08:47,202 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:47,202 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:47,205 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:47,684 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-04-24 21:08:47,685 0 tokens consumed
+2025-04-24 21:08:47,686 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:49,032 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=0785718168&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 40830
+2025-04-24 21:08:49,185 1 tokens consumed
+2025-04-24 21:08:49,198 Fetching ASIN 0060618094 (9/10)...
+2025-04-24 21:08:49,198 Fetching ASIN 0060618094 for 365 days...
+2025-04-24 21:08:49,198 Executing single product query
+2025-04-24 21:08:49,198 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:49,199 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:49,203 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:49,794 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 138
+2025-04-24 21:08:49,795 0 tokens consumed
+2025-04-24 21:08:49,797 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:51,158 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=0060618094&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 75656
+2025-04-24 21:08:51,578 1 tokens consumed
+2025-04-24 21:08:51,593 Fetching ASIN 1465272186 (10/10)...
+2025-04-24 21:08:51,594 Fetching ASIN 1465272186 for 365 days...
+2025-04-24 21:08:51,594 Executing single product query
+2025-04-24 21:08:51,594 Estimated time to complete 1 request(s) is 0.50 minutes
+2025-04-24 21:08:51,594 	with a refill rate of 5 token(s) per minute
+2025-04-24 21:08:51,596 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:52,185 https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-04-24 21:08:52,186 0 tokens consumed
+2025-04-24 21:08:52,187 Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-24 21:08:52,638 https://api.keepa.com:443 "GET /product/?stats=365&domain=1&stock=0&history=1&rating=0&buybox=0&videos=0&aplus=0&asin=1465272186&key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 129433
+2025-04-24 21:08:53,029 1 tokens consumed
+2025-04-24 21:08:53,048 Processing deals...
+2025-04-24 21:08:53,048 Processing ASIN 1954966032 (1/10)...
+2025-04-24 21:08:53,048 ASIN 1954966032, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,049 ASIN 1954966032, Header=Avg. Price 90, Value=$117.31
+2025-04-24 21:08:53,049 ASIN 1954966032, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,050 ASIN 1954966032, Header=Avg. Price 365, Value=$60.93
+2025-04-24 21:08:53,050 ASIN 1954966032, Header=Price Now, Value=$13667.50
+2025-04-24 21:08:53,050 ASIN 1954966032, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,050 ASIN 1954966032, Header=Deal found, Value=7513610
+2025-04-24 21:08:53,050 ASIN 1954966032, Header=AMZ link, Value=https://www.amazon.com/dp/1954966032
+2025-04-24 21:08:53,051 ASIN 1954966032, Header=Keepa Link, Value=https://keepa.com/#!product/1-1954966032
+2025-04-24 21:08:53,051 ASIN 1954966032, Header=Title, Value=Airick Flies High
+2025-04-24 21:08:53,051 ASIN 1954966032, Header=last update, Value=7528388
+2025-04-24 21:08:53,051 ASIN 1954966032, Header=last price change, Value=-
+2025-04-24 21:08:53,051 ASIN 1954966032, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,051 ASIN 1954966032, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,053 ASIN 1954966032, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,053 ASIN 1954966032, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,053 ASIN 1954966032, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,053 ASIN 1954966032, Header=Tracking since, Value=5381062
+2025-04-24 21:08:53,053 ASIN 1954966032, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,053 ASIN 1954966032, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 4, 'name': "Children's Books"}, {'catId': 1084192, 'name': 'Growing Up & Facts of Life'}, {'catId': 7009087011, 'name': 'Friendship, Social Skills & School Life'}, {'catId': 3139, 'name': 'Disabilities'}]
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=ASIN, Value=1954966032
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Freq. Bought Together, Value=None
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Type, Value=0
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Manufacturer, Value=Emerge Publishing
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Brand, Value=None
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Product Group, Value=Book
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,054 ASIN 1954966032, Header=Item Type, Value=Book
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Author, Value=Gaffney, Eric
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Contributors, Value=[['Gaffney, Eric', 'author'], ['Wenaas, Alisha', 'illustrator']]
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Number of Items, Value=1
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Number of Pages, Value=48
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Publication Date, Value=20210318
+2025-04-24 21:08:53,055 ASIN 1954966032, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Package - Quantity, Value=0
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Package Weight, Value=118
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Package Height, Value=7
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Package Length, Value=210
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Package Width, Value=209
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Listed since, Value=5374494
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Edition, Value=None
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Release Date, Value=-1
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Format, Value=None
+2025-04-24 21:08:53,056 ASIN 1954966032, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,057 ASIN 1954966032, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,058 ASIN 1954966032, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,059 ASIN 1954966032, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=New - Current, Value=-
+2025-04-24 21:08:53,060 ASIN 1954966032, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - Highest, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New - Stock, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,061 ASIN 1954966032, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,062 ASIN 1954966032, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,063 ASIN 1954966032, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,064 ASIN 1954966032, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - Current, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,065 ASIN 1954966032, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,066 ASIN 1954966032, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,067 ASIN 1954966032, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,068 ASIN 1954966032, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,069 ASIN 1954966032, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,070 ASIN 1954966032, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,071 ASIN 1954966032, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,071 Processing ASIN 1440245010 (2/10)...
+2025-04-24 21:08:53,071 ASIN 1440245010, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Avg. Price 90, Value=$111.03
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Avg. Price 365, Value=$141.28
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Price Now, Value=$13219.85
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Deal found, Value=7528366
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=AMZ link, Value=https://www.amazon.com/dp/1440245010
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Keepa Link, Value=https://keepa.com/#!product/1-1440245010
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=Title, Value=Gun Digest Book of Modern Gun Values: The Shooter's Guide to Guns 1900 to Present
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=last update, Value=7528364
+2025-04-24 21:08:53,072 ASIN 1440245010, Header=last price change, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Tracking since, Value=2393898
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 48, 'name': 'Crafts, Hobbies & Home'}, {'catId': 5066, 'name': 'Antiques & Collectibles'}, {'catId': 5083, 'name': 'Firearms & Weapons'}, {'catId': 11160403011, 'name': 'Firearms'}]
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=ASIN, Value=1440245010
+2025-04-24 21:08:53,073 ASIN 1440245010, Header=Freq. Bought Together, Value=['1510726888', '1936120909']
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Type, Value=0
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Manufacturer, Value=Gun Digest Books
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Brand, Value=Gun Digest Books
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Product Group, Value=Book
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Item Type, Value=Book
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Author, Value=Peterson, Phillip
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Contributors, Value=[['Peterson, Phillip', 'author'], ['Johnson, Andrew', 'author']]
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Number of Items, Value=1
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Number of Pages, Value=712
+2025-04-24 21:08:53,074 ASIN 1440245010, Header=Publication Date, Value=20160411
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Package - Quantity, Value=1
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Package Weight, Value=1315
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Package Height, Value=36
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Package Length, Value=274
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Package Width, Value=208
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Listed since, Value=2250760
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Edition, Value=Eighteenth
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Release Date, Value=-1
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Format, Value=None
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,075 ASIN 1440245010, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,076 ASIN 1440245010, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,077 ASIN 1440245010, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=New - Current, Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,078 ASIN 1440245010, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New - Highest, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New - Stock, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,079 ASIN 1440245010, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,080 ASIN 1440245010, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Used - Current, Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,081 ASIN 1440245010, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,082 ASIN 1440245010, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,083 ASIN 1440245010, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,084 ASIN 1440245010, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,085 ASIN 1440245010, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,086 ASIN 1440245010, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,087 ASIN 1440245010, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,087 ASIN 1440245010, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,087 Processing ASIN 0914671227 (3/10)...
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Avg. Price 90, Value=$118.63
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Avg. Price 365, Value=$142.64
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Price Now, Value=$11873.58
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Deal found, Value=7523592
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=AMZ link, Value=https://www.amazon.com/dp/0914671227
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Keepa Link, Value=https://keepa.com/#!product/1-0914671227
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=Title, Value=Absolute Solitude: Selected Poems
+2025-04-24 21:08:53,087 ASIN 0914671227, Header=last update, Value=7528388
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=last price change, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Tracking since, Value=2518013
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 17, 'name': 'Literature & Fiction'}, {'catId': 10204, 'name': 'History & Criticism'}, {'catId': 10207, 'name': 'Criticism & Theory'}]
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=ASIN, Value=0914671227
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Freq. Bought Together, Value=['1893996557']
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Type, Value=0
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Manufacturer, Value=Archipelago
+2025-04-24 21:08:53,088 ASIN 0914671227, Header=Brand, Value=Archipelago Botanicals
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Product Group, Value=Book
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Item Type, Value=Book
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Author, Value=Loynaz, Dulce Maria
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Contributors, Value=[['Loynaz, Dulce Maria', 'author'], ["O'Connor, James", 'translator']]
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Number of Items, Value=1
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Number of Pages, Value=240
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Publication Date, Value=20160503
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Languages, Value=[['English', 'Published'], ['Spanish', 'Original Language'], ['English']]
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Package - Quantity, Value=1
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Package Weight, Value=307
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Package Height, Value=20
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Package Length, Value=164
+2025-04-24 21:08:53,089 ASIN 0914671227, Header=Package Width, Value=153
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Listed since, Value=2078764
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Edition, Value=None
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Release Date, Value=20160503
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Format, Value=None
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,090 ASIN 0914671227, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,091 ASIN 0914671227, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=New - Current, Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,092 ASIN 0914671227, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - Highest, Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,093 ASIN 0914671227, Header=New - Stock, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,094 ASIN 0914671227, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,095 ASIN 0914671227, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - Current, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,096 ASIN 0914671227, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,097 ASIN 0914671227, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,098 ASIN 0914671227, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,099 ASIN 0914671227, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,100 ASIN 0914671227, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,101 ASIN 0914671227, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,101 Processing ASIN 1784962686 (4/10)...
+2025-04-24 21:08:53,101 ASIN 1784962686, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,101 ASIN 1784962686, Header=Avg. Price 90, Value=$119.47
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Avg. Price 365, Value=$56.03
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Price Now, Value=$10025.80
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Deal found, Value=7526530
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=AMZ link, Value=https://www.amazon.com/dp/1784962686
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Keepa Link, Value=https://keepa.com/#!product/1-1784962686
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Title, Value=Asurmen: Hand of Asuryan (1) (Phoenix Lords)
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=last update, Value=7528388
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=last price change, Value=-
+2025-04-24 21:08:53,102 ASIN 1784962686, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Tracking since, Value=2998044
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 25, 'name': 'Science Fiction & Fantasy'}, {'catId': 16272, 'name': 'Science Fiction'}, {'catId': 16273, 'name': 'Adventure'}]
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=ASIN, Value=1784962686
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Freq. Bought Together, Value=['1784966126', '1784966754']
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Type, Value=0
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Manufacturer, Value=Games Workshop
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Brand, Value=Games Workshop
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Product Group, Value=Book
+2025-04-24 21:08:53,103 ASIN 1784962686, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Item Type, Value=Book
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Author, Value=Thorpe, Gav
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Contributors, Value=[['Thorpe, Gav', 'author']]
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Number of Items, Value=1
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Number of Pages, Value=272
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Publication Date, Value=20160906
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Package - Quantity, Value=1
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Package Weight, Value=204
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Package Height, Value=23
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Package Length, Value=196
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Package Width, Value=127
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Listed since, Value=2532328
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Edition, Value=Reprint
+2025-04-24 21:08:53,104 ASIN 1784962686, Header=Release Date, Value=20160906
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Format, Value=None
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,105 ASIN 1784962686, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,106 ASIN 1784962686, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - Current, Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,107 ASIN 1784962686, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New - Highest, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New - Stock, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,108 ASIN 1784962686, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,109 ASIN 1784962686, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,110 ASIN 1784962686, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,110 ASIN 1784962686, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,110 ASIN 1784962686, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,110 ASIN 1784962686, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,110 ASIN 1784962686, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,110 ASIN 1784962686, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - Current, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,111 ASIN 1784962686, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,112 ASIN 1784962686, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,113 ASIN 1784962686, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,114 ASIN 1784962686, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,115 ASIN 1784962686, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,116 ASIN 1784962686, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,116 Processing ASIN 0891950257 (5/10)...
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Avg. Price 90, Value=$97.07
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Avg. Price 365, Value=$68.15
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Price Now, Value=$8126.35
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Deal found, Value=7525510
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=AMZ link, Value=https://www.amazon.com/dp/0891950257
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Keepa Link, Value=https://keepa.com/#!product/1-0891950257
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Title, Value=Forty Centuries of Wage and Price Controls: How Not to Fight Inflation
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=last update, Value=7528388
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=last price change, Value=-
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,117 ASIN 0891950257, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Tracking since, Value=2667547
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 3, 'name': 'Business & Money'}, {'catId': 2581, 'name': 'Economics'}, {'catId': 2589, 'name': 'Economic History'}]
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=ASIN, Value=0891950257
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Freq. Bought Together, Value=None
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Type, Value=0
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Manufacturer, Value=Green Hill Pub
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Brand, Value=Brand: Jameson Books Inc.
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Product Group, Value=Book
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,118 ASIN 0891950257, Header=Item Type, Value=Book
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Author, Value=Schuettinger, Robert Lindsay
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Contributors, Value=[['Schuettinger, Robert Lindsay', 'author']]
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Binding, Value=Hardcover
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Number of Items, Value=1
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Number of Pages, Value=184
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Publication Date, Value=1979
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Package - Quantity, Value=0
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Package Weight, Value=431
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Package Height, Value=23
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Package Length, Value=231
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Package Width, Value=157
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Listed since, Value=-1
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Edition, Value=None
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Release Date, Value=-1
+2025-04-24 21:08:53,119 ASIN 0891950257, Header=Format, Value=None
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,120 ASIN 0891950257, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,121 ASIN 0891950257, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - Current, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - Highest, Value=-
+2025-04-24 21:08:53,122 ASIN 0891950257, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New - Stock, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,123 ASIN 0891950257, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,124 ASIN 0891950257, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - Current, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,125 ASIN 0891950257, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,126 ASIN 0891950257, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,127 ASIN 0891950257, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,128 ASIN 0891950257, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,129 ASIN 0891950257, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,130 ASIN 0891950257, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,131 ASIN 0891950257, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,131 Processing ASIN 9353166217 (6/10)...
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Avg. Price 90, Value=$106.83
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Avg. Price 365, Value=$167.55
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Price Now, Value=$3668.61
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Deal found, Value=7528268
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=AMZ link, Value=https://www.amazon.com/dp/9353166217
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Keepa Link, Value=https://keepa.com/#!product/1-9353166217
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Title, Value=FLUID MECHANICS: FUNDAMENTALS AND APPLICATION 4Ed
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=last update, Value=7528344
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=last price change, Value=-
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,132 ASIN 9353166217, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Tracking since, Value=4476220
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 21, 'name': 'Reference'}]
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=ASIN, Value=9353166217
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Freq. Bought Together, Value=['9390185289']
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Type, Value=0
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Manufacturer, Value=Mc Graw Hill India
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Brand, Value=McGraw-Hill Education
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Product Group, Value=Book
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Item Type, Value=Book
+2025-04-24 21:08:53,133 ASIN 9353166217, Header=Author, Value=CENGEl
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Contributors, Value=[['CENGEl', 'author']]
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Number of Items, Value=-1
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Number of Pages, Value=1024
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Publication Date, Value=20191205
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Package - Quantity, Value=0
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Package Weight, Value=1320
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Package Height, Value=55
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Package Length, Value=321
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Package Width, Value=210
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Listed since, Value=4424132
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Edition, Value=4th
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Release Date, Value=-1
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Format, Value=None
+2025-04-24 21:08:53,134 ASIN 9353166217, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,135 ASIN 9353166217, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,136 ASIN 9353166217, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - Current, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,137 ASIN 9353166217, Header=New - Highest, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New - Stock, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,138 ASIN 9353166217, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,139 ASIN 9353166217, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - Current, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,140 ASIN 9353166217, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,141 ASIN 9353166217, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,142 ASIN 9353166217, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,143 ASIN 9353166217, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,144 ASIN 9353166217, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,145 ASIN 9353166217, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,145 Processing ASIN 053123035X (7/10)...
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Avg. Price 90, Value=$110.55
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Avg. Price 365, Value=$100.55
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Price Now, Value=$10309.15
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Deal found, Value=7528228
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=AMZ link, Value=https://www.amazon.com/dp/053123035X
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Keepa Link, Value=https://keepa.com/#!product/1-053123035X
+2025-04-24 21:08:53,146 ASIN 053123035X, Header=Title, Value=Frederic Chopin (Revised Edition) (Getting to Know the World's Greatest Composers)
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=last update, Value=7528388
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=last price change, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Tracking since, Value=3572796
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 4, 'name': "Children's Books"}, {'catId': 2351, 'name': 'Biographies'}, {'catId': 2356, 'name': 'Musical'}]
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=ASIN, Value=053123035X
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Freq. Bought Together, Value=['053122242X', '0516445413']
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Type, Value=0
+2025-04-24 21:08:53,147 ASIN 053123035X, Header=Manufacturer, Value=Children's Press
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Brand, Value=Children's Press
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Product Group, Value=Book
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Item Type, Value=Book
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Author, Value=Venezia, Mike
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Contributors, Value=[['Venezia, Mike', 'author'], ['Venezia, Mike', 'illustrator']]
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Number of Items, Value=1
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Number of Pages, Value=40
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Publication Date, Value=20170901
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Package - Quantity, Value=1
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Package Weight, Value=91
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Package Height, Value=5
+2025-04-24 21:08:53,148 ASIN 053123035X, Header=Package Length, Value=236
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Package Width, Value=199
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Listed since, Value=3250696
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Edition, Value=Revised
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Release Date, Value=20170901
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Format, Value=None
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,149 ASIN 053123035X, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,150 ASIN 053123035X, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=New - Current, Value=-
+2025-04-24 21:08:53,151 ASIN 053123035X, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - Highest, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New - Stock, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,152 ASIN 053123035X, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,153 ASIN 053123035X, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,154 ASIN 053123035X, Header=Used - Current, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,155 ASIN 053123035X, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,156 ASIN 053123035X, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,157 ASIN 053123035X, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,158 ASIN 053123035X, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,159 ASIN 053123035X, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,160 ASIN 053123035X, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,160 ASIN 053123035X, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,160 ASIN 053123035X, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,160 ASIN 053123035X, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,160 ASIN 053123035X, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,160 ASIN 053123035X, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,160 Processing ASIN 0785718168 (8/10)...
+2025-04-24 21:08:53,160 ASIN 0785718168, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,160 ASIN 0785718168, Header=Avg. Price 90, Value=$90.07
+2025-04-24 21:08:53,160 ASIN 0785718168, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,160 ASIN 0785718168, Header=Avg. Price 365, Value=$110.41
+2025-04-24 21:08:53,160 ASIN 0785718168, Header=Price Now, Value=$6105.13
+2025-04-24 21:08:53,160 ASIN 0785718168, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Deal found, Value=7527620
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=AMZ link, Value=https://www.amazon.com/dp/0785718168
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Keepa Link, Value=https://keepa.com/#!product/1-0785718168
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Title, Value=Oh, Cuan Lejos Llegaras! (Oh, The Places You'll Go!) (Turtleback School & Library Binding Edition) (Spanish Edition)
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=last update, Value=7528388
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=last price change, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Tracking since, Value=141660
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,161 ASIN 0785718168, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 4, 'name': "Children's Books"}, {'catId': 2966, 'name': 'Literature & Fiction'}, {'catId': 3004, 'name': 'Poetry'}]
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=ASIN, Value=0785718168
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Freq. Bought Together, Value=['0679805273']
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Type, Value=0
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Manufacturer, Value=Turtleback Books
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Brand, Value=None
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Product Group, Value=Book
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Item Type, Value=Book
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Author, Value=Dr. Seuss
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Contributors, Value=[['Dr. Seuss', 'author']]
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Binding, Value=School & Library Binding
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Number of Items, Value=-1
+2025-04-24 21:08:53,162 ASIN 0785718168, Header=Number of Pages, Value=44
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Publication Date, Value=19930101
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Languages, Value=[['Spanish', 'Published'], ['Icelandic', 'Published'], ['Spanish', 'Original Language'], ['English']]
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Package - Quantity, Value=1
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Package Weight, Value=422
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Package Height, Value=10
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Package Length, Value=277
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Package Width, Value=212
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Listed since, Value=0
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Edition, Value=Bound for Schools & Libraries ed.
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Release Date, Value=-1
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Format, Value=None
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,163 ASIN 0785718168, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,164 ASIN 0785718168, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,165 ASIN 0785718168, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - Current, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - Highest, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,166 ASIN 0785718168, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New - Stock, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,167 ASIN 0785718168, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,168 ASIN 0785718168, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - Current, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,169 ASIN 0785718168, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,170 ASIN 0785718168, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,171 ASIN 0785718168, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,172 ASIN 0785718168, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,173 ASIN 0785718168, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,174 ASIN 0785718168, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,174 Processing ASIN 0060618094 (9/10)...
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Avg. Price 90, Value=$102.84
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Avg. Price 365, Value=$43.71
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Price Now, Value=$2976.37
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,174 ASIN 0060618094, Header=Deal found, Value=7528076
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=AMZ link, Value=https://www.amazon.com/dp/0060618094
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Keepa Link, Value=https://keepa.com/#!product/1-0060618094
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Title, Value=The Sacrament of the Present Moment (English and French Edition)
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=last update, Value=7528388
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=last price change, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Tracking since, Value=2573419
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,175 ASIN 0060618094, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 22, 'name': 'Religion & Spirituality'}]
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=ASIN, Value=0060618094
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Freq. Bought Together, Value=None
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Type, Value=0
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Manufacturer, Value=Harper Collins
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Brand, Value=None
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Product Group, Value=Book
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Item Type, Value=Book
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Author, Value=Jean-Pierre de Caussade
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Contributors, Value=[['Jean-Pierre de Caussade', 'author']]
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Binding, Value=Hardcover
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Number of Items, Value=1
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Number of Pages, Value=103
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Publication Date, Value=1982
+2025-04-24 21:08:53,176 ASIN 0060618094, Header=Languages, Value=[['English', 'Published'], ['French', 'Published'], ['English', 'Original Language'], ['French', 'Original Language'], ['English'], ['French']]
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Package - Quantity, Value=0
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Package Weight, Value=227
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Package Height, Value=19
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Package Length, Value=197
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Package Width, Value=133
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Listed since, Value=0
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Edition, Value=None
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Release Date, Value=-1
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Format, Value=None
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,177 ASIN 0060618094, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,178 ASIN 0060618094, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,179 ASIN 0060618094, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,180 ASIN 0060618094, Header=New - Current, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - Highest, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New - Stock, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,181 ASIN 0060618094, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,182 ASIN 0060618094, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,183 ASIN 0060618094, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - Current, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,184 ASIN 0060618094, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,185 ASIN 0060618094, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,186 ASIN 0060618094, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,187 ASIN 0060618094, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,188 ASIN 0060618094, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,189 ASIN 0060618094, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,189 Processing ASIN 1465272186 (10/10)...
+2025-04-24 21:08:53,189 ASIN 1465272186, Header=Percent Down 90, Value=-
+2025-04-24 21:08:53,189 ASIN 1465272186, Header=Avg. Price 90, Value=$98.84
+2025-04-24 21:08:53,189 ASIN 1465272186, Header=Percent Down 365, Value=-
+2025-04-24 21:08:53,189 ASIN 1465272186, Header=Avg. Price 365, Value=$152.60
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Price Now, Value=$3108.66
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Price Now Source, Value=-
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Deal found, Value=7528360
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=AMZ link, Value=https://www.amazon.com/dp/1465272186
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Keepa Link, Value=https://keepa.com/#!product/1-1465272186
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Title, Value=Basic Data Processing Using Excel
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=last update, Value=7528360
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=last price change, Value=-
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Sales Rank - Reference, Value=283155
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Reviews - Rating, Value=-
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Reviews - Review Count, Value=-
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=FBA Pick&Pack Fee, Value=-
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Referral Fee %, Value=-
+2025-04-24 21:08:53,190 ASIN 1465272186, Header=Tracking since, Value=2635608
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Categories - Root, Value=-
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Categories - Sub, Value=-
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Categories - Tree, Value=[{'catId': 283155, 'name': 'Books'}, {'catId': 1000, 'name': 'Subjects'}, {'catId': 3, 'name': 'Business & Money'}]
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=ASIN, Value=1465272186
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Freq. Bought Together, Value=['1119702909']
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Type, Value=0
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Manufacturer, Value=Kendall Hunt Publishing
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Brand, Value=Kendall/Hunt Publishing Company
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Product Group, Value=Book
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Variation Attributes, Value=-
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Item Type, Value=Book
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Author, Value=Ruifang Hope Sun
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Contributors, Value=[['Ruifang Hope Sun', 'author']]
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Binding, Value=Paperback
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Number of Items, Value=1
+2025-04-24 21:08:53,191 ASIN 1465272186, Header=Number of Pages, Value=152
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Publication Date, Value=20151117
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Languages, Value=[['English', 'Published'], ['English', 'Original Language'], ['English']]
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Package - Quantity, Value=0
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Package Weight, Value=383
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Package Height, Value=7
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Package Length, Value=276
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Package Width, Value=218
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Listed since, Value=2587352
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Edition, Value=1
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Release Date, Value=-1
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Format, Value=None
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Sales Rank - Current, Value=-
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Sales Rank - 30 days avg., Value=-
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Sales Rank - 60 days avg., Value=-
+2025-04-24 21:08:53,192 ASIN 1465272186, Header=Sales Rank - 90 days avg., Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - 180 days avg., Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - 365 days avg., Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Lowest, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Lowest 365 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Highest, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Highest 365 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Drops last 30 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Drops last 60 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Drops last 90 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Drops last 180 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Sales Rank - Drops last 365 days, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Buy Box - Current, Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Buy Box - 30 days avg., Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Buy Box - 60 days avg., Value=-
+2025-04-24 21:08:53,193 ASIN 1465272186, Header=Buy Box - 90 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - 180 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - 365 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - Lowest, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - Lowest 365 days, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - Highest, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - Highest 365 days, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - 90 days OOS, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Buy Box - Stock, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - Current, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - 30 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - 60 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - 90 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - 180 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - 365 days avg., Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - Lowest, Value=-
+2025-04-24 21:08:53,194 ASIN 1465272186, Header=Amazon - Lowest 365 days, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=Amazon - Highest, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=Amazon - Highest 365 days, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=Amazon - 90 days OOS, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=Amazon - Stock, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - Current, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - 30 days avg., Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - 60 days avg., Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - 90 days avg., Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - 180 days avg., Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - 365 days avg., Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - Lowest, Value=-
+2025-04-24 21:08:53,195 ASIN 1465272186, Header=New - Lowest 365 days, Value=-
+2025-04-24 21:08:53,202 ASIN 1465272186, Header=New - Highest, Value=-
+2025-04-24 21:08:53,202 ASIN 1465272186, Header=New - Highest 365 days, Value=-
+2025-04-24 21:08:53,202 ASIN 1465272186, Header=New - 90 days OOS, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New - Stock, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - Current, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - 30 days avg., Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - 60 days avg., Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - 90 days avg., Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - 180 days avg., Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - 365 days avg., Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - Lowest, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - Lowest 365 days, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - Highest, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - Highest 365 days, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - 90 days OOS, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBA - Stock, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBM - Current, Value=-
+2025-04-24 21:08:53,203 ASIN 1465272186, Header=New, 3rd Party FBM - 30 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - 60 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - 90 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - 180 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - 365 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - Lowest, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - Lowest 365 days, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - Highest, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - Highest 365 days, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - 90 days OOS, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=New, 3rd Party FBM - Stock, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=Buy Box Used - Current, Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=Buy Box Used - 30 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=Buy Box Used - 60 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=Buy Box Used - 90 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=Buy Box Used - 180 days avg., Value=-
+2025-04-24 21:08:53,204 ASIN 1465272186, Header=Buy Box Used - 365 days avg., Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Buy Box Used - Lowest, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Buy Box Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Buy Box Used - Highest, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Buy Box Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Buy Box Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Buy Box Used - Stock, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - Current, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - 30 days avg., Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - 60 days avg., Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - 90 days avg., Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - 180 days avg., Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - 365 days avg., Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - Lowest, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - Lowest 365 days, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - Highest, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - Highest 365 days, Value=-
+2025-04-24 21:08:53,205 ASIN 1465272186, Header=Used - 90 days OOS, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used - Stock, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - Current, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - 30 days avg., Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - 60 days avg., Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - 90 days avg., Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - 180 days avg., Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - 365 days avg., Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - Lowest, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - Lowest 365 days, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - Highest, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - Highest 365 days, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - 90 days OOS, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, like new - Stock, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, very good - Current, Value=-
+2025-04-24 21:08:53,206 ASIN 1465272186, Header=Used, very good - 30 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - 60 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - 90 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - 180 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - 365 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - Lowest, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - Highest, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - Highest 365 days, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - 90 days OOS, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, very good - Stock, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, good - Current, Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, good - 30 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, good - 60 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, good - 90 days avg., Value=-
+2025-04-24 21:08:53,207 ASIN 1465272186, Header=Used, good - 180 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - 365 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - Lowest, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - Lowest 365 days, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - Highest, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - Highest 365 days, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - 90 days OOS, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, good - Stock, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - Current, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - 30 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - 60 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - 90 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - 180 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - 365 days avg., Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - Lowest, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - Lowest 365 days, Value=-
+2025-04-24 21:08:53,208 ASIN 1465272186, Header=Used, acceptable - Highest, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=Used, acceptable - Highest 365 days, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=Used, acceptable - 90 days OOS, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=Used, acceptable - Stock, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - Current, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - 30 days avg., Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - 60 days avg., Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - 90 days avg., Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - 180 days avg., Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - 365 days avg., Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - Lowest, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - Lowest 365 days, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - Highest, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - Highest 365 days, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - 90 days OOS, Value=-
+2025-04-24 21:08:53,209 ASIN 1465272186, Header=List Price - Stock, Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=New Offer Count - Current, Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=New Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=New Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=New Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=New Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=New Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=Used Offer Count - Current, Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=Used Offer Count - 30 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=Used Offer Count - 60 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=Used Offer Count - 90 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=Used Offer Count - 180 days avg., Value=-
+2025-04-24 21:08:53,210 ASIN 1465272186, Header=Used Offer Count - 365 days avg., Value=-
+2025-04-24 21:08:53,210 Rows generated: 10
+2025-04-24 21:08:53,211 Writing CSV...
+2025-04-24 21:08:53,211 CSV path = /home/timscripts/keepa_api/keepa-deals/Keepa_Deals_Export.csv
+2025-04-24 21:08:53,213 File size: 15656 bytes
+2025-04-24 21:08:53,214 Script completed successfully!
