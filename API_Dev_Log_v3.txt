@@ -2246,3 +2246,37 @@ Confirmed Learnings:
    - stats.current[2,11,19–21] (Used, Buy Box Used, Used, like new, etc.) return -1 when no book is listed in that condition (e.g., stats.current[20]=-1 for Used, very good on ASIN 1499810695).
    - Impact: Must distinguish between API failures (missing stats.current) and valid unlisted conditions (-1).
    - Resolution: Log stats.current when current[2] <= 0 to debug unlisted vs. missing data.
+
+   Date: April 24, 2025
+Confirmed Learnings (Updated):
+1. stats_90 vs. stats_365 (Source: Browser test, test_fields_log.txt, debug_log.txt, Apr 24)
+   - stats_90: From Deals API dr objects (product_90.get('stats', {})). Condition prices (Used - Current: stats.current[2], Buy Box Used - Current: [11], etc.) often missing or 0/-1 (e.g., ASIN 1954966032: stats.current[2]=0).
+   - stats_365: From Product API (data.get('stats', {})). Reliable for stats.current[2,11,19–21] (e.g., ASIN 1499810695: stats.current[2]=2099, [21]=1999).
+   - Issue: get_field used stats_365.current for condition prices, causing -1/blank in CSV.
+   - Resolution: Use stats_90.current, log when current[2] <= 0 to debug missing/unlisted data.
+2. No Fallbacks (Source: Strategy discussion, Apr 23)
+   - Fallbacks (e.g., Product API for missing Deals API stats.current) risk inconsistent data (e.g., timestamp mismatches). Let get_field fail to force correct Deals API source.
+3. Unlisted Conditions (Source: User feedback, Apr 24)
+   - stats.current[2,11,19–21] return -1 for unlisted conditions (e.g., ASIN 1499810695: stats.current[20]=-1 for Used, very good).
+   - Resolution: Log stats.current when missing/invalid to distinguish API failures vs. unlisted conditions.
+
+   Dev Log Update
+2025-04-27: Continued debugging Keepa_Deals.py. Fixed TypeError in fetch_product by removing product_code/history (Chunk 8). CSV output shows progress: Used - Current (e.g., 2099), Sales Rank - Drops (e.g., 1, 3) correct but unformatted. Issues: Used, like new - Averages shows offer counts (e.g., 2, 3) instead of prices (e.g., $35.57), New Offer Count/Amazon fields contain prices (e.g., 1499), prices not converted to dollars, Used - Lowest has unparsed lists (e.g., [6410422, 19529]). Root cause: field_mapping.json misalignments (e.g., New Offer Count mapped to stats.current[4] instead of stats.current[8]) and get_field lacking price formatting/list parsing. fetch_deals confirmed compatible. Next: Update field_mapping.json, enhance get_field for formatting/parsing.
+
+Dev Log Update
+2025-04-28: Major regression in Keepa_Deals.py after updating field_mapping.json and Chunk 6 (get_field). CSV output showed inflated prices (e.g., Avg. Price 90=$15081.41 for 1954966032, should be $117.48) and empty fields (e.g., Sales Rank, Offer Counts). Previous CSV had correct Used - Current (2099), Sales Rank - Drops (1), but needed price formatting ($20.99) and Used, like new prices ($35.57, not 2). Cause: field_mapping.json indices (e.g., stats.current[8] for New Offer Count) and get_field list parsing disrupted data extraction. Plan: Revert to previous field_mapping.json and Chunk 6, update get_field for price formatting and list parsing, test incrementally.
+
+Dev Log Update
+2025-04-28: CSV output still broken after reverting field_mapping.json and updating Chunk 6. Prices inflated (e.g., Avg. Price 90=$15081.14 for 1954966032, should be $117.48), most fields empty. Debug log (for grok apr 24 8:44) shows get_field errors: 'list index out of range' for stats.avg90[3], 'list object has no attribute get' for stats.current. Cause: get_field’s new list parsing assumes stats fields are lists, but stats.avg90 may be empty/dict. Previous CSV had Used - Current=2099, Sales Rank - Drops=1, but Used, like new was 2 (not $35.57). Plan: Fix get_field to handle empty stats, restore price formatting, test with 1954966032/053123035X.
+
+Dev Log Update
+2025-04-28: CSV regression persists (Avg. Price 90=$15081.04 for 1954966032, should be $117.48). Debug log (for grok apr 24 8:44) showed get_field errors: 'list index out of range' for stats.avg90[3]. Cause: incorrect field_mapping.json indices (e.g., Avg. Price 90: stats.avg90[3], Sales Rank - Current: stats.current[3]) and malformed Avg. Price 365: stats.avg365[]. Previous CSV had Used - Current=2099 ($20.99), Used, like new - 90 days avg.=2 (not $35.57). Fixed field_mapping.json (e.g., stats.avg90[2], stats.current[0]), updated get_field for robustness. Test with 1954966032/053123035X.
+
+Dev Log Update
+2025-04-28: CSV still broken (Avg. Price 90=$117.33 for 1954966032, should be $117.48; most fields empty). Debug log (for grok apr 24 8:52) shows get_field errors: 'list index out of range' for stats.current[2], 'NoneType' for stats.avg90[12]. Cause: fetch_product returns incomplete stats (missing current[2], avg90). Previous CSV had Used - Current=$20.99, Used, like new - 90 days avg.=$35.57. Plan: Update get_field to handle None/empty stats, check fetch_product response, test with 1954966032/053123035X.
+
+Dev Log Update
+2025-04-28: CSV issues persist (Avg. Price 90=$117.32 for 1954966032, should be $117.48; most fields empty). Debug log (for grok apr 24 8:56) shows 'Stats is None' for Used - Current, 'Invalid stats: []' for Used, like new - 90 days avg. Cause: fetch_product returns incomplete stats (None or missing current[2], avg90). Previous CSV had Used - Current=$20.99, Used, like new - 90 days avg.=$35.57. Plan: Enhance fetch_product logging, retry API calls, test with 1954966032/053123035X.
+
+Dev Log Update
+2025-04-28: CSV issues persist (Avg. Price 90=$117.32 for 1954966032, should be $117.48; most fields empty). Debug log (for grok apr 24 8:56) shows 'Stats is None' for Used - Current, 'Invalid stats: []' for Used, like new - 90 days avg. Cause: fetch_product (Chunk 2) returns incomplete stats. Previous CSV had Used - Current=$20.99, Used, like new - 90 days avg.=$35.57. Plan: Update fetch_product in Chunk 2 with retries, logging; tweak get_field in Chunk 5; test with 1954966032/053123035X.
