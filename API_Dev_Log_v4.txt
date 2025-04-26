@@ -143,3 +143,18 @@ Implement the requested fields (Buy Box Used - Current, etc., using stats indice
 2025-04-26: Fixed CSV (grok apr 26 10:55). Mapped stats.current[18] or [1] to Buy Box Used - Current ($20.99). Added console output, logged raw API response. Tested ASIN 1954966032. Note: It’s never Keepa.
 
 2025-04-26: Moved Title, ASIN, Sales Rank - Current, Buy Box Used - Current, get_stat_value to stable.py (grok apr 26 12:38). Self-contained chunks, no future changes. Tested ASINs 1954966032, B0065TF4ME, 0914671227. Note: It’s never Keepa.
+
+2025-04-26: Major milestone achieved with four stable columns in Keepa_Deals_Export.csv (grok apr 26 12:53). Successfully implemented and locked in Title, ASIN, Sales Rank - Current, and Buy Box Used - Current, with all formatting and field mappings finalized. Key achievements:
+
+- Title: Sourced from fetch_deals (deal['title']), outputting correctly (e.g., "Airick Flies High", "Rubaiyat of Omar Khayyam (Deluxe Edition in Slipcase)", "Absolute Solitude: Selected Poems"). Moved to stable.py as get_title for modularity.
+- ASIN: Sourced from fetch_deals (deal['asin']), formatted with ="..." (e.g., ="0914671227") to preserve leading zeros in Excel. Moved to stable.py as get_asin.
+- Buy Box Used - Current: Uses stats.current[2] (e.g., 2099 → $20.99), formatted with $ and two decimals via get_stat_value (divisor=100, is_price=True). Correctly outputs $20.99, $20.00, $23.48 for ASINs 1954966032, B0065TF4ME, 0914671227. Moved to stable.py as buy_box_used_current.
+- Sales Rank - Current: Uses stats.current[3] (e.g., 1403811 → 1,403,811), formatted with comma separators via get_stat_value (divisor=1, is_price=False). Correctly outputs 1,403,811, 1,445,165, 1,314,508. Moved to stable.py as sales_rank_current.
+- get_stat_value: Core function for formatting prices ($XX.XX) and non-prices (X,XXX,XXX), locked in stable.py as a self-contained chunk. Supports all four columns without need for future changes.
+- stable.py: Created to house get_stat_value, get_title, get_asin, buy_box_used_current, sales_rank_current as standalone chunks. Added comment separators (# Title, # ASIN, etc.) for clarity, to be maintained in future updates.
+- Keepa_Deals.py: Updated to import from stable.py, streamlining main script. Retained fetch_deals, fetch_product, write_csv, main. Fixed syntax error in deal_query ("isOutOfStock" typo). Used buyBox=1 in fetch_product for reliable price data.
+- CSV: Outputs correct data for all four columns, tested with ASINs 1954966032, B0065TF4ME, 0914671227. Resolved earlier issues (swapped columns, missing B0065TF4ME price, no fallbacks).
+- Debug: Logs (grok apr 26 12:53) confirm raw stats (e.g., current=[-1, -1, 2099, 1403811, ...]), row_data, and function results. No fallbacks used, ensuring clear error detection.
+- Process: Backups saved to /home/timscripts/keepa_api/keepa-deals/Bak_Apr26. Used Sublime Text, GitHub Desktop for commits. Virtualenv /home/timscripts/keepa_venv/ with Python 3.11.
+
+Challenges overcome: Swapped stats.current[2] and [18] mappings, removed fallbacks, fixed B0065TF4ME missing price, corrected ASIN leading zeros, and added Sales Rank comma formatting. Next steps: Add columns (e.g., Price Now Source, Percent Down 90) after break. Note: It’s never Keepa.

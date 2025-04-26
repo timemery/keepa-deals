@@ -30,6 +30,3 @@ def sales_rank_current(product):
     stats = product.get('stats', {})
     result = {'Sales Rank - Current': get_stat_value(stats, 'current', 3, divisor=1, is_price=False)}
     return result
-
-
-
