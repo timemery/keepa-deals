@@ -101,35 +101,22 @@ def fetch_product(asin, days=365, offers=20, rating=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
-        buy_box = product.get('buyBox', {})
-        logging.debug(f"Raw stats for ASIN {asin}: current={current[:12]}")
+        logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps(offers[:5], default=str)}")
-        logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
-        print(f"Raw stats.current: {current[:12]}")
+        print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
             print(f"Incomplete stats for ASIN {asin}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
-        if current[1] <= 0:
-            logging.warning(f"No New price for ASIN {asin}: current[1]={current[1]}")
         if current[2] <= 0:
             logging.warning(f"No Buy Box Used price for ASIN {asin}: current[2]={current[2]}")
         if current[3] <= 0:
             logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
-        if current[4] <= 0:
-            logging.warning(f"No Used price for ASIN {asin}: current[4]={current[4]}")
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
-
-def used_current(product):
-    stats = product.get('stats', {})
-    result = {'Used - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True)}
-    logging.debug(f"used_current result: {result}")
-    print(f"Used - Current for ASIN: {result}")
-    return result
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -168,7 +155,6 @@ def main():
             row = {}
             row.update(buy_box_used_current(product))
             row.update(sales_rank_current(product))
-            row.update(used_current(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")

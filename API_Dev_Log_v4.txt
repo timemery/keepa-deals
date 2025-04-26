@@ -158,3 +158,43 @@ Implement the requested fields (Buy Box Used - Current, etc., using stats indice
 - Process: Backups saved to /home/timscripts/keepa_api/keepa-deals/Bak_Apr26. Used Sublime Text, GitHub Desktop for commits. Virtualenv /home/timscripts/keepa_venv/ with Python 3.11.
 
 Challenges overcome: Swapped stats.current[2] and [18] mappings, removed fallbacks, fixed B0065TF4ME missing price, corrected ASIN leading zeros, and added Sales Rank comma formatting. Next steps: Add columns (e.g., Price Now Source, Percent Down 90) after break. Note: It’s never Keepa.
+
+Addressing Buy Box - Current and FBA/FBM Questions
+Let’s first clarify the Buy Box condition and FBA/FBM separation to satisfy your curiosity, using Keepa’s API documentation and online sources.
+
+Buy Box Condition
+You’re correct that the Buy Box isn’t tied to a specific condition like New or Used. The Buy Box is the “Add to Cart” offer on Amazon’s product page, awarded to the seller with the best combination of price, availability, fulfillment method (FBA preferred), and seller metrics (e.g., feedback, shipping speed). Per Keepa’s API documentation and related sources:
+
+Keepa API (keepaapi.readthedocs.io): The stats.current array includes:
+stats.current[0]: Amazon price (new, if available).
+stats.current[1]: New price (3rd party, FBA or FBM).
+stats.current[2]: Used price (Buy Box Used, already mapped).
+The buyBox field (when buyBox=1) provides the current Buy Box price and seller ID, but doesn’t specify condition directly. The price history (buyBoxPriceHistory) shows the winning offer’s price, which can be New, Used, or other conditions.
+Medium Article (andrewkushnerov.medium.com): Confirms the Buy Box is the primary purchase button, with ~80% of sales, and its price can come from any condition (New, Used Good, Used Like New, Collectible) based on the winning offer. The buyBoxSellerIdHistory tracks the seller, and special values like -1 (no Buy Box) or -2 (Amazon) indicate status.
+Amazon Seller Guidelines (sellercentral.amazon.com, feedvisor.com): The Buy Box prioritizes New condition but can select Used or Collectible if no New offer qualifies (e.g., lower price, faster shipping). Collectible items (e.g., signed books) must be unique, and Used conditions (Like New, Very Good, Good, Acceptable) have specific criteria (e.g., intact pages, minimal wear).
+Seller Assistant (sellerassistant.app): Notes the Buy Box price (pink line on Keepa charts) reflects the winning offer, which could be FBA, FBM, or Amazon, and isn’t limited to New. Hovering over pink diamonds shows the condition and seller.
+Conclusion: The Buy Box price in Keepa’s API is likely in buyBox or inferred from stats.current[0] (Amazon New) or [1] (3rd party New) if New wins, but could be stats.current[2] (Used) or others if a Used/Collectible offer wins. This variability makes it complex, justifying your choice to delay it.
+Separating FBA from FBM for stats.current[1]
+stats.current[1] represents the 3rd party New price (FBA or FBM), but Keepa’s API doesn’t directly split FBA vs. FBM in stats.current. Here’s how to distinguish them:
+
+Keepa API (keepaapi.readthedocs.io): The offers field (when offers=20) contains detailed offer data, including:
+offer.isPrime: True if FBA (Prime-eligible).
+offer.isAmazon: True if sold by Amazon.
+offer.condition: New, Used, etc.
+Example: offers[0] = {'isPrime': 1, 'condition': 'New', 'price': 2499} indicates FBA New at $24.99.
+Debug Log (“grok apr 26 4:51” expected):
+text
+
+Raw stats for ASIN 1954966032: current=[-1, 2499, 2099, 1403811, ...]
+Offers for ASIN 1954966032: [{'isPrime': 1, 'condition': 'New', 'price': 2499}, ...]
+If stats.current[1] = 2499 matches an offers entry with isPrime=1, it’s FBA; if isPrime=0, it’s FBM.
+Medium Article (basil-latif.medium.com): Suggests using offers to track FBA vs. FBM for Buy Box analysis, as isPrime flags Prime eligibility (FBA or Amazon).
+Seller Journal (sellerjournal.com): Notes FBA offers (orange triangles on Keepa charts) align with Buy Box when priced competitively, visible in offers.
+Conclusion: To separate FBA from FBM for stats.current[1], check offers for the offer matching stats.current[1] and inspect isPrime. This requires parsing offers, adding complexity, so it’s wise to tackle simpler columns first.
+Why Delay Buy Box - Current
+Your intuition to postpone Buy Box - Current is solid:
+
+Complexity: Requires checking buyBox, stats.current[0], [1], or others, and possibly offers to confirm condition and fulfillment.
+Validation: Needs debug log analysis (buyBox, offers) to map correctly, as stats.current[1] may not always be the Buy Box price.
+Risk: Incorrect mapping could lead to wrong prices (e.g., Used instead of New).
+Plan: We’ll revisit Buy Box - Current after simpler columns, using buyBox and offers to confirm the winning offer’s price and condition.
