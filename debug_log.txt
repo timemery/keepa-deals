@@ -1451,3 +1451,18 @@
 2025-04-26 09:05:00,925 DEBUG: row_data values: {'Buy Box Used 🚚 - Current': '-'}
 2025-04-26 09:05:00,925 INFO: Writing CSV...
 2025-04-26 09:05:00,925 INFO: Script completed!
+2025-04-26 10:21:56,372 INFO: Starting Keepa stats inspection...
+2025-04-26 10:21:56,373 DEBUG: Fetching product stats for ASIN 1499810695: https://api.keepa.com/product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1499810695&stats=90&offers=20&rating=1
+2025-04-26 10:21:56,376 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-04-26 10:22:04,279 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1499810695&stats=90&offers=20&rating=1 HTTP/1.1" 200 154835
+2025-04-26 10:22:07,208 DEBUG: Response status: 200
+2025-04-26 10:22:07,223 DEBUG: Raw stats.current for ASIN 1499810695: [-1, 1499, 800, 881026, 699, -1, -1, 1994, -1, -1, -1, 1, 7, -1, -1, 8, 46, 208, 1994, 1200]
+2025-04-26 10:22:07,225 INFO: Mapping stats.current indices:
+2025-04-26 10:22:07,225 INFO: stats.current[0] (Amazon Price): -1
+2025-04-26 10:22:07,225 INFO: stats.current[1] (Marketplace New (Buy Box)): $14.99
+2025-04-26 10:22:07,225 INFO: stats.current[2] (Sales Rank): 800
+2025-04-26 10:22:07,225 INFO: stats.current[3] (Marketplace Used): $8810.26
+2025-04-26 10:22:07,226 INFO: stats.current[10] (Buy Box (Alt)): -1
+2025-04-26 10:22:07,226 INFO: stats.current[17] (Number of Reviews): 208
+2025-04-26 10:22:07,226 INFO: stats.current[18] (Buy Box Used): $19.94
+2025-04-26 10:22:07,226 INFO: Inspection completed!
