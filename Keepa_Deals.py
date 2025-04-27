@@ -2,7 +2,7 @@
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -132,44 +132,6 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
-
-def package_weight(product):
-    weight = product.get('packageWeight', -1)
-    result = {'Package Weight': f"{weight / 1000:.2f} kg" if weight != -1 else '-'}
-    logging.debug(f"package_weight result: {result}")
-    print(f"Package Weight for ASIN: {result}")
-    return result
-
-def package_height(product):
-    height = product.get('packageHeight', -1)
-    result = {'Package Height': f"{height / 10:.1f} cm" if height != -1 else '-'}
-    logging.debug(f"package_height result: {result}")
-    print(f"Package Height for ASIN: {result}")
-    return result
-
-def package_length(product):
-    length = product.get('packageLength', -1)
-    result = {'Package Length': f"{length / 10:.1f} cm" if length != -1 else '-'}
-    logging.debug(f"package_length result: {result}")
-    print(f"Package Length for ASIN: {result}")
-    return result
-
-def package_width(product):
-    width = product.get('packageWidth', -1)
-    result = {'Package Width': f"{width / 10:.1f} cm" if width != -1 else '-'}
-    logging.debug(f"package_width result: {result}")
-    print(f"Package Width for ASIN: {result}")
-    return result
-
-def package_quantity(product):
-    quantity = product.get('packageQuantity', -1)
-    if quantity == 0:
-        logging.warning(f"Package Quantity is 0 for ASIN {product.get('asin', 'unknown')}, defaulting to 1")
-        quantity = 1
-    result = {'Package - Quantity': str(quantity) if quantity != -1 else '-'}
-    logging.debug(f"package_quantity result: {result}")
-    print(f"Package - Quantity for ASIN: {result}")
-    return result
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -213,11 +175,11 @@ def main():
             row.update(sales_rank_180_days_avg(product))
             row.update(sales_rank_365_days_avg(product))
             row.update(used_current(product))
+            row.update(package_quantity(product))
             row.update(package_weight(product))
             row.update(package_height(product))
             row.update(package_length(product))
             row.update(package_width(product))
-            row.update(package_quantity(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
