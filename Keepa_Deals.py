@@ -1,6 +1,7 @@
 # Chunk 1 starts
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
+from retrying import retry
 from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg
 
 # Logging
@@ -23,6 +24,7 @@ except Exception as e:
 # Chunk 1 ends
 
 # Chunk 2 starts
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_deals(page):
     logging.debug(f"Fetching deals page {page}...")
     print(f"Fetching deals page {page}...")
@@ -60,7 +62,7 @@ def fetch_deals(page):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     logging.debug(f"Deal URL: {url}")
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=30)
         logging.debug(f"Deal response: {response.text}")
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
@@ -78,13 +80,18 @@ def fetch_deals(page):
 # Chunk 2 ends
 
 # Chunk 3 starts
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_product(asin, days=365, offers=20, rating=1, history=1):
+    if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
+        logging.error(f"Invalid ASIN format: {asin}")
+        print(f"Invalid ASIN format: {asin}")
+        return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=15)
+        response = requests.get(url, headers=headers, timeout=30)
         logging.debug(f"Response status: {response.status_code}")
         logging.debug(f"Response time: {response.headers.get('Date', 'N/A')}")
         logging.debug(f"Raw response: {response.text[:500]}...")
@@ -107,7 +114,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
         logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
-        logging.debug(f"Package dimensions for ASIN {asin}: weight={product.get('packageWeight', -1)}, height={product.get('packageHeight', -1)}, length={product.get('packageLength', -1)}, width={product.get('packageWidth', -1)}")
+        logging.debug(f"Package dimensions for ASIN {asin}: weight={product.get('packageWeight', -1)}, height={product.get('packageHeight', -1)}, length={product.get('packageLength', -1)}, width={product.get('packageWidth', -1)}, quantity={product.get('packageQuantity', -1)}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
@@ -119,6 +126,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
             logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
         if current[18] <= 0:
             logging.warning(f"No Buy Box price for ASIN {asin}: current[18]={current[18]}")
+        time.sleep(1)  # Rate limiting
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
@@ -151,6 +159,16 @@ def package_width(product):
     result = {'Package Width': f"{width / 10:.1f} cm" if width != -1 else '-'}
     logging.debug(f"package_width result: {result}")
     print(f"Package Width for ASIN: {result}")
+    return result
+
+def package_quantity(product):
+    quantity = product.get('packageQuantity', -1)
+    if quantity == 0:
+        logging.warning(f"Package Quantity is 0 for ASIN {product.get('asin', 'unknown')}, defaulting to 1")
+        quantity = 1
+    result = {'Package - Quantity': str(quantity) if quantity != -1 else '-'}
+    logging.debug(f"package_quantity result: {result}")
+    print(f"Package - Quantity for ASIN: {result}")
     return result
 # Chunk 3 ends
 
@@ -199,6 +217,7 @@ def main():
             row.update(package_height(product))
             row.update(package_length(product))
             row.update(package_width(product))
+            row.update(package_quantity(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
