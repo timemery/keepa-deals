@@ -1,7 +1,7 @@
 # Chunk 1 starts
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -107,6 +107,7 @@ def fetch_product(asin, days=365, offers=20, rating=1):
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
         logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg60={stats.get('avg60', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
+        logging.debug(f"Stats min/max for ASIN {asin}: min={stats.get('min', [-1] * 30)[:10]}, min365={stats.get('min365', [-1] * 30)[:10]}, max={stats.get('max', [-1] * 30)[:10]}, max365={stats.get('max365', [-1] * 30)[:10]}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
@@ -136,27 +137,6 @@ def sales_rank_60_days_avg(product):
     result = {'Sales Rank - 60 days avg.': get_stat_value(stats, 'avg60', 3, is_price=False)}
     logging.debug(f"sales_rank_60_days_avg result: {result}")
     print(f"Sales Rank - 60 days avg. for ASIN: {result}")
-    return result
-
-def sales_rank_90_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 90 days avg.': get_stat_value(stats, 'avg90', 3, is_price=False)}
-    logging.debug(f"sales_rank_90_days_avg result: {result}")
-    print(f"Sales Rank - 90 days avg. for ASIN: {result}")
-    return result
-
-def sales_rank_180_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 180 days avg.': get_stat_value(stats, 'avg180', 3, is_price=False)}
-    logging.debug(f"sales_rank_180_days_avg result: {result}")
-    print(f"Sales Rank - 180 days avg. for ASIN: {result}")
-    return result
-
-def sales_rank_365_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 365 days avg.': get_stat_value(stats, 'avg365', 3, is_price=False)}
-    logging.debug(f"sales_rank_365_days_avg result: {result}")
-    print(f"Sales Rank - 365 days avg. for ASIN: {result}")
     return result
 
 def sales_rank_lowest(product):

@@ -43,3 +43,21 @@ def sales_rank_30_days_avg(product):
     stats = product.get('stats', {})
     result = {'Sales Rank - 30 days avg.': get_stat_value(stats, 'avg30', 3, is_price=False)}
     return result
+
+# Sales Rank - 90 days avg.
+def sales_rank_90_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 90 days avg.': get_stat_value(stats, 'avg90', 3, is_price=False)}
+    return result
+
+# Sales Rank - 180 days avg.
+def sales_rank_180_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 180 days avg.': get_stat_value(stats, 'avg180', 3, is_price=False)}
+    return result
+
+# Sales Rank - 365 days avg.
+def sales_rank_365_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 365 days avg.': get_stat_value(stats, 'avg365', 3, is_price=False)}
+    return result
