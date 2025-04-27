@@ -78,7 +78,7 @@ def fetch_deals(page):
 # Chunk 2 ends
 
 # Chunk 3 starts
-def fetch_product(asin, days=365, offers=20, rating=1, history=1):
+def fetch_product(asin, days=90, offers=20, rating=1, history=1):
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}"
@@ -107,7 +107,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
         logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg60={stats.get('avg60', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
-        logging.debug(f"Stats min/max for ASIN {asin}: min={stats.get('min', [-1] * 30)[:10]}, min365={stats.get('min365', [-1] * 30)[:10]}, max={stats.get('max', [-1] * 30)[:10]}, max365={stats.get('max365', [-1] * 30)[:10]}")
+        logging.debug(f"Stats min/max for ASIN {asin}: min={stats.get('min', [-1] * 30)[:20]}, min365={stats.get('min365', [-1] * 30)[:20]}, max={stats.get('max', [-1] * 30)[:20]}, max365={stats.get('max365', [-1] * 30)[:20]}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
@@ -141,7 +141,7 @@ def sales_rank_60_days_avg(product):
 
 def sales_rank_lowest(product):
     stats = product.get('stats', {})
-    result = {'Sales Rank - Lowest': get_stat_value(stats, 'min', 4, is_price=False)}
+    result = {'Sales Rank - Lowest': get_stat_value(stats, 'min', 3, is_price=False)}
     logging.debug(f"sales_rank_lowest result: {result}")
     print(f"Sales Rank - Lowest for ASIN: {result}")
     return result
@@ -155,7 +155,7 @@ def sales_rank_lowest_365_days(product):
 
 def sales_rank_highest(product):
     stats = product.get('stats', {})
-    result = {'Sales Rank - Highest': get_stat_value(stats, 'max', 4, is_price=False)}
+    result = {'Sales Rank - Highest': get_stat_value(stats, 'max', 3, is_price=False)}
     logging.debug(f"sales_rank_highest result: {result}")
     print(f"Sales Rank - Highest for ASIN: {result}")
     return result
