@@ -78,7 +78,7 @@ def fetch_deals(page):
 # Chunk 2 ends
 
 # Chunk 3 starts
-def fetch_product(asin, days=365, offers=20, rating=1):
+def fetch_product(asin, days=30, offers=20, rating=1):
     logging.debug(f"Fetching ASIN {asin} for {days} days...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1"
@@ -86,6 +86,7 @@ def fetch_product(asin, days=365, offers=20, rating=1):
     try:
         response = requests.get(url, headers=headers, timeout=15)
         logging.debug(f"Response status: {response.status_code}")
+        logging.debug(f"Response time: {response.headers.get('Date', 'N/A')}")
         logging.debug(f"Raw response: {response.text[:500]}...")
         if response.status_code != 200:
             logging.error(f"Request failed: {response.status_code}, {response.text}")
