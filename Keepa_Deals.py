@@ -1,7 +1,7 @@
 # Chunk 1 starts
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse
-from stable import get_stat_value, get_title, get_asin, buy_box_used_current, sales_rank_current
+from stable import get_stat_value, get_title, get_asin, sales_rank_current
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -103,21 +103,15 @@ def fetch_product(asin, days=365, offers=20, rating=1):
         offers = product.get('offers', [])
         buy_box = product.get('buyBox', {})
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:12]}")
-        logging.debug(f"Offers for ASIN {asin}: {json.dumps(offers[:5], default=str)}")
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
+        logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers[:5]], default=str)}")
         print(f"Raw stats.current: {current[:12]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
             print(f"Incomplete stats for ASIN {asin}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
-        if current[1] <= 0:
-            logging.warning(f"No New price for ASIN {asin}: current[1]={current[1]}")
         if current[2] <= 0:
-            logging.warning(f"No Buy Box Used price for ASIN {asin}: current[2]={current[2]}")
-        if current[3] <= 0:
-            logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
-        if current[4] <= 0:
-            logging.warning(f"No Used price for ASIN {asin}: current[4]={current[4]}")
+            logging.warning(f"No Used price for ASIN {asin}: current[2]={current[2]}")
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
@@ -126,9 +120,21 @@ def fetch_product(asin, days=365, offers=20, rating=1):
 
 def used_current(product):
     stats = product.get('stats', {})
-    result = {'Used - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True)}
+    result = {'Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
     logging.debug(f"used_current result: {result}")
     print(f"Used - Current for ASIN: {result}")
+    return result
+
+def buy_box_used_current(product):
+    stats = product.get('stats', {})
+    buy_box = product.get('buyBox', {})
+    price = buy_box.get('price', -1)
+    if price <= 0:
+        logging.warning(f"No Buy Box Used price for ASIN {product.get('asin', '-')}: buyBox={buy_box}")
+        return {'Buy Box Used - Current': '-'}
+    result = {'Buy Box Used - Current': f"${price / 100:.2f}"}
+    logging.debug(f"buy_box_used_current result: {result}")
+    print(f"Buy Box Used - Current for ASIN: {result}")
     return result
 # Chunk 3 ends
 
