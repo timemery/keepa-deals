@@ -11,7 +11,7 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
             return '-'
         if is_price:
             return f"${value / divisor:.2f}"
-        return f"{int(value / divisor):,}"  # Fix decimals
+        return f"{value / divisor:,}"  # Reverted to original
     except (IndexError, TypeError, AttributeError) as e:
         logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
         return '-'

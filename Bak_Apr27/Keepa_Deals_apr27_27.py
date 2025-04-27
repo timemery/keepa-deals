@@ -1,6 +1,7 @@
 # Chunk 1 starts
 # Keepa_Deals.py
-import json, csv, logging, sys, requests, urllib.parse
+import json, csv, logging, sys, requests, urllib.parse, time
+from stable import get_stat_value, get_title, get_asin, sales_rank_current
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -100,45 +101,45 @@ def fetch_product(asin, days=365, offers=20, rating=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
+        buy_box = product.get('buyBox', {})
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
-        logging.debug(f"Offers for ASIN {asin}: {json.dumps(offers[:5], default=str)}")
+        logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
+        logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers[:5]], default=str)}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
             print(f"Incomplete stats for ASIN {asin}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
         if current[2] <= 0:
-            logging.warning(f"No Buy Box Used price for ASIN {asin}: current[2]={current[2]}")
-        if current[18] <= 0:
-            logging.warning(f"No Sales Rank for ASIN {asin}: current[18]={current[18]}")
+            logging.warning(f"No Used price for ASIN {asin}: current[2]={current[2]}")
+        if current[3] <= 0:
+            logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
-def get_stat_value(stats, key, index, divisor=100, is_price=True):
-    value = stats.get(key, [-1] * 30)[index]
-    if isinstance(value, list):
-        value = value[0] if value else -1
-    if value <= 0:
-        return '-'
-    logging.debug(f"get_stat_value for {key}[{index}]: value={value}, divisor={divisor}, is_price={is_price}")
-    return f"${value / divisor:.2f}" if is_price else str(value)
+def used_current(product):
+    stats = product.get('stats', {})
+    result = {'Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
+    logging.debug(f"used_current result: {result}")
+    print(f"Used - Current for ASIN: {result}")
+    return result
 
 def buy_box_used_current(product):
-    stats = product.get('stats', {})
-    result = {'Buy Box Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
-    logging.debug(f"buy_box_used_current result: {result}")
-    print(f"Buy Box Used - Current for ASIN: {result}")
-    return result
-
-def sales_rank_current(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - Current': get_stat_value(stats, 'current', 18, divisor=1, is_price=False)}
-    logging.debug(f"sales_rank_current result: {result}")
-    print(f"Sales Rank - Current for ASIN: {result}")
-    return result
+    offers = product.get('offers', [])
+    for offer in offers:
+        if offer.get('isBuyBox', False) and offer.get('condition', '').lower().startswith('used'):
+            price = offer.get('price', -1)
+            if price <= 0:
+                continue
+            result = {'Buy Box Used - Current': f"${price / 100:.2f}"}
+            logging.debug(f"buy_box_used_current result: {result}")
+            print(f"Buy Box Used - Current for ASIN: {result}")
+            return result
+    logging.warning(f"No Used Buy Box offer for ASIN {product.get('asin', '-')}")
+    return {'Buy Box Used - Current': '-'}
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -155,7 +156,7 @@ def write_csv(rows, deals, diagnostic=False):
                 logging.debug(f"row_data keys: {row_data.keys()}")
                 logging.debug(f"row_data values: {row_data}")
                 print(f"Writing row for ASIN {deal['asin']}: {row_data}")
-                writer.writerow([deal['asin'] if header == 'ASIN' else deal['title'] if header == 'Title' else row_data.get(header, '-') for header in HEADERS])
+                writer.writerow([get_asin(deal) if header == 'ASIN' else get_title(deal) if header == 'Title' else row_data.get(header, '-') for header in HEADERS])
 # Chunk 4 ends
 
 # Chunk 5 starts
@@ -163,6 +164,7 @@ def main():
     try:
         logging.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...")
+        time.sleep(2)  # Pause to stabilize API
         deals = fetch_deals(0)
         rows = []
         if not deals:
@@ -177,6 +179,7 @@ def main():
             row = {}
             row.update(buy_box_used_current(product))
             row.update(sales_rank_current(product))
+            row.update(used_current(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
