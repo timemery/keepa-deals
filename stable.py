@@ -1,32 +1,31 @@
 # stable.py
-def get_stat_value(stats, key, index, divisor=100, is_price=True):
-    value = stats.get(key, [-1] * 30)[index]
-    if isinstance(value, list):
-        value = value[0] if value else -1
-    if value <= 0:
-        return '-'
-    if is_price:
-        return f"${value / divisor:.2f}"
-    return f"{value:,}"  # Add comma separators for non-price values
+import logging
 
+def get_stat_value(stats, key, index, divisor=1, is_price=False):
+    try:
+        value = stats.get(key, [])[index]
+        if isinstance(value, list):
+            value = value[0] if value else -1
+        if value == -1 or value is None:
+            return '-'
+        if is_price:
+            return f"${value / divisor:.2f}"
+        return f"{value / divisor:,}"
+    except (IndexError, TypeError, AttributeError) as e:
+        logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
+        return '-'
 # Title
 def get_title(deal):
-    result = {'Title': deal.get('title', '-')}
-    return result['Title']
+    title = deal.get('title', '-')
+    return title if title else '-'
 
 # ASIN
 def get_asin(deal):
-    result = {'ASIN': f'="{deal["asin"]}"'}
-    return result['ASIN']
-
-# Buy Box Used - Current
-def buy_box_used_current(product):
-    stats = product.get('stats', {})
-    result = {'Buy Box Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
-    return result
+    asin = deal.get('asin', '-')
+    return f'="{asin}"' if asin else '-'
 
 # Sales Rank - Current
 def sales_rank_current(product):
     stats = product.get('stats', {})
-    result = {'Sales Rank - Current': get_stat_value(stats, 'current', 3, divisor=1, is_price=False)}
+    result = {'Sales Rank - Current': get_stat_value(stats, 'current', 3, is_price=False)}
     return result

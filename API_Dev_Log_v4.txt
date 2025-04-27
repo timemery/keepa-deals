@@ -198,3 +198,5 @@ Complexity: Requires checking buyBox, stats.current[0], [1], or others, and poss
 Validation: Needs debug log analysis (buyBox, offers) to map correctly, as stats.current[1] may not always be the Buy Box price.
 Risk: Incorrect mapping could lead to wrong prices (e.g., Used instead of New).
 Plan: We’ll revisit Buy Box - Current after simpler columns, using buyBox and offers to confirm the winning offer’s price and condition.
+
+2025-04-26: Reverted buy_box_used_current to Keepa_Deals.py, updated used_current to stats.current[2] (grok buy box used current vs used current). Testing Buy Box Used - Current via buyBox.price. Expected Used - Current: $20.99, $20.00, $23.48; Buy Box Used - Current: $20.99, $23.98, $27.47. Title, ASIN, Sales Rank - Current unchanged in stable.py. Note: It’s never Keepa.
