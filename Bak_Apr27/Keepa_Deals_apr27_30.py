@@ -1,7 +1,7 @@
 # Chunk 1 starts
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -127,13 +127,6 @@ def buy_box_used_current(product):
     result = {'Buy Box Used - Current': get_stat_value(stats, 'current', 18, divisor=100, is_price=True)}
     logging.debug(f"buy_box_used_current result: {result}")
     print(f"Buy Box Used - Current for ASIN: {result}")
-    return result
-
-def sales_rank_30_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 30 days avg.': get_stat_value(stats, 'avg', 3, is_price=False)}
-    logging.debug(f"sales_rank_30_days_avg result: {result}")
-    print(f"Sales Rank - 30 days avg. for ASIN: {result}")
     return result
 # Chunk 3 ends
 
