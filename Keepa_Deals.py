@@ -1,7 +1,7 @@
 # Chunk 1 starts
 # Keepa_Deals.py
-import json, csv, logging, sys, requests, urllib.parse
-from stable import get_stat_value, get_title, get_asin, sales_rank_current
+import json, csv, logging, sys, requests, urllib.parse, time
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -70,7 +70,7 @@ def fetch_deals(page):
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {json.dumps([d['asin'] for d in deals], default=str)}")
         print(f"Fetched {len(deals)} deals")
-        return [{'asin': deal['asin'], 'title': deal.get('title', '-')} for deal in deals]
+        return [{'asin': deal['asin'], 'title': deal.get('title', '-')} for deal in deals[:3]]  # Limit to 3
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
@@ -82,9 +82,9 @@ def fetch_product(asin, days=365, offers=20, rating=1):
     logging.debug(f"Fetching ASIN {asin} for {days} days...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT  personally, I'm skeptical that these API responses are always reliable—Keepa's data can be spotty, especially for less popular ASINs like these. If we're still seeing missing values, it might be worth cross-checking with Amazon's product page or another API call to validate. Keep an eye on those logs; they’ll tell us if the issue is our code or Keepa's data gaps.10.0; Win64; x64) Chrome/90.0.4430.212'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=15)  # Increased timeout
         logging.debug(f"Response status: {response.status_code}")
         logging.debug(f"Raw response: {response.text[:500]}...")
         if response.status_code != 200:
@@ -114,27 +114,25 @@ def fetch_product(asin, days=365, offers=20, rating=1):
             logging.warning(f"No Used price for ASIN {asin}: current[2]={current[2]}")
         if current[3] <= 0:
             logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
-        if current[18] <= 0:
-            logging.warning(f"No Buy Box price for ASIN {asin}: current[18]={current[18]}")
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
-def used_current(product):
-    stats = product.get('stats', {})
-    result = {'Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
-    logging.debug(f"used_current result: {result}")
-    print(f"Used - Current for ASIN: {result}")
-    return result
-
 def buy_box_used_current(product):
-    stats = product.get('stats', {})
-    result = {'Buy Box Used - Current': get_stat_value(stats, 'current', 18, divisor=100, is_price=True)}
-    logging.debug(f"buy_box_used_current result: {result}")
-    print(f"Buy Box Used - Current for ASIN: {result}")
-    return result
+    offers = product.get('offers', [])
+    for offer in offers:
+        if offer.get('isBuyBox', False) and offer.get('condition', '').lower().startswith('used'):
+            price = offer.get('price', -1)
+            if price <= 0:
+                continue
+            result = {'Buy Box Used - Current': f"${price / 100:.2f}"}
+            logging.debug(f"buy_box_used_current result: {result}")
+            print(f"Buy Box Used - Current for ASIN: {result}")
+            return result
+    logging.warning(f"No Used Buy Box offer for ASIN {product.get('asin', '-')}")
+    return {'Buy Box Used - Current': '-'}
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -159,6 +157,7 @@ def main():
     try:
         logging.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...")
+        time.sleep(2)  # Pause to stabilize API
         deals = fetch_deals(0)
         rows = []
         if not deals:
