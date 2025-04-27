@@ -78,7 +78,7 @@ def fetch_deals(page):
 # Chunk 2 ends
 
 # Chunk 3 starts
-def fetch_product(asin, days=90, offers=20, rating=1, history=1):
+def fetch_product(asin, days=730, offers=20, rating=1, history=1):
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}"
@@ -141,7 +141,7 @@ def sales_rank_60_days_avg(product):
 
 def sales_rank_lowest(product):
     stats = product.get('stats', {})
-    result = {'Sales Rank - Lowest': get_stat_value(stats, 'min', 3, is_price=False)}
+    result = {'Sales Rank - Lowest': get_stat_value(stats, 'min', 5, is_price=False)}
     logging.debug(f"sales_rank_lowest result: {result}")
     print(f"Sales Rank - Lowest for ASIN: {result}")
     return result
@@ -155,7 +155,7 @@ def sales_rank_lowest_365_days(product):
 
 def sales_rank_highest(product):
     stats = product.get('stats', {})
-    result = {'Sales Rank - Highest': get_stat_value(stats, 'max', 3, is_price=False)}
+    result = {'Sales Rank - Highest': get_stat_value(stats, 'max', 5, is_price=False)}
     logging.debug(f"sales_rank_highest result: {result}")
     print(f"Sales Rank - Highest for ASIN: {result}")
     return result
