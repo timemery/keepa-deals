@@ -82,7 +82,7 @@ def fetch_product(asin, days=365, offers=20, rating=1):
     logging.debug(f"Fetching ASIN {asin} for {days} days...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT  personally, I'm skeptical that these API responses are always reliable—Keepa's data can be spotty, especially for less popular ASINs like these. If we're still seeing missing values, it might be worth cross-checking with Amazon's product page or another API call to validate. Keep an eye on those logs; they’ll tell us if the issue is our code or Keepa's data gaps.10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=10)
         logging.debug(f"Response status: {response.status_code}")
@@ -102,16 +102,20 @@ def fetch_product(asin, days=365, offers=20, rating=1):
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
         buy_box = product.get('buyBox', {})
-        logging.debug(f"Raw stats for ASIN {asin}: current={current[:12]}")
+        logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers[:5]], default=str)}")
-        print(f"Raw stats.current: {current[:12]}")
+        print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
             print(f"Incomplete stats for ASIN {asin}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
         if current[2] <= 0:
             logging.warning(f"No Used price for ASIN {asin}: current[2]={current[2]}")
+        if current[3] <= 0:
+            logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
+        if current[18] <= 0:
+            logging.warning(f"No Buy Box price for ASIN {asin}: current[18]={current[18]}")
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
@@ -127,12 +131,7 @@ def used_current(product):
 
 def buy_box_used_current(product):
     stats = product.get('stats', {})
-    buy_box = product.get('buyBox', {})
-    price = buy_box.get('price', -1)
-    if price <= 0:
-        logging.warning(f"No Buy Box Used price for ASIN {product.get('asin', '-')}: buyBox={buy_box}")
-        return {'Buy Box Used - Current': '-'}
-    result = {'Buy Box Used - Current': f"${price / 100:.2f}"}
+    result = {'Buy Box Used - Current': get_stat_value(stats, 'current', 18, divisor=100, is_price=True)}
     logging.debug(f"buy_box_used_current result: {result}")
     print(f"Buy Box Used - Current for ASIN: {result}")
     return result
