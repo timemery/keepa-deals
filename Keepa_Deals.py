@@ -105,6 +105,7 @@ def fetch_product(asin, days=365, offers=20, rating=1):
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
+        logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
@@ -131,7 +132,7 @@ def buy_box_used_current(product):
 
 def sales_rank_30_days_avg(product):
     stats = product.get('stats', {})
-    result = {'Sales Rank - 30 days avg.': get_stat_value(stats, 'avg', 3, is_price=False)}
+    result = {'Sales Rank - 30 days avg.': get_stat_value(stats, 'avg30', 3, is_price=False)}
     logging.debug(f"sales_rank_30_days_avg result: {result}")
     print(f"Sales Rank - 30 days avg. for ASIN: {result}")
     return result
