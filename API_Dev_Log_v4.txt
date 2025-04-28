@@ -222,3 +222,5 @@ Plan: We’ll revisit Buy Box - Current after simpler columns, using buyBox and 
 2025-04-27: Updated Used condition functions for Lowest, Highest, Stock using csv/offers. Increased ASINs to 5. Fixed stats indices. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Improved Used, like new; partial Used, very good/good/acceptable. Note: It’s never Keepa.
 
 2025-04-27: Fixed 'int' object has no attribute 'time' in Used functions. Refined Lowest, Highest, Stock using csv/offers. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new; improved Used, very good/good/acceptable. Note: It’s never Keepa.
+
+2025-04-28: Fixed SyntaxError 'zip avut' in used_good. Enhanced CSV logging for Used conditions. No fallbacks to expose issues. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new (Current, Lowest, Highest); partial Used, very good/good/acceptable due to missing CSV. Note: It’s never Keepa.
