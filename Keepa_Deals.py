@@ -16,7 +16,7 @@ try:
     with open('headers.json') as f:
         HEADERS = json.load(f)
         logging.debug(f"Loaded headers: {HEADERS}")
-        print(f"Headers loaded: {HEADERS}")
+        print(f"Headers loaded: {len(HEADERS)} fields")
 except Exception as e:
     logging.error(f"Startup failed: {str(e)}")
     print(f"Startup failed: {str(e)}")
@@ -63,7 +63,7 @@ def fetch_deals(page):
     logging.debug(f"Deal URL: {url}")
     try:
         response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Deal response: {response.text}")
+        logging.debug(f"Deal response: {response.text[:500]}...")
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
             print(f"Deal fetch failed: {response.status_code}")
@@ -113,9 +113,10 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         csv_field = product.get('csv', [])
         if not isinstance(csv_field, list) or not csv_field or len(csv_field) < 11:
             logging.warning(f"CSV field invalid for ASIN {asin}: {csv_field}")
-            csv_field = [[] for _ in range(11)]  # Ensure 11 indices
+            csv_field = [[] for _ in range(11)]
         csv_lengths = [len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
+        logging.debug(f"Sales Rank Drops for ASIN {asin}: drops30={stats.get('salesDrops30', -1)}, drops60={stats.get('salesDrops60', -1)}, drops90={stats.get('salesDrops90', -1)}, drops180={stats.get('salesDrops180', -1)}, drops365={stats.get('salesDrops365', -1)}")
         logging.debug(f"CSV field for ASIN {asin}: {csv_lengths}")
         logging.debug(f"CSV raw data for ASIN {asin}: {[x[:10] if isinstance(x, list) else x for x in csv_field[:11]]}")
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
@@ -133,12 +134,75 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
             logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
         if current[18] <= 0:
             logging.warning(f"No Buy Box price for ASIN {asin}: current[18]={current[18]}")
-        time.sleep(1)  # Rate limiting
+        time.sleep(1)
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
+
+def list_price(product):
+    stats = product.get('stats', {})
+    csv_field = product.get('csv', [[] for _ in range(11)])
+    asin = product.get('asin', 'unknown')
+    if not isinstance(csv_field, list) or len(csv_field) <= 8 or csv_field[8] is None or not isinstance(csv_field[8], list) or not csv_field[8]:
+        logging.warning(f"No valid CSV data for List Price, ASIN {asin}: {csv_field[:9] if isinstance(csv_field, list) else csv_field}")
+        csv_data = []
+    else:
+        csv_data = csv_field[8]
+    logging.debug(f"CSV data length for List Price, ASIN {asin}: {len(csv_data)}")
+    logging.debug(f"CSV raw data for List Price, ASIN {asin}: {csv_data[:20]}")
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float))] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    result = {
+        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True),
+        'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
+        'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
+        'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
+        'List Price - 180 days avg.': get_stat_value(stats, 'avg180', 8, divisor=100, is_price=True),
+        'List Price - 365 days avg.': get_stat_value(stats, 'avg365', 8, divisor=100, is_price=True),
+        'List Price - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'List Price - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'List Price - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'List Price - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
+        'List Price - Stock': '-'  # List Price has no stock
+    }
+    logging.debug(f"list_price result for ASIN {asin}: {result}")
+    print(f"List Price for ASIN {asin}: {result}")
+    return result
+
+def new_3rd_party_fbm(product):
+    stats = product.get('stats', {})
+    csv_field = product.get('csv', [[] for _ in range(11)])
+    asin = product.get('asin', 'unknown')
+    if not isinstance(csv_field, list) or len(csv_field) <= 1 or csv_field[1] is None or not isinstance(csv_field[1], list) or not csv_field[1]:
+        logging.warning(f"No valid CSV data for New, 3rd Party FBM, ASIN {asin}: {csv_field[:2] if isinstance(csv_field, list) else csv_field}")
+        csv_data = []
+    else:
+        csv_data = csv_field[1]
+    logging.debug(f"CSV data length for New, 3rd Party FBM, ASIN {asin}: {len(csv_data)}")
+    logging.debug(f"CSV raw data for New, 3rd Party FBM, ASIN {asin}: {csv_data[:20]}")
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float))] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+    result = {
+        'New, 3rd Party FBM - Current': get_stat_value(stats, 'current', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'New, 3rd Party FBM - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'New, 3rd Party FBM - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'New, 3rd Party FBM - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'New, 3rd Party FBM - 90 days OOS': get_stat_value(stats, 'outOfStock90', 1, is_price=False),
+        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '-'
+    }
+    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
+    print(f"New, 3rd Party FBM for ASIN {asin}: {result}")
+    return result
 
 def used_like_new(product):
     stats = product.get('stats', {})
@@ -228,7 +292,7 @@ def used_good(product):
         'Used, good - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
         'Used, good - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, good - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
-        'Used, very good - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, good - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
         'Used, good - Stock': str(stock) if stock > 0 else '-'
     }
@@ -316,6 +380,8 @@ def main():
             row.update(package_height(product))
             row.update(package_length(product))
             row.update(package_width(product))
+            row.update(list_price(product))
+            row.update(new_3rd_party_fbm(product))
             row.update(used_like_new(product))
             row.update(used_very_good(product))
             row.update(used_good(product))

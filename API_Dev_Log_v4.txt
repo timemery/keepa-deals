@@ -224,3 +224,241 @@ Plan: We’ll revisit Buy Box - Current after simpler columns, using buyBox and 
 2025-04-27: Fixed 'int' object has no attribute 'time' in Used functions. Refined Lowest, Highest, Stock using csv/offers. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new; improved Used, very good/good/acceptable. Note: It’s never Keepa.
 
 2025-04-28: Fixed SyntaxError 'zip avut' in used_good. Enhanced CSV logging for Used conditions. No fallbacks to expose issues. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new (Current, Lowest, Highest); partial Used, very good/good/acceptable due to missing CSV. Note: It’s never Keepa.
+
+2025-04-28: Documented confirmed field mapping issues where CSV data for one field incorrectly matches Keepa data for another field, identifying reliable data sources for future use. Observations based on CSV and Keepa data for ASINs 1954966032, B0065TF4ME, 2764332513, 891950257, 914671227. Focus on Used conditions, but mappings provide wins for other fields (e.g., Collectible, List Price).
+
+Confirmed Field Mappings:
+1. ASIN 1954966032:
+   - Used, like new - Current, Lowest, Highest ($14.99):
+     - Matches: List Price - Current, 90 days avg. ($14.99).
+     - Source: Likely stats.current[8] or csv[8].
+     - Implication: Used, like new is pulling List Price data, confirming stats.current[8] for List Price.
+   - Used, very good - Lowest ($42.36), Highest ($46.40):
+     - Matches: Collectible - Lowest ($42.36), Highest ($46.40).
+     - Source: csv[10].
+     - Implication: Used, very good is pulling Collectible data, confirming csv[10] for Collectible.
+   - Used, acceptable - Lowest ($28.58):
+     - Matches: New, 3rd Party FBM - 365 days avg. ($28.58).
+     - Source: Likely csv[1] or stats.avg365[1].
+     - Implication: Used, acceptable is pulling New, FBM data, confirming csv[1] for New, FBM.
+
+2. ASIN B0065TF4ME:
+   - Used, like new - Current, Highest ($41.99):
+     - Matches: List Price - Current ($41.99).
+     - Source: stats.current[8].
+     - Implication: Used, like new is pulling List Price, confirming stats.current[8].
+   - Used, like new - Lowest ($7.50):
+     - Matches: List Price - Lowest ($7.50).
+     - Source: Likely csv[8].
+     - Implication: Confirms csv[8] for List Price - Lowest.
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99).
+     - Source: csv[10].
+     - Implication: Used, very good is pulling Collectible, confirming csv[10].
+   - Used, acceptable - Lowest ($59.00):
+     - Matches: New, 3rd Party FBM - Lowest ($59.00).
+     - Source: csv[1].
+     - Implication: Used, acceptable is pulling New, FBM, confirming csv[1].
+
+3. ASIN 2764332513:
+   - Used, like new - Current, Highest ($14.99):
+     - Matches: List Price - Current, Highest ($14.99).
+     - Source: stats.current[8].
+     - Implication: Used, like new is pulling List Price, confirming stats.current[8].
+   - Used, like new - Lowest ($12.99):
+     - Matches: List Price - Lowest ($12.99).
+     - Source: csv[8].
+     - Implication: Confirms csv[8] for List Price - Lowest.
+
+4. ASIN 891950257:
+   - Used, like new - Current, Lowest, Highest ($9.95):
+     - Matches: List Price - Current, Lowest, Highest ($9.95).
+     - Source: stats.current[8].
+     - Implication: Used, like new is pulling List Price, confirming stats.current[8].
+   - Used, very good - Lowest ($10.95), Highest ($140.46):
+     - Matches: Collectible - Lowest ($10.95), Highest ($140.46).
+     - Source: csv[10].
+     - Implication: Used, very good is pulling Collectible, confirming csv[10].
+
+5. ASIN 914671227:
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99) from ASIN B0065TF4ME.
+     - Source: csv[10] of incorrect ASIN.
+     - Implication: ASIN mix-up in deals or write_csv; confirms csv[10] for Collectible when ASINs align.
+
+Notes:
+- Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 doesn’t exactly match any Keepa field (possibly Sales Rank - Drops, e.g., Drops last 90 days: 1). Not included in confirmed mappings.
+- High Used, acceptable - Highest values ($74787.20, $69893.96, etc.) don’t match Keepa fields, likely data corruption or indexing error.
+- ASIN mix-up (914671227, 891950257 appearing as 0915777363, 0891950257 in CSV) indicates deals/rows mismatch.
+- Next Steps: Debug $3.99 error (log Sales Rank - Drops fields), fix ASIN mix-up, correct csv[4:7] indexing for Used conditions. Enhanced logging in Keepa_Deals.py for csv[4:10] and deals ASINs. Expected: Accurate Used conditions, reliable Collectible/List Price mappings. Note: It’s never Keepa.
+
+2025-04-28: Implemented functions to capitalize on exact field mapping matches identified from Used condition errors, fetching List Price (stats.current[8], csv[8]), Collectible (csv[10]), and New, 3rd Party FBM (csv[1]) into correct columns. Confirmed Used, acceptable - Highest values (e.g., $74787.20) match Sales Rank - Current (stats.current[3]) for ASINs 1954966032, B0065TF4ME, 2764332513, 891950257, 914671227. Clarified ASIN mix-up (0915777363, 0891950257 in earlier CSV likely from write_csv mismatch, pending debug log confirmation). Enhanced Sales Rank - Drops logging to trace $3.99 error. Updated headers.json with Collectible fields.
+
+Confirmed Field Mappings:
+1. ASIN 1954966032:
+   - Used, like new - Current, Lowest, Highest ($14.99):
+     - Matches: List Price - Current, 90 days avg. ($14.99).
+     - Source: stats.current[8], csv[8].
+     - Action: Implemented list_price() using stats.current[8], csv[8].
+   - Used, very good - Lowest ($42.36), Highest ($46.40):
+     - Matches: Collectible - Lowest ($42.36), Highest ($46.40).
+     - Source: csv[10].
+     - Action: Implemented collectible() using csv[10].
+   - Used, acceptable - Lowest ($28.58):
+     - Matches: New, 3rd Party FBM - 365 days avg. ($28.58).
+     - Source: csv[1].
+     - Action: Implemented new_3rd_party_fbm() using csv[1].
+   - Used, acceptable - Highest ($74787.20):
+     - Matches: Sales Rank - Current (74,787).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3] for Sales Rank - Current.
+
+2. ASIN B0065TF4ME:
+   - Used, like new - Current, Highest ($41.99):
+     - Matches: List Price - Current ($41.99).
+     - Source: stats.current[8].
+     - Action: list_price().
+   - Used, like new - Lowest ($7.50):
+     - Matches: List Price - Lowest ($7.50).
+     - Source: csv[8].
+     - Action: list_price().
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99).
+     - Source: csv[10].
+     - Action: collectible().
+   - Used, acceptable - Lowest ($59.00):
+     - Matches: New, 3rd Party FBM - Lowest ($59.00).
+     - Source: csv[1].
+     - Action: new_3rd_party_fbm().
+   - Used, acceptable - Highest ($69893.96):
+     - Matches: Sales Rank - Current (69,894).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+3. ASIN 2764332513:
+   - Used, like new - Current, Highest ($14.99):
+     - Matches: List Price - Current, Highest ($14.99).
+     - Source: stats.current[8].
+     - Action: list_price().
+   - Used, like new - Lowest ($12.99):
+     - Matches: List Price - Lowest ($12.99).
+     - Source: csv[8].
+     - Action: list_price().
+   - Used, acceptable - Highest ($68867.60):
+     - Matches: Sales Rank - Current (68,868).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+4. ASIN 891950257:
+   - Used, like new - Current, Lowest, Highest ($9.95):
+     - Matches: List Price - Current, Lowest, Highest ($9.95).
+     - Source: stats.current[8].
+     - Action: list_price().
+   - Used, very good - Lowest ($10.95), Highest ($140.46):
+     - Matches: Collectible - Lowest ($10.95), Highest ($140.46).
+     - Source: csv[10].
+     - Action: collectible().
+   - Used, acceptable - Highest ($49615.96):
+     - Matches: Sales Rank - Current (49,616).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+5. ASIN 914671227:
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99) from B0065TF4ME.
+     - Source: csv[10] of incorrect ASIN.
+     - Action: collectible() (pending ASIN mix-up fix).
+   - Used, acceptable - Highest ($69085.96):
+     - Matches: Sales Rank - Current (69,086).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+Notes:
+- Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 likely from Sales Rank - Drops (e.g., drops90: 1 for 1954966032). Added logging in fetch_product().
+- ASIN mix-up (0915777363, 0891950257 in earlier CSV) likely from write_csv mismatch. Awaiting debug log confirmation of Deals ASINs.
+- Clarified “frequently” (List Price: 4/5 ASINs), “consistently” (Collectible: 4/5), “often” (New, FBM: 2/5) as exact matches varying by ASIN.
+- Next Steps: Debug $3.99 error (check Sales Rank - Drops), confirm ASIN alignment, fix Used condition indexing (csv[4:7]). Expected: Accurate List Price, Collectible, New, FBM in CSV; progress on Used conditions. Note: It’s never Keepa.
+
+Dev Log Update
+2025-04-28: Implemented functions for List Price (stats.current[8], csv[8]) and New, 3rd Party FBM (csv[1]) to capitalize on exact field mapping matches from Used condition errors. Excluded Collectible fields as per updated headers.json (204 fields). Confirmed Used, acceptable - Highest values (e.g., $74787.20) match Sales Rank - Current (stats.current[3]) for ASINs 1954966032, B0065TF4ME, 2764332513, 891950257, 914671227. Noted ASIN mix-up (0915777363, 0891950257 in earlier CSV, likely write_csv mismatch). Enhanced Sales Rank - Drops logging for $3.99 error.
+
+Confirmed Field Mappings:
+
+ASIN 1954966032:
+Used, like new - Current, Lowest, Highest ($14.99):
+Matches: List Price - Current, 90 days avg. ($14.99).
+Source: stats.current[8], csv[8].
+Action: Implemented list_price() using stats.current[8], csv[8].
+Used, very good - Lowest ($42.36), Highest ($46.40):
+Matches: Collectible - Lowest ($42.36), Highest ($46.40).
+Source: csv[10].
+Action: No action (Collectible excluded).
+Used, acceptable - Lowest ($28.58):
+Matches: New, 3rd Party FBM - 365 days avg. ($28.58).
+Source: csv[1].
+Action: Implemented new_3rd_party_fbm() using csv[1].
+Used, acceptable - Highest ($74787.20):
+Matches: Sales Rank - Current (74,787).
+Source: stats.current[3].
+Implication: Confirms stats.current[3] for Sales Rank - Current.
+ASIN B0065TF4ME:
+Used, like new - Current, Highest ($41.99):
+Matches: List Price - Current ($41.99).
+Source: stats.current[8].
+Action: list_price().
+Used, like new - Lowest ($7.50):
+Matches: List Price - Lowest ($7.50).
+Source: csv[8].
+Action: list_price().
+Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99).
+Source: csv[10].
+Action: No action (Collectible excluded).
+Used, acceptable - Lowest ($59.00):
+Matches: New, 3rd Party FBM - Lowest ($59.00).
+Source: csv[1].
+Action: new_3rd_party_fbm().
+Used, acceptable - Highest ($69893.96):
+Matches: Sales Rank - Current (69,894).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+ASIN 2764332513:
+Used, like new - Current, Highest ($14.99):
+Matches: List Price - Current, Highest ($14.99).
+Source: stats.current[8].
+Action: list_price().
+Used, like new - Lowest ($12.99):
+Matches: List Price - Lowest ($12.99).
+Source: csv[8].
+Action: list_price().
+Used, acceptable - Highest ($68867.60):
+Matches: Sales Rank - Current (68,868).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+ASIN 891950257:
+Used, like new - Current, Lowest, Highest ($9.95):
+Matches: List Price - Current, Lowest, Highest ($9.95).
+Source: stats.current[8].
+Action: list_price().
+Used, very good - Lowest ($10.95), Highest ($140.46):
+Matches: Collectible - Lowest ($10.95), Highest ($140.46).
+Source: csv[10].
+Action: No action (Collectible excluded).
+Used, acceptable - Highest ($49615.96):
+Matches: Sales Rank - Current (49,616).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+ASIN 914671227:
+Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99) from B0065TF4ME.
+Source: csv[10] of incorrect ASIN.
+Action: No action (Collectible excluded).
+Used, acceptable - Highest ($69085.96):
+Matches: Sales Rank - Current (69,086).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+Notes:
+
+Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 likely from Sales Rank - Drops (e.g., drops90: 1 for 1954966032). Enhanced logging in fetch_product().
+ASIN mix-up (0915777363, 0891950257 in earlier CSV) likely from write_csv mismatch. Awaiting debug log confirmation of Deals ASINs.
+Next Steps: Debug $3.99 error (check Sales Rank - Drops), confirm ASIN alignment, fix Used condition indexing (csv[4:7]). Expected: Accurate List Price, New, 3rd Party FBM in CSV; progress on Used conditions. Note: It’s never Keepa.
