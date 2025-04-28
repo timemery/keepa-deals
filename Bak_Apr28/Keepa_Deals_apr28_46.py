@@ -137,8 +137,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
 
 def used_like_new(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
-    csv_data = csv_field[4] if isinstance(csv_field, list) and len(csv_field) > 4 else []
+    csv_data = product.get('csv', [[]])[4] if product.get('csv') and len(product.get('csv')) > 4 else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, like new: {len(csv_data)}")
     if not csv_data:
@@ -166,8 +165,7 @@ def used_like_new(product):
 
 def used_very_good(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
-    csv_data = csv_field[5] if isinstance(csv_field, list) and len(csv_field) > 5 else []
+    csv_data = product.get('csv', [[]])[5] if product.get('csv') and len(product.get('csv')) > 5 else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, very good: {len(csv_data)}")
     if not csv_data:
@@ -195,8 +193,7 @@ def used_very_good(product):
 
 def used_good(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
-    csv_data = csv_field[6] if isinstance(csv_field, list) and len(csv_field) > 6 else []
+    csv_data = product.get('csv', [[]])[6] if product.get('csv') and len(product.get('csv')) > 6 else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, good: {len(csv_data)}")
     if not csv_data:
@@ -224,8 +221,7 @@ def used_good(product):
 
 def used_acceptable(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
-    csv_data = csv_field[7] if isinstance(csv_field, list) and len(csv_field) > 7 else []
+    csv_data = product.get('csv', [[]])[7] if product.get('csv') and len(product.get('csv')) > 7 else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, acceptable: {len(csv_data)}")
     if not csv_data:
