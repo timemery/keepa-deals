@@ -220,3 +220,5 @@ Plan: We’ll revisit Buy Box - Current after simpler columns, using buyBox and 
 2025-04-27: Moved package_quantity, package_weight, package_height, package_length, package_width to stable.py. Package - Quantity, Weight, Height, Length, Width solid. Sales Rank - Current, 30/90/180/365 days avg., Used - Current in stable.py. Expected: Package - Quantity: 1 (default), 1, 1; Weight: 0.12 kg, 0.53 kg, 0.06 kg. Note: It’s never Keepa.
 
 2025-04-27: Updated Used condition functions for Lowest, Highest, Stock using csv/offers. Increased ASINs to 5. Fixed stats indices. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Improved Used, like new; partial Used, very good/good/acceptable. Note: It’s never Keepa.
+
+2025-04-27: Fixed 'int' object has no attribute 'time' in Used functions. Refined Lowest, Highest, Stock using csv/offers. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new; improved Used, very good/good/acceptable. Note: It’s never Keepa.
