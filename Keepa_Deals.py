@@ -72,7 +72,7 @@ def fetch_deals(page):
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {json.dumps([d['asin'] for d in deals], default=str)}")
         print(f"Fetched {len(deals)} deals")
-        return [{'asin': deal['asin'], 'title': deal.get('title', '-')} for deal in deals[:3]]
+        return [{'asin': deal['asin'], 'title': deal.get('title', '-')} for deal in deals[:5]]
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
@@ -110,11 +110,13 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
         buy_box = product.get('buyBox', {})
+        csv_data = product.get('csv', [])
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
         logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
         logging.debug(f"Package dimensions for ASIN {asin}: weight={product.get('packageWeight', -1)}, height={product.get('packageHeight', -1)}, length={product.get('packageLength', -1)}, width={product.get('packageWidth', -1)}, quantity={product.get('packageQuantity', -1)}")
+        logging.debug(f"CSV data for ASIN {asin}: {csv_data[:100]}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
@@ -132,6 +134,106 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
+
+def used_like_new(product):
+    stats = product.get('stats', {})
+    csv_data = product.get('csv', [[]])[4]  # Used, like new prices
+    offers = product.get('offers', [])
+    prices = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0] if csv_data else []
+    prices_365 = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and time >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    stock = sum(1 for o in offers if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
+    result = {
+        'Used, like new - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True),
+        'Used, like new - 30 days avg.': get_stat_value(stats, 'avg30', 4, divisor=100, is_price=True),
+        'Used, like new - 60 days avg.': get_stat_value(stats, 'avg60', 4, divisor=100, is_price=True),
+        'Used, like new - 90 days avg.': get_stat_value(stats, 'avg90', 4, divisor=100, is_price=True),
+        'Used, like new - 180 days avg.': get_stat_value(stats, 'avg180', 4, divisor=100, is_price=True),
+        'Used, like new - 365 days avg.': get_stat_value(stats, 'avg365', 4, divisor=100, is_price=True),
+        'Used, like new - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'Used, like new - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, like new - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'Used, like new - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, like new - 90 days OOS': get_stat_value(stats, 'outOfStock90', 4, is_price=False),
+        'Used, like new - Stock': str(stock) if stock > 0 else '-'
+    }
+    logging.debug(f"used_like_new result: {result}")
+    print(f"Used, like new for ASIN: {result}")
+    return result
+
+def used_very_good(product):
+    stats = product.get('stats', {})
+    csv_data = product.get('csv', [[]])[5]  # Used, very good prices
+    offers = product.get('offers', [])
+    prices = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0] if csv_data else []
+    prices_365 = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and time >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    stock = sum(1 for o in offers if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
+    result = {
+        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True),
+        'Used, very good - 30 days avg.': get_stat_value(stats, 'avg30', 5, divisor=100, is_price=True),
+        'Used, very good - 60 days avg.': get_stat_value(stats, 'avg60', 5, divisor=100, is_price=True),
+        'Used, very good - 90 days avg.': get_stat_value(stats, 'avg90', 5, divisor=100, is_price=True),
+        'Used, very good - 180 days avg.': get_stat_value(stats, 'avg180', 5, divisor=100, is_price=True),
+        'Used, very good - 365 days avg.': get_stat_value(stats, 'avg365', 5, divisor=100, is_price=True),
+        'Used, very good - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'Used, very good - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, very good - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'Used, very good - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, very good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 5, is_price=False),
+        'Used, very good - Stock': str(stock) if stock > 0 else '-'
+    }
+    logging.debug(f"used_very_good result: {result}")
+    print(f"Used, very good for ASIN: {result}")
+    return result
+
+def used_good(product):
+    stats = product.get('stats', {})
+    csv_data = product.get('csv', [[]])[6]  # Used, good prices
+    offers = product.get('offers', [])
+    prices = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0] if csv_data else []
+    prices_365 = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and time >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    stock = sum(1 for o in offers if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
+    result = {
+        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True),
+        'Used, good - 30 days avg.': get_stat_value(stats, 'avg30', 6, divisor=100, is_price=True),
+        'Used, good - 60 days avg.': get_stat_value(stats, 'avg60', 6, divisor=100, is_price=True),
+        'Used, good - 90 days avg.': get_stat_value(stats, 'avg90', 6, divisor=100, is_price=True),
+        'Used, good - 180 days avg.': get_stat_value(stats, 'avg180', 6, divisor=100, is_price=True),
+        'Used, good - 365 days avg.': get_stat_value(stats, 'avg365', 6, divisor=100, is_price=True),
+        'Used, good - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'Used, good - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, good - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'Used, good - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
+        'Used, good - Stock': str(stock) if stock > 0 else '-'
+    }
+    logging.debug(f"used_good result: {result}")
+    print(f"Used, good for ASIN: {result}")
+    return result
+
+def used_acceptable(product):
+    stats = product.get('stats', {})
+    csv_data = product.get('csv', [[]])[7]  # Used, acceptable prices
+    offers = product.get('offers', [])
+    prices = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0] if csv_data else []
+    prices_365 = [price for time, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and time >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    stock = sum(1 for o in offers if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
+    result = {
+        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
+        'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
+        'Used, acceptable - 60 days avg.': get_stat_value(stats, 'avg60', 7, divisor=100, is_price=True),
+        'Used, acceptable - 90 days avg.': get_stat_value(stats, 'avg90', 7, divisor=100, is_price=True),
+        'Used, acceptable - 180 days avg.': get_stat_value(stats, 'avg180', 7, divisor=100, is_price=True),
+        'Used, acceptable - 365 days avg.': get_stat_value(stats, 'avg365', 7, divisor=100, is_price=True),
+        'Used, acceptable - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'Used, acceptable - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, acceptable - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'Used, acceptable - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, acceptable - 90 days OOS': get_stat_value(stats, 'outOfStock90', 7, is_price=False),
+        'Used, acceptable - Stock': str(stock) if stock > 0 else '-'
+    }
+    logging.debug(f"used_acceptable result: {result}")
+    print(f"Used, acceptable for ASIN: {result}")
+    return result
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -164,7 +266,7 @@ def main():
             print("No deals fetched, writing diagnostic CSV")
             write_csv([], [], diagnostic=True)
             return
-        for deal in deals[:3]:
+        for deal in deals[:5]:
             asin = deal['asin']
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
@@ -180,6 +282,10 @@ def main():
             row.update(package_height(product))
             row.update(package_length(product))
             row.update(package_width(product))
+            row.update(used_like_new(product))
+            row.update(used_very_good(product))
+            row.update(used_good(product))
+            row.update(used_acceptable(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
