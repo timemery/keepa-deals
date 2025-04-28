@@ -111,9 +111,9 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         offers = product.get('offers', [])
         buy_box = product.get('buyBox', {})
         csv_field = product.get('csv', [])
-        if not isinstance(csv_field, list) or not csv_field:
+        if not isinstance(csv_field, list) or not csv_field or len(csv_field) < 11:
             logging.warning(f"CSV field invalid for ASIN {asin}: {csv_field}")
-            csv_field = []
+            csv_field = [[] for _ in range(11)]  # Ensure 11 indices
         csv_lengths = [len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
         logging.debug(f"CSV field for ASIN {asin}: {csv_lengths}")
@@ -142,17 +142,21 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
 
 def used_like_new(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
+    csv_field = product.get('csv', [[] for _ in range(11)])
     asin = product.get('asin', 'unknown')
-    if not isinstance(csv_field, list) or len(csv_field) <= 4 or csv_field[4] is None or not isinstance(csv_field[4], list):
+    if not isinstance(csv_field, list) or len(csv_field) <= 4 or csv_field[4] is None or not isinstance(csv_field[4], list) or not csv_field[4]:
         logging.warning(f"No valid CSV data for Used, like new, ASIN {asin}: {csv_field[:5] if isinstance(csv_field, list) else csv_field}")
         csv_data = []
     else:
         csv_data = csv_field[4]
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, like new, ASIN {asin}: {len(csv_data)}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    logging.debug(f"CSV raw data for Used, like new, ASIN {asin}: {csv_data[:20]}")
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    if not prices and offers:
+        prices = [o.get('price', -1) for o in offers if o.get('condition') == 'Used - Like New' and o.get('price', -1) > 0]
+        prices_365 = prices
     stock = sum(1 for o in offers if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
     result = {
         'Used, like new - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True),
@@ -174,17 +178,21 @@ def used_like_new(product):
 
 def used_very_good(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
+    csv_field = product.get('csv', [[] for _ in range(11)])
     asin = product.get('asin', 'unknown')
-    if not isinstance(csv_field, list) or len(csv_field) <= 5 or csv_field[5] is None or not isinstance(csv_field[5], list):
+    if not isinstance(csv_field, list) or len(csv_field) <= 5 or csv_field[5] is None or not isinstance(csv_field[5], list) or not csv_field[5]:
         logging.warning(f"No valid CSV data for Used, very good, ASIN {asin}: {csv_field[:6] if isinstance(csv_field, list) else csv_field}")
         csv_data = []
     else:
         csv_data = csv_field[5]
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, very good, ASIN {asin}: {len(csv_data)}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    logging.debug(f"CSV raw data for Used, very good, ASIN {asin}: {csv_data[:20]}")
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    if not prices and offers:
+        prices = [o.get('price', -1) for o in offers if o.get('condition') == 'Used - Very Good' and o.get('price', -1) > 0]
+        prices_365 = prices
     stock = sum(1 for o in offers if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
     result = {
         'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True),
@@ -206,17 +214,21 @@ def used_very_good(product):
 
 def used_good(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
+    csv_field = product.get('csv', [[] for _ in range(11)])
     asin = product.get('asin', 'unknown')
-    if not isinstance(csv_field, list) or len(csv_field) <= 6 or csv_field[6] is None or not isinstance(csv_field[6], list):
+    if not isinstance(csv_field, list) or len(csv_field) <= 6 or csv_field[6] is None or not isinstance(csv_field[6], list) or not csv_field[6]:
         logging.warning(f"No valid CSV data for Used, good, ASIN {asin}: {csv_field[:7] if isinstance(csv_field, list) else csv_field}")
         csv_data = []
     else:
         csv_data = csv_field[6]
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, good, ASIN {asin}: {len(csv_data)}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    logging.debug(f"CSV raw data for Used, good, ASIN {asin}: {csv_data[:20]}")
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    if not prices and offers:
+        prices = [o.get('price', -1) for o in offers if o.get('condition') == 'Used - Good' and o.get('price', -1) > 0]
+        prices_365 = prices
     stock = sum(1 for o in offers if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
     result = {
         'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True),
@@ -238,17 +250,21 @@ def used_good(product):
 
 def used_acceptable(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [])
+    csv_field = product.get('csv', [[] for _ in range(11)])
     asin = product.get('asin', 'unknown')
-    if not isinstance(csv_field, list) or len(csv_field) <= 7 or csv_field[7] is None or not isinstance(csv_field[7], list):
+    if not isinstance(csv_field, list) or len(csv_field) <= 7 or csv_field[7] is None or not isinstance(csv_field[7], list) or not csv_field[7]:
         logging.warning(f"No valid CSV data for Used, acceptable, ASIN {asin}: {csv_field[:8] if isinstance(csv_field, list) else csv_field}")
         csv_data = []
     else:
         csv_data = csv_field[7]
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, acceptable, ASIN {asin}: {len(csv_data)}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 1 <= price <= 100000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    logging.debug(f"CSV raw data for Used, acceptable, ASIN {asin}: {csv_data[:20]}")
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and 50 <= price <= 50000 and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    if not prices and offers:
+        prices = [o.get('price', -1) for o in offers if o.get('condition') == 'Used - Acceptable' and o.get('price', -1) > 0]
+        prices_365 = prices
     stock = sum(1 for o in offers if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
     result = {
         'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
