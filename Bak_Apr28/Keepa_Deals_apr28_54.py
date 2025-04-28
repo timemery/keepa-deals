@@ -8,13 +8,14 @@ from stable import get_stat_value, get_title, get_asin, sales_rank_current, used
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 try:
+    # Config & Headers
     with open('config.json') as f:
         config = json.load(f)
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
     with open('headers.json') as f:
         HEADERS = json.load(f)
-        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
+        logging.debug(f"Loaded headers: {HEADERS}")
         print(f"Headers loaded: {len(HEADERS)} fields")
 except Exception as e:
     logging.error(f"Startup failed: {str(e)}")
@@ -28,7 +29,7 @@ def fetch_deals(page):
     logging.debug(f"Fetching deals page {page}...")
     print(f"Fetching deals page {page}...")
     deal_query = {
-        "page": page,
+        "page": 0,
         "domainId": "1",
         "excludeCategories": [],
         "includeCategories": [283155],
@@ -69,7 +70,7 @@ def fetch_deals(page):
             return []
         data = response.json()
         deals = data.get('deals', {}).get('dr', [])
-        logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
+        logging.debug(f"Fetched {len(deals)} deals: {json.dumps([d['asin'] for d in deals], default=str)}")
         print(f"Fetched {len(deals)} deals")
         return [{'asin': deal['asin'], 'title': deal.get('title', '-')} for deal in deals[:5]]
     except Exception as e:
@@ -92,6 +93,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
     try:
         response = requests.get(url, headers=headers, timeout=30)
         logging.debug(f"Response status: {response.status_code}")
+        logging.debug(f"Response time: {response.headers.get('Date', 'N/A')}")
         logging.debug(f"Raw response: {response.text[:500]}...")
         if response.status_code != 200:
             logging.error(f"Request failed: {response.status_code}, {response.text}")
@@ -106,10 +108,32 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         product = products[0]
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
-        csv_field = product.get('csv', [[] for _ in range(11)])
-        logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]}")
+        offers = product.get('offers', [])
+        buy_box = product.get('buyBox', {})
+        csv_field = product.get('csv', [])
+        if not isinstance(csv_field, list) or not csv_field or len(csv_field) < 11:
+            logging.warning(f"CSV field invalid for ASIN {asin}: {csv_field}")
+            csv_field = [[] for _ in range(11)]
+        csv_lengths = [len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]
+        logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
+        logging.debug(f"Sales Rank Drops for ASIN {asin}: drops30={stats.get('salesDrops30', -1)}, drops60={stats.get('salesDrops60', -1)}, drops90={stats.get('salesDrops90', -1)}, drops180={stats.get('salesDrops180', -1)}, drops365={stats.get('salesDrops365', -1)}")
+        logging.debug(f"CSV field for ASIN {asin}: {csv_lengths}")
         logging.debug(f"CSV raw data for ASIN {asin}: {[x[:10] if isinstance(x, list) else x for x in csv_field[:11]]}")
-        logging.debug(f"Sales Rank Drops for ASIN {asin}: drops90={stats.get('salesDrops90', -1)}")
+        logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
+        logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
+        logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
+        logging.debug(f"Package dimensions for ASIN {asin}: weight={product.get('packageWeight', -1)}, height={product.get('packageHeight', -1)}, length={product.get('packageLength', -1)}, width={product.get('packageWidth', -1)}, quantity={product.get('packageQuantity', -1)}")
+        print(f"Raw stats.current: {current[:20]}")
+        if not stats or len(current) < 19:
+            logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
+            print(f"Incomplete stats for ASIN {asin}")
+            return {'stats': {'current': [-1] * 30}, 'asin': asin}
+        if current[2] <= 0:
+            logging.warning(f"No Used price for ASIN {asin}: current[2]={current[2]}")
+        if current[3] <= 0:
+            logging.warning(f"No Sales Rank for ASIN {asin}: current[3]={current[3]}")
+        if current[18] <= 0:
+            logging.warning(f"No Buy Box price for ASIN {asin}: current[18]={current[18]}")
         time.sleep(1)
         return product
     except Exception as e:
@@ -142,7 +166,7 @@ def list_price(product):
         'List Price - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'List Price - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
-        'List Price - Stock': '-'
+        'List Price - Stock': '-'  # List Price has no stock
     }
     logging.debug(f"list_price result for ASIN {asin}: {result}")
     print(f"List Price for ASIN {asin}: {result}")
@@ -174,7 +198,7 @@ def new_3rd_party_fbm(product):
         'New, 3rd Party FBM - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'New, 3rd Party FBM - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'New, 3rd Party FBM - 90 days OOS': get_stat_value(stats, 'outOfStock90', 1, is_price=False),
-        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
+        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '-'
     }
     logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
     print(f"New, 3rd Party FBM for ASIN {asin}: {result}")
@@ -206,7 +230,7 @@ def used_like_new(product):
         'Used, like new - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'Used, like new - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, like new - 90 days OOS': get_stat_value(stats, 'outOfStock90', 4, is_price=False),
-        'Used, like new - Stock': str(stock) if stock > 0 else '0'
+        'Used, like new - Stock': str(stock) if stock > 0 else '-'
     }
     logging.debug(f"used_like_new result for ASIN {asin}: {result}")
     print(f"Used, like new for ASIN {asin}: {result}")
@@ -238,7 +262,7 @@ def used_very_good(product):
         'Used, very good - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'Used, very good - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, very good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 5, is_price=False),
-        'Used, very good - Stock': str(stock) if stock > 0 else '0'
+        'Used, very good - Stock': str(stock) if stock > 0 else '-'
     }
     logging.debug(f"used_very_good result for ASIN {asin}: {result}")
     print(f"Used, very good for ASIN {asin}: {result}")
@@ -270,7 +294,7 @@ def used_good(product):
         'Used, good - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'Used, good - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
-        'Used, good - Stock': str(stock) if stock > 0 else '0'
+        'Used, good - Stock': str(stock) if stock > 0 else '-'
     }
     logging.debug(f"used_good result for ASIN {asin}: {result}")
     print(f"Used, good for ASIN {asin}: {result}")
@@ -302,7 +326,7 @@ def used_acceptable(product):
         'Used, acceptable - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'Used, acceptable - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, acceptable - 90 days OOS': get_stat_value(stats, 'outOfStock90', 7, is_price=False),
-        'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
+        'Used, acceptable - Stock': str(stock) if stock > 0 else '-'
     }
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     print(f"Used, acceptable for ASIN {asin}: {result}")
@@ -317,12 +341,13 @@ def write_csv(rows, deals, diagnostic=False):
         if diagnostic:
             writer.writerow(['No deals fetched'] + ['-'] * (len(HEADERS) - 1))
         else:
-            for deal, row in zip(deals[:len(rows)], rows):
-                row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
+            for row, deal in zip(rows, deals[:len(rows)]):
+                row_data = {}
                 row_data.update(row)
-                logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
-                print(f"Writing row for ASIN {deal['asin']}...")
-                writer.writerow([row_data.get(header, '-') for header in HEADERS])
+                logging.debug(f"row_data keys for ASIN {deal['asin']}: {row_data.keys()}")
+                logging.debug(f"row_data values for ASIN {deal['asin']}: {row_data}")
+                print(f"Writing row for ASIN {deal['asin']}: {row_data}")
+                writer.writerow([get_asin(deal) if header == 'ASIN' else get_title(deal) if header == 'Title' else row_data.get(header, '-') for header in HEADERS])
 # Chunk 4 ends
 
 # Chunk 5 starts
@@ -339,7 +364,6 @@ def main():
             write_csv([], [], diagnostic=True)
             return
         logging.debug(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
-        print(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
         for deal in deals[:5]:
             asin = deal['asin']
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
