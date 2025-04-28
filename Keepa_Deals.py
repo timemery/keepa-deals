@@ -110,13 +110,13 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
         buy_box = product.get('buyBox', {})
-        csv_data = product.get('csv', [])
+        csv_field = product.get('csv', [])
         logging.debug(f"Raw stats for ASIN {asin}: current={current[:20]}")
         logging.debug(f"Buy Box for ASIN {asin}: {json.dumps(buy_box, default=str)}")
         logging.debug(f"Offers for ASIN {asin}: {json.dumps([{'price': o.get('price'), 'condition': o.get('condition'), 'isFBA': o.get('isFBA'), 'isBuyBox': o.get('isBuyBox')} for o in offers], default=str)}")
         logging.debug(f"Stats avg for ASIN {asin}: avg={stats.get('avg', [-1] * 30)[:10]}, avg30={stats.get('avg30', [-1] * 30)[:10]}, avg90={stats.get('avg90', [-1] * 30)[:10]}, avg180={stats.get('avg180', [-1] * 30)[:10]}, avg365={stats.get('avg365', [-1] * 30)[:10]}")
         logging.debug(f"Package dimensions for ASIN {asin}: weight={product.get('packageWeight', -1)}, height={product.get('packageHeight', -1)}, length={product.get('packageLength', -1)}, width={product.get('packageWidth', -1)}, quantity={product.get('packageQuantity', -1)}")
-        logging.debug(f"CSV data for ASIN {asin}: {csv_data[:100] if csv_data else 'Empty'}")
+        logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in csv_field[:8]] if isinstance(csv_field, list) else 'Empty'}")
         print(f"Raw stats.current: {current[:20]}")
         if not stats or len(current) < 19:
             logging.error(f"Incomplete stats for ASIN {asin}: {stats}")
@@ -138,7 +138,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
 def used_like_new(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [])
-    csv_data = csv_field[4] if isinstance(csv_field, list) and len(csv_field) > 4 else []
+    csv_data = csv_field[4] if isinstance(csv_field, list) and len(csv_field) > 4 and isinstance(csv_field[4], list) else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, like new: {len(csv_data)}")
     if not csv_data:
@@ -167,7 +167,7 @@ def used_like_new(product):
 def used_very_good(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [])
-    csv_data = csv_field[5] if isinstance(csv_field, list) and len(csv_field) > 5 else []
+    csv_data = csv_field[5] if isinstance(csv_field, list) and len(csv_field) > 5 and isinstance(csv_field[5], list) else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, very good: {len(csv_data)}")
     if not csv_data:
@@ -196,7 +196,7 @@ def used_very_good(product):
 def used_good(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [])
-    csv_data = csv_field[6] if isinstance(csv_field, list) and len(csv_field) > 6 else []
+    csv_data = csv_field[6] if isinstance(csv_field, list) and len(csv_field) > 6 and isinstance(csv_field[6], list) else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, good: {len(csv_data)}")
     if not csv_data:
@@ -225,7 +225,7 @@ def used_good(product):
 def used_acceptable(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [])
-    csv_data = csv_field[7] if isinstance(csv_field, list) and len(csv_field) > 7 else []
+    csv_data = csv_field[7] if isinstance(csv_field, list) and len(csv_field) > 7 and isinstance(csv_field[7], list) else []
     offers = product.get('offers', [])
     logging.debug(f"CSV data length for Used, acceptable: {len(csv_data)}")
     if not csv_data:
