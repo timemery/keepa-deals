@@ -117,43 +117,6 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
-def diagnose_fields(product):
-    """Log all csv and stats fields to verify Used, acceptable mapping."""
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    csv_field = product.get('csv', [[] for _ in range(11)])
-    offers = product.get('offers', [])
-    
-    # Log all csv arrays
-    logging.info(f"Diagnosing fields for ASIN {asin}")
-    for i in range(len(csv_field)):
-        csv_data = csv_field[i] if isinstance(csv_field[i], list) else []
-        prices = [price / 100 for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if isinstance(price, (int, float)) and price > 0] if csv_data else []
-        logging.info(f"csv[{i}] length: {len(csv_data)}, prices: {prices[:10] if prices else 'None'}")
-    
-    # Log stats fields
-    stat_keys = ['current', 'avg30', 'avg90', 'avg180', 'avg365', 'outOfStock90']
-    for key in stat_keys:
-        stat_data = stats.get(key, [-1] * 30)
-        logging.info(f"stats.{key}: {[f'${x / 100:.2f}' if isinstance(x, (int, float)) and x > 0 else x for x in stat_data[:11]]}")
-    
-    # Log offers for Used - Acceptable
-    acceptable_offers = [o for o in offers if o.get('condition') == 'Used - Acceptable']
-    offer_prices = [o.get('price', -1) / 100 for o in acceptable_offers if o.get('price', -1) > 0]
-    logging.info(f"Used, acceptable offers: {offer_prices if offer_prices else 'None'}")
-    
-    # Compare with expected Used, acceptable values
-    expected = {
-        '1954966032': {'lowest': 12.54, 'highest': 28.31},
-        '0915777363': {'lowest': 26.64, 'highest': 1082.07},
-        'B0065TF4ME': {'lowest': 6.12, 'highest': 398.26},
-        '0914671227': {'lowest': 6.97, 'highest': 287.98},
-        '1788730259': {'lowest': 15.45, 'highest': 32.60}
-    }.get(asin, {'lowest': -1, 'highest': -1})
-    logging.info(f"Expected Used, acceptable for ASIN {asin}: Lowest=${expected['lowest']:.2f}, Highest=${expected['highest']:.2f}")
-    
-    return {'Diagnosed': f'Fields logged for ASIN {asin}'}
-
 def list_price(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [[] for _ in range(11)])
@@ -324,10 +287,18 @@ def used_acceptable(product):
         csv_data = csv_field[7]
     logging.debug(f"CSV data length for Used, acceptable, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, acceptable, ASIN {asin}: {csv_data[:20]}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if isinstance(price, (int, float)) and price > 0] if csv_data else []
+    valid_prices = []
+    for timestamp, price in zip(csv_data[0::2], csv_data[1::2]):
+        if (isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and
+            price >= 1 and price <= 1000000 and timestamp > (time.time() - 5*365*24*3600)*1000 and timestamp <= time.time()*1000):
+            valid_prices.append(price)
+        else:
+            logging.debug(f"Filtered invalid Used, acceptable entry for ASIN {asin}: timestamp={timestamp}, price={price}")
+    prices = valid_prices if valid_prices else []
     prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if
-                  isinstance(price, (int, float)) and price > 0 and
-                  isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+                  isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and
+                  price >= 1 and price <= 1000000 and
+                  timestamp >= (time.time() - 365*24*3600)*1000 and timestamp <= time.time()*1000] if csv_data else []
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
     result = {
         'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
@@ -384,7 +355,6 @@ def main():
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            row.update(diagnose_fields(product))  # Add diagnostics
             row.update(sales_rank_current(product))
             row.update(sales_rank_30_days_avg(product))
             row.update(sales_rank_90_days_avg(product))
