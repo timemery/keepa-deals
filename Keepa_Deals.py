@@ -1,5 +1,5 @@
 # Chunk 1 starts
-# Keepa_Deals.py
+# Keepa_Deals.py - helping grok reorient itself
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
 from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width
@@ -217,6 +217,7 @@ def new_3rd_party_fbm(product):
         'New, 3rd Party FBM - 90 days OOS': get_stat_value(stats, 'outOfStock90', 1, is_price=False),
         'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
     }
+    logging.debug(f"new_3rd_party_fbm stats.current[1] for ASIN {asin}: {stats.get('current', [-1]*30)[1]}")
     logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
     print(f"New, 3rd Party FBM for ASIN {asin}: {result}")
     return result
@@ -253,6 +254,7 @@ def used_like_new(product):
         'Used, like new - 90 days OOS': get_stat_value(stats, 'outOfStock90', 4, is_price=False),
         'Used, like new - Stock': str(stock) if stock > 0 else '0'
     }
+    logging.debug(f"used_like_new stats.current[4] for ASIN {asin}: {stats.get('current', [-1]*30)[4]}")
     logging.debug(f"used_like_new result for ASIN {asin}: {result}")
     print(f"Used, like new for ASIN {asin}: {result}")
     return result
@@ -289,6 +291,7 @@ def used_very_good(product):
         'Used, very good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 5, is_price=False),
         'Used, very good - Stock': str(stock) if stock > 0 else '0'
     }
+    logging.debug(f"used_very_good stats.current[5] for ASIN {asin}: {stats.get('current', [-1]*30)[5]}")
     logging.debug(f"used_very_good result for ASIN {asin}: {result}")
     print(f"Used, very good for ASIN {asin}: {result}")
     return result
@@ -325,6 +328,7 @@ def used_good(product):
         'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
         'Used, good - Stock': str(stock) if stock > 0 else '0'
     }
+    logging.debug(f"used_good stats.current[6] for ASIN {asin}: {stats.get('current', [-1]*30)[6]}")
     logging.debug(f"used_good result for ASIN {asin}: {result}")
     print(f"Used, good for ASIN {asin}: {result}")
     return result
@@ -361,6 +365,7 @@ def used_acceptable(product):
         'Used, acceptable - 90 days OOS': get_stat_value(stats, 'outOfStock90', 7, is_price=False),
         'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
     }
+    logging.debug(f"used_acceptable stats.current[7] for ASIN {asin}: {stats.get('current', [-1]*30)[7]}")
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     print(f"Used, acceptable for ASIN {asin}: {result}")
     return result
