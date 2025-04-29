@@ -232,8 +232,12 @@ def used_like_new(product):
         csv_data = csv_field[4]
     logging.debug(f"CSV data length for Used, like new, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, like new, ASIN {asin}: {csv_data[:20]}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float))] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+              if isinstance(price, (int, float)) and price > 0 and 
+                 isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+                  if isinstance(price, (int, float)) and price > 0 and 
+                     isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
     result = {
         'Used, like new - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True),
@@ -264,8 +268,12 @@ def used_very_good(product):
         csv_data = csv_field[5]
     logging.debug(f"CSV data length for Used, very good, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, very good, ASIN {asin}: {csv_data[:20]}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float))] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+              if isinstance(price, (int, float)) and price > 0 and 
+                 isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+                  if isinstance(price, (int, float)) and price > 0 and 
+                     isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
     result = {
         'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True),
@@ -296,8 +304,12 @@ def used_good(product):
         csv_data = csv_field[6]
     logging.debug(f"CSV data length for Used, good, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, good, ASIN {asin}: {csv_data[:20]}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float))] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if price > 0 and isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+              if isinstance(price, (int, float)) and price > 0 and 
+                 isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+                  if isinstance(price, (int, float)) and price > 0 and 
+                     isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
     result = {
         'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True),
