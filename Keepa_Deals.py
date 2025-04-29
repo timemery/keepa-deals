@@ -324,10 +324,19 @@ def used_acceptable(product):
         csv_data = csv_field[7]
     logging.debug(f"CSV data length for Used, acceptable, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, acceptable, ASIN {asin}: {csv_data[:20]}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if isinstance(price, (int, float)) and price > 0] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) if
-                  isinstance(price, (int, float)) and price > 0 and
-                  isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
+    prices = []
+    if csv_data and len(csv_data) >= 2:
+        for i in range(1, len(csv_data), 2):  # Odd indices are prices
+            price = csv_data[i]
+            timestamp = csv_data[i-1] if i > 0 else 0
+            if (isinstance(price, (int, float)) and price > 0 and
+                isinstance(timestamp, (int, float)) and timestamp > 0):
+                prices.append(price)
+    prices_365 = [price for i, price in enumerate(csv_data[1::2])
+                  if (i*2 < len(csv_data) and
+                      isinstance(price, (int, float)) and price > 0 and
+                      isinstance(csv_data[i*2], (int, float)) and
+                      csv_data[i*2] >= (time.time() - 365*24*3600)*1000)] if csv_data else []
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
     result = {
         'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
