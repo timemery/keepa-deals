@@ -92,7 +92,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
     try:
         response = requests.get(url, headers=headers, timeout=30)
         logging.debug(f"Response status: {response.status_code}")
-        logging.debug(f"Raw response: {response.text[:500]}...")
+        logging.debug(f"Raw response: {response.text[:1000]}...")
         if response.status_code != 200:
             logging.error(f"Request failed: {response.status_code}, {response.text}")
             print(f"Request failed: {response.status_code}")
@@ -107,6 +107,9 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         csv_field = product.get('csv', [[] for _ in range(11)])
+        logging.debug(f"Product keys for ASIN {asin}: {list(product.keys())}")
+        logging.debug(f"Stats keys for ASIN {asin}: {list(stats.keys())}")
+        logging.debug(f"Stats current for ASIN {asin}: {current}")
         logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]}")
         logging.debug(f"CSV raw data for ASIN {asin}: {[x[:10] if isinstance(x, list) else x for x in csv_field[:11]]}")
         logging.debug(f"Sales Rank Drops for ASIN {asin}: drops90={stats.get('salesDrops90', -1)}")
