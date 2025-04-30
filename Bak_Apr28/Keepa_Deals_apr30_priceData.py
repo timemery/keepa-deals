@@ -23,54 +23,71 @@ except Exception as e:
 # Chunk 1 ends
 
 # Chunk 2 starts
-def fetch_deals(api_key, per_page=100, max_pages=2):
-    asins = []
-    price_data_map = {}  # Store priceData by ASIN
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
+def fetch_deals(page):
+    logging.debug(f"Fetching deals page {page}...")
+    print(f"Fetching deals page {page}...")
+    deal_query = {
+        "page": page,
+        "domainId": "1",
+        "excludeCategories": [],
+        "includeCategories": [283155],
+        "priceTypes": [2],
+        "deltaRange": [1950, 9900],
+        "deltaPercentRange": [50, 2147483647],
+        "salesRankRange": [50000, 1500000],
+        "currentRange": [2000, 30100],
+        "minRating": 10,
+        "isLowest": False,
+        "isLowest90": False,
+        "isLowestOffer": False,
+        "isOutOfStock": False,
+        "titleSearch": "",
+        "isRangeEnabled": True,
+        "isFilterEnabled": True,
+        "filterErotic": False,
+        "singleVariation": True,
+        "hasReviews": False,
+        "isPrimeExclusive": False,
+        "mustHaveAmazonOffer": False,
+        "mustNotHaveAmazonOffer": False,
+        "sortType": 4,
+        "dateRange": "3",
+        "warehouseConditions": [2, 3, 4, 5]
+    }
+    query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
+    encoded_selection = urllib.parse.quote(query_json)
+    url = f"https://api.keepa.com/deal?key={api_key}&selection={encoded_selection}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
-    for page in range(max_pages):
-        url = f"https://api.keepa.com/deals?key={api_key}&domain=1&isRange=1&sortType=rank-desc&perPage={per_page}&page={page}"
-        logging.debug(f"Fetching deals page {page}...")
-        try:
-            response = requests.get(url, headers=headers, timeout=30)
-            logging.debug(f"Deals response status: {response.status_code}")
-            if response.status_code != 200:
-                logging.error(f"Deals request failed: {response.status_code}, {response.text}")
-                print(f"Deals request failed: {response.status_code}")
-                continue
-            data = response.json()
-            deals = data.get('dr', [])
-            logging.debug(f"Deals found on page {page}: {len(deals)}")
-            for deal in deals:
-                asin = deal.get('asin')
-                if asin:
-                    asins.append(asin)
-                    price_data = deal.get('priceData', {}).get('USED_ACCEPTABLE_SHIPPING', {})
-                    price_data_map[asin] = {
-                        'lowest': price_data.get('lowest', -1),
-                        'highest': price_data.get('highest', -1),
-                        'lowest365': price_data.get('lowest365', -1),
-                        'highest365': price_data.get('highest365', -1)
-                    }
-            time.sleep(1)
-        except Exception as e:
-            logging.error(f"Deals fetch failed for page {page}: {str(e)}")
-            print(f"Deals fetch failed: {str(e)}")
-            continue
-    logging.debug(f"Total ASINs fetched: {len(asins)}")
-    print(f"Total ASINs fetched: {len(asins)}")
-    return asins[:150], price_data_map
+    logging.debug(f"Deal URL: {url}")
+    try:
+        response = requests.get(url, headers=headers, timeout=30)
+        logging.debug(f"Deal response: {response.text[:500]}...")
+        if response.status_code != 200:
+            logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
+            print(f"Deal fetch failed: {response.status_code}")
+            return []
+        data = response.json()
+        deals = data.get('deals', {}).get('dr', [])
+        logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
+        print(f"Fetched {len(deals)} deals")
+        return [{'asin': deal['asin'], 'title': deal.get('title', '-')} for deal in deals[:5]]
+    except Exception as e:
+        logging.error(f"Deal fetch exception: {str(e)}")
+        print(f"Deal fetch exception: {str(e)}")
+        return []
 # Chunk 2 ends
 
 # Chunk 3 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=20, rating=1, history=1):
+def fetch_product(asin, days=365, offers=50, rating=1, history=1):
     if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
     print(f"Fetching ASIN {asin}...")
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1"
+    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1&condition=used_acc"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=30)
@@ -87,6 +104,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
         product = products[0]
         logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in product.get('csv', [])[:11]]}")
+        logging.debug(f"Offers count for ASIN {asin}: {len(product.get('offers', []))}")
         time.sleep(1)
         return product
     except Exception as e:
@@ -168,89 +186,58 @@ def used_good(product):
     print(f"Used, good for ASIN {asin}: {result}")
     return result
 
-def used_acceptable(product, price_data_map):
+def used_acceptable(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
     used_acc_offers = [o for o in offers if o.get('condition') == 'Used - Acceptable']
     logging.debug(f"Used, acceptable offers for ASIN {asin}: {len(used_acc_offers)} found")
+    prices = []
+    prices_365 = []
+    for offer in used_acc_offers:
+        offer_csv = offer.get('offerCSV', [])
+        logging.debug(f"Offer CSV for ASIN {asin}: {offer_csv[:20]}")
+        for i in range(0, len(offer_csv), 3):
+            timestamp, price, shipping = offer_csv[i:i+3]
+            if isinstance(timestamp, (int, float)) and isinstance(price, (int, float)) and isinstance(shipping, (int, float)) and timestamp > 0:
+                total_price = price + shipping
+                if total_price > 0:
+                    prices.append(total_price)
+                    if timestamp >= (time.time() - 365*24*3600)*1000:
+                        prices_365.append(total_price)
     stock = sum(1 for o in used_acc_offers if o.get('stock', 0) > 0)
-    price_data = price_data_map.get(asin, {})
     result = {
         'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
         'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
         'Used, acceptable - 90 days avg.': get_stat_value(stats, 'avg90', 7, divisor=100, is_price=True),
         'Used, acceptable - 180 days avg.': get_stat_value(stats, 'avg180', 7, divisor=100, is_price=True),
         'Used, acceptable - 365 days avg.': get_stat_value(stats, 'avg365', 7, divisor=100, is_price=True),
-        'Used, acceptable - Lowest': f"${price_data['lowest'] / 100:.2f}" if price_data.get('lowest', -1) != -1 else '-',
-        'Used, acceptable - Lowest 365 days': f"${price_data['lowest365'] / 100:.2f}" if price_data.get('lowest365', -1) != -1 else '-',
-        'Used, acceptable - Highest': f"${price_data['highest'] / 100:.2f}" if price_data.get('highest', -1) != -1 else '-',
-        'Used, acceptable - Highest 365 days': f"${price_data['highest365'] / 100:.2f}" if price_data.get('highest365', -1) != -1 else '-',
+        'Used, acceptable - Lowest': f"${min(prices) / 100:.2f}" if prices else '-',
+        'Used, acceptable - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
+        'Used, acceptable - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
+        'Used, acceptable - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
         'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
     }
-    logging.debug(f"used_acceptable price_data for ASIN {asin}: {price_data}")
+    logging.debug(f"used_acceptable prices for ASIN {asin}: {prices[:20]}")
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     print(f"Used, acceptable for ASIN {asin}: {result}")
     return result
 # Chunk 3 ends
 
 # Chunk 4 starts
-def main():
-    logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-    print("Starting Keepa Deals script...")
-    logging.debug("Starting Keepa Deals script...")
-    config_path = 'config.json'
-    try:
-        with open(config_path, 'r') as config_file:
-            config = json.load(config_file)
-            api_key = config.get('keepa_api_key')
-            if not api_key:
-                logging.error("No API key found in config.json")
-                print("No API key found in config.json")
-                return
-    except Exception as e:
-        logging.error(f"Failed to load config: {str(e)}")
-        print(f"Failed to load config: {str(e)}")
-        return
-    asins, price_data_map = fetch_deals(api_key, per_page=100, max_pages=2)
-    if not asins:
-        logging.error("No ASINs fetched from deals")
-        print("No ASINs fetched from deals")
-        return
-    headers = load_headers()
-    if not headers:
-        logging.error("No headers loaded")
-        print("No headers loaded")
-        return
-    output_file = 'Keepa_Deals_Export.csv'
-    results = []
-    for i, asin in enumerate(asins[:5]):  # Process first 5 ASINs
-        logging.debug(f"Processing ASIN {asin} ({i+1}/{min(5, len(asins))})")
-        print(f"Processing ASIN {asin} ({i+1}/{min(5, len(asins))})")
-        product = fetch_product(asin)
-        row = {
-            'ASIN': asin,
-            **list_price(product),
-            **used_acceptable(product, price_data_map),
-            **used_very_good(product),
-            **used_good(product),
-            **sales_rank_drops(product),
-            **product_package(product)
-        }
-        results.append(row)
-        time.sleep(1)
-    try:
-        with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=headers, extrasaction='ignore')
-            writer.writeheader()
-            writer.writerows(results)
-        logging.debug(f"CSV written successfully: {output_file}")
-        print(f"CSV written successfully: {output_file}")
-    except Exception as e:
-        logging.error(f"Failed to write CSV: {str(e)}")
-        print(f"Failed to write CSV: {str(e)}")
-    logging.debug("Script completed!")
-    print("Script completed!")
+def write_csv(rows, deals, diagnostic=False):
+    with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(HEADERS)
+        if diagnostic:
+            writer.writerow(['No deals fetched'] + ['-'] * (len(HEADERS) - 1))
+        else:
+            for deal, row in zip(deals[:len(rows)], rows):
+                row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
+                row_data.update(row)
+                logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
+                print(f"Writing row for ASIN {deal['asin']}...")
+                writer.writerow([row_data.get(header, '-') for header in HEADERS])
 # Chunk 4 ends
 
 # Chunk 5 starts
