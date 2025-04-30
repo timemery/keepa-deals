@@ -205,11 +205,17 @@ def used_acceptable(product):
         csv_data = csv_field[7]
     logging.debug(f"CSV data length for Used, acceptable, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, acceptable, ASIN {asin}: {csv_data[:40]}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2])
               if isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2])
                   if isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
+    # Log offers for Used - Acceptable
+    offers = product.get('offers', [])
+    used_acc_offers = [o for o in offers if o.get('condition') == 'Used - Acceptable']
+    logging.debug(f"Used, acceptable offers for ASIN {asin}: {len(used_acc_offers)} found")
+    for i, offer in enumerate(used_acc_offers):
+        logging.debug(f"Offer {i} for ASIN {asin}: condition={offer.get('condition')}, offerCSV={offer.get('offerCSV', [])[:20]}")
     result = {
         'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
         'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
