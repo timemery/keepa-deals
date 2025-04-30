@@ -99,20 +99,12 @@ def package_width(product):
 # Updated list_price
 def list_price(product):
     stats = product.get('stats', {})
-    csv_field = product.get('csv', [[] for _ in range(11)])
     asin = product.get('asin', 'unknown')
-    if not isinstance(csv_field, list) or len(csv_field) <= 8 or csv_field[8] is None or not isinstance(csv_field[8], list) or not csv_field[8]:
-        logging.warning(f"No valid CSV data for List Price, ASIN {asin}: {csv_field[:9] if isinstance(csv_field, list) else csv_field}")
-        logging.debug(f"Product keys for List Price, ASIN {asin}: {list(product.keys())}")
-        csv_data = []
-    else:
-        csv_data = csv_field[8]
-    logging.debug(f"CSV data length for List Price, ASIN {asin}: {len(csv_data)}")
-    logging.debug(f"CSV raw data for List Price, ASIN {asin}: {csv_data[:40]}")
-    logging.debug(f"Stats keys for List Price, ASIN {asin}: {list(stats.keys())}")
-    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+    csv_field = product.get('csv', [[] for _ in range(11)])
+    csv_data = csv_field[8] if isinstance(csv_field, list) and len(csv_field) > 8 and csv_field[8] else []
+    prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2])
               if isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
-    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
+    prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2])
                   if isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp >= (time.time() - 365*24*3600)*1000] if csv_data else []
     result = {
         'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True),
@@ -125,11 +117,8 @@ def list_price(product):
         'List Price - Lowest 365 days': f"${min(prices_365) / 100:.2f}" if prices_365 else '-',
         'List Price - Highest': f"${max(prices) / 100:.2f}" if prices else '-',
         'List Price - Highest 365 days': f"${max(prices_365) / 100:.2f}" if prices_365 else '-',
-        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
-        'List Price - Stock': '0'
+        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False)
     }
-    logging.debug(f"list_price stats.current[8] for ASIN {asin}: {stats.get('current', [-1]*30)[8]}")
-    logging.debug(f"list_price prices for ASIN {asin}: {prices[:20]}")
     logging.debug(f"list_price result for ASIN {asin}: {result}")
     print(f"List Price for ASIN {asin}: {result}")
     return result

@@ -1,11 +1,19 @@
 # Chunk 1 starts
-# Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
 from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, list_price, new_3rd_party_fbm, used_like_new
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+
+def load_headers():
+    try:
+        with open('headers.json', 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logging.error(f"Failed to load headers: {str(e)}")
+        print(f"Failed to load headers: {str(e)}")
+        return []
 
 try:
     with open('config.json') as f:
@@ -28,17 +36,23 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
     price_data_map = {}
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     for page in range(max_pages):
-        url = f"https://api.keepa.com/deal?key={api_key}&domain=1&isRange=1&sortType=rank-desc&perPage={per_page}&page={page}"
-        logging.debug(f"Fetching deals page {page}...")
+        selection = json.dumps({
+            "page": page, "domainId": "1", "priceTypes": [2]
+        })
+        url = f"https://api.keepa.com/deal?key={api_key}&selection={urllib.parse.quote(selection)}&perPage={per_page}"
+        logging.debug(f"Fetching deals page {page}: {url}")
+        logging.debug(f"Selection JSON: {selection}")
         try:
             response = requests.get(url, headers=headers, timeout=30)
             logging.debug(f"Deals response status: {response.status_code}")
             if response.status_code != 200:
-                logging.error(f"Deals request failed: {response.status_code}")
+                logging.error(f"Deals request failed: {response.status_code} - {response.text}")
                 print(f"Deals request failed: {response.status_code}")
                 continue
             data = response.json()
+            logging.debug(f"Deals response data: {json.dumps(data, indent=2)[:1000]}...")  # Log first 1000 chars
             deals = data.get('dr', [])
+            logging.debug(f"Deals count: {len(deals)}")
             for deal in deals:
                 asin = deal.get('asin')
                 if asin:
@@ -195,7 +209,7 @@ def main():
     try:
         with open(config_path, 'r') as config_file:
             config = json.load(config_file)
-            api_key = config.get('keepa_api_key')
+            api_key = config.get('api_key')  # Fixed key name
             if not api_key:
                 logging.error("No API key found in config.json")
                 print("No API key found in config.json")
@@ -246,52 +260,71 @@ def main():
 # Chunk 4 ends
 
 # Chunk 5 starts
-def main():
+def load_headers():
     try:
-        logging.info("Starting Keepa_Deals...")
-        print("Starting Keepa_Deals...")
-        time.sleep(2)
-        deals = fetch_deals(0)
-        rows = []
-        if not deals:
-            logging.warning("No deals fetched, writing diagnostic CSV")
-            print("No deals fetched, writing diagnostic CSV")
-            write_csv([], [], diagnostic=True)
-            return
-        logging.debug(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
-        print(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
-        for deal in deals[:5]:
-            asin = deal['asin']
-            logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
-            product = fetch_product(asin)
-            row = {}
-            row.update(sales_rank_current(product))
-            row.update(sales_rank_30_days_avg(product))
-            row.update(sales_rank_90_days_avg(product))
-            row.update(sales_rank_180_days_avg(product))
-            row.update(sales_rank_365_days_avg(product))
-            row.update(used_current(product))
-            row.update(package_quantity(product))
-            row.update(package_weight(product))
-            row.update(package_height(product))
-            row.update(package_length(product))
-            row.update(package_width(product))
-            row.update(list_price(product))  # Use stable.list_price
-            row.update(new_3rd_party_fbm(product))
-            row.update(used_like_new(product))
-            row.update(used_very_good(product))
-            row.update(used_good(product))
-            row.update(used_acceptable(product))
-            rows.append(row)
-        write_csv(rows, deals)
-        logging.info("Writing CSV...")
-        print("Writing CSV...")
-        logging.info("Script completed!")
-        print("Script completed!")
+        with open('headers.json', 'r') as f:
+            return json.load(f)
     except Exception as e:
-        logging.error(f"Main failed: {str(e)}")
-        print(f"Main failed: {str(e)}")
-        sys.exit(1)
+        logging.error(f"Failed to load headers: {str(e)}")
+        print(f"Failed to load headers: {str(e)}")
+        return []
+
+def main():
+    logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+    print("Starting Keepa Deals script...")
+    logging.debug("Starting Keepa Deals script...")
+    config_path = 'config.json'
+    try:
+        with open(config_path, 'r') as config_file:
+            config = json.load(config_file)
+            api_key = config.get('api_key')  # Fixed key name
+            if not api_key:
+                logging.error("No API key found in config.json")
+                print("No API key found in config.json")
+                return
+    except Exception as e:
+        logging.error(f"Failed to load config: {str(e)}")
+        print(f"Failed to load config: {str(e)}")
+        return
+    asins, price_data_map = fetch_deals(api_key, per_page=100, max_pages=2)
+    if not asins:
+        logging.error("No ASINs fetched from deals")
+        print("No ASINs fetched from deals")
+        return
+    headers = load_headers()
+    if not headers:
+        logging.error("No headers loaded")
+        print("No headers loaded")
+        return
+    output_file = 'Keepa_Deals_Export.csv'
+    results = []
+    for i, asin in enumerate(asins[:5]):  # Process first 5 ASINs
+        logging.debug(f"Processing ASIN {asin} ({i+1}/{min(5, len(asins))})")
+        print(f"Processing ASIN {asin} ({i+1}/{min(5, len(asins))})")
+        product = fetch_product(asin)
+        row = {
+            'ASIN': asin,
+            **list_price(product),
+            **used_acceptable(product, price_data_map),
+            **used_very_good(product),
+            **used_good(product),
+            **sales_rank_drops(product),
+            **product_package(product)
+        }
+        results.append(row)
+        time.sleep(1)
+    try:
+        with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=headers, extrasaction='ignore')
+            writer.writeheader()
+            writer.writerows(results)
+        logging.debug(f"CSV written successfully: {output_file}")
+        print(f"CSV written successfully: {output_file}")
+    except Exception as e:
+        logging.error(f"Failed to write CSV: {str(e)}")
+        print(f"Failed to write CSV: {str(e)}")
+    logging.debug("Script completed!")
+    print("Script completed!")
 
 if __name__ == "__main__":
     main()
