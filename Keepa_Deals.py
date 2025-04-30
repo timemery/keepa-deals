@@ -35,6 +35,15 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
     asins = []
     price_data_map = {}
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
+    # Check tokens
+    token_url = f"https://api.keepa.com/token?key={api_key}"
+    try:
+        token_response = requests.get(token_url, headers=headers, timeout=30)
+        token_data = token_response.json()
+        logging.debug(f"Token status: {token_response.status_code}, tokens left: {token_data.get('tokensLeft', -1)}")
+    except Exception as e:
+        logging.error(f"Token check failed: {str(e)}")
+        print(f"Token check failed: {str(e)}")
     for page in range(max_pages):
         selection = json.dumps({
             "page": page, "domainId": "1", "priceTypes": [2]
@@ -45,12 +54,16 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
         try:
             response = requests.get(url, headers=headers, timeout=30)
             logging.debug(f"Deals response status: {response.status_code}")
+            logging.debug(f"Deals raw response: {response.text}")
             if response.status_code != 200:
                 logging.error(f"Deals request failed: {response.status_code} - {response.text}")
                 print(f"Deals request failed: {response.status_code}")
                 continue
             data = response.json()
-            logging.debug(f"Deals response data: {json.dumps(data, indent=2)[:1000]}...")  # Log first 1000 chars
+            logging.debug(f"Deals response data: {json.dumps(data, indent=2)}")
+            if 'error' in data:
+                logging.error(f"Deals response error: {data['error']}")
+                print(f"Deals response error: {data['error']}")
             deals = data.get('dr', [])
             logging.debug(f"Deals count: {len(deals)}")
             for deal in deals:
@@ -75,6 +88,7 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
 # Chunk 3 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_product(asin, days=365, offers=20, rating=1, history=1):
+    global api_key
     if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
@@ -84,11 +98,13 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=30)
+        logging.debug(f"Product response status: {response.status_code}")
         if response.status_code != 200:
-            logging.error(f"Request failed: {response.status_code}")
-            print(f"Request failed: {response.status_code}")
+            logging.error(f"Product request failed: {response.status_code} - {response.text}")
+            print(f"Product request failed: {response.status_code}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
         data = response.json()
+        logging.debug(f"Product response data: {json.dumps(data, indent=2)[:1000]}...")
         products = data.get('products', [])
         if not products:
             logging.error(f"No product data for ASIN {asin}")
@@ -98,8 +114,8 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         time.sleep(1)
         return product
     except Exception as e:
-        logging.error(f"Fetch failed: {str(e)}")
-        print(f"Fetch failed: {str(e)}")
+        logging.error(f"Product fetch failed: {str(e)}")
+        print(f"Product fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
 def used_very_good(product):
