@@ -25,21 +25,20 @@ except Exception as e:
 # Chunk 2 starts
 def fetch_deals(api_key, per_page=100, max_pages=2):
     asins = []
-    price_data_map = {}  # Store priceData by ASIN
+    price_data_map = {}
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     for page in range(max_pages):
-        url = f"https://api.keepa.com/deals?key={api_key}&domain=1&isRange=1&sortType=rank-desc&perPage={per_page}&page={page}"
+        url = f"https://api.keepa.com/deal?key={api_key}&domain=1&isRange=1&sortType=rank-desc&perPage={per_page}&page={page}"
         logging.debug(f"Fetching deals page {page}...")
         try:
             response = requests.get(url, headers=headers, timeout=30)
             logging.debug(f"Deals response status: {response.status_code}")
             if response.status_code != 200:
-                logging.error(f"Deals request failed: {response.status_code}, {response.text}")
+                logging.error(f"Deals request failed: {response.status_code}")
                 print(f"Deals request failed: {response.status_code}")
                 continue
             data = response.json()
             deals = data.get('dr', [])
-            logging.debug(f"Deals found on page {page}: {len(deals)}")
             for deal in deals:
                 asin = deal.get('asin')
                 if asin:
@@ -53,10 +52,8 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
                     }
             time.sleep(1)
         except Exception as e:
-            logging.error(f"Deals fetch failed for page {page}: {str(e)}")
+            logging.error(f"Deals fetch failed: {str(e)}")
             print(f"Deals fetch failed: {str(e)}")
-            continue
-    logging.debug(f"Total ASINs fetched: {len(asins)}")
     print(f"Total ASINs fetched: {len(asins)}")
     return asins[:150], price_data_map
 # Chunk 2 ends
@@ -68,15 +65,13 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
-    logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
-    print(f"Fetching ASIN {asin}...")
+    logging.debug(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Response status: {response.status_code}")
         if response.status_code != 200:
-            logging.error(f"Request failed: {response.status_code}, {response.text}")
+            logging.error(f"Request failed: {response.status_code}")
             print(f"Request failed: {response.status_code}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
         data = response.json()
@@ -86,11 +81,10 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
             print(f"No product data for ASIN {asin}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
         product = products[0]
-        logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in product.get('csv', [])[:11]]}")
         time.sleep(1)
         return product
     except Exception as e:
-        logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
+        logging.error(f"Fetch failed: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
@@ -173,7 +167,6 @@ def used_acceptable(product, price_data_map):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
     used_acc_offers = [o for o in offers if o.get('condition') == 'Used - Acceptable']
-    logging.debug(f"Used, acceptable offers for ASIN {asin}: {len(used_acc_offers)} found")
     stock = sum(1 for o in used_acc_offers if o.get('stock', 0) > 0)
     price_data = price_data_map.get(asin, {})
     result = {
@@ -188,7 +181,6 @@ def used_acceptable(product, price_data_map):
         'Used, acceptable - Highest 365 days': f"${price_data['highest365'] / 100:.2f}" if price_data.get('highest365', -1) != -1 else '-',
         'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
     }
-    logging.debug(f"used_acceptable price_data for ASIN {asin}: {price_data}")
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     print(f"Used, acceptable for ASIN {asin}: {result}")
     return result
