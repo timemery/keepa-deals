@@ -97,6 +97,7 @@ def package_width(product):
 
 # List Price
 # Updated list_price function
+# Updated list_price
 def list_price(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [[] for _ in range(11)])
@@ -107,7 +108,8 @@ def list_price(product):
     else:
         csv_data = csv_field[8]
     logging.debug(f"CSV data length for List Price, ASIN {asin}: {len(csv_data)}")
-    logging.debug(f"CSV raw data for List Price, ASIN {asin}: {csv_data[:20]}")
+    logging.debug(f"CSV raw data for List Price, ASIN {asin}: {csv_data[:40]}")
+    logging.debug(f"Stats keys for List Price, ASIN {asin}: {list(stats.keys())}")
     prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
               if isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
     prices_365 = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
@@ -133,6 +135,7 @@ def list_price(product):
     return result
 
 # Used Like New
+# Moved used_like_new
 def used_like_new(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [[] for _ in range(11)])
@@ -142,7 +145,7 @@ def used_like_new(product):
         csv_data = []
     else:
         csv_data = csv_field[4]
-    logging.debug(f"CSV data length for Used, used_like_new, ASIN {asin}: {len(csv_data)}")
+    logging.debug(f"CSV data length for Used, like new, ASIN {asin}: {len(csv_data)}")
     logging.debug(f"CSV raw data for Used, like new, ASIN {asin}: {csv_data[:20]}")
     prices = [price for timestamp, price in zip(csv_data[0::2], csv_data[1::2]) 
               if isinstance(price, (int, float)) and isinstance(timestamp, (int, float)) and timestamp > 0] if csv_data else []
@@ -170,6 +173,7 @@ def used_like_new(product):
 
 # New, 3rd Party FBM
 # Moved functions from Keepa_Deals.py
+# Moved new_3rd_party_fbm
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [[] for _ in range(11)])
