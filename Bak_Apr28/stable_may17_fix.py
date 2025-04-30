@@ -96,7 +96,7 @@ def package_width(product):
     result = {'Package Width': f"{width / 10:.1f} cm" if width != -1 else '-'}
     return result
 
-# Updated list_price
+# List Price
 def list_price(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [[] for _ in range(11)])
