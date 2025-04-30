@@ -1,5 +1,6 @@
-# stable.py - helping grok reorient itself
+# stable.py - added import time
 import logging
+import time
 
 # get_stat_value
 def get_stat_value(stats, key, index, divisor=1, is_price=False):
@@ -96,14 +97,13 @@ def package_width(product):
     return result
 
 # List Price
-# Updated list_price function
-# Updated list_price
 def list_price(product):
     stats = product.get('stats', {})
     csv_field = product.get('csv', [[] for _ in range(11)])
     asin = product.get('asin', 'unknown')
     if not isinstance(csv_field, list) or len(csv_field) <= 8 or csv_field[8] is None or not isinstance(csv_field[8], list) or not csv_field[8]:
         logging.warning(f"No valid CSV data for List Price, ASIN {asin}: {csv_field[:9] if isinstance(csv_field, list) else csv_field}")
+        logging.debug(f"Product keys for List Price, ASIN {asin}: {list(product.keys())}")
         csv_data = []
     else:
         csv_data = csv_field[8]
