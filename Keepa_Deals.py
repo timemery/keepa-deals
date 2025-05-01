@@ -121,7 +121,6 @@ def list_price(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
     result = {
-        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True),
         'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
         'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
         'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
@@ -145,7 +144,6 @@ def new_3rd_party_fbm(product):
         'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
         'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
         'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 90 days OOS': get_stat_value(stats, 'outOfStock90', 1, is_price=False),
         'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
     }
     logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
@@ -181,7 +179,6 @@ def used_very_good(product):
         'Used, very good - 90 days avg.': get_stat_value(stats, 'avg90', 5, divisor=100, is_price=True),
         'Used, very good - 180 days avg.': get_stat_value(stats, 'avg180', 5, divisor=100, is_price=True),
         'Used, very good - 365 days avg.': get_stat_value(stats, 'avg365', 5, divisor=100, is_price=True),
-        'Used, very good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 5, is_price=False),
         'Used, very good - Stock': str(stock) if stock > 0 else '0'
     }
     logging.debug(f"used_very_good result for ASIN {asin}: {result}")
@@ -193,7 +190,6 @@ def used_good(product):
     asin = product.get('asin', 'unknown')
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
     result = {
-        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True),
         'Used, good - 30 days avg.': get_stat_value(stats, 'avg30', 6, divisor=100, is_price=True),
         'Used, good - 60 days avg.': get_stat_value(stats, 'avg60', 6, divisor=100, is_price=True),
         'Used, good - 90 days avg.': get_stat_value(stats, 'avg90', 6, divisor=100, is_price=True),
