@@ -1,4 +1,4 @@
-# Keepa_Deals.py - Based on Keepa_Deals_may12_attempt.py with stable.py and inline functions
+# Keepa_Deals.py - Direct HTTP requests with Keepa Deals API sample JSON
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
 from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, list_price, used_like_new, new_3rd_party_fbm
@@ -29,21 +29,51 @@ def fetch_deals(page):
     deal_query = {
         "page": page,
         "domainId": "1",
+        "excludeCategories": [],
+        "includeCategories": [283155],
         "priceTypes": [2],
-        "salesRankRange": [10000, 2000000],
-        "deltaPercentRange": [40, 100],
-        "isFilterEnabled": False,
+        "deltaRange": [1950, 9900],
+        "deltaPercentRange": [50, 2147483647],
+        "salesRankRange": [50000, 1500000],
+        "currentRange": [2000, 30100],
+        "minRating": 10,
+        "isLowest": false,
+        "isLowest90": false,
+        "isLowestOffer": false,
+        "isOutOfStock": false,
+        "titleSearch": "",
+        "isRangeEnabled": true,
+        "isFilterEnabled": true,
+        "filterErotic": false,
+        "singleVariation": true,
+        "hasReviews": false,
+        "isPrimeExclusive": false,
+        "mustHaveAmazonOffer": false,
+        "mustNotHaveAmazonOffer": false,
         "sortType": 4,
-        "includeCategories": [283155]
+        "dateRange": "3",
+        "warehouseConditions": [2, 3, 4, 5]
     }
-    query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
-    encoded_selection = urllib.parse.quote(query_json)
+    query_json = json.dumps(deal_query, separators=(',', ':'))
+    encoded_selection = urllib.parse.quote(query_json, safe='')
     url = f"https://api.keepa.com/deal?key={api_key}&selection={encoded_selection}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive'
+    }
+    logging.debug(f"Raw selection: {query_json}")
+    logging.debug(f"Encoded selection: {encoded_selection}")
     logging.debug(f"Deal URL: {url}")
     try:
         response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Deal response: {response.text}")
+        logging.debug(f"Deal response status: {response.status_code}")
+        logging.debug(f"Deal response headers: {response.headers}")
+        logging.debug(f"Deal response text: {response.text}")
+        # Save raw response for analysis
+        with open(f'response_page_{page}.json', 'w', encoding='utf-8') as f:
+            f.write(response.text)
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
             print(f"Deal fetch failed: {response.status_code}")
@@ -69,7 +99,12 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive'
+    }
     try:
         response = requests.get(url, headers=headers, timeout=30)
         logging.debug(f"Response status: {response.status_code}")
