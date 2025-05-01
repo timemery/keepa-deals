@@ -106,6 +106,7 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         product = products[0]
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
+        logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}")
         csv_field = product.get('csv', [[] for _ in range(11)])
         logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]}")
         logging.debug(f"CSV raw data for ASIN {asin}: {[x[:10] if isinstance(x, list) else x for x in csv_field[:11]]}")
