@@ -30,6 +30,7 @@ except Exception as e:
     sys.exit(1)
 # Chunk 1 ends
 
+# In Keepa_Deals.py, replace Chunk 2 with:
 # Chunk 2 starts
 def fetch_deals(api_key, per_page=100, max_pages=2):
     asins = []
