@@ -96,6 +96,27 @@ def package_width(product):
     result = {'Package Width': f"{width / 10:.1f} cm" if width != -1 else '-'}
     return result
 
+# list_price - current
+def list_price(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True)
+    }
+    logging.debug(f"list_price result for ASIN {asin}: {result}")
+    return result
+
+# used good - current
+def used_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_good result for ASIN {asin}: {result}")
+    return result
+
+
 # Updated list_price
 
 # Used Like New
