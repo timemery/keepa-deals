@@ -30,12 +30,11 @@ except Exception as e:
     sys.exit(1)
 # Chunk 1 ends
 
-# In Keepa_Deals.py, replace Chunk 2 with:
 # Chunk 2 starts
 def fetch_deals(api_key, per_page=100, max_pages=2):
     asins = []
     price_data_map = {}
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212', 'Accept-Encoding': 'gzip'}
     # Check tokens
     token_url = f"https://api.keepa.com/token?key={api_key}"
     try:
@@ -47,7 +46,8 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
         print(f"Token check failed: {str(e)}")
     for page in range(max_pages):
         selection = json.dumps({
-            "page": page, "domainId": "1", "priceTypes": [2]
+            "page": page, "domainId": "1", "priceTypes": [2], "salesRankRange": [50000, 1500000],
+            "deltaPercentRange": [50, 100], "isFilterEnabled": True, "isRangeEnabled": True, "sortType": 4
         })
         url = f"https://api.keepa.com/deal?key={api_key}&selection={urllib.parse.quote(selection)}&perPage={per_page}"
         logging.debug(f"Fetching deals page {page}: {url}")
