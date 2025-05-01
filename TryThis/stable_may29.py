@@ -5,18 +5,14 @@ import time
 # get_stat_value
 def get_stat_value(stats, key, index, divisor=1, is_price=False):
     try:
-        value = stats.get(key, [])
-        if not value or len(value) <= index:
-            logging.warning(f"get_stat_value: No data for key={key}, index={index}, returning '-'")
-            return '-'
-        value = value[index]
+        value = stats.get(key, [])[index]
         if isinstance(value, list):
             value = value[0] if value else -1
         if value == -1 or value is None:
             return '-'
         if is_price:
             return f"${value / divisor:.2f}"
-        return f"{int(value / divisor):,}"
+        return f"{int(value / divisor):,}"  # Fix decimals
     except (IndexError, TypeError, AttributeError) as e:
         logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
         return '-'
@@ -129,28 +125,7 @@ def used_very_good(product):
     }
     logging.debug(f"used_very_good result for ASIN {asin}: {result}")
     return result
-
-
-# Used, like new - Current
-def used_like_new(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'Used, like new - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
-    return result
-
-# Used, acceptable - Current
-def used_acceptable(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
-    return result
-
+    
 # Updated list_price
 
 # Used Like New
