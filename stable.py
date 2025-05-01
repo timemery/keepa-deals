@@ -151,8 +151,22 @@ def used_acceptable(product):
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     return result
 
+# New, 3rd Party FBM - Current
+def new_3rd_party_fbm_current(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    offers = product.get('offers', [])
+    current_price = get_stat_value(stats, 'current', 1, divisor=100, is_price=True)
+    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False)]
+    if fbm_prices and current_price != '-' and not any(abs(float(current_price[1:]) - p) < 0.01 for p in fbm_prices):
+        logging.warning(f"FBM price mismatch for ASIN {asin}: stats={current_price}, offers={fbm_prices}")
+        current_price = '-'
+    result = {
+        'New, 3rd Party FBM - Current': current_price
+    }
+    logging.debug(f"new_3rd_party_fbm_current result for ASIN {asin}: {result}")
+    return result
+
 # Updated list_price
 
 # Used Like New
-
-# New, 3rd Party FBM
