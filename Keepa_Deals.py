@@ -47,7 +47,8 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
     for page in range(max_pages):
         selection = json.dumps({
             "page": page, "domainId": "1", "priceTypes": [2], "salesRankRange": [50000, 1500000],
-            "deltaPercentRange": [50, 100], "isFilterEnabled": True, "isRangeEnabled": True, "sortType": 4
+            "deltaPercentRange": [50, 100], "isFilterEnabled": True, "isRangeEnabled": True,
+            "sortType": 0, "includeCategories": [283155]
         })
         url = f"https://api.keepa.com/deal?key={api_key}&selection={urllib.parse.quote(selection)}&perPage={per_page}"
         logging.debug(f"Fetching deals page {page}: {url}")
