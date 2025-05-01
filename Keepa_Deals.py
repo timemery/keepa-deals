@@ -7,12 +7,14 @@ from stable import get_stat_value, get_title, get_asin, sales_rank_current, used
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
+# Cache headers globally
 try:
     with open('config.json') as f:
         config = json.load(f)
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
     with open('headers.json') as f:
+        global HEADERS
         HEADERS = json.load(f)
         logging.debug(f"Loaded headers: {len(HEADERS)} fields")
         print(f"Headers loaded: {len(HEADERS)} fields")
@@ -137,9 +139,16 @@ def list_price(product):
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+    offers = product.get('offers', [])
+    stock = sum(1 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+    current_price = get_stat_value(stats, 'current', 1, divisor=100, is_price=True)
+    # Validate FBM price against offers
+    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False)]
+    if fbm_prices and current_price != '-' and not any(abs(float(current_price[1:]) - p) < 0.01 for p in fbm_prices):
+        logging.warning(f"FBM price mismatch for ASIN {asin}: stats={current_price}, offers={fbm_prices}")
+        current_price = '-'
     result = {
-        'New, 3rd Party FBM - Current': get_stat_value(stats, 'current', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - Current': current_price,
         'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
         'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
         'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
@@ -230,6 +239,9 @@ def write_csv(rows, deals, diagnostic=False):
             for deal, row in zip(deals[:len(rows)], rows):
                 row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
                 row_data.update(row)
+                missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
+                if missing_headers:
+                    logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
                 logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
                 print(f"Writing row for ASIN {deal['asin']}...")
                 writer.writerow([row_data.get(header, '-') for header in HEADERS])
