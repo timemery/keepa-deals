@@ -462,3 +462,5 @@ Notes:
 Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 likely from Sales Rank - Drops (e.g., drops90: 1 for 1954966032). Enhanced logging in fetch_product().
 ASIN mix-up (0915777363, 0891950257 in earlier CSV) likely from write_csv mismatch. Awaiting debug log confirmation of Deals ASINs.
 Next Steps: Debug $3.99 error (check Sales Rank - Drops), confirm ASIN alignment, fix Used condition indexing (csv[4:7]). Expected: Accurate List Price, New, 3rd Party FBM in CSV; progress on Used conditions. Note: It’s never Keepa.
+
+for grok to read... 
