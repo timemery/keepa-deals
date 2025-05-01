@@ -46,14 +46,8 @@ def fetch_deals(api_key, per_page=100, max_pages=2):
         print(f"Token check failed: {str(e)}")
     for page in range(max_pages):
         selection = json.dumps({
-            "page": page, "domainId": "1", "excludeCategories": [], "includeCategories": [283155],
-            "priceTypes": [2], "deltaRange": [1950, 9900], "deltaPercentRange": [50, 2147483647],
-            "salesRankRange": [50000, 1500000], "currentRange": [2000, 30100], "minRating": 10,
-            "isLowest": False, "isLowest90": False, "isLowestOffer": False, "isOutOfStock": False,
-            "titleSearch": "", "isRangeEnabled": True, "isFilterEnabled": True, "filterErotic": False,
-            "singleVariation": True, "hasReviews": False, "isPrimeExclusive": False,
-            "mustHaveAmazonOffer": False, "mustNotHaveAmazonOffer": False, "sortType": 4,
-            "dateRange": "3", "warehouseConditions": [2, 3, 4, 5]
+            "page": page, "domainId": "1", "priceTypes": [2], "salesRankRange": [50000, 1500000],
+            "deltaPercentRange": [50, 100], "isFilterEnabled": True, "isRangeEnabled": True, "sortType": 4
         })
         url = f"https://api.keepa.com/deal?key={api_key}&selection={urllib.parse.quote(selection)}&perPage={per_page}"
         logging.debug(f"Fetching deals page {page}: {url}")
