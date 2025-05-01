@@ -2,7 +2,7 @@
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -139,16 +139,8 @@ def list_price(product):
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    offers = product.get('offers', [])
-    stock = sum(1 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
-    current_price = get_stat_value(stats, 'current', 1, divisor=100, is_price=True)
-    # Validate FBM price against offers
-    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False)]
-    if fbm_prices and current_price != '-' and not any(abs(float(current_price[1:]) - p) < 0.01 for p in fbm_prices):
-        logging.warning(f"FBM price mismatch for ASIN {asin}: stats={current_price}, offers={fbm_prices}")
-        current_price = '-'
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
     result = {
-        'New, 3rd Party FBM - Current': current_price,
         'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
         'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
         'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
@@ -279,7 +271,8 @@ def main():
             row.update(package_length(product))
             row.update(package_width(product))
             row.update(list_price(product))
-            row.update(new_3rd_party_fbm(product))
+            row.update(new_3rd_party_fbm_current(product))
+            row.update(new_3rd_party_fbm(product))            
             row.update(used_like_new(product))
             row.update(used_very_good(product))
             row.update(used_good(product))
