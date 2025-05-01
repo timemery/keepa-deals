@@ -173,7 +173,6 @@ def used_very_good(product):
     asin = product.get('asin', 'unknown')
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
     result = {
-        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True),
         'Used, very good - 30 days avg.': get_stat_value(stats, 'avg30', 5, divisor=100, is_price=True),
         'Used, very good - 60 days avg.': get_stat_value(stats, 'avg60', 5, divisor=100, is_price=True),
         'Used, very good - 90 days avg.': get_stat_value(stats, 'avg90', 5, divisor=100, is_price=True),

@@ -116,7 +116,16 @@ def used_good(product):
     logging.debug(f"used_good result for ASIN {asin}: {result}")
     return result
 
-
+# Used, very good - Current
+def used_very_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+    return result
+    
 # Updated list_price
 
 # Used Like New
