@@ -155,6 +155,7 @@ def used_like_new(product):
     asin = product.get('asin', 'unknown')
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
     result = {
+        'Used, like new - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True),
         'Used, like new - 30 days avg.': get_stat_value(stats, 'avg30', 4, divisor=100, is_price=True),
         'Used, like new - 60 days avg.': get_stat_value(stats, 'avg60', 4, divisor=100, is_price=True),
         'Used, like new - 90 days avg.': get_stat_value(stats, 'avg90', 4, divisor=100, is_price=True),
@@ -205,6 +206,7 @@ def used_acceptable(product):
     asin = product.get('asin', 'unknown')
     stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
     result = {
+        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True),
         'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
         'Used, acceptable - 60 days avg.': get_stat_value(stats, 'avg60', 7, divisor=100, is_price=True),
         'Used, acceptable - 90 days avg.': get_stat_value(stats, 'avg90', 7, divisor=100, is_price=True),
