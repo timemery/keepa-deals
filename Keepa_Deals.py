@@ -1,4 +1,4 @@
-# Keepa_Deals.py - Direct HTTP requests with Keepa Deals API sample JSON
+# Keepa_Deals.py - Direct HTTP requests with fixed Python booleans
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
 from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, list_price, used_like_new, new_3rd_party_fbm
@@ -37,19 +37,19 @@ def fetch_deals(page):
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
         "minRating": 10,
-        "isLowest": false,
-        "isLowest90": false,
-        "isLowestOffer": false,
-        "isOutOfStock": false,
+        "isLowest": False,
+        "isLowest90": False,
+        "isLowestOffer": False,
+        "isOutOfStock": False,
         "titleSearch": "",
-        "isRangeEnabled": true,
-        "isFilterEnabled": true,
-        "filterErotic": false,
-        "singleVariation": true,
-        "hasReviews": false,
-        "isPrimeExclusive": false,
-        "mustHaveAmazonOffer": false,
-        "mustNotHaveAmazonOffer": false,
+        "isRangeEnabled": True,
+        "isFilterEnabled": True,
+        "filterErotic": False,
+        "singleVariation": True,
+        "hasReviews": False,
+        "isPrimeExclusive": False,
+        "mustHaveAmazonOffer": False,
+        "mustNotHaveAmazonOffer": False,
         "sortType": 4,
         "dateRange": "3",
         "warehouseConditions": [2, 3, 4, 5]
