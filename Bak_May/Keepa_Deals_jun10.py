@@ -245,34 +245,21 @@ def used_acceptable(product):
 
 # Chunk 4 starts
 def write_csv(rows, deals, diagnostic=False):
-    try:
-        with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(HEADERS)
-            if diagnostic:
-                writer.writerow(['No deals fetched'] + ['-'] * (len(HEADERS) - 1))
-                logging.info(f"Diagnostic CSV written: Keepa_Deals_Export.csv")
-                print(f"Diagnostic CSV written: Keepa_Deals_Export.csv")
-            else:
-                for deal, row in zip(deals[:len(rows)], rows):
-                    try:
-                        row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
-                        row_data.update(row)
-                        missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
-                        if missing_headers:
-                            logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
-                        logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
-                        print(f"Writing row for ASIN {deal['asin']}...")
-                        writer.writerow([row_data.get(header, '-') for header in HEADERS])
-                        logging.debug(f"Wrote row for ASIN {deal['asin']}")
-                    except Exception as e:
-                        logging.error(f"Failed to write row for ASIN {deal['asin']}: {str(e)}")
-                        print(f"Failed to write row for ASIN {deal['asin']}: {str(e)}")
-        logging.info(f"CSV written: Keepa_Deals_Export.csv")
-        print(f"CSV written: Keepa_Deals_Export.csv")
-    except Exception as e:
-        logging.error(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
-        print(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
+    with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(HEADERS)
+        if diagnostic:
+            writer.writerow(['No deals fetched'] + ['-'] * (len(HEADERS) - 1))
+        else:
+            for deal, row in zip(deals[:len(rows)], rows):
+                row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
+                row_data.update(row)
+                missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
+                if missing_headers:
+                    logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
+                logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
+                print(f"Writing row for ASIN {deal['asin']}...")
+                writer.writerow([row_data.get(header, '-') for header in HEADERS])
 # Chunk 4 ends
 
 # Chunk 5 starts
@@ -321,7 +308,6 @@ def main():
         print("Writing CSV...")
         logging.info("Script completed!")
         print("Script completed!")
-        print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}")
     except Exception as e:
         logging.error(f"Main failed: {str(e)}")
         print(f"Main failed: {str(e)}")
