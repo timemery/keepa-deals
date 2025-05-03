@@ -263,30 +263,6 @@ def write_csv(rows, deals, diagnostic=False):
 # Chunk 4 ends
 
 # Chunk 5 starts
-def write_csv(rows, deals, filename='Keepa_Deals_Export.csv', diagnostic=False):
-    try:
-        with open('headers.json', 'r') as f:
-            headers = json.load(f)
-        with open(filename, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=headers, restval='-')
-            writer.writeheader()
-            if diagnostic:
-                writer.writerow({'ASIN': 'No deals fetched'})
-                logging.info(f"Diagnostic CSV written: {filename}")
-                print(f"Diagnostic CSV written: {filename}")
-                return
-            for row in rows:
-                try:
-                    writer.writerow(row)
-                    logging.debug(f"Wrote row for ASIN {row.get('ASIN', 'unknown')}")
-                except Exception as e:
-                    logging.error(f"Failed to write row for ASIN {row.get('ASIN', 'unknown')}: {str(e)}")
-        logging.info(f"CSV written: {filename}")
-        print(f"CSV written: {filename}")
-    except Exception as e:
-        logging.error(f"Failed to write CSV {filename}: {str(e)}")
-        print(f"Failed to write CSV: {str(e)}")
-
 def main():
     try:
         logging.info("Starting Keepa_Deals...")
@@ -305,7 +281,7 @@ def main():
             asin = deal['asin']
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
-            row = {'ASIN': asin}  # Ensure ASIN is always included
+            row = {}
             row.update(sales_rank_current(product))
             row.update(sales_rank_30_days_avg(product))
             row.update(sales_rank_90_days_avg(product))
@@ -319,10 +295,10 @@ def main():
             row.update(package_width(product))
             row.update(list_price(product))
             row.update(new_3rd_party_fbm_current(product))
-            row.update(new_3rd_party_fbm(product))
+            row.update(new_3rd_party_fbm(product))            
             row.update(used_like_new(product))
             row.update(used_like_new_debug(product))
-            row.update(used_like_new_lowest_highest(product))
+            row.update(used_like_new_lowest_highest(product))            
             row.update(used_very_good(product))
             row.update(used_good(product))
             row.update(used_acceptable(product))
