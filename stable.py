@@ -141,6 +141,17 @@ def used_like_new(product):
     logging.debug(f"used_like_new result for ASIN {asin}: {result}")
     return result
 
+# Used, like new - Lowest Highest
+def used_like_new_lowest_highest(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, like new - Lowest': get_stat_value(stats, 'min', 4, divisor=100, is_price=True),
+        'Used, like new - Highest': get_stat_value(stats, 'max', 4, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_like_new_lowest_highest result for ASIN {asin}: {result}")
+    return result
+
 # Used, acceptable - Current
 def used_acceptable(product):
     stats = product.get('stats', {})
