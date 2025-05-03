@@ -2,7 +2,7 @@
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current, used_like_new_lowest_highest
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -297,7 +297,8 @@ def main():
             row.update(new_3rd_party_fbm_current(product))
             row.update(new_3rd_party_fbm(product))            
             row.update(used_like_new(product))
-            row.update(used_like_new_debug(product))            
+            row.update(used_like_new_debug(product))
+            row.update(used_like_new_lowest_highest(product))            
             row.update(used_very_good(product))
             row.update(used_good(product))
             row.update(used_acceptable(product))
