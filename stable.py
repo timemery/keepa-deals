@@ -10,8 +10,8 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
             logging.warning(f"get_stat_value: No data for key={key}, index={index}, returning '-'")
             return '-'
         value = value[index]
-        if isinstance(value, list):
-            value = value[0] if value else -1
+        if isinstance(value, list):  # Handle min/max [timestamp, price]
+            value = value[1] if len(value) > 1 else -1  # Use price, not timestamp
         if value == -1 or value is None:
             return '-'
         if is_price:
