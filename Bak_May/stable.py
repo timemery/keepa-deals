@@ -1,17 +1,22 @@
-# stable.py
+# stable.py - added import time
 import logging
+import time
 
 # get_stat_value
 def get_stat_value(stats, key, index, divisor=1, is_price=False):
     try:
-        value = stats.get(key, [])[index]
+        value = stats.get(key, [])
+        if not value or len(value) <= index:
+            logging.warning(f"get_stat_value: No data for key={key}, index={index}, returning '-'")
+            return '-'
+        value = value[index]
         if isinstance(value, list):
             value = value[0] if value else -1
         if value == -1 or value is None:
             return '-'
         if is_price:
             return f"${value / divisor:.2f}"
-        return f"{int(value / divisor):,}"  # Fix decimals
+        return f"{int(value / divisor):,}"
     except (IndexError, TypeError, AttributeError) as e:
         logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
         return '-'
@@ -94,3 +99,74 @@ def package_width(product):
     width = product.get('packageWidth', -1)
     result = {'Package Width': f"{width / 10:.1f} cm" if width != -1 else '-'}
     return result
+
+# list_price - current
+def list_price(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True)
+    }
+    logging.debug(f"list_price result for ASIN {asin}: {result}")
+    return result
+
+# used good - current
+def used_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_good result for ASIN {asin}: {result}")
+    return result
+
+# Used, very good - Current
+def used_very_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+    return result
+
+
+# Used, like new - Current
+def used_like_new(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, like new - Current': get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
+    return result
+
+# Used, acceptable - Current
+def used_acceptable(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
+    return result
+
+# New, 3rd Party FBM - Current
+def new_3rd_party_fbm_current(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    offers = product.get('offers', [])
+    current_price = get_stat_value(stats, 'current', 1, divisor=100, is_price=True)
+    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False)]
+    if fbm_prices and current_price != '-' and not any(abs(float(current_price[1:]) - p) < 0.01 for p in fbm_prices):
+        logging.warning(f"FBM price mismatch for ASIN {asin}: stats={current_price}, offers={fbm_prices}")
+        current_price = '-'
+    result = {
+        'New, 3rd Party FBM - Current': current_price
+    }
+    logging.debug(f"new_3rd_party_fbm_current result for ASIN {asin}: {result}")
+    return result
+
+# Updated list_price
+
+# Used Like New

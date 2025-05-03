@@ -169,6 +169,29 @@ def used_like_new(product):
     print(f"Used, like new for ASIN {asin}: {result}")
     return result
 
+# debug used like new - start
+def used_like_new_debug(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    offers = product.get('offers', [])
+    current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
+    avg30_price = get_stat_value(stats, 'avg30', 4, divisor=100, is_price=True)
+    min30_price = get_stat_value(stats, 'min', 4, divisor=100, is_price=True)
+    max30_price = get_stat_value(stats, 'max', 4, divisor=100, is_price=True)
+    # Calculate average of min/max
+    avg_min_max = '-' if min30_price == '-' or max30_price == '-' else f"${(float(min30_price[1:]) + float(max30_price[1:])) / 2:.2f}"
+    like_new_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'Used - Like New']
+    logging.debug(f"Used, like new debug for ASIN {asin}: current={current_price}, avg30={avg30_price}, min30={min30_price}, max30={max30_price}, avg_min_max={avg_min_max}, offers={like_new_prices}")
+    result = {
+        'Used, like new - Current': current_price,
+        'Used, like new - 30 days avg.': avg30_price,
+        'Used, like new - 30 days min': min30_price,
+        'Used, like new - 30 days max': max30_price,
+        'Used, like new - Min/Max Avg': avg_min_max
+    }
+    return result
+# debug used like new - end
+
 def used_very_good(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
@@ -274,6 +297,7 @@ def main():
             row.update(new_3rd_party_fbm_current(product))
             row.update(new_3rd_party_fbm(product))            
             row.update(used_like_new(product))
+            row.update(used_like_new_debug(product))            
             row.update(used_very_good(product))
             row.update(used_good(product))
             row.update(used_acceptable(product))
