@@ -306,7 +306,7 @@ def main():
             row.update(new_3rd_party_fbm_current(product))
             row.update(new_3rd_party_fbm(product))            
             row.update(used_like_new(product))
-            # row.update(used_like_new_debug(product))  # Removed to prevent interference
+            row.update(used_like_new_debug(product))
             row.update(used_like_new_lowest_highest(product))            
             row.update(used_very_good(product))
             row.update(used_good(product))
