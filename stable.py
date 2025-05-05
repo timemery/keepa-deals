@@ -2,14 +2,16 @@
 import logging
 import time
 
-# get_stat_value
+# get_stat_value - Added logging.debug
 def get_stat_value(stats, key, index, divisor=1, is_price=False):
     try:
         value = stats.get(key, [])
+        logging.debug(f"get_stat_value: key={key}, index={index}, stats[{key}]={value}")
         if not value or len(value) <= index:
             logging.warning(f"get_stat_value: No data for key={key}, index={index}, returning '-'")
             return '-'
         value = value[index]
+        logging.debug(f"get_stat_value: key={key}, index={index}, value={value}")
         if isinstance(value, list):  # Handle min/max [timestamp, price]
             value = value[1] if len(value) > 1 else -1  # Use price, not timestamp
         if value == -1 or value is None:
