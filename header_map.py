@@ -1,6 +1,6 @@
 # header_map.py
 # Critical: Do not remove or modify FUNCTION_MAP without updating headers.json and stable.py
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current, list_price, new_3rd_party_fbm, used_like_new as stable_used_like_new, used_very_good as stable_used_very_good, used_good as stable_used_good, used_acceptable as stable_used_acceptable, list_price as stable_list_price
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current, list_price, used_like_new as stable_used_like_new, used_very_good as stable_used_very_good, used_good as stable_used_good, used_acceptable as stable_used_acceptable, list_price as stable_list_price
 
 # Function mapping for headers (in headers.json order)
 FUNCTION_MAP = {
@@ -113,17 +113,17 @@ FUNCTION_MAP = {
     "New, 3rd Party FBA - 90 days OOS": None,
     "New, 3rd Party FBA - Stock": None,
     "New, 3rd Party FBM - Current": new_3rd_party_fbm_current,
-    "New, 3rd Party FBM - 30 days avg.": new_3rd_party_fbm,
-    "New, 3rd Party FBM - 60 days avg.": new_3rd_party_fbm,
-    "New, 3rd Party FBM - 90 days avg.": new_3rd_party_fbm,
-    "New, 3rd Party FBM - 180 days avg.": new_3rd_party_fbm,
-    "New, 3rd Party FBM - 365 days avg.": new_3rd_party_fbm,
+    "New, 3rd Party FBM - 30 days avg.": None,
+    "New, 3rd Party FBM - 60 days avg.": None,
+    "New, 3rd Party FBM - 90 days avg.": None,
+    "New, 3rd Party FBM - 180 days avg.": None,
+    "New, 3rd Party FBM - 365 days avg.": None,
     "New, 3rd Party FBM - Lowest": None,
     "New, 3rd Party FBM - Lowest 365 days": None,
     "New, 3rd Party FBM - Highest": None,
     "New, 3rd Party FBM - Highest 365 days": None,
     "New, 3rd Party FBM - 90 days OOS": None,
-    "New, 3rd Party FBM - Stock": new_3rd_party_fbm,
+    "New, 3rd Party FBM - Stock": None,
     "Buy Box Used - Current": None,
     "Buy Box Used - 30 days avg.": None,
     "Buy Box Used - 60 days avg.": None,
