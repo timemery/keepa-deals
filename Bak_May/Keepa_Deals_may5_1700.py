@@ -253,7 +253,9 @@ def write_csv(rows, deals, diagnostic=False):
                 for deal, row in zip(deals[:len(rows)], rows):
                     try:
                         row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
-                        row_data.update(row)
+                        for key, value in row.items():
+                            if key not in row_data or row_data[key] == '-' or key.startswith('Used, like new'):
+                                row_data[key] = value
                         missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
@@ -291,16 +293,26 @@ def main():
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            functions = [
-                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
-                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                package_quantity, package_weight, package_height, package_length,
-                package_width, used_like_new, used_like_new_lowest_highest,
-                used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
-                new_3rd_party_fbm, list_price
-            ]
-            for func in functions:
-                row.update(func(product))
+            row.update(sales_rank_current(product))
+            row.update(sales_rank_30_days_avg(product))
+            row.update(sales_rank_90_days_avg(product))
+            row.update(sales_rank_180_days_avg(product))
+            row.update(sales_rank_365_days_avg(product))
+            row.update(used_current(product))
+            row.update(package_quantity(product))
+            row.update(package_weight(product))
+            row.update(package_height(product))
+            row.update(package_length(product))
+            row.update(package_width(product))
+            row.update(list_price(product))
+            row.update(new_3rd_party_fbm_current(product))
+            row.update(new_3rd_party_fbm(product))            
+            row.update(used_like_new(product))
+            # row.update(used_like_new_debug(product))  # Removed to prevent interference
+            row.update(used_like_new_lowest_highest(product))            
+            row.update(used_very_good(product))
+            row.update(used_good(product))
+            row.update(used_acceptable(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
