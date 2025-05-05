@@ -133,27 +133,18 @@ def used_very_good(product):
     return result
 
 
-# Used, like new - Current - I did update this - twice... 
+# Used, like new - Current - like new - Lowest - Highest
 def used_like_new(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
     current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
     logging.debug(f"used_like_new for ASIN {asin}: current_price={current_price}")
     result = {
-        'Used, like new - Current': current_price
-    }
-    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
-    return result
-
-# Used, like new - Lowest Highest
-def used_like_new_lowest_highest(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
+        'Used, like new - Current': current_price,
         'Used, like new - Lowest': get_stat_value(stats, 'min', 4, divisor=100, is_price=True),
         'Used, like new - Highest': get_stat_value(stats, 'max', 4, divisor=100, is_price=True)
     }
-    logging.debug(f"used_like_new_lowest_highest result for ASIN {asin}: {result}")
+    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
     return result
 
 # Used, acceptable - Current
