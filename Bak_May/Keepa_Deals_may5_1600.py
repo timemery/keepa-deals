@@ -239,7 +239,7 @@ def used_acceptable(product):
     return result
 # Chunk 3 ends
 
-# Chunk 4 starts - Modify write_csv to prioritize non-default values from used_like_new over list_price.
+# Chunk 4 starts
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -253,9 +253,7 @@ def write_csv(rows, deals, diagnostic=False):
                 for deal, row in zip(deals[:len(rows)], rows):
                     try:
                         row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
-                        for key, value in row.items():
-                            if key not in row_data or row_data[key] == '-' or key.startswith('Used, like new'):
-                                row_data[key] = value
+                        row_data.update(row)
                         missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
