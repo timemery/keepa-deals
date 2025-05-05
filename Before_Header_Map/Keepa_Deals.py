@@ -2,8 +2,7 @@
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current, used_like_new_lowest_highest, used_very_good, used_good, new_3rd_party_fbm, list_price
-from header_map import FUNCTION_MAP
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current, used_like_new_lowest_highest
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -15,15 +14,10 @@ try:
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
     with open('headers.json') as f:
+        global HEADERS
         HEADERS = json.load(f)
         logging.debug(f"Loaded headers: {len(HEADERS)} fields")
         print(f"Headers loaded: {len(HEADERS)} fields")
-    # Validate FUNCTION_MAP against HEADERS
-    unmapped_headers = [h for h in HEADERS if h not in FUNCTION_MAP]
-    if unmapped_headers:
-        logging.warning(f"Unmapped headers ({len(unmapped_headers)}): {', '.join(unmapped_headers[:5])}{'...' if len(unmapped_headers) > 5 else ''}")
-        for header in unmapped_headers:
-            logging.warning(f"Warning: {header} not in FUNCTION_MAP")
 except Exception as e:
     logging.error(f"Startup failed: {str(e)}")
     print(f"Startup failed: {str(e)}")
@@ -175,6 +169,25 @@ def used_like_new(product):
     print(f"Used, like new for ASIN {asin}: {result}")
     return result
 
+# debug used like new - start
+def used_like_new_debug(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    offers = product.get('offers', [])
+    min30_price = get_stat_value(stats, 'min', 4, divisor=100, is_price=True)
+    max30_price = get_stat_value(stats, 'max', 4, divisor=100, is_price=True)
+    # Calculate average of min/max
+    avg_min_max = '-' if min30_price == '-' or max30_price == '-' else f"${(float(min30_price[1:]) + float(max30_price[1:])) / 2:.2f}"
+    like_new_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'Used - Like New']
+    logging.debug(f"Used, like new debug for ASIN {asin}: min30={min30_price}, max30={max30_price}, avg_min_max={avg_min_max}, offers={like_new_prices}")
+    result = {
+        'Debug - Min Guess': min30_price,
+        'Debug - Max Guess': max30_price,
+        'Debug - Avg Guess': avg_min_max
+    }
+    return result
+# debug used like new - end
+
 def used_very_good(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
@@ -226,7 +239,7 @@ def used_acceptable(product):
     return result
 # Chunk 3 ends
 
-# Chunk 4 starts
+# Chunk 4 starts - Modify write_csv to prioritize non-default values from used_like_new over list_price.
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -278,13 +291,16 @@ def main():
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            # Order functions to prioritize used conditions, then others, then list_price
-            function_order = sorted(set([FUNCTION_MAP.get(h) for h in HEADERS if h in FUNCTION_MAP]),
-                                  key=lambda f: (f.__name__ not in ['used_like_new', 'used_very_good', 'used_good', 'used_acceptable'],
-                                                f.__name__ == 'list_price') if f else (True, True))
-            for func in function_order:
-                if func:
-                    row.update(func(product))
+            functions = [
+                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
+                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
+                package_quantity, package_weight, package_height, package_length,
+                package_width, used_like_new, used_like_new_lowest_highest,
+                used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
+                new_3rd_party_fbm, list_price
+            ]
+            for func in functions:
+                row.update(func(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
