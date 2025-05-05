@@ -131,7 +131,7 @@ def used_very_good(product):
     return result
 
 
-# Used, like new - Current
+# Used, like new - Current - I did update this - twice... 
 def used_like_new(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
