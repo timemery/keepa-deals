@@ -134,7 +134,7 @@ def used_very_good(product):
 
 
 # Used, like new - Current - like new - Lowest - Highest
-ef used_like_new(product):
+def used_like_new(product):
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 30)
     min_vals = stats.get('min', [-1] * 30)
@@ -157,7 +157,7 @@ def used_acceptable(product):
     return result
 
 # Used, Offer Count - Current    
-def used_offer_count(product):
+def used_offer_count_current(product):
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 30)
     result = {
