@@ -2,8 +2,7 @@
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time
 from retrying import retry
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current, list_price
-from header_map import FUNCTION_MAP
+from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current, used_like_new_lowest_highest
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -15,15 +14,10 @@ try:
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
     with open('headers.json') as f:
+        global HEADERS
         HEADERS = json.load(f)
         logging.debug(f"Loaded headers: {len(HEADERS)} fields")
         print(f"Headers loaded: {len(HEADERS)} fields")
-    # Validate FUNCTION_MAP against HEADERS
-    unmapped_headers = [h for h in HEADERS if h not in FUNCTION_MAP]
-    if unmapped_headers:
-        logging.warning(f"Unmapped headers ({len(unmapped_headers)}): {', '.join(unmapped_headers[:5])}{'...' if len(unmapped_headers) > 5 else ''}")
-        for header in unmapped_headers:
-            logging.warning(f"Warning: {header} not in FUNCTION_MAP")
 except Exception as e:
     logging.error(f"Startup failed: {str(e)}")
     print(f"Startup failed: {str(e)}")
@@ -88,14 +82,14 @@ def fetch_deals(page):
 
 # Chunk 3 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=0, rating=1, history=1):
+def fetch_product(asin, days=365, offers=50, rating=1, history=1):
     if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
     print(f"Fetching ASIN {asin}...")
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=0"
+    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=30)
@@ -114,7 +108,7 @@ def fetch_product(asin, days=365, offers=0, rating=1, history=1):
         product = products[0]
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
-        logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}, current={current}")
+        logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}")
         csv_field = product.get('csv', [[] for _ in range(11)])
         logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]}")
         logging.debug(f"CSV raw data for ASIN {asin}: {[x[:10] if isinstance(x, list) else x for x in csv_field[:11]]}")
@@ -125,9 +119,127 @@ def fetch_product(asin, days=365, offers=0, rating=1, history=1):
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
+
+def list_price(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
+        'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
+        'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
+        'List Price - 180 days avg.': get_stat_value(stats, 'avg180', 8, divisor=100, is_price=True),
+        'List Price - 365 days avg.': get_stat_value(stats, 'avg365', 8, divisor=100, is_price=True),
+        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
+        'List Price - Stock': '-'
+    }
+    logging.debug(f"list_price result for ASIN {asin}: {result}")
+    print(f"List Price for ASIN {asin}: {result}")
+    return result
+
+def new_3rd_party_fbm(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+    result = {
+        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
+    print(f"New, 3rd Party FBM for ASIN {asin}: {result}")
+    return result
+
+def used_like_new(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
+    result = {
+        'Used, like new - 30 days avg.': get_stat_value(stats, 'avg30', 4, divisor=100, is_price=True),
+        'Used, like new - 60 days avg.': get_stat_value(stats, 'avg60', 4, divisor=100, is_price=True),
+        'Used, like new - 90 days avg.': get_stat_value(stats, 'avg90', 4, divisor=100, is_price=True),
+        'Used, like new - 180 days avg.': get_stat_value(stats, 'avg180', 4, divisor=100, is_price=True),
+        'Used, like new - 365 days avg.': get_stat_value(stats, 'avg365', 4, divisor=100, is_price=True),
+        'Used, like new - 90 days OOS': get_stat_value(stats, 'outOfStock90', 4, is_price=False),
+        'Used, like new - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
+    print(f"Used, like new for ASIN {asin}: {result}")
+    return result
+
+# debug used like new - start
+def used_like_new_debug(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    offers = product.get('offers', [])
+    min30_price = get_stat_value(stats, 'min', 4, divisor=100, is_price=True)
+    max30_price = get_stat_value(stats, 'max', 4, divisor=100, is_price=True)
+    # Calculate average of min/max
+    avg_min_max = '-' if min30_price == '-' or max30_price == '-' else f"${(float(min30_price[1:]) + float(max30_price[1:])) / 2:.2f}"
+    like_new_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'Used - Like New']
+    logging.debug(f"Used, like new debug for ASIN {asin}: min30={min30_price}, max30={max30_price}, avg_min_max={avg_min_max}, offers={like_new_prices}")
+    result = {
+        'Debug - Min Guess': min30_price,
+        'Debug - Max Guess': max30_price,
+        'Debug - Avg Guess': avg_min_max
+    }
+    return result
+# debug used like new - end
+
+def used_very_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
+    result = {
+        'Used, very good - 30 days avg.': get_stat_value(stats, 'avg30', 5, divisor=100, is_price=True),
+        'Used, very good - 60 days avg.': get_stat_value(stats, 'avg60', 5, divisor=100, is_price=True),
+        'Used, very good - 90 days avg.': get_stat_value(stats, 'avg90', 5, divisor=100, is_price=True),
+        'Used, very good - 180 days avg.': get_stat_value(stats, 'avg180', 5, divisor=100, is_price=True),
+        'Used, very good - 365 days avg.': get_stat_value(stats, 'avg365', 5, divisor=100, is_price=True),
+        'Used, very good - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+    print(f"Used, very good for ASIN {asin}: {result}")
+    return result
+
+def used_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
+    result = {
+        'Used, good - 30 days avg.': get_stat_value(stats, 'avg30', 6, divisor=100, is_price=True),
+        'Used, good - 60 days avg.': get_stat_value(stats, 'avg60', 6, divisor=100, is_price=True),
+        'Used, good - 90 days avg.': get_stat_value(stats, 'avg90', 6, divisor=100, is_price=True),
+        'Used, good - 180 days avg.': get_stat_value(stats, 'avg180', 6, divisor=100, is_price=True),
+        'Used, good - 365 days avg.': get_stat_value(stats, 'avg365', 6, divisor=100, is_price=True),
+        'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
+        'Used, good - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_good result for ASIN {asin}: {result}")
+    print(f"Used, good for ASIN {asin}: {result}")
+    return result
+
+def used_acceptable(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
+    result = {
+        'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
+        'Used, acceptable - 60 days avg.': get_stat_value(stats, 'avg60', 7, divisor=100, is_price=True),
+        'Used, acceptable - 90 days avg.': get_stat_value(stats, 'avg90', 7, divisor=100, is_price=True),
+        'Used, acceptable - 180 days avg.': get_stat_value(stats, 'avg180', 7, divisor=100, is_price=True),
+        'Used, acceptable - 365 days avg.': get_stat_value(stats, 'avg365', 7, divisor=100, is_price=True),
+        'Used, acceptable - 90 days OOS': get_stat_value(stats, 'outOfStock90', 7, is_price=False),
+        'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
+    print(f"Used, acceptable for ASIN {asin}: {result}")
+    return result
 # Chunk 3 ends
 
-# Chunk 4 starts
+# Chunk 4 starts - Modify write_csv to prioritize non-default values from used_like_new over list_price.
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -179,13 +291,16 @@ def main():
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            # Order functions to prioritize used conditions, then others, then list_price
-            function_order = sorted(set([FUNCTION_MAP.get(h) for h in HEADERS if h in FUNCTION_MAP]),
-                                  key=lambda f: (f.__name__ not in ['used_like_new', 'used_very_good', 'used_good', 'used_acceptable'],
-                                                f.__name__ == 'list_price') if f else (True, True))
-            for func in function_order:
-                if func:
-                    row.update(func(product))
+            functions = [
+                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
+                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
+                package_quantity, package_weight, package_height, package_length,
+                package_width, used_like_new, used_like_new_lowest_highest,
+                used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
+                new_3rd_party_fbm, list_price
+            ]
+            for func in functions:
+                row.update(func(product))
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")

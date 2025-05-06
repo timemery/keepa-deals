@@ -7,8 +7,8 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
     try:
         value = stats.get(key, [])
         logging.debug(f"get_stat_value: key={key}, index={index}, stats[{key}]={value}")
-        if not value or len(value) <= index or value[index] is None:
-            logging.warning(f"get_stat_value: No data or None for key={key}, index={index}, returning '-'")
+        if not value or len(value) <= index:
+            logging.warning(f"get_stat_value: No data for key={key}, index={index}, returning '-'")
             return '-'
         value = value[index]
         logging.debug(f"get_stat_value: key={key}, index={index}, value={value}")
@@ -133,34 +133,28 @@ def used_very_good(product):
     return result
 
 
-# Used, like new - Current - like new - Lowest - Highest
+# Used, like new - Current - I did update this - twice... 
 def used_like_new(product):
     stats = product.get('stats', {})
-    current = stats.get('current', [-1] * 30)
-    min_vals = stats.get('min', [-1] * 30)
-    max_vals = stats.get('max', [-1] * 30)
-    avg30 = stats.get('avg30', [-1] * 30)
-    avg60 = stats.get('avg60', [-1] * 30)
-    avg90 = stats.get('avg90', [-1] * 30)
-    avg180 = stats.get('avg180', [-1] * 30)
-    avg365 = stats.get('avg365', [-1] * 30)
-    out_of_stock = stats.get('outOfStock', [-1] * 30)
-    stock = stats.get('stock', [-1] * 30)
+    asin = product.get('asin', 'unknown')
+    current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
+    logging.debug(f"used_like_new for ASIN {asin}: current_price={current_price}")
     result = {
-        'Used, like new - Current': current[4] / 100.0 if current[4] != -1 and current[4] > 100 else None,
-        'Used, like new - 30 days avg.': avg30[4] / 100.0 if avg30[4] != -1 and avg30[4] > 100 else None,
-        'Used, like new - 60 days avg.': avg60[4] / 100.0 if avg60[4] != -1 and avg60[4] > 100 else None,
-        'Used, like new - 90 days avg.': avg90[4] / 100.0 if avg90[4] != -1 and avg90[4] > 100 else None,
-        'Used, like new - 180 days avg.': avg180[4] / 100.0 if avg180[4] != -1 and avg180[4] > 100 else None,
-        'Used, like new - 365 days avg.': avg365[4] / 100.0 if avg365[4] != -1 and avg365[4] > 100 else None,
-        'Used, like new - Lowest': min_vals[4] / 100.0 if min_vals[4] != -1 and min_vals[4] > 100 else None,
-        'Used, like new - Lowest 365 days': min_vals[4] / 100.0 if min_vals[4] != -1 and min_vals[4] > 100 else None,  # All-time lowest
-        'Used, like new - Highest': max_vals[4] / 100.0 if max_vals[4] != -1 and max_vals[4] > 100 else None,
-        'Used, like new - Highest 365 days': max_vals[4] / 100.0 if max_vals[4] != -1 and max_vals[4] > 100 else None,  # All-time highest
-        'Used, like new - 90 days OOS': out_of_stock[4] if out_of_stock[4] != -1 else None,
-        'Used, like new - Stock': stock[4] if stock[4] != -1 else None
+        'Used, like new - Current': current_price
     }
-    return {k: v for k, v in result.items() if v is not None}
+    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
+    return result
+
+# Used, like new - Lowest Highest
+def used_like_new_lowest_highest(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, like new - Lowest': get_stat_value(stats, 'min', 4, divisor=100, is_price=True),
+        'Used, like new - Highest': get_stat_value(stats, 'max', 4, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_like_new_lowest_highest result for ASIN {asin}: {result}")
+    return result
 
 # Used, acceptable - Current
 def used_acceptable(product):
@@ -171,15 +165,6 @@ def used_acceptable(product):
     }
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     return result
-
-# Used, Offer Count - Current    
-def used_offer_count_current(product):
-    stats = product.get('stats', {})
-    current = stats.get('current', [-1] * 30)
-    result = {
-        'Used Offer Count - Current': current[9] if current[9] != -1 else None
-    }
-    return {k: v for k, v in result.items() if v is not None}
 
 # New, 3rd Party FBM - Current
 def new_3rd_party_fbm_current(product):
