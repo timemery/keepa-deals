@@ -1,0 +1,514 @@
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box). Represents lowest current used price from Buy Box Used (index 7), Used (11), Used, Like New (13), Used, Very Good (15), Used, Good (17). Used, Acceptable (19) rarely used, possibly only from reputable sellers. Updated price_now() to check these indices, exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs.
+
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box). Represents lowest current used price from Buy Box Used (index 7), Used (11), Used, Like New (13), Used, Very Good (15), Used, Good (17). Used, Acceptable (19) rarely used, possibly only from reputable sellers. Updated price_now() to check these indices, exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs. 2025-04-25: Removed to_csv from api.query (not supported in keepa==1.3.14). Simplified stock=True handling to ensure used prices are fetched correctly.
+
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box). Represents lowest current used price from Buy Box Used (index 7), Used (11), Used, Like New (13), Used, Very Good (15), Used, Good (17). Used, Acceptable (19) rarely used, possibly only from reputable sellers. Updated price_now() to check these indices, exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs.
+2025-04-25: Removed to_csv from api.query (not supported in keepa==1.3.14). Simplified stock=True handling to ensure used prices are fetched correctly.
+2025-04-25: Fixed price_now to use buyBoxUsedPrice, fallback to offers for lowest used price (conditions Like New, Very Good, Good, Used). stats.current[7, 11, 13, 15, 17] were incorrectly pulling sales rank drops (e.g., 2, 60).
+
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box). Represents lowest current used price from Buy Box Used (index 7), Used (11), Used, Like New (13), Used, Very Good (15), Used, Good (17). Used, Acceptable (19) rarely used, possibly only from reputable sellers. Updated price_now() to check these indices, exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs.
+2025-04-25: Removed to_csv from api.query (not supported in keepa==1.3.14). Simplified stock=True handling to ensure used prices are fetched correctly.
+2025-04-25: Fixed price_now to use buyBoxUsedPrice, fallback to offers for lowest used price (conditions Like New, Very Good, Good, Used). stats.current[7, 11, 13, 15, 17] were incorrectly pulling sales rank drops (e.g., 2, 60).
+2025-04-25: stats.current[13, 17] (Used Very Good, List Price) were pulling offer counts (e.g., [2, 60] for 1954966032) due to incorrect index mapping. Updated price_now to rely on buyBoxUsedPrice and offers; relaxed condition filter to include all valid offer prices.
+
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box Used). Represents lowest current used price from Buy Box Used (index 3), fallback to offers (conditions Like New, Very Good, Good, Used). Updated price_now() to prioritize stats.current[3], exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs.
+2025-04-25: Removed to_csv from api.query (not supported in keepa==1.3.14). Added stock=True to fetch_product for used prices.
+2025-04-25: Fixed fetch_deals to use /deal endpoint with user’s query (includeCategories: [283155], priceTypes: [2]). Hardcoded ASINs removed. Added requests for direct API call due to Python client limitations.
+2025-04-25: Debug log showed empty offers for 1954966032, 0914671227 (buyBoxUsedPrice=-1, valid_offer_prices=[]). Added condition filter [2, 3, 4, 5] to price_now for offers. Testing with offers=20, stock=True.
+
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box Used). Represents lowest current used price from Buy Box Used (index 3), fallback to offers (conditions Like New, Very Good, Good, Used). Updated price_now() to prioritize stats.current[3], exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs.
+2025-04-25: Removed to_csv from api.query (not supported in keepa==1.3.14). Added stock=True to fetch_product for used prices.
+2025-04-25: Fixed fetch_deals to use /deal endpoint with user’s query (includeCategories: [283155], priceTypes: [2]). Hardcoded ASINs removed. Added requests for direct API call due to Python client limitations.
+2025-04-25: Debug log showed empty deals due to 400 error (Invalid selection parameter). Fixed URL-encoding in fetch_deals with json.dumps separators and User-Agent header. Testing with offers=20, stock=True.
+
+2025-04-25: Price Now source clarified. Not fixed to stats.current[3] (Buy Box Used). Represents current Buy Box Used price (index 3), no fallback to offers to expose errors. Updated price_now() to use stats.current[3] only, exclude outliers (> $1000). Prior scripts (v5, March 16, 2025) used similar min() logic. Cross-checked Keepa API docs and Git dev logs.
+2025-04-25: Removed to_csv from api.query (not supported in keepa==1.3.14). Added stock=True to fetch_product for used prices.
+2025-04-25: Fixed fetch_deals to use /deal endpoint with user’s query (includeCategories: [283155], priceTypes: [2]). Hardcoded ASINs removed. Added requests for direct API call due to Python client limitations.
+2025-04-25: Debug log showed empty deals due to 400 error (Invalid selection parameter). Fixed URL-encoding in fetch_deals with quote_plus, sorted JSON keys, and User-Agent header. Testing with offers=20, stock=True.
+
+2025-04-25: Switched focus to simpler fields (Buy Box Used, Used, condition-specific) to build data retrieval. Implemented buy_box_used_fields, used_fields, used_condition_fields using stats indices ([3], [10], [12-15]) from data types document. No fallbacks to expose errors.
+2025-04-25: Debug log showed 400 error (Invalid selection parameter). Simplified fetch_deals query, used quote_plus, sorted JSON keys, and User-Agent header. Added Deal URL logging for manual testing.
+2025-04-25: Stock fields (e.g., stockBuyBoxUsed, stockUsedLikeNew) return DROP as per data types document due to sparsity.
+2025-04-25: Removed Price Now logic; will revisit after capturing simpler fields. Testing with offers=20, stock=True.
+
+grok comment:
+The TypeError in get çapstat_value ("<= not supported between instances of 'list' and 'int'") indicates that stats['min'][3] is returning a list instead of an integer, which breaks the comparison in get_stat_value. This is due to the Keepa API’s min and max fields returning arrays of [price, timestamp] pairs (per the Statistics Object documentation). Additionally, the persistent 400 error ("Deal fetch failed: 400, Invalid selection parameter") in the debug log (https://github.com/timemery/keepa-deals, commit “for grok apr 25 2:15”) suggests the /deal query encoding still needs refinement. Given your suggestion to focus on simpler fields (Buy Box Used, Used, and condition-specific fields), I’ll update Keepa_Deals.py to:
+
+Fix get_stat_value to handle min/max arrays correctly.
+Simplify the /deal query to match the “Show API query” parameters and test encoding (per Jessica’s email and Keepa docs).
+Implement the requested fields (Buy Box Used - Current, etc., using stats indices [3], [10], [12-15]) without fallbacks, as per your data types document.
+
+2025-04-25: Fixed TypeError in get_stat_value. stats['min'][3] returns [price, timestamp]; updated to extract price (index 0). Handles min/max arrays per Statistics Object docs.
+2025-04-25: Debug log showed 400 error (Invalid selection parameter). Double-encoded selection with quote_plus(quote()) per Keepa docs. Used exact “Show API query” fields.
+2025-04-25: Implemented Buy Box Used ([3]), Used ([10]), condition-specific fields ([12-15]) using stats indices from data types document. No fallbacks to expose errors.
+2025-04-25: Stock fields (e.g., stockBuyBoxUsed) return DROP due to sparsity. Testing with offers=20, stock=True.
+
+2025-04-25: Script not running (no output). Added try-catch in main and config loading to catch silent failures. Reverted to single urllib.parse.quote for /deal query encoding.
+2025-04-25: Fixed TypeError in get_stat_value for min/max arrays ([price, timestamp]). Kept Buy Box Used ([3]), Used ([10]), condition-specific fields ([12-15]) from data types document.
+2025-04-25: Debug log showed 400 error (Invalid selection parameter). Added response text logging in fetch_deals. Stock fields return DROP due to sparsity.
+2025-04-25: Testing with offers=20, stock=True. Focused on Buy Box Used, Used, condition fields.
+
+2025-04-25: Script runs but CSV has only headers. Simplified fetch_deals query to core fields (page, domainId, includeCategories, priceTypes, sortType) to avoid 400 error.
+2025-04-25: Added logging for raw query JSON and Deal response in fetch_deals. Kept Buy Box Used ([3]), Used ([10]), condition-specific fields ([12-15]) from data types document.
+2025-04-25: Fixed TypeError in get_stat_value for min/max arrays ([price, timestamp]). Stock fields return DROP due to sparsity.
+2025-04-25: Testing with offers=20, stock=True. Focused on Buy Box Used, Used, condition fields.
+
+2025-04-25: No CSV written, script runs but fetch_deals returns empty. Minimized query to page, domainId, priceTypes to avoid 400 error. Added diagnostic CSV write if no deals.
+2025-04-25: Debug log (commit “for grok apr 25 2:59”) showed 400 error (Invalid selection parameter). Kept raw query JSON and response logging.
+2025-04-25: Fixed TypeError in get_stat_value for min/max arrays ([price, timestamp]). Kept Buy Box Used ([3]), Used ([10]), condition-specific fields ([12-15]).
+2025-04-25: Testing with offers=20, stock=True. Focused on Buy Box Used, Used, condition fields.
+
+2025-04-25: No CSV written, fetch_deals returns empty. Restored April 22 deal_filters.json query to avoid 400 error. Focused on Buy Box Used - Current ([3]).
+2025-04-25: Debug log (commit “for grok apr 25 3:05”) showed 400 error (Invalid selection parameter). Hyper-minimal query failed, reverted to full query.
+2025-04-25: Fixed TypeError in get_stat_value for min/max arrays. Diagnostic CSV write if no deals. Testing with offers=20, stock=True.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV written with Buy Box Used - Current ($13838.49, $8290.06, -), but prices incorrect (expected ~$20.99). Fixed divisor to 1000 in get_stat_value. Used headers.json for CSV headers.
+2025-04-25: Restored April 22 deal_filters.json query to avoid 400 error. Focused on Buy Box Used - Current ([3]).
+2025-04-25: Debug log (commit “for grok apr 25 3:41”) showed deals fetched. Diagnostic CSV write if no deals. Testing with offers=20, stock=True.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: SyntaxError in write_csv, fixed list comprehension. Kept divisor 1000, April 22 query, Buy Box Used - Current ([3]). CSV should write all headers from headers.json.
+2025-04-25: Previous CSV had incorrect prices ($13838.49, expected ~$20.99). Divisor 1000 should fix. Testing with offers=20, stock=True.
+2025-04-25: Restored April 22 deal_filters.json query to avoid 400 error. Diagnostic CSV if no deals.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote $1383.85, matches Sales Rank (1383849), not price (~$20.99). Changed to stats.current[10] for Used price. Log full stats.current. Kept ASIN, title, divisor 1000, April 22 query.
+2025-04-25: CSV had one row, expected three. Added ASIN, title, enhanced fetch_product logging for stats.current[10]. Debug log (commit “for grok apr 25 3:55”).
+2025-04-25: SyntaxError in write_csv fixed. Restored April 22 deal_filters.json query. Diagnostic CSV if no deals.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote 3 rows (ASIN, Title) but no Buy Box Used - Current (stats.current[10] likely -1). Fixed write_csv to use headers.json, no duplication. Log stats.current, fallback to current[3]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “for grok apr 24 4:09”) shows 3 deals. stats.current[10] may be missing. Testing with offers=20, stock=True.
+2025-04-25: CSV wrote $1383.85, matched Sales Rank. Used stats.current[10] for Used price. Enhanced logging.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote 3 rows, Buy Box Used - Current ($1383.85, -, $1406.05), wrong prices (expected ~$20.99). Logging stats.current[0-15] to debug current[10]. Kept divisor 1000, April 22 query, no fallbacks. Headers from headers.json.
+2025-04-25: Debug log (commit “for grok apr 25 4:19”) shows 3 deals. stats.current[10] may be sales rank. Testing with offers=20, stock=True.
+2025-04-25: Fixed write_csv to use headers.json, no duplication. stats.current[10] for Used price.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote Buy Box Used - Current ($1383.85, -, $1406.05), matches Sales Rank (1383849 for 1954966032). Used stats.current[11] for Used price, added Sales Rank - Current (current[2]). Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “for grok apr 25 5:17”) shows 3 deals. stats.current[10] was sales rank. Testing with offers=20, stock=True.
+2025-04-25: Fixed write_csv to use headers.json. stats.current[11] per April 22 field_mapping.json.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: Sales Rank - Current (current[2]) pulled prices (2099, 2261, 2000), Buy Box Used - Current (current[11]) was -. Swapped to current[2] for Used price, current[10] for Sales Rank. Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “for grok apr 25 5:46”) shows 3 deals. current[10] was sales rank, current[2] was price. Testing with offers=20, stock=True.
+2025-04-25: Used stats.current[11] for Used price, current[2] for Sales Rank. Fixed headers.json usage.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote Buy Box Used - Current ($2.10, -, -), expected $20.99 (2099/1000, seen in prior Sales Rank). Sales Rank - Current missing. Used stats.current[2] for Used price, current[10] for Sales Rank. Fixed row.update in write_csv. Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “for grok apr 25 6:17”) shows 3 deals. current[2] was 210, not 2099. Testing with offers=20, stock=True.
+2025-04-25: Swapped current[2] for Used price, current[10] for Sales Rank. April 22 used field_mapping.json.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote Buy Box Used - Current ($2.10, $2.26, -), expected $20.99 (2099/1000, seen in Sales Rank at 5:46). No Sales Rank - Current. Reverted to stats.current[2] for Used price (was correct at 5:46), current[10] for Sales Rank. Removed retrying decorator. Note: It's never Keepa, it's always our code. Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “GROK! apr 25 6:28”) shows 3 deals. current[2] was 210, not 2099. Retrying may disrupt API.
+2025-04-25: Fixed row.update in write_csv. April 22 used field_mapping.json with current[2].
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote Buy Box Used - Current ($2.10, $2.26, $2.00), expected $20.99 (2099/1000, seen in Sales Rank at 5:46). No Sales Rank - Current. Swapped stats.current[2] for Used price, current[10] for Sales Rank (per 5:46). Note: It's never Keepa, it's always our code. Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “grok apr 25 6:39”) shows 3 deals. current[2] was 210, not 2099. April 22 used field_mapping.json.
+2025-04-25: Reverted to stats.current[2] for Used price, removed retrying. April 22 used current[2].
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote one row, Buy Box Used - Current ($2.10, -, -), expected $20.99 (2099/1000, seen in Sales Rank at 5:46). No Sales Rank - Current. Reverted to 5:46 setup: stats.current[2] for Sales Rank - Current (2099), current[10] for Buy Box Used - Current (138385), swapped in write_csv. Note: It's never Keepa, it's always our code. Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “GRRRROOOOOKKKKKK”) shows 3 deals. current[2] was 210, not 2099. April 22 used field_mapping.json.
+2025-04-25: Swapped stats.current[2] for Used price, current[10] for Sales Rank. Removed retrying.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-25: CSV wrote Sales Rank - Current (2099, 2261, 2000 = $20.99, $22.61, $20.00), correct prices but wrong column. Buy Box Used - Current empty. Mapped stats.current[2] to Buy Box Used - Current, skipped Sales Rank - Current. Added ASIN progress logging. Note: It's never Keepa, it's always our code. Log stats.current[0-15]. Kept divisor 1000, April 22 query.
+2025-04-25: Debug log (commit “grok apr 25 8:13”) shows 3 deals. current[2] was 2099 (price). Progress bars from keepa.query.
+2025-04-25: Reverted to stats.current[2] for Sales Rank - Current (2099), current[10] for Buy Box Used - Current (138385). Removed retrying.
+2025-04-25: Backups use Bak_apr25 folder.
+
+2025-04-26: CSV wrote Buy Box Used - Current ($2.10, $2.00, $2.35), correct Used prices (2099/100=$20.99, etc.) but wrong column and divisor (1000 vs. 100). Mapped stats.current[3] to Used - Current, skipped Buy Box Used - Current. Removed Price Now Source from headers.json. Log row_data.keys(), stats.current[0-15]. Note: It's never Keepa, it's always our code. Kept April 22 query.
+2025-04-26: Debug log (commit “grok apr 26 8:07”) shows 3 deals. current[2] was 2099 (Used price).
+2025-04-25: Reverted to stats.current[2] for Sales Rank - Current (2099), current[10] for Buy Box Used - Current (138385). Removed retrying.
+2025-04-25: Backups use Bak_Apr26 folder.
+
+2025-04-26: CSV (8:38) wrote Used - Current ($14083.93, $14446.70, $13137.87), sales ranks (1408393) meant for Sales Rank - Current. CSV (8:07) wrote Buy Box Used - Current ($2.10, $2.00, $2.35), Used prices (2099/1000) meant for Used - Current. Mapped stats.current[3] to Used - Current (/100), stats.current[2] to Sales Rank - Current (/1). Kept Price Now Source. Log row_data.keys(), stats.current[0-15]. Note: It's never Keepa. Kept April 22 query.
+2025-04-26: Debug log (commit “grok apr 26 8:38”) shows 3 deals. current[3] was 2099 (Used price).
+2025-04-25: Reverted to stats.current[2] for Sales Rank - Current (2099), current[10] for Buy Box Used - Current (138385). Removed retrying.
+2025-04-25: Backups use Bak_Apr26 folder.
+
+2025-04-26: CSV (8:50) wrote Sales Rank - Current (2099, -, 2348), Buy Box Used 🚚 - Current prices (2099/100=$20.99) meant for Buy Box Used 🚚 - Current. Mapped stats.current[1] to Buy Box Used 🚚 - Current (/100), skipped Sales Rank - Current. Kept Price Now Source. Log row_data.keys(), row_data values, stats.current[0-15]. Note: It's never Keepa. Kept April 22 query.
+2025-04-26: Debug log (commit “grok apr 26 8:38”) shows 3 deals. current[3] was 2099 (Used price).
+2025-04-25: Reverted to stats.current[2] for Sales Rank - Current (2099), current[10] for Buy Box Used - Current (138385). Removed retrying.
+2025-04-25: Backups use Bak_Apr26 folder.
+
+2025-04-26: Mapped stats.current[18] to Buy Box Used - Current ($20.99) per grok apr 26 10:26. Updated Keepa_Deals.py, used requests.get for /product. Tested ASIN 1954966032. Note: It’s never Keepa.
+
+2025-04-26: Fixed CSV (grok apr 26 10:55). Mapped stats.current[18] or [1] to Buy Box Used - Current ($20.99). Added console output, logged raw API response. Tested ASIN 1954966032. Note: It’s never Keepa.
+
+2025-04-26: Moved Title, ASIN, Sales Rank - Current, Buy Box Used - Current, get_stat_value to stable.py (grok apr 26 12:38). Self-contained chunks, no future changes. Tested ASINs 1954966032, B0065TF4ME, 0914671227. Note: It’s never Keepa.
+
+2025-04-26: Major milestone achieved with four stable columns in Keepa_Deals_Export.csv (grok apr 26 12:53). Successfully implemented and locked in Title, ASIN, Sales Rank - Current, and Buy Box Used - Current, with all formatting and field mappings finalized. Key achievements:
+
+- Title: Sourced from fetch_deals (deal['title']), outputting correctly (e.g., "Airick Flies High", "Rubaiyat of Omar Khayyam (Deluxe Edition in Slipcase)", "Absolute Solitude: Selected Poems"). Moved to stable.py as get_title for modularity.
+- ASIN: Sourced from fetch_deals (deal['asin']), formatted with ="..." (e.g., ="0914671227") to preserve leading zeros in Excel. Moved to stable.py as get_asin.
+- Buy Box Used - Current: Uses stats.current[2] (e.g., 2099 → $20.99), formatted with $ and two decimals via get_stat_value (divisor=100, is_price=True). Correctly outputs $20.99, $20.00, $23.48 for ASINs 1954966032, B0065TF4ME, 0914671227. Moved to stable.py as buy_box_used_current.
+- Sales Rank - Current: Uses stats.current[3] (e.g., 1403811 → 1,403,811), formatted with comma separators via get_stat_value (divisor=1, is_price=False). Correctly outputs 1,403,811, 1,445,165, 1,314,508. Moved to stable.py as sales_rank_current.
+- get_stat_value: Core function for formatting prices ($XX.XX) and non-prices (X,XXX,XXX), locked in stable.py as a self-contained chunk. Supports all four columns without need for future changes.
+- stable.py: Created to house get_stat_value, get_title, get_asin, buy_box_used_current, sales_rank_current as standalone chunks. Added comment separators (# Title, # ASIN, etc.) for clarity, to be maintained in future updates.
+- Keepa_Deals.py: Updated to import from stable.py, streamlining main script. Retained fetch_deals, fetch_product, write_csv, main. Fixed syntax error in deal_query ("isOutOfStock" typo). Used buyBox=1 in fetch_product for reliable price data.
+- CSV: Outputs correct data for all four columns, tested with ASINs 1954966032, B0065TF4ME, 0914671227. Resolved earlier issues (swapped columns, missing B0065TF4ME price, no fallbacks).
+- Debug: Logs (grok apr 26 12:53) confirm raw stats (e.g., current=[-1, -1, 2099, 1403811, ...]), row_data, and function results. No fallbacks used, ensuring clear error detection.
+- Process: Backups saved to /home/timscripts/keepa_api/keepa-deals/Bak_Apr26. Used Sublime Text, GitHub Desktop for commits. Virtualenv /home/timscripts/keepa_venv/ with Python 3.11.
+
+Challenges overcome: Swapped stats.current[2] and [18] mappings, removed fallbacks, fixed B0065TF4ME missing price, corrected ASIN leading zeros, and added Sales Rank comma formatting. Next steps: Add columns (e.g., Price Now Source, Percent Down 90) after break. Note: It’s never Keepa.
+
+Addressing Buy Box - Current and FBA/FBM Questions
+Let’s first clarify the Buy Box condition and FBA/FBM separation to satisfy your curiosity, using Keepa’s API documentation and online sources.
+
+Buy Box Condition
+You’re correct that the Buy Box isn’t tied to a specific condition like New or Used. The Buy Box is the “Add to Cart” offer on Amazon’s product page, awarded to the seller with the best combination of price, availability, fulfillment method (FBA preferred), and seller metrics (e.g., feedback, shipping speed). Per Keepa’s API documentation and related sources:
+
+Keepa API (keepaapi.readthedocs.io): The stats.current array includes:
+stats.current[0]: Amazon price (new, if available).
+stats.current[1]: New price (3rd party, FBA or FBM).
+stats.current[2]: Used price (Buy Box Used, already mapped).
+The buyBox field (when buyBox=1) provides the current Buy Box price and seller ID, but doesn’t specify condition directly. The price history (buyBoxPriceHistory) shows the winning offer’s price, which can be New, Used, or other conditions.
+Medium Article (andrewkushnerov.medium.com): Confirms the Buy Box is the primary purchase button, with ~80% of sales, and its price can come from any condition (New, Used Good, Used Like New, Collectible) based on the winning offer. The buyBoxSellerIdHistory tracks the seller, and special values like -1 (no Buy Box) or -2 (Amazon) indicate status.
+Amazon Seller Guidelines (sellercentral.amazon.com, feedvisor.com): The Buy Box prioritizes New condition but can select Used or Collectible if no New offer qualifies (e.g., lower price, faster shipping). Collectible items (e.g., signed books) must be unique, and Used conditions (Like New, Very Good, Good, Acceptable) have specific criteria (e.g., intact pages, minimal wear).
+Seller Assistant (sellerassistant.app): Notes the Buy Box price (pink line on Keepa charts) reflects the winning offer, which could be FBA, FBM, or Amazon, and isn’t limited to New. Hovering over pink diamonds shows the condition and seller.
+Conclusion: The Buy Box price in Keepa’s API is likely in buyBox or inferred from stats.current[0] (Amazon New) or [1] (3rd party New) if New wins, but could be stats.current[2] (Used) or others if a Used/Collectible offer wins. This variability makes it complex, justifying your choice to delay it.
+Separating FBA from FBM for stats.current[1]
+stats.current[1] represents the 3rd party New price (FBA or FBM), but Keepa’s API doesn’t directly split FBA vs. FBM in stats.current. Here’s how to distinguish them:
+
+Keepa API (keepaapi.readthedocs.io): The offers field (when offers=20) contains detailed offer data, including:
+offer.isPrime: True if FBA (Prime-eligible).
+offer.isAmazon: True if sold by Amazon.
+offer.condition: New, Used, etc.
+Example: offers[0] = {'isPrime': 1, 'condition': 'New', 'price': 2499} indicates FBA New at $24.99.
+Debug Log (“grok apr 26 4:51” expected):
+text
+
+Raw stats for ASIN 1954966032: current=[-1, 2499, 2099, 1403811, ...]
+Offers for ASIN 1954966032: [{'isPrime': 1, 'condition': 'New', 'price': 2499}, ...]
+If stats.current[1] = 2499 matches an offers entry with isPrime=1, it’s FBA; if isPrime=0, it’s FBM.
+Medium Article (basil-latif.medium.com): Suggests using offers to track FBA vs. FBM for Buy Box analysis, as isPrime flags Prime eligibility (FBA or Amazon).
+Seller Journal (sellerjournal.com): Notes FBA offers (orange triangles on Keepa charts) align with Buy Box when priced competitively, visible in offers.
+Conclusion: To separate FBA from FBM for stats.current[1], check offers for the offer matching stats.current[1] and inspect isPrime. This requires parsing offers, adding complexity, so it’s wise to tackle simpler columns first.
+Why Delay Buy Box - Current
+Your intuition to postpone Buy Box - Current is solid:
+
+Complexity: Requires checking buyBox, stats.current[0], [1], or others, and possibly offers to confirm condition and fulfillment.
+Validation: Needs debug log analysis (buyBox, offers) to map correctly, as stats.current[1] may not always be the Buy Box price.
+Risk: Incorrect mapping could lead to wrong prices (e.g., Used instead of New).
+Plan: We’ll revisit Buy Box - Current after simpler columns, using buyBox and offers to confirm the winning offer’s price and condition.
+
+2025-04-26: Reverted buy_box_used_current to Keepa_Deals.py, updated used_current to stats.current[2] (grok buy box used current vs used current). Testing Buy Box Used - Current via buyBox.price. Expected Used - Current: $20.99, $20.00, $23.48; Buy Box Used - Current: $20.99, $23.98, $27.47. Title, ASIN, Sales Rank - Current unchanged in stable.py. Note: It’s never Keepa.
+
+2025-04-27: Confirmed Title, ASIN, Sales Rank - Current, Used - Current in stable.py, matching Keepa (Sales Rank: 1,424,521, 340,619, 1,370,465; Used - Current: $20.99, $20.00, $23.48). Fixed decimals in Sales Rank - Current using int() in get_stat_value. Testing Sales Rank - 30 days avg. in Keepa_Deals.py (stats.avg[3]). Buy Box Used - Current failing (all '-') despite Keepa showing $20.99, $23.98, $27.47 and other Buy Box Used metrics, with buyBox={} and no isBuyBox: True in offers. Likely needs alternative stats field or offers logic. Documented working columns in Keepa data types spreadsheet. Note: It’s never Keepa.
+
+2025-04-27: Refined Sales Rank - 30 days avg. in Keepa_Deals.py with stats.avg30[3], set days=30 in fetch_product. Improved logging for API response time. Expected: Sales Rank - Current: 1,420,372, 366,336, 1,368,579; Sales Rank - 30 days avg.: 1,374,087, 1,491,804, 1,025,128; Used - Current: $20.99, $20.00, $23.48. Title, ASIN, Sales Rank - Current, Used - Current unchanged in stable.py. Buy Box Used - Current still failing. Note: It’s never Keepa.
+
+2025-04-27: Moved Sales Rank - 30 days avg. to stable.py (stats.avg30[3], close enough: diffs ~13,624, 1,904, 345). Added Sales Rank - 60/90/180/365 days avg., Lowest, Lowest 365, Highest, Highest 365 to Keepa_Deals.py (stats.avg60/90/180/365[3], min[3], min365[3], max[3], max365[3]). Set days=365. Expected: Sales Rank - Current: 1,420,372, 366,336, 1,368,579; Sales Rank - 30 days avg.: 1,373,844, 1,489,559, 1,025,522; Sales Rank - 365 days avg.: 1,347,415, 1,146,530, 1,664,301. Title, ASIN, Sales Rank - Current, Used - Current ($20.99, $20.00, $23.48) unchanged. Buy Box Used - Current paused. Note: It’s never Keepa.
+
+2025-04-27: Moved Sales Rank - 90/180/365 days avg. to stable.py (diffs <0.3%). Sales Rank - 60 days avg., Lowest 365 days, Highest 365 days missing ('-'). Sales Rank - Lowest, Highest wrong (e.g., 6,410,422 vs. 19,529). Enhanced logging for min/max. Expected: Sales Rank - 90 days avg.: 1,507,272, 1,489,091, 1,532,336; Sales Rank - 365 days avg.: 1,347,457, 1,146,499, 1,664,283; Sales Rank - Lowest: 19,529, 63,481, 82,440. Title, ASIN, Sales Rank - Current, Used - Current, Sales Rank - 30 days avg. unchanged. Buy Box Used - Current paused. Note: It’s never Keepa.
+
+2025-04-27: Added history=1 to fetch_product, tested min[4], max[4] for Sales Rank - Lowest, Highest. Sales Rank - 60 days avg., Lowest 365 days, Highest 365 days still missing. Expected: Sales Rank - 60 days avg.: 1,471,737, 1,605,569, 1,248,470; Lowest: 19,529, 63,481, 82,440; Lowest 365 days: 155,062, 115,005, 165,128. Sales Rank - Current, 30/90/180/365 days avg. in stable.py. Buy Box Used - Current paused. Note: It’s never Keepa.
+
+2025-04-27: Tested days=90, reverted to min[3], max[3] for Sales Rank - Lowest, Highest. Sales Rank - 60 days avg., Lowest 365 days, Highest 365 days still missing. Enhanced min/max logging. Expected: Sales Rank - 60 days avg.: 1,471,737, 1,605,569, 1,248,470; Lowest: 19,529, 63,481, 82,440; Lowest 365 days: 155,062, 115,005, 165,128. Sales Rank - Current, 30/90/180/365 days avg. in stable.py. Buy Box Used - Current paused. Note: It’s never Keepa.
+
+2025-04-27: Removed Sales Rank - 60 days avg., Lowest, Lowest 365 days, Highest, Highest 365 days, Buy Box Used - Current from Keepa_Deals.py (print -). Added Package Weight, Height, Length, Width (grams to kg, mm to cm). Sales Rank - Current, 30/90/180/365 days avg., Used - Current in stable.py. Expected: Package Weight: ~0.45 kg, Height: ~2.5 cm, Length: ~22.9 cm, Width: ~15.2 cm (ASIN 1954966032). Note: It’s never Keepa.
+
+2025-04-27: Set timeout=30 in fetch_deals, fetch_product. Added package_quantity (default to 1 if 0). Package Weight, Height, Length, Width solid. Sales Rank - Current, 30/90/180/365 days avg., Used - Current in stable.py. Expected: Package - Quantity: 1 (default), 1, 1; Weight: 0.12 kg, 0.53 kg, 0.31 kg; Height: 0.7 cm, 2.3 cm, 2.0 cm. Note: It’s never Keepa.
+
+2025-04-27: Moved package_quantity, package_weight, package_height, package_length, package_width to stable.py. Package - Quantity, Weight, Height, Length, Width solid. Sales Rank - Current, 30/90/180/365 days avg., Used - Current in stable.py. Expected: Package - Quantity: 1 (default), 1, 1; Weight: 0.12 kg, 0.53 kg, 0.06 kg. Note: It’s never Keepa.
+
+2025-04-27: Updated Used condition functions for Lowest, Highest, Stock using csv/offers. Increased ASINs to 5. Fixed stats indices. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Improved Used, like new; partial Used, very good/good/acceptable. Note: It’s never Keepa.
+
+2025-04-27: Fixed 'int' object has no attribute 'time' in Used functions. Refined Lowest, Highest, Stock using csv/offers. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new; improved Used, very good/good/acceptable. Note: It’s never Keepa.
+
+2025-04-28: Fixed SyntaxError 'zip avut' in used_good. Enhanced CSV logging for Used conditions. No fallbacks to expose issues. Kept ASINs at 5. Package - Quantity, Weight, Height, Length, Width in stable.py. Expected: Accurate Used, like new (Current, Lowest, Highest); partial Used, very good/good/acceptable due to missing CSV. Note: It’s never Keepa.
+
+2025-04-28: Documented confirmed field mapping issues where CSV data for one field incorrectly matches Keepa data for another field, identifying reliable data sources for future use. Observations based on CSV and Keepa data for ASINs 1954966032, B0065TF4ME, 2764332513, 891950257, 914671227. Focus on Used conditions, but mappings provide wins for other fields (e.g., Collectible, List Price).
+
+Confirmed Field Mappings:
+1. ASIN 1954966032:
+   - Used, like new - Current, Lowest, Highest ($14.99):
+     - Matches: List Price - Current, 90 days avg. ($14.99).
+     - Source: Likely stats.current[8] or csv[8].
+     - Implication: Used, like new is pulling List Price data, confirming stats.current[8] for List Price.
+   - Used, very good - Lowest ($42.36), Highest ($46.40):
+     - Matches: Collectible - Lowest ($42.36), Highest ($46.40).
+     - Source: csv[10].
+     - Implication: Used, very good is pulling Collectible data, confirming csv[10] for Collectible.
+   - Used, acceptable - Lowest ($28.58):
+     - Matches: New, 3rd Party FBM - 365 days avg. ($28.58).
+     - Source: Likely csv[1] or stats.avg365[1].
+     - Implication: Used, acceptable is pulling New, FBM data, confirming csv[1] for New, FBM.
+
+2. ASIN B0065TF4ME:
+   - Used, like new - Current, Highest ($41.99):
+     - Matches: List Price - Current ($41.99).
+     - Source: stats.current[8].
+     - Implication: Used, like new is pulling List Price, confirming stats.current[8].
+   - Used, like new - Lowest ($7.50):
+     - Matches: List Price - Lowest ($7.50).
+     - Source: Likely csv[8].
+     - Implication: Confirms csv[8] for List Price - Lowest.
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99).
+     - Source: csv[10].
+     - Implication: Used, very good is pulling Collectible, confirming csv[10].
+   - Used, acceptable - Lowest ($59.00):
+     - Matches: New, 3rd Party FBM - Lowest ($59.00).
+     - Source: csv[1].
+     - Implication: Used, acceptable is pulling New, FBM, confirming csv[1].
+
+3. ASIN 2764332513:
+   - Used, like new - Current, Highest ($14.99):
+     - Matches: List Price - Current, Highest ($14.99).
+     - Source: stats.current[8].
+     - Implication: Used, like new is pulling List Price, confirming stats.current[8].
+   - Used, like new - Lowest ($12.99):
+     - Matches: List Price - Lowest ($12.99).
+     - Source: csv[8].
+     - Implication: Confirms csv[8] for List Price - Lowest.
+
+4. ASIN 891950257:
+   - Used, like new - Current, Lowest, Highest ($9.95):
+     - Matches: List Price - Current, Lowest, Highest ($9.95).
+     - Source: stats.current[8].
+     - Implication: Used, like new is pulling List Price, confirming stats.current[8].
+   - Used, very good - Lowest ($10.95), Highest ($140.46):
+     - Matches: Collectible - Lowest ($10.95), Highest ($140.46).
+     - Source: csv[10].
+     - Implication: Used, very good is pulling Collectible, confirming csv[10].
+
+5. ASIN 914671227:
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99) from ASIN B0065TF4ME.
+     - Source: csv[10] of incorrect ASIN.
+     - Implication: ASIN mix-up in deals or write_csv; confirms csv[10] for Collectible when ASINs align.
+
+Notes:
+- Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 doesn’t exactly match any Keepa field (possibly Sales Rank - Drops, e.g., Drops last 90 days: 1). Not included in confirmed mappings.
+- High Used, acceptable - Highest values ($74787.20, $69893.96, etc.) don’t match Keepa fields, likely data corruption or indexing error.
+- ASIN mix-up (914671227, 891950257 appearing as 0915777363, 0891950257 in CSV) indicates deals/rows mismatch.
+- Next Steps: Debug $3.99 error (log Sales Rank - Drops fields), fix ASIN mix-up, correct csv[4:7] indexing for Used conditions. Enhanced logging in Keepa_Deals.py for csv[4:10] and deals ASINs. Expected: Accurate Used conditions, reliable Collectible/List Price mappings. Note: It’s never Keepa.
+
+2025-04-28: Implemented functions to capitalize on exact field mapping matches identified from Used condition errors, fetching List Price (stats.current[8], csv[8]), Collectible (csv[10]), and New, 3rd Party FBM (csv[1]) into correct columns. Confirmed Used, acceptable - Highest values (e.g., $74787.20) match Sales Rank - Current (stats.current[3]) for ASINs 1954966032, B0065TF4ME, 2764332513, 891950257, 914671227. Clarified ASIN mix-up (0915777363, 0891950257 in earlier CSV likely from write_csv mismatch, pending debug log confirmation). Enhanced Sales Rank - Drops logging to trace $3.99 error. Updated headers.json with Collectible fields.
+
+Confirmed Field Mappings:
+1. ASIN 1954966032:
+   - Used, like new - Current, Lowest, Highest ($14.99):
+     - Matches: List Price - Current, 90 days avg. ($14.99).
+     - Source: stats.current[8], csv[8].
+     - Action: Implemented list_price() using stats.current[8], csv[8].
+   - Used, very good - Lowest ($42.36), Highest ($46.40):
+     - Matches: Collectible - Lowest ($42.36), Highest ($46.40).
+     - Source: csv[10].
+     - Action: Implemented collectible() using csv[10].
+   - Used, acceptable - Lowest ($28.58):
+     - Matches: New, 3rd Party FBM - 365 days avg. ($28.58).
+     - Source: csv[1].
+     - Action: Implemented new_3rd_party_fbm() using csv[1].
+   - Used, acceptable - Highest ($74787.20):
+     - Matches: Sales Rank - Current (74,787).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3] for Sales Rank - Current.
+
+2. ASIN B0065TF4ME:
+   - Used, like new - Current, Highest ($41.99):
+     - Matches: List Price - Current ($41.99).
+     - Source: stats.current[8].
+     - Action: list_price().
+   - Used, like new - Lowest ($7.50):
+     - Matches: List Price - Lowest ($7.50).
+     - Source: csv[8].
+     - Action: list_price().
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99).
+     - Source: csv[10].
+     - Action: collectible().
+   - Used, acceptable - Lowest ($59.00):
+     - Matches: New, 3rd Party FBM - Lowest ($59.00).
+     - Source: csv[1].
+     - Action: new_3rd_party_fbm().
+   - Used, acceptable - Highest ($69893.96):
+     - Matches: Sales Rank - Current (69,894).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+3. ASIN 2764332513:
+   - Used, like new - Current, Highest ($14.99):
+     - Matches: List Price - Current, Highest ($14.99).
+     - Source: stats.current[8].
+     - Action: list_price().
+   - Used, like new - Lowest ($12.99):
+     - Matches: List Price - Lowest ($12.99).
+     - Source: csv[8].
+     - Action: list_price().
+   - Used, acceptable - Highest ($68867.60):
+     - Matches: Sales Rank - Current (68,868).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+4. ASIN 891950257:
+   - Used, like new - Current, Lowest, Highest ($9.95):
+     - Matches: List Price - Current, Lowest, Highest ($9.95).
+     - Source: stats.current[8].
+     - Action: list_price().
+   - Used, very good - Lowest ($10.95), Highest ($140.46):
+     - Matches: Collectible - Lowest ($10.95), Highest ($140.46).
+     - Source: csv[10].
+     - Action: collectible().
+   - Used, acceptable - Highest ($49615.96):
+     - Matches: Sales Rank - Current (49,616).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+5. ASIN 914671227:
+   - Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+     - Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99) from B0065TF4ME.
+     - Source: csv[10] of incorrect ASIN.
+     - Action: collectible() (pending ASIN mix-up fix).
+   - Used, acceptable - Highest ($69085.96):
+     - Matches: Sales Rank - Current (69,086).
+     - Source: stats.current[3].
+     - Implication: Confirms stats.current[3].
+
+Notes:
+- Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 likely from Sales Rank - Drops (e.g., drops90: 1 for 1954966032). Added logging in fetch_product().
+- ASIN mix-up (0915777363, 0891950257 in earlier CSV) likely from write_csv mismatch. Awaiting debug log confirmation of Deals ASINs.
+- Clarified “frequently” (List Price: 4/5 ASINs), “consistently” (Collectible: 4/5), “often” (New, FBM: 2/5) as exact matches varying by ASIN.
+- Next Steps: Debug $3.99 error (check Sales Rank - Drops), confirm ASIN alignment, fix Used condition indexing (csv[4:7]). Expected: Accurate List Price, Collectible, New, FBM in CSV; progress on Used conditions. Note: It’s never Keepa.
+
+Dev Log Update
+2025-04-28: Implemented functions for List Price (stats.current[8], csv[8]) and New, 3rd Party FBM (csv[1]) to capitalize on exact field mapping matches from Used condition errors. Excluded Collectible fields as per updated headers.json (204 fields). Confirmed Used, acceptable - Highest values (e.g., $74787.20) match Sales Rank - Current (stats.current[3]) for ASINs 1954966032, B0065TF4ME, 2764332513, 891950257, 914671227. Noted ASIN mix-up (0915777363, 0891950257 in earlier CSV, likely write_csv mismatch). Enhanced Sales Rank - Drops logging for $3.99 error.
+
+Confirmed Field Mappings:
+
+ASIN 1954966032:
+Used, like new - Current, Lowest, Highest ($14.99):
+Matches: List Price - Current, 90 days avg. ($14.99).
+Source: stats.current[8], csv[8].
+Action: Implemented list_price() using stats.current[8], csv[8].
+Used, very good - Lowest ($42.36), Highest ($46.40):
+Matches: Collectible - Lowest ($42.36), Highest ($46.40).
+Source: csv[10].
+Action: No action (Collectible excluded).
+Used, acceptable - Lowest ($28.58):
+Matches: New, 3rd Party FBM - 365 days avg. ($28.58).
+Source: csv[1].
+Action: Implemented new_3rd_party_fbm() using csv[1].
+Used, acceptable - Highest ($74787.20):
+Matches: Sales Rank - Current (74,787).
+Source: stats.current[3].
+Implication: Confirms stats.current[3] for Sales Rank - Current.
+ASIN B0065TF4ME:
+Used, like new - Current, Highest ($41.99):
+Matches: List Price - Current ($41.99).
+Source: stats.current[8].
+Action: list_price().
+Used, like new - Lowest ($7.50):
+Matches: List Price - Lowest ($7.50).
+Source: csv[8].
+Action: list_price().
+Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99).
+Source: csv[10].
+Action: No action (Collectible excluded).
+Used, acceptable - Lowest ($59.00):
+Matches: New, 3rd Party FBM - Lowest ($59.00).
+Source: csv[1].
+Action: new_3rd_party_fbm().
+Used, acceptable - Highest ($69893.96):
+Matches: Sales Rank - Current (69,894).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+ASIN 2764332513:
+Used, like new - Current, Highest ($14.99):
+Matches: List Price - Current, Highest ($14.99).
+Source: stats.current[8].
+Action: list_price().
+Used, like new - Lowest ($12.99):
+Matches: List Price - Lowest ($12.99).
+Source: csv[8].
+Action: list_price().
+Used, acceptable - Highest ($68867.60):
+Matches: Sales Rank - Current (68,868).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+ASIN 891950257:
+Used, like new - Current, Lowest, Highest ($9.95):
+Matches: List Price - Current, Lowest, Highest ($9.95).
+Source: stats.current[8].
+Action: list_price().
+Used, very good - Lowest ($10.95), Highest ($140.46):
+Matches: Collectible - Lowest ($10.95), Highest ($140.46).
+Source: csv[10].
+Action: No action (Collectible excluded).
+Used, acceptable - Highest ($49615.96):
+Matches: Sales Rank - Current (49,616).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+ASIN 914671227:
+Used, very good - Current ($99.99), Lowest ($14.57), Highest ($133.99):
+Matches: Collectible - Current ($99.99), Lowest ($14.57), Highest ($133.99) from B0065TF4ME.
+Source: csv[10] of incorrect ASIN.
+Action: No action (Collectible excluded).
+Used, acceptable - Highest ($69085.96):
+Matches: Sales Rank - Current (69,086).
+Source: stats.current[3].
+Implication: Confirms stats.current[3].
+Notes:
+
+Used, acceptable - Lowest ($3.99) for 1954966032, 2764332513, 891950257, 914671227 likely from Sales Rank - Drops (e.g., drops90: 1 for 1954966032). Enhanced logging in fetch_product().
+ASIN mix-up (0915777363, 0891950257 in earlier CSV) likely from write_csv mismatch. Awaiting debug log confirmation of Deals ASINs.
+Next Steps: Debug $3.99 error (check Sales Rank - Drops), confirm ASIN alignment, fix Used condition indexing (csv[4:7]). Expected: Accurate List Price, New, 3rd Party FBM in CSV; progress on Used conditions. Note: It’s never Keepa.
+
+Analysis and Feedback
+With all five Keepa Deals examples (ASINs 1559579897, B0065TF4ME, 8415292783, 915777363, B0006AVKT4) and the GitHub commit "for grok may 2 11:35" (https://github.com/timemery/keepa-deals) providing Keepa_Deals.py, stable.py, Keepa_Deals_Export.csv, debug_log.txt, and headers.json, I’ll analyze the used_like_new_debug experiment, validate your theory that ranges (e.g., $6.82-$29.58 for ASIN 1954966032) represent min/max bounds for fields like Lowest/Highest, and confirm the stability of new_3rd_party_fbm_current, used_like_new, and used_acceptable in stable.py. I’ll also address the setup (both used_like_new and used_like_new_debug in Chunk 3, process_product in Chunk 5) and propose updates to align with Keepa Deals data.
+
+Setup Verification
+Functions: Both used_like_new and used_like_new_debug are in Chunk 3 of Keepa_Deals.py, as you clarified. used_like_new handles averages (30 days avg. through 365 days avg., 90 days OOS, Stock), while used_like_new_debug adds debug fields (Current, 30 days min, 30 days max, Min/Max Avg).
+Process Product: process_product is in Chunk 5 (not Chunk 2). You’ve added row.update(used_like_new_debug(product)) alongside row.update(used_like_new(product)), which is correct to preserve production fields while including debug data.
+Headers: headers.json includes the new debug fields (Used, like new - 30 days min, 30 days max, Min/Max Avg), ensuring CSV compatibility.
+Backup: Files are backed up to /home/timscripts/keepa_api/keepa-deals/Bak_May/.
+Range Theory Validation
+Your theory posits that ranges in Keepa Deals (e.g., $6.82-$29.58 for ASIN 1954966032) represent stats['min'][4] and stats['max'][4] for fields like Used, like new - Lowest/Highest, with the Deals page displaying a single value (e.g., min[4]). The used_like_new_debug function logs min30[4], max30[4], and avg_min_max to test this. Since ASIN 1954966032 is no longer on Keepa Deals, we’ll use the new ASINs and debug_log.txt.
+
+Debug Log Insights
+For ASIN 1559579897 (new example):
+
+Log: Used, like new debug for ASIN 1559579897: current=$183.98, avg30=$175.29, min30=$111.59, max30=$190.29, avg_min_max=$150.94, offers=[183.98, ...]
+Keepa Deals (File 1): Used, like new - Lowest: $111.59, Highest: $190.29.
+Analysis: The range ($111.59-$190.29) matches min30[4] and max30[4], confirming your theory that ranges are min/max bounds. The Deals page shows Lowest as min[4] ($111.59), not an average ($150.94). Current ($183.98) aligns with stats['current'][4], but wasn’t listed explicitly in File 1.
+For ASIN B0065TF4ME:
+
+Log: current=$81.83, avg30=$106.46, min30=$10.99, max30=$123.46, avg_min_max=$67.23
+File 2: Used, like new - Current: $81.83, Lowest: $10.99, Highest: $123.46.
+Analysis: Matches confirm Lowest/Highest are min[4]/max[4], and Current is stats['current'][4].
+For ASIN 8415292783:
+
+Log: current=-, avg30=-, min30=$17.48, max30=$92.40, avg_min_max=$54.94
+File 3: Used, like new - Lowest: $17.48, Highest: $92.40.
+Analysis: Matches min[4]/max[4]. No Current in CSV or File 3, indicating sparse API data.
+For ASIN 915777363:
+
+Log: current=-, avg30=$39.97, min30=$33.14, max30=$91.93, avg_min_max=$62.54
+File 4: Used, like new - Lowest: $33.14, Highest: $91.93.
+Analysis: Matches min[4]/max[4]. No Current in CSV, but avg30 matches File 4.
+For ASIN B0006AVKT4:
+
+Log: current=-, avg30=-, min30=$20.67, max30=$196.42, avg_min_max=$108.55
+File 5: Used, like new - Lowest: $20.67, Highest: $196.42.
+Analysis: Matches min[4]/max[4]. No Current in CSV.
+Conclusion
+Your theory is correct: ranges in Keepa Deals reflect stats['min'][4] and stats['max'][4] for Used, like new - Lowest/Highest. The Deals page displays min[4] for Lowest (e.g., $111.59 for 1559579897) and current[4] for Current when available. The $6.82-$29.58 range for 1954966032 was likely min[4]/max[4], not outdated data. The mismatch with current[4] ($81.83) reflects sparse or newer API data.
+
+CSV Comparison
+Comparing Keepa_Deals_Export.csv with Keepa Deals examples:
+
+1559579897: Used, like new - Current: $183.98 (matches File 1’s Buy Box Used - Current, possibly mislabeled), 30 days min: $111.59, 30 days max: $190.29 (matches). Used, acceptable - Current: $28.08 (matches).
+B0065TF4ME: Used, like new - Current: $81.83, 30 days min: $10.99, 30 days max: $123.46, New, 3rd Party FBM - Current: $59.00 (all match). Used, acceptable - Current: $23.93 (matches).
+8415292783: Used, like new - Current: -, 30 days min: $17.48, 30 days max: $92.40, New, 3rd Party FBM - Current: $26.03 (matches). Used, acceptable - Current: - (expected, sparse data).
+915777363: Used, like new - Current: -, 30 days min: $33.14, 30 days max: $91.93, Used, acceptable - Current: $26.64 (matches).
+B0006AVKT4: Used, like new - Current: -, 30 days min: $20.67, 30 days max: $196.42, Used, acceptable - Current: $30.13 (matches).
+Stable Fields: new_3rd_party_fbm_current, used_like_new (Current), and used_acceptable (Current) are stable in stable.py. Used, like new - Lowest and Highest are candidates for stable.py, mapping to min[4]/max[4].
