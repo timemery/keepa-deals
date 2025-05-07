@@ -7,7 +7,7 @@ from stable import (
     sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg,
     sales_rank_365_days_avg, package_quantity, package_weight, package_height,
     package_length, package_width, used_like_new, used_very_good, used_good,
-    used_acceptable, new_3rd_party_fbm_current
+    used_acceptable, new_3rd_party_fbm_current, used_like_new_lowest_highest
 )
 
 # Logging
@@ -284,7 +284,7 @@ def main():
                 sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
                 sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
                 package_quantity, package_weight, package_height, package_length,
-                package_width, used_like_new,
+                package_width, used_like_new, used_like_new_lowest_highest,
                 used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
                 new_3rd_party_fbm, list_price
             ]
