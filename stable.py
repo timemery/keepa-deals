@@ -141,9 +141,8 @@ def used_like_new(product):
     current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
     offers = product.get('offers', [])
     like_new_offers = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'Used - Like New']
-    logging.debug(f"used_like_new for ASIN {asin}: current_price={current_price}, like_new_offers={like_new_offers}")
-    result = {'Used, like new - Current': current_price if like_new_offers else '-'}
-    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
+    result = {'Used, like new - Current': current_price}
+    logging.debug(f"used_like_new for ASIN {asin}: current_price={current_price}, like_new_offers={like_new_offers}, result={result}")
     return result
 
 # Used, like new - Lowest Highest
