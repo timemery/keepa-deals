@@ -22,7 +22,7 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
     except (IndexError, TypeError, AttributeError) as e:
         logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
         return '-'
-
+        
 # Title
 def get_title(deal):
     title = deal.get('title', '-')

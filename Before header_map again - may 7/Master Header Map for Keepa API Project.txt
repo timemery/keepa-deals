@@ -1,0 +1,126 @@
+Master Header Map for Keepa API Project
+Evolution of the Master Header Map
+The Master Header Map for the Keepa API project emerged to address data misalignment in Keepa_Deals_Export.csv, particularly the override issue where List Price - Current overwrote valid Used, like new - Current values. Initially, Keepa_Deals.py used a static list of functions in main to populate CSV rows, but non-deterministic dictionary updates caused errors (e.g., '-' instead of $81.83 for some products). Logs revealed the issue: row.update() allowed later functions (e.g., list_price) to overwrite earlier ones (e.g., used_like_new).
+Early attempts fixed this with an explicit function order, prioritizing used conditions, but this required manual updates for new headers, risking errors as headers.json grew to 213 fields. Inspired by the scraping project’s Master Header Map, we pivoted to a dynamic solution: a FUNCTION_MAP dictionary mapping headers to stable.py functions, stored in header_map.py to prevent overwrites.
+How We Came Up With It
+
+Observation: Logs showed override errors (e.g., used_like_new values replaced by list_price). The static function list was fragile, misaligning with headers.json.
+Collaboration: You highlighted the scraping project’s header map, which ensured consistent CSV columns. We adapted it for the API’s structured JSON, focusing on function ordering.
+Iteration: Testing revealed unmapped headers (e.g., Buy Box - Current) defaulted to '-', safe but incomplete. We expanded FUNCTION_MAP to cover all 213 headers, adding validation and logging.
+
+Mechanism
+
+Header Definition:
+
+headers.json defines 213 headers (e.g., Sales Rank - Current, Used, like new - Current).
+Loaded globally in Keepa_Deals.py, ensuring CSV consistency.
+
+
+FUNCTION_MAP:
+
+In header_map.py, FUNCTION_MAP maps headers to stable.py functions (e.g., 'Sales Rank - Current': sales_rank_current).
+Unimplemented headers (e.g., Buy Box - Current) map to None, defaulting to '-' in the CSV.
+Example:FUNCTION_MAP = {
+    'Sales Rank - Current': sales_rank_current,
+    'Used, like new - Current': used_like_new,
+    'List Price - Current': list_price,
+    'Buy Box - Current': None,
+    ...
+}
+
+
+
+
+Dynamic Function Ordering:
+
+In main, functions are extracted from FUNCTION_MAP based on headers.json.
+Ordered to prioritize used conditions (used_like_new, used_very_good, used_good, used_acceptable), then others, with list_price last:function_order = sorted(set([FUNCTION_MAP.get(h) for h in HEADERS if h in FUNCTION_MAP]),
+                       key=lambda f: (f.__name__ not in ['used_like_new', 'used_very_good', 'used_good', 'used_acceptable'],
+                                     f.__name__ == 'list_price') if f else (True, True))
+
+
+Ensures used_like_new writes before list_price, preventing overrides.
+
+
+Validation and Logging:
+
+At startup, Keepa_Deals.py checks FUNCTION_MAP against headers.json, logging warnings for unmapped headers (e.g., “158 unmapped headers: Buy Box - Current, ...”).
+Logs are written to debug_log.txt, aiding trial-and-error for guessed headers.
+
+
+CSV Writing:
+
+write_csv uses HEADERS to write rows, populating ASIN and Title from deals, then function outputs, with '-' for unmapped headers.
+Example row: ['-', '$922.13', ..., 'COURTROOM POWER...', ..., '1,464,176', ...].
+
+
+
+Why We Need It
+
+Override Prevention: Static function lists caused list_price to overwrite used_like_new (e.g., '-' instead of $39.38). FUNCTION_MAP enforces priority, ensuring accurate data.
+Scalability: Manual function lists required updates for new headers, risking errors. FUNCTION_MAP adapts to headers.json changes, supporting 213 headers without recoding.
+Protection: Storing FUNCTION_MAP in header_map.py isolates it from Keepa_Deals.py edits, preventing accidental overwrites (as happened previously).
+Completeness: Maps all 213 headers, defaulting unimplemented ones to '-', ensuring a full dataset for analysis.
+Debugging: Logging unmapped headers identifies gaps (e.g., guessed headers), guiding function development.
+
+Advantages
+
+Consistency:
+
+Locks in 213 CSV columns, ensuring uniform structure across runs, importable into pandas or Excel without cleanup.
+Example: Sales Rank - Current always in column 46, regardless of API data.
+
+
+Accuracy:
+
+Prioritizes specific functions (e.g., used_like_new) over general ones (e.g., list_price), preventing overrides.
+Example: Ensures Used, like new - Current retains $81.83, not '-'.
+
+
+Completeness:
+
+Includes all 213 headers, even unimplemented ones, defaulting to '-'.
+Supports guessed headers, logged for later validation against Keepa API fields.
+
+
+Scalability:
+
+Handles large datasets (e.g., 500 deals) without restructuring.
+Adding new headers requires only FUNCTION_MAP and stable.py updates, not main.
+
+
+Protection:
+
+header_map.py isolates critical logic, reducing overwrite risks.
+Validation checks catch misalignments early, logging to debug_log.txt.
+
+
+
+Over Static Function Lists
+
+Static Lists: Required manual ordering, prone to errors (e.g., missing used_very_good), and didn’t scale with headers.json.
+Master Header Map: Dynamic, comprehensive, and protected, ensuring accuracy and flexibility.
+
+Cons
+
+Upfront Effort:
+
+Building FUNCTION_MAP for 213 headers takes time, especially for guessed headers needing API validation.
+Mitigation: Done once, reusable; logging guides incremental updates.
+
+
+Rigidity:
+
+New API fields require FUNCTION_MAP updates, potentially missing until added.
+Mitigation: Defaults to '-', and periodic API reviews keep it current.
+
+
+Overhead:
+
+213 columns × 500 rows = 106,500 cells, many '-', bloating CSV (3MB).
+Mitigation: Filter key columns post-run or compress CSV.
+
+
+
+Conclusion
+The Master Header Map is a robust solution for the Keepa API project, ensuring data accuracy, scalability, and protection. It resolves override issues, adapts to 213 headers, and supports debugging through logging. By trading minor rigidity for reliability, it delivers a consistent, analysis-ready CSV, ready for your deal-hunting needs.
