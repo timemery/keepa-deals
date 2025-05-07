@@ -1,5 +1,5 @@
-# Chunk 1 starts - small change to add to git.
 # Keepa_Deals.py
+# Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
 from stable import (
@@ -7,8 +7,9 @@ from stable import (
     sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg,
     sales_rank_365_days_avg, package_quantity, package_weight, package_height,
     package_length, package_width, used_like_new, used_very_good, used_good,
-    used_acceptable, new_3rd_party_fbm_current
+    used_acceptable, new_3rd_party_fbm_current, list_price
 )
+from header_map import FUNCTION_MAP
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -126,24 +127,6 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
-def list_price(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
-        'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
-        'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
-        'List Price - 180 days avg.': get_stat_value(stats, 'avg180', 8, divisor=100, is_price=True),
-        'List Price - 365 days avg.': get_stat_value(stats, 'avg365', 8, divisor=100, is_price=True),
-        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
-        'List Price - Stock': '-'
-    }
-    logging.debug(f"list_price result for ASIN {asin}: {result}")
-    print(f"List Price for ASIN {asin}: {result}")
-    return result
-
-# def sales_rank_90_days_avg_dev - moved to stable.py and deleted it from here.
-
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
@@ -226,9 +209,18 @@ def used_acceptable(product):
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     print(f"Used, acceptable for ASIN {asin}: {result}")
     return result
+
+def used_offer_count_current(product):
+    offers = product.get('offers', [])
+    asin = product.get('asin', 'unknown')
+    count = sum(1 for o in offers if o.get('condition', '').startswith('Used') and o.get('stock', 0) > 0)
+    result = {'Used Offer Count - Current': str(count) if count > 0 else '0'}
+    logging.debug(f"used_offer_count_current result for ASIN {asin}: {result}")
+    print(f"Used Offer Count - Current for ASIN {asin}: {result}")
+    return result
 # Chunk 3 ends
 
-# Chunk 4 starts - Modify write_csv to prioritize non-default values from used_like_new over list_price.
+# Chunk 4 starts
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -275,19 +267,23 @@ def main():
             return
         logging.debug(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
         print(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
+
+        # Define functions list using header_map.py
+        function_order = sorted(
+            set([FUNCTION_MAP.get(h) for h in HEADERS if h in FUNCTION_MAP and FUNCTION_MAP[h]]),
+            key=lambda f: (
+                f.__name__ not in ['used_like_new', 'used_very_good', 'used_good', 'used_acceptable'],
+                f.__name__ == 'list_price'
+            ) if f else (True, True)
+        )
+        functions = function_order
+        logging.debug(f"Unmapped headers: {[h for h in HEADERS if h not in FUNCTION_MAP or not FUNCTION_MAP[h]]}")
+
         for deal in deals[:5]:
             asin = deal['asin']
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            functions = [
-                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
-                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                package_quantity, package_weight, package_height, package_length,
-                package_width, used_like_new,
-                used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
-                new_3rd_party_fbm, list_price
-            ]
             for func in functions:
                 row.update(func(product))
             rows.append(row)
