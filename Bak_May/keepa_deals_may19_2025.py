@@ -1,4 +1,4 @@
-# Chunk 1 starts - small change to add to git.
+# Chunk 1 starts
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
