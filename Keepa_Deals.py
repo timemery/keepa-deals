@@ -1,8 +1,14 @@
 # Chunk 1 starts
 # Keepa_Deals.py
-import json, csv, logging, sys, requests, urllib.parse, time
+import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
-from stable import get_stat_value, get_title, get_asin, sales_rank_current, used_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, package_quantity, package_weight, package_height, package_length, package_width, used_like_new, used_acceptable, new_3rd_party_fbm_current, used_like_new_lowest_highest
+from stable import (
+    get_stat_value, get_title, get_asin, sales_rank_current, used_current,
+    sales_rank_30_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg,
+    package_quantity, package_weight, package_height, package_length,
+    package_width, used_like_new, used_very_good, used_good, used_acceptable,
+    new_3rd_party_fbm_current, used_like_new_lowest_highest
+)
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -82,7 +88,7 @@ def fetch_deals(page):
 
 # Chunk 3 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=50, rating=1, history=1):
+def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
@@ -135,6 +141,17 @@ def list_price(product):
     logging.debug(f"list_price result for ASIN {asin}: {result}")
     print(f"List Price for ASIN {asin}: {result}")
     return result
+
+def sales_rank_90_days_avg_dev(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    raw_value = stats.get('avg90', [None] * 4)[3] if stats.get('avg90') else None
+    avg90 = get_stat_value(stats, 'avg90', 3, is_price=False)
+    logging.debug(f"sales_rank_90_days_avg_dev ASIN {asin}: raw_stats_avg90={stats.get('avg90')}, raw_value={raw_value}, formatted={avg90}, timestamp={datetime.datetime.now()}")
+    if raw_value is None or raw_value == -1:
+        logging.warning(f"sales_rank_90_days_avg_dev ASIN {asin}: Invalid data, raw_value={raw_value}")
+        avg90 = '-'
+    return {'Sales Rank - 90 days avg.': avg90}
 
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
@@ -292,7 +309,7 @@ def main():
             product = fetch_product(asin)
             row = {}
             functions = [
-                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
+                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg_dev,
                 sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
                 package_quantity, package_weight, package_height, package_length,
                 package_width, used_like_new, used_like_new_lowest_highest,
