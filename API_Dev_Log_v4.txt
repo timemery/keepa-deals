@@ -512,3 +512,5 @@ B0065TF4ME: Used, like new - Current: $81.83, 30 days min: $10.99, 30 days max: 
 915777363: Used, like new - Current: -, 30 days min: $33.14, 30 days max: $91.93, Used, acceptable - Current: $26.64 (matches).
 B0006AVKT4: Used, like new - Current: -, 30 days min: $20.67, 30 days max: $196.42, Used, acceptable - Current: $30.13 (matches).
 Stable Fields: new_3rd_party_fbm_current, used_like_new (Current), and used_acceptable (Current) are stable in stable.py. Used, like new - Lowest and Highest are candidates for stable.py, mapping to min[4]/max[4].
+
+Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) and source code (github.com/keepacom/api_backend, Stats.java) confirm stats['avg90'][3] is a weighted mean for Sales Rank - 90 days avg., not a simple average. This is noted in Stats.java: “Contains the weighted mean for the last 90 days.” No user comments on forums or GitHub issues contradict this. Thus, get_stat_value(stats, 'avg90', 3, is_price=False) correctly accesses the weighted mean, but the output suggests a retrieval or formatting issue.
