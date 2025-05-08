@@ -1,0 +1,500 @@
+2025-05-08 18:42:19,225 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:19,225 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:19,225 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:19,225 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:19,225 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:19,225 DEBUG: used_acceptable result for ASIN B0065TF4ME: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:19,225 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:19,225 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:19,226 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:19,226 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:19,226 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:19,226 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:19,226 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:19,226 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:19,226 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:19,226 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:19,227 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:19,227 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:19,227 DEBUG: used_acceptable result for ASIN B0065TF4ME: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:19,227 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:19,227 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:19,227 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:19,227 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:19,227 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:19,227 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:19,227 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:19,228 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:19,228 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:19,228 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:19,228 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:19,228 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:19,228 DEBUG: used_acceptable result for ASIN B0065TF4ME: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:19,228 DEBUG: Raw offers for ASIN B0065TF4ME: []
+2025-05-08 18:42:19,228 DEBUG: used_offer_count_current result for ASIN B0065TF4ME: offers=0, count=0
+2025-05-08 18:42:19,228 INFO: Fetching ASIN 1133933424 (5/5)
+2025-05-08 18:42:19,229 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-08 18:42:19,606 DEBUG: https://api.keepa.com:443 "GET /token?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 139
+2025-05-08 18:42:19,606 DEBUG: Token check: tokensLeft=295
+2025-05-08 18:42:19,607 DEBUG: Fetching ASIN 1133933424 for 365 days, history=1, offers=10...
+2025-05-08 18:42:19,609 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-08 18:42:19,986 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1133933424&stats=365&offers=10&rating=1&stock=1&buyBox=1&history=1&update=1&onlyLiveOffers=1 HTTP/1.1" 200 215
+2025-05-08 18:42:19,986 DEBUG: Response status: 200
+2025-05-08 18:42:19,986 DEBUG: Raw response: {"timestamp":1746744140838,"tokensLeft":295,"refillIn":33225,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":0,"processingTimeInMs":0,"error":{"type":"invalidParameter","message":"Either no or a minimum of 20 offers must be requested.","details":null}}...
+2025-05-08 18:42:19,986 ERROR: No product data for ASIN 1133933424
+2025-05-08 18:42:19,987 DEBUG: get_stat_value: key=current, index=6, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,987 DEBUG: get_stat_value: key=current, index=6, value=-1
+2025-05-08 18:42:19,987 DEBUG: used_good result for ASIN 1133933424: {'Used, good - Current': '-'}
+2025-05-08 18:42:19,987 DEBUG: get_stat_value: key=current, index=5, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,987 DEBUG: get_stat_value: key=current, index=5, value=-1
+2025-05-08 18:42:19,987 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - Current': '-'}
+2025-05-08 18:42:19,987 DEBUG: get_stat_value: key=current, index=4, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,987 DEBUG: get_stat_value: key=current, index=4, value=-1
+2025-05-08 18:42:19,988 DEBUG: used_like_new for ASIN 1133933424: stats.current=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], current_price=-
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=7, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=7, value=-1
+2025-05-08 18:42:19,988 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - Current': '-'}
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=3, value=-1
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=2, value=-1
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[]
+2025-05-08 18:42:19,988 WARNING: get_stat_value: No data for key=avg30, index=3, returning '-'
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[]
+2025-05-08 18:42:19,988 WARNING: get_stat_value: No data for key=avg90, index=3, returning '-'
+2025-05-08 18:42:19,988 DEBUG: Sales Rank - 90 days avg. for ASIN 1133933424: {'Sales Rank - 90 days avg.': '-'}
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,988 DEBUG: get_stat_value: key=current, index=1, value=-1
+2025-05-08 18:42:19,989 DEBUG: new_3rd_party_fbm_current result for ASIN 1133933424: {'New, 3rd Party FBM - Current': '-'}
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[]
+2025-05-08 18:42:19,989 WARNING: get_stat_value: No data for key=avg180, index=3, returning '-'
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[]
+2025-05-08 18:42:19,989 WARNING: get_stat_value: No data for key=avg365, index=3, returning '-'
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=current, index=8, stats[current]=[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=current, index=8, value=-1
+2025-05-08 18:42:19,989 DEBUG: list_price result for ASIN 1133933424: {'List Price - Current': '-'}
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[]
+2025-05-08 18:42:19,989 WARNING: get_stat_value: No data for key=avg30, index=1, returning '-'
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-08 18:42:19,989 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[]
+2025-05-08 18:42:19,989 WARNING: get_stat_value: No data for key=avg90, index=1, returning '-'
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[]
+2025-05-08 18:42:19,989 WARNING: get_stat_value: No data for key=avg180, index=1, returning '-'
+2025-05-08 18:42:19,989 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg365, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: new_3rd_party_fbm result for ASIN 1133933424: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg30, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg90, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg180, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg365, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: new_3rd_party_fbm result for ASIN 1133933424: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg30, index=1, returning '-'
+2025-05-08 18:42:19,990 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-08 18:42:19,990 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg90, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg180, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg365, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: new_3rd_party_fbm result for ASIN 1133933424: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg30, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg90, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg180, index=1, returning '-'
+2025-05-08 18:42:19,991 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[]
+2025-05-08 18:42:19,991 WARNING: get_stat_value: No data for key=avg365, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: new_3rd_party_fbm result for ASIN 1133933424: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg30, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg90, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg180, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg365, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: new_3rd_party_fbm result for ASIN 1133933424: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg30, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-08 18:42:19,992 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-08 18:42:19,992 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg90, index=1, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg180, index=1, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg365, index=1, returning '-'
+2025-05-08 18:42:19,993 DEBUG: new_3rd_party_fbm result for ASIN 1133933424: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:19,993 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:19,993 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:19,994 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:19,994 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:19,994 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,994 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,994 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,994 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,994 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,994 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,994 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,994 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,994 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:19,994 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:19,994 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:19,995 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:19,995 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:19,995 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,995 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,996 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,996 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,996 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,996 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,996 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,996 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,996 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:19,996 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:19,996 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:19,996 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,997 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,997 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,997 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,997 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:19,997 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:19,997 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:19,997 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:19,997 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,998 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,998 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=avg30, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=avg90, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[]
+2025-05-08 18:42:19,999 WARNING: get_stat_value: No data for key=avg180, index=4, returning '-'
+2025-05-08 18:42:19,999 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=avg365, index=4, returning '-'
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-08 18:42:20,000 DEBUG: used_like_new result for ASIN 1133933424: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=avg30, index=5, returning '-'
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=avg90, index=5, returning '-'
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=avg180, index=5, returning '-'
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[]
+2025-05-08 18:42:20,000 WARNING: get_stat_value: No data for key=avg365, index=5, returning '-'
+2025-05-08 18:42:20,000 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-08 18:42:20,000 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[]
+2025-05-08 18:42:20,001 WARNING: get_stat_value: No data for key=avg30, index=5, returning '-'
+2025-05-08 18:42:20,001 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-08 18:42:20,001 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-08 18:42:20,001 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[]
+2025-05-08 18:42:20,001 WARNING: get_stat_value: No data for key=avg90, index=5, returning '-'
+2025-05-08 18:42:20,001 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[]
+2025-05-08 18:42:20,001 WARNING: get_stat_value: No data for key=avg180, index=5, returning '-'
+2025-05-08 18:42:20,001 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[]
+2025-05-08 18:42:20,001 WARNING: get_stat_value: No data for key=avg365, index=5, returning '-'
+2025-05-08 18:42:20,001 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-08 18:42:20,001 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[]
+2025-05-08 18:42:20,001 WARNING: get_stat_value: No data for key=avg30, index=5, returning '-'
+2025-05-08 18:42:20,002 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-08 18:42:20,002 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-08 18:42:20,002 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[]
+2025-05-08 18:42:20,002 WARNING: get_stat_value: No data for key=avg90, index=5, returning '-'
+2025-05-08 18:42:20,002 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[]
+2025-05-08 18:42:20,002 WARNING: get_stat_value: No data for key=avg180, index=5, returning '-'
+2025-05-08 18:42:20,002 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[]
+2025-05-08 18:42:20,002 WARNING: get_stat_value: No data for key=avg365, index=5, returning '-'
+2025-05-08 18:42:20,002 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-08 18:42:20,002 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[]
+2025-05-08 18:42:20,002 WARNING: get_stat_value: No data for key=avg30, index=5, returning '-'
+2025-05-08 18:42:20,002 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-08 18:42:20,002 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg90, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg180, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg365, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg30, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg90, index=5, returning '-'
+2025-05-08 18:42:20,003 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[]
+2025-05-08 18:42:20,003 WARNING: get_stat_value: No data for key=avg180, index=5, returning '-'
+2025-05-08 18:42:20,004 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[]
+2025-05-08 18:42:20,004 WARNING: get_stat_value: No data for key=avg365, index=5, returning '-'
+2025-05-08 18:42:20,004 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-08 18:42:20,004 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[]
+2025-05-08 18:42:20,004 WARNING: get_stat_value: No data for key=avg30, index=5, returning '-'
+2025-05-08 18:42:20,004 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-08 18:42:20,004 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-08 18:42:20,004 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[]
+2025-05-08 18:42:20,004 WARNING: get_stat_value: No data for key=avg90, index=5, returning '-'
+2025-05-08 18:42:20,004 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[]
+2025-05-08 18:42:20,004 WARNING: get_stat_value: No data for key=avg180, index=5, returning '-'
+2025-05-08 18:42:20,004 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg365, index=5, returning '-'
+2025-05-08 18:42:20,005 DEBUG: used_very_good result for ASIN 1133933424: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,005 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,005 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,005 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,006 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,006 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,006 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,006 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,006 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,006 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,006 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,007 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,007 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,007 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,007 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,008 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,008 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,009 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,009 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,009 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,009 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,009 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,009 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,009 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,009 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,010 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,010 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,010 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,010 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,010 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,010 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,010 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,010 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,010 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,010 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,011 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,011 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,011 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,011 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,011 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,011 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,012 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,012 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[]
+2025-05-08 18:42:20,012 WARNING: get_stat_value: No data for key=avg30, index=6, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg90, index=6, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg180, index=6, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg365, index=6, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-08 18:42:20,013 DEBUG: used_good result for ASIN 1133933424: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,013 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,013 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,014 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,014 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,015 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,015 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,016 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,016 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,017 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,017 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,017 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,017 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,017 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,017 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,017 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,017 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,017 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,017 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,017 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,017 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,017 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg30, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg90, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[]
+2025-05-08 18:42:20,018 WARNING: get_stat_value: No data for key=avg180, index=7, returning '-'
+2025-05-08 18:42:20,018 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[]
+2025-05-08 18:42:20,019 WARNING: get_stat_value: No data for key=avg365, index=7, returning '-'
+2025-05-08 18:42:20,019 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-08 18:42:20,019 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-08 18:42:20,019 DEBUG: used_acceptable result for ASIN 1133933424: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-08 18:42:20,019 DEBUG: Raw offers for ASIN 1133933424: []
+2025-05-08 18:42:20,019 DEBUG: used_offer_count_current result for ASIN 1133933424: offers=0, count=0
+2025-05-08 18:42:20,019 WARNING: Missing headers for ASIN B0CS6RL7D6: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-08 18:42:20,020 DEBUG: row_data for ASIN B0CS6RL7D6: ['ASIN', 'Title', 'Used, good - Current', 'Used, very good - Current', 'Used, like new - Current', 'Used, acceptable - Current', 'Package Weight', 'Package Height', 'Package Length', 'Package Width']
+2025-05-08 18:42:20,020 DEBUG: Wrote row for ASIN B0CS6RL7D6
+2025-05-08 18:42:20,020 WARNING: Missing headers for ASIN 1954966032: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-08 18:42:20,020 DEBUG: row_data for ASIN 1954966032: ['ASIN', 'Title', 'Used, good - Current', 'Used, very good - Current', 'Used, like new - Current', 'Used, acceptable - Current', 'Package Weight', 'Package Height', 'Package Length', 'Package Width']
+2025-05-08 18:42:20,020 DEBUG: Wrote row for ASIN 1954966032
+2025-05-08 18:42:20,020 WARNING: Missing headers for ASIN 1419712489: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-08 18:42:20,020 DEBUG: row_data for ASIN 1419712489: ['ASIN', 'Title', 'Used, good - Current', 'Used, very good - Current', 'Used, like new - Current', 'Used, acceptable - Current', 'Package Weight', 'Package Height', 'Package Length', 'Package Width']
+2025-05-08 18:42:20,020 DEBUG: Wrote row for ASIN 1419712489
+2025-05-08 18:42:20,020 WARNING: Missing headers for ASIN B0065TF4ME: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-08 18:42:20,020 DEBUG: row_data for ASIN B0065TF4ME: ['ASIN', 'Title', 'Used, good - Current', 'Used, very good - Current', 'Used, like new - Current', 'Used, acceptable - Current', 'Package Weight', 'Package Height', 'Package Length', 'Package Width']
+2025-05-08 18:42:20,020 DEBUG: Wrote row for ASIN B0065TF4ME
+2025-05-08 18:42:20,020 WARNING: Missing headers for ASIN 1133933424: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-08 18:42:20,021 DEBUG: row_data for ASIN 1133933424: ['ASIN', 'Title', 'Used, good - Current', 'Used, very good - Current', 'Used, like new - Current', 'Used, acceptable - Current', 'Package Weight', 'Package Height', 'Package Length', 'Package Width']
+2025-05-08 18:42:20,021 DEBUG: Wrote row for ASIN 1133933424
+2025-05-08 18:42:20,021 INFO: CSV written: Keepa_Deals_Export.csv
+2025-05-08 18:42:20,021 INFO: Writing CSV...
+2025-05-08 18:42:20,021 INFO: Script completed!
