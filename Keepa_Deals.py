@@ -215,12 +215,14 @@ def used_offer_count_current(product):
     asin = product.get('asin', 'unknown')
     count = 0
     for o in offers:
-        condition = o.get('condition', '')
+        condition = o.get('condition', -1)
         stock = o.get('stock', -1)
-        logging.debug(f"Offer for ASIN {asin}: condition={condition}, stock={stock}")
-        if isinstance(condition, str) and condition.startswith('Used') and stock >= 0:
+        # Keepa condition codes: 2=Used-Like New, 3=Very Good, 4=Good, 5=Acceptable
+        is_used = condition in [2, 3, 4, 5]
+        logging.debug(f"Offer for ASIN {asin}: condition={condition}, stock={stock}, is_used={is_used}")
+        if is_used and stock > 0:  # Strict stock check
             count += 1
-    result = {'Used Offer Count - Current': str(count) if count >= 0 else '0'}
+    result = {'Used Offer Count - Current': str(count)}
     logging.debug(f"used_offer_count_current result for ASIN {asin}: offers={len(offers)}, count={count}")
     print(f"Used Offer Count - Current for ASIN {asin}: {result}")
     return result
