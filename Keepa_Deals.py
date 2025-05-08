@@ -1,4 +1,4 @@
-# Keepa_Deals.py (only Chunk 1 updated)
+# Keepa_Deals.py
 # Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
@@ -235,7 +235,7 @@ def write_csv(rows, deals, diagnostic=False):
                     try:
                         row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
                         row_data.update(row)
-                        missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
+                        missing_headers = [h for h in HEADERS if h not in row_data]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
                         logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
@@ -268,7 +268,45 @@ def main():
         logging.debug(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
         print(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
 
-        # Define functions list using header_map.py
+        # Define untested functions
+        untested_functions = {
+            "New, 3rd Party FBM - 30 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 60 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 90 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 180 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 365 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - Stock": new_3rd_party_fbm,
+            "Used, like new - 30 days avg.": used_like_new,
+            "Used, like new - 60 days avg.": used_like_new,
+            "Used, like new - 90 days avg.": used_like_new,
+            "Used, like new - 180 days avg.": used_like_new,
+            "Used, like new - 365 days avg.": used_like_new,
+            "Used, like new - 90 days OOS": used_like_new,
+            "Used, like new - Stock": used_like_new,
+            "Used, very good - 30 days avg.": used_very_good,
+            "Used, very good - 60 days avg.": used_very_good,
+            "Used, very good - 90 days avg.": used_very_good,
+            "Used, very good - 180 days avg.": used_very_good,
+            "Used, very good - 365 days avg.": used_very_good,
+            "Used, very good - Stock": used_very_good,
+            "Used, good - 30 days avg.": used_good,
+            "Used, good - 60 days avg.": used_good,
+            "Used, good - 90 days avg.": used_good,
+            "Used, good - 180 days avg.": used_good,
+            "Used, good - 365 days avg.": used_good,
+            "Used, good - 90 days OOS": used_good,
+            "Used, good - Stock": used_good,
+            "Used, acceptable - 30 days avg.": used_acceptable,
+            "Used, acceptable - 60 days avg.": used_acceptable,
+            "Used, acceptable - 90 days avg.": used_acceptable,
+            "Used, acceptable - 180 days avg.": used_acceptable,
+            "Used, acceptable - 365 days avg.": used_acceptable,
+            "Used, acceptable - 90 days OOS": used_acceptable,
+            "Used, acceptable - Stock": used_acceptable,
+            "Used Offer Count - Current": used_offer_count_current
+        }
+
+        # Define confirmed functions
         function_order = sorted(
             set([FUNCTION_MAP.get(h) for h in HEADERS if h in FUNCTION_MAP and FUNCTION_MAP[h]]),
             key=lambda f: (
@@ -276,15 +314,15 @@ def main():
                 f.__name__ == 'list_price'
             ) if f else (True, True)
         )
-        functions = function_order
-        logging.debug(f"Unmapped headers: {[h for h in HEADERS if h not in FUNCTION_MAP or not FUNCTION_MAP[h]]}")
+        logging.debug(f"Unmapped headers: {[h for h in HEADERS if h not in FUNCTION_MAP and h not in untested_functions]}")
 
         for deal in deals[:5]:
             asin = deal['asin']
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            for func in functions:
+            # Process confirmed functions
+            for func in function_order:
                 try:
                     result = func(product)
                     if not isinstance(result, dict):
@@ -293,6 +331,17 @@ def main():
                     row.update(result)
                 except Exception as e:
                     logging.error(f"Error in function {func.__name__} for ASIN {asin}: {str(e)}")
+                    raise
+            # Process untested functions
+            for header, func in untested_functions.items():
+                try:
+                    result = func(product)
+                    if not isinstance(result, dict):
+                        logging.error(f"Untested function {func.__name__} returned non-dict: {result}")
+                        raise ValueError(f"Untested function {func.__name__} must return a dictionary")
+                    row.update({k: v for k, v in result.items() if k == header})
+                except Exception as e:
+                    logging.error(f"Error in untested function {func.__name__} for ASIN {asin}: {str(e)}")
                     raise
             rows.append(row)
         write_csv(rows, deals)
