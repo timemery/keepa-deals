@@ -104,7 +104,7 @@ def fetch_deals(page):
 
 # Chunk 3 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=100, rating=1, history=1):
+def fetch_product(asin, days=365, offers=10, rating=1, history=1):
     if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
@@ -115,13 +115,13 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
     print(f"Fetching ASIN {asin}...")
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1"
+    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1&onlyLiveOffers=1"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     for attempt in range(3):
         try:
-            response = requests.get(url, headers=headers, timeout=30)
+            response = requests.get(url, headers=headers, timeout=60)
             logging.debug(f"Response status: {response.status_code}")
-            logging.debug(f"Raw response: {response.text[:2000]}...")
+            logging.debug(f"Raw response: {response.text[:3000]}...")
             if response.status_code != 200:
                 logging.error(f"Request failed: {response.status_code}, {response.text}")
                 print(f"Request failed: {response.status_code}")
@@ -138,10 +138,6 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
             logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}")
             logging.debug(f"Offers for ASIN {asin}: {product.get('offers', [])}")
             logging.debug(f"Offers successful for ASIN {asin}: {product.get('offersSuccessful', False)}")
-            if not product.get('offersSuccessful', False) and attempt < 2:
-                logging.warning(f"Offers not successful for ASIN {asin}, retrying...")
-                time.sleep(5)
-                continue
             time.sleep(1)
             return product
         except Exception as e:
@@ -241,11 +237,12 @@ def used_offer_count_current(product):
     count = 0
     logging.debug(f"Raw offers for ASIN {asin}: {offers}")
     for o in offers:
-        condition = o.get('condition', -1)
+        condition = o.get('condition', '')
         stock = o.get('stock', -1)
-        is_used = condition in [2, 3, 4, 5]  # Used: 2=Like New, 3=Very Good, 4=Good, 5=Acceptable
-        logging.debug(f"Offer for ASIN {asin}: condition={condition}, stock={stock}, is_used={is_used}")
-        if is_used and stock > 0:
+        is_used = isinstance(condition, str) and condition.startswith('Used')
+        is_live = o.get('isLive', False)
+        logging.debug(f"Offer for ASIN {asin}: condition={condition}, stock={stock}, is_used={is_used}, is_live={is_live}")
+        if is_used and is_live and stock > 0:
             count += 1
     result = {'Used Offer Count - Current': str(count)}
     logging.debug(f"used_offer_count_current result for ASIN {asin}: offers={len(offers)}, count={count}")
