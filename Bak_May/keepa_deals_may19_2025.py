@@ -1,5 +1,5 @@
-# Chunk 1 starts
 # Keepa_Deals.py
+# Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
 from stable import (
@@ -7,8 +7,9 @@ from stable import (
     sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg,
     sales_rank_365_days_avg, package_quantity, package_weight, package_height,
     package_length, package_width, used_like_new, used_very_good, used_good,
-    used_acceptable, new_3rd_party_fbm_current
+    used_acceptable, new_3rd_party_fbm_current, list_price
 )
+from function_map import FUNCTION_MAP
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -126,24 +127,6 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 
-def list_price(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
-        'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
-        'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
-        'List Price - 180 days avg.': get_stat_value(stats, 'avg180', 8, divisor=100, is_price=True),
-        'List Price - 365 days avg.': get_stat_value(stats, 'avg365', 8, divisor=100, is_price=True),
-        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
-        'List Price - Stock': '-'
-    }
-    logging.debug(f"list_price result for ASIN {asin}: {result}")
-    print(f"List Price for ASIN {asin}: {result}")
-    return result
-
-# def sales_rank_90_days_avg_dev - moved to stable.py and deleted it from here.
-
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
@@ -226,9 +209,26 @@ def used_acceptable(product):
     logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
     print(f"Used, acceptable for ASIN {asin}: {result}")
     return result
+
+def used_offer_count_current(product):
+    offers = product.get('offers', [])
+    asin = product.get('asin', 'unknown')
+    count = 0
+    for o in offers:
+        condition = o.get('condition', -1)
+        stock = o.get('stock', -1)
+        # Keepa condition codes: 2=Used-Like New, 3=Very Good, 4=Good, 5=Acceptable
+        is_used = condition in [2, 3, 4, 5]
+        logging.debug(f"Offer for ASIN {asin}: condition={condition}, stock={stock}, is_used={is_used}")
+        if is_used and stock > 0:  # Strict stock check
+            count += 1
+    result = {'Used Offer Count - Current': str(count)}
+    logging.debug(f"used_offer_count_current result for ASIN {asin}: offers={len(offers)}, count={count}")
+    print(f"Used Offer Count - Current for ASIN {asin}: {result}")
+    return result
 # Chunk 3 ends
 
-# Chunk 4 starts - Modify write_csv to prioritize non-default values from used_like_new over list_price.
+# Chunk 4 starts
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -243,7 +243,7 @@ def write_csv(rows, deals, diagnostic=False):
                     try:
                         row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
                         row_data.update(row)
-                        missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
+                        missing_headers = [h for h in HEADERS if h not in row_data]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
                         logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
@@ -275,21 +275,82 @@ def main():
             return
         logging.debug(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
         print(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
+
+        # Define untested functions
+        untested_functions = {
+            "New, 3rd Party FBM - 30 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 60 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 90 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 180 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - 365 days avg.": new_3rd_party_fbm,
+            "New, 3rd Party FBM - Stock": new_3rd_party_fbm,
+            "Used, like new - 30 days avg.": used_like_new,
+            "Used, like new - 60 days avg.": used_like_new,
+            "Used, like new - 90 days avg.": used_like_new,
+            "Used, like new - 180 days avg.": used_like_new,
+            "Used, like new - 365 days avg.": used_like_new,
+            "Used, like new - 90 days OOS": used_like_new,
+            "Used, like new - Stock": used_like_new,
+            "Used, very good - 30 days avg.": used_very_good,
+            "Used, very good - 60 days avg.": used_very_good,
+            "Used, very good - 90 days avg.": used_very_good,
+            "Used, very good - 180 days avg.": used_very_good,
+            "Used, very good - 365 days avg.": used_very_good,
+            "Used, very good - Stock": used_very_good,
+            "Used, good - 30 days avg.": used_good,
+            "Used, good - 60 days avg.": used_good,
+            "Used, good - 90 days avg.": used_good,
+            "Used, good - 180 days avg.": used_good,
+            "Used, good - 365 days avg.": used_good,
+            "Used, good - 90 days OOS": used_good,
+            "Used, good - Stock": used_good,
+            "Used, acceptable - 30 days avg.": used_acceptable,
+            "Used, acceptable - 60 days avg.": used_acceptable,
+            "Used, acceptable - 90 days avg.": used_acceptable,
+            "Used, acceptable - 180 days avg.": used_acceptable,
+            "Used, acceptable - 365 days avg.": used_acceptable,
+            "Used, acceptable - 90 days OOS": used_acceptable,
+            "Used, acceptable - Stock": used_acceptable,
+            "Used Offer Count - Current": used_offer_count_current
+        }
+
+        # Define confirmed functions
+        function_order = sorted(
+            set([FUNCTION_MAP.get(h) for h in HEADERS if h in FUNCTION_MAP and FUNCTION_MAP[h]]),
+            key=lambda f: (
+                f.__name__ not in ['used_like_new', 'used_very_good', 'used_good', 'used_acceptable'],
+                f.__name__ == 'list_price'
+            ) if f else (True, True)
+        )
+        logging.debug(f"Unmapped headers: {[h for h in HEADERS if h not in FUNCTION_MAP and h not in untested_functions]}")
+
         for deal in deals[:5]:
             asin = deal['asin']
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
-            functions = [
-                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
-                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                package_quantity, package_weight, package_height, package_length,
-                package_width, used_like_new,
-                used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
-                new_3rd_party_fbm, list_price
-            ]
-            for func in functions:
-                row.update(func(product))
+            # Process confirmed functions
+            for func in function_order:
+                try:
+                    result = func(product)
+                    if not isinstance(result, dict):
+                        logging.error(f"Function {func.__name__} returned non-dict: {result}")
+                        raise ValueError(f"Function {func.__name__} must return a dictionary")
+                    row.update(result)
+                except Exception as e:
+                    logging.error(f"Error in function {func.__name__} for ASIN {asin}: {str(e)}")
+                    raise
+            # Process untested functions
+            for header, func in untested_functions.items():
+                try:
+                    result = func(product)
+                    if not isinstance(result, dict):
+                        logging.error(f"Untested function {func.__name__} returned non-dict: {result}")
+                        raise ValueError(f"Untested function {func.__name__} must return a dictionary")
+                    row.update({k: v for k, v in result.items() if k == header})
+                except Exception as e:
+                    logging.error(f"Error in untested function {func.__name__} for ASIN {asin}: {str(e)}")
+                    raise
             rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
