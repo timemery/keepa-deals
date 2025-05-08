@@ -213,9 +213,15 @@ def used_acceptable(product):
 def used_offer_count_current(product):
     offers = product.get('offers', [])
     asin = product.get('asin', 'unknown')
-    count = sum(1 for o in offers if isinstance(o.get('condition'), str) and o.get('condition').startswith('Used') and o.get('stock', 0) > 0)
-    result = {'Used Offer Count - Current': str(count) if count > 0 else '0'}
-    logging.debug(f"used_offer_count_current result for ASIN {asin}: {result}")
+    count = 0
+    for o in offers:
+        condition = o.get('condition', '')
+        stock = o.get('stock', -1)
+        logging.debug(f"Offer for ASIN {asin}: condition={condition}, stock={stock}")
+        if isinstance(condition, str) and condition.startswith('Used') and stock >= 0:
+            count += 1
+    result = {'Used Offer Count - Current': str(count) if count >= 0 else '0'}
+    logging.debug(f"used_offer_count_current result for ASIN {asin}: offers={len(offers)}, count={count}")
     print(f"Used Offer Count - Current for ASIN {asin}: {result}")
     return result
 # Chunk 3 ends
