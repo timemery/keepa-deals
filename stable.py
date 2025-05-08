@@ -1,4 +1,4 @@
-# stable.py - added import time
+# stable.py
 import logging
 import time
 
@@ -12,8 +12,8 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
             return '-'
         value = value[index]
         logging.debug(f"get_stat_value: key={key}, index={index}, value={value}")
-        if isinstance(value, list):  # Handle min/max [timestamp, price]
-            value = value[1] if len(value) > 1 else -1  # Use price, not timestamp
+        if isinstance(value, list):
+            value = value[1] if len(value) > 1 else -1
         if value == -1 or value is None:
             return '-'
         if is_price:

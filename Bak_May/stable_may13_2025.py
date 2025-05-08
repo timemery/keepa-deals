@@ -1,4 +1,4 @@
-# stable.py - added import time
+# stable.py
 import logging
 import time
 
@@ -12,8 +12,8 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
             return '-'
         value = value[index]
         logging.debug(f"get_stat_value: key={key}, index={index}, value={value}")
-        if isinstance(value, list):  # Handle min/max [timestamp, price]
-            value = value[1] if len(value) > 1 else -1  # Use price, not timestamp
+        if isinstance(value, list):
+            value = value[1] if len(value) > 1 else -1
         if value == -1 or value is None:
             return '-'
         if is_price:
@@ -22,7 +22,7 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
     except (IndexError, TypeError, AttributeError) as e:
         logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
         return '-'
-
+        
 # Title
 def get_title(deal):
     title = deal.get('title', '-')
@@ -139,11 +139,8 @@ def used_like_new(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
     current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
-    offers = product.get('offers', [])
-    like_new_offers = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'Used - Like New']
-    logging.debug(f"used_like_new for ASIN {asin}: current_price={current_price}, like_new_offers={like_new_offers}")
-    result = {'Used, like new - Current': current_price if like_new_offers else '-'}
-    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
+    result = {'Used, like new - Current': current_price}
+    logging.debug(f"used_like_new for ASIN {asin}: stats.current={stats.get('current', [])}, current_price={current_price}")
     return result
 
 # Used, like new - Lowest Highest
