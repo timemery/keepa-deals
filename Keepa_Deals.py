@@ -79,7 +79,8 @@ def fetch_deals(page):
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
         print(f"Fetched {len(deals)} deals")
-        return [{} for deal in deals[:5]]  # ASIN isolation test
+        # Simulate invalid ASINs for test
+        return [{'asin': '-'} for deal in deals[:5]]
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
