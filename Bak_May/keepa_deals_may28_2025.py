@@ -115,14 +115,13 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
     print(f"Fetching ASIN {asin}...")
-    current_time = int(time.time() * 1000)
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1&onlyLiveOffers=1"
+    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     for attempt in range(3):
         try:
-            response = requests.get(url, headers=headers, timeout=60)
+            response = requests.get(url, headers=headers, timeout=30)
             logging.debug(f"Response status: {response.status_code}")
-            logging.debug(f"Raw response: {response.text[:3000]}...")
+            logging.debug(f"Raw response: {response.text[:2000]}...")
             if response.status_code != 200:
                 logging.error(f"Request failed: {response.status_code}, {response.text}")
                 print(f"Request failed: {response.status_code}")
@@ -136,20 +135,13 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
             product = products[0]
             stats = product.get('stats', {})
             current = stats.get('current', [-1] * 30)
-            if not stats or len(current) < 30:  # Validate stats
-                logging.warning(f"Incomplete stats for ASIN {asin}, retrying without onlyLiveOffers...")
-                url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1"
-                response = requests.get(url, headers=headers, timeout=60)
-                if response.status_code == 200:
-                    data = response.json()
-                    products = data.get('products', [])
-                    if products:
-                        product = products[0]
-                        stats = product.get('stats', {})
-                        current = stats.get('current', [-1] * 30)
             logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}")
             logging.debug(f"Offers for ASIN {asin}: {product.get('offers', [])}")
             logging.debug(f"Offers successful for ASIN {asin}: {product.get('offersSuccessful', False)}")
+            if not product.get('offersSuccessful', False) and attempt < 2:
+                logging.warning(f"Offers not successful for ASIN {asin}, retrying...")
+                time.sleep(5)
+                continue
             time.sleep(1)
             return product
         except Exception as e:
