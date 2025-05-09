@@ -23,14 +23,15 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
         logging.error(f"get_stat_value failed: stats={stats}, key={key}, index={index}, error={str(e)}")
         return '-'
                 
-# Title
+# Title - newer but less good
+#def title(product):
+#    title_str = product.get('title', '')
+#    return str(title_str) if title_str else ''
+
+# OLD Title
 def get_title(deal):
     title = deal.get('title', '-')
-    return {'Title': title if title else '-'}
-# OLD Title
-# def get_title(deal):
-#    title = deal.get('title', '-')
-#    return title if title else '-'
+    return title if title else '-'
 
 # ASIN
 def get_asin(deal):
