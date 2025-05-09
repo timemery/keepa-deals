@@ -104,7 +104,7 @@ def fetch_deals(page):
 
 # Chunk 3 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=10, rating=1, history=1):
+def fetch_product(asin, days=365, offers=10, history=1):
     if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
@@ -115,7 +115,7 @@ def fetch_product(asin, days=365, offers=10, rating=1, history=1):
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
     print(f"Fetching ASIN {asin}...")
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1&onlyLiveOffers=1"
+    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&buyBox=1&history={history}&update=1&onlyLiveOffers=1"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     for attempt in range(3):
         try:
@@ -137,7 +137,7 @@ def fetch_product(asin, days=365, offers=10, rating=1, history=1):
             current = stats.get('current', [-1] * 30)
             if not stats or len(current) < 30:  # Validate stats
                 logging.warning(f"Incomplete stats for ASIN {asin}, retrying without onlyLiveOffers...")
-                url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&buyBox=1&history={history}&update=1"
+                url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&buyBox=1&history={history}&update=1"
                 response = requests.get(url, headers=headers, timeout=60)
                 if response.status_code == 200:
                     data = response.json()
