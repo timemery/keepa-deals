@@ -1,3 +1,4 @@
+# Chunk 1 starts - small change to add to git.
 # Keepa_Deals.py
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
@@ -9,7 +10,6 @@ from stable import (
     used_acceptable, new_3rd_party_fbm_current
 )
 
-# Chunk 1 starts
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
@@ -142,6 +142,8 @@ def list_price(product):
     print(f"List Price for ASIN {asin}: {result}")
     return result
 
+# def sales_rank_90_days_avg_dev - moved to stable.py and deleted it from here.
+
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
@@ -226,7 +228,7 @@ def used_acceptable(product):
     return result
 # Chunk 3 ends
 
-# Chunk 4 starts
+# Chunk 4 starts - Modify write_csv to prioritize non-default values from used_like_new over list_price.
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -239,9 +241,9 @@ def write_csv(rows, deals, diagnostic=False):
             else:
                 for deal, row in zip(deals[:len(rows)], rows):
                     try:
-                        row_data = {'ASIN': get_asin(deal)['ASIN'], 'Title': get_title(asin=deal['asin'], api_key=api_key)}
+                        row_data = {'ASIN': get_asin(deal), 'Title': get_title(deal)}
                         row_data.update(row)
-                        missing_headers = [h for h in HEADERS if h not in row_data]
+                        missing_headers = [h for h in HEADERS if h not in row_data and h not in ['ASIN', 'Title']]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
                         logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
