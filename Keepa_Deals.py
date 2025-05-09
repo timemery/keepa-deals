@@ -79,7 +79,7 @@ def fetch_deals(page):
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
         print(f"Fetched {len(deals)} deals")
-        return [{} for deal in deals[:5]]  # Fixed syntax
+        return [{} for deal in deals[:5]]  # ASIN isolation test
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
@@ -284,7 +284,7 @@ def main():
             functions = [
                 sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
                 sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                lambda x: package_quantity(asin, api_key),  # Updated to pass asin, api_key
+                lambda x: package_quantity(asin, api_key),  # Correctly pass asin, api_key
                 package_weight, package_height, package_length, package_width,
                 used_like_new, used_very_good, used_good, used_acceptable,
                 new_3rd_party_fbm_current, new_3rd_party_fbm, list_price
