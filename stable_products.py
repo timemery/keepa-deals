@@ -1,8 +1,10 @@
-# stable.py change to make it visible in changes
-import logging
-import time
-from retrying import retry
+# stable_products.py
 import requests
+import logging
+from retrying import retry
+
+# Shared globals
+API_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
 
 # Chunk 1 starts
 # Global stuff starts
@@ -31,34 +33,36 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
 # Title starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def get_title(asin, api_key):
+    if not validate_asin(asin):
+        return {'Title': '-'}
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=30)
+        response = requests.get(url, headers=API_HEADERS, timeout=30)
         logging.debug(f"get_title response status for ASIN {asin}: {response.status_code}")
         if response.status_code != 200:
             logging.error(f"get_title request failed for ASIN {asin}: {response.status_code}")
-            return '-'
+            return {'Title': '-'}
         data = response.json()
         products = data.get('products', [])
         if not products:
             logging.error(f"get_title no product data for ASIN {asin}")
-            return '-'
+            return {'Title': '-'}
         title = products[0].get('title', '-')
-        logging.debug(f"get_title result for ASIN {asin}: {title}")
-        return title if title else '-'
+        logging.debug(f"get_title result for ASIN {asin}: {title[:50]}")
+        return {'Title': title}
     except Exception as e:
         logging.error(f"get_title fetch failed for ASIN {asin}: {str(e)}")
-        return '-'
+        return {'Title': '-'}
 # Title ends
 
 # ASIN starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def get_asin(asin, api_key):
+    if not validate_asin(asin):  # Use stable_deals.py function
+        return {'ASIN': '-'}
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=30)
+        response = requests.get(url, headers=API_HEADERS, timeout=30)
         logging.debug(f"get_asin response status for ASIN {asin}: {response.status_code}")
         if response.status_code != 200:
             logging.error(f"get_asin request failed for ASIN {asin}: {response.status_code}")
@@ -115,11 +119,12 @@ def sales_rank_365_days_avg(product):
 
 # Package - Quantity starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def package_quantity(asin, api_key):  # Fixed parameter from product to asin, api_key
+def package_quantity(asin, api_key):
+    if not validate_asin(asin):
+        return {'Package - Quantity': '-'}
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=30)
+        response = requests.get(url, headers=API_HEADERS, timeout=30)
         logging.debug(f"package_quantity response status for ASIN {asin}: {response.status_code}")
         if response.status_code != 200:
             logging.error(f"package_quantity request failed for ASIN {asin}: {response.status_code}")
