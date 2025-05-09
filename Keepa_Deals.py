@@ -1,12 +1,16 @@
 # Keepa_Deals.py
+# Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
+from stable_deals import validate_asin
+from stable_products import get_asin, get_title, package_quantity
+from stable_calculations import *  # Empty import
 from stable import (
-    get_stat_value, get_title, get_asin, sales_rank_current, used_current,
-    sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg,
-    sales_rank_365_days_avg, package_quantity, package_weight, package_height,
-    package_length, package_width, used_like_new, used_very_good, used_good,
-    used_acceptable, new_3rd_party_fbm_current
+    sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
+    sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
+    package_weight, package_height, package_length, package_width,
+    used_like_new, used_very_good, used_good, used_acceptable,
+    new_3rd_party_fbm_current, new_3rd_party_fbm, list_price
 )
 
 # Chunk 1 starts
@@ -278,13 +282,16 @@ def main():
         print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
         for deal in deals[:5]:
             asin = deal.get('asin', '-')
+            if not validate_asin(asin):
+                logging.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}")
+                continue
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
             functions = [
                 sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
                 sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                lambda x: package_quantity(asin, api_key),  # Correctly pass asin, api_key
+                lambda x: package_quantity(asin, api_key),
                 package_weight, package_height, package_length, package_width,
                 used_like_new, used_very_good, used_good, used_acceptable,
                 new_3rd_party_fbm_current, new_3rd_party_fbm, list_price
