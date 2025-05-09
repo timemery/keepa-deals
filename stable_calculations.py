@@ -1,2 +1,2 @@
-# stable_calculations.py changes to make it visible in changes
+# stable_calculations.py
 # Empty for now
