@@ -79,8 +79,7 @@ def fetch_deals(page):
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
         print(f"Fetched {len(deals)} deals")
-        # Simulate global change: exclude title from deals
-        return [{'asin': deal['asin']} for deal in deals[:5]]
+        return [{} for deal in deals[:5]]  # Fixed syntax
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
@@ -275,20 +274,20 @@ def main():
             print("No deals fetched, writing diagnostic CSV")
             write_csv([], [], diagnostic=True)
             return
-        logging.debug(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
-        print(f"Deals ASINs: {[d['asin'] for d in deals[:5]]}")
+        logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
+        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
         for deal in deals[:5]:
-            asin = deal['asin']
+            asin = deal.get('asin', '-')
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
             functions = [
                 sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
                 sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                package_quantity, package_weight, package_height, package_length,
-                package_width, used_like_new,
-                used_very_good, used_good, used_acceptable, new_3rd_party_fbm_current,
-                new_3rd_party_fbm, list_price
+                lambda x: package_quantity(asin, api_key),  # Updated to pass asin, api_key
+                package_weight, package_height, package_length, package_width,
+                used_like_new, used_very_good, used_good, used_acceptable,
+                new_3rd_party_fbm_current, new_3rd_party_fbm, list_price
             ]
             for func in functions:
                 row.update(func(product))
