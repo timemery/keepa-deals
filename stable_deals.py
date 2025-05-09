@@ -1,4 +1,4 @@
-# stable_deals.py
+# stable_deals.py change
 import logging
 
 def validate_asin(asin):
