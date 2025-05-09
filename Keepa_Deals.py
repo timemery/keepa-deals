@@ -3,15 +3,15 @@
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
 from stable_deals import validate_asin
-from stable_products import get_asin, get_title, package_quantity
-from stable_calculations import *  # Empty import
-from stable import (
+from stable_products import (
+    get_asin, get_title, package_quantity,
     sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
     sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
     package_weight, package_height, package_length, package_width,
     used_like_new, used_very_good, used_good, used_acceptable,
     new_3rd_party_fbm_current, new_3rd_party_fbm, list_price
 )
+from stable_calculations import *  # Empty import
 
 # Chunk 1 starts
 # Logging

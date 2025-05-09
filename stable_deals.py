@@ -1,4 +1,4 @@
-# stable_deals.py
+# stable_deals.py changed to make it visible in git
 import logging
 
 def validate_asin(asin):
