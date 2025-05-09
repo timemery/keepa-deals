@@ -13,7 +13,6 @@ from stable_products import (
 )
 from stable_calculations import *  # Empty import
 
-# Chunk 1 starts
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
