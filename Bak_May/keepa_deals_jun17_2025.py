@@ -2,7 +2,7 @@
 # Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
-from stable_deals import validate_asin, deal_found, fetch_deals_for_deals
+from stable_deals import validate_asin, deal_found
 from stable_products import (
     get_asin, get_title, package_quantity,
     sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
@@ -12,7 +12,6 @@ from stable_products import (
     new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
     get_stat_value
 )
-from stable_calculations import *  # Empty import
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -63,8 +62,8 @@ def fetch_deals(page):
         "isPrimeExclusive": False,
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
-        "sortType": 0,  # Changed to match reference code
-        "dateRange": "7",  # Changed to match reference code
+        "sortType": 4,
+        "dateRange": "3",
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
@@ -74,7 +73,7 @@ def fetch_deals(page):
     logging.debug(f"Deal URL: {url}")
     try:
         response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Deal response: {response.text[:1000]}...")
+        logging.debug(f"Deal response: {response.text[:500]}...")
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
             print(f"Deal fetch failed: {response.status_code}")
@@ -82,9 +81,7 @@ def fetch_deals(page):
         data = response.json()
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {[d.get('asin', '-') for d in deals[:5]]}")
-        logging.debug(f"Deal response structure: {list(data.get('deals', {}).keys())}")
-        logging.debug(f"First deal keys: {[list(d.keys()) for d in deals[:1]]}")
-        logging.debug(f"First deal full: {deals[:1]}")
+        logging.debug(f"Full deal response: {data}")
         print(f"Fetched {len(deals)} deals")
         return deals[:5]
     except Exception as e:
