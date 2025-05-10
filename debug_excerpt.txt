@@ -1,500 +1,500 @@
-2025-05-09 20:31:46,090 DEBUG: Stats structure for ASIN 0749924357: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerConditionFBM', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedStats'], current_length=34
-2025-05-09 20:31:46,090 DEBUG: CSV field for ASIN 0749924357: [2, 46, 1074, 2846, 'None', 'None', 'None', 6, 'None', 'None', 'None']
-2025-05-09 20:31:46,090 DEBUG: CSV raw data for ASIN 0749924357: [[3146732, -1], [3146732, -1, 3758874, 4666, 3765950, -1, 3949016, 51800, 3951846, 4720], [3146732, 98, 3163496, 97, 3166744, 98, 3173830, 92, 3176726, 98], [3146732, 15359984, 3156412, 15397907, 3163496, 15424120, 3166744, 15437932, 3168608, 15448211], None, None, None, [5630452, 90799, 399, 5743592, -1, -1], None, None, None]
-2025-05-09 20:31:46,091 DEBUG: Sales Rank Drops for ASIN 0749924357: drops90=-1
-2025-05-09 20:31:47,094 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:47,807 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22527
-2025-05-09 20:31:47,941 DEBUG: get_asin response status for ASIN 0749924357: 200
-2025-05-09 20:31:47,942 DEBUG: get_asin result for ASIN 0749924357: 0749924357
-2025-05-09 20:31:47,944 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:48,529 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22524
-2025-05-09 20:31:48,733 DEBUG: get_title response status for ASIN 0749924357: 200
-2025-05-09 20:31:48,735 DEBUG: get_title result for ASIN 0749924357: Women Who Think Too Much : How to Break Free of Ov
-2025-05-09 20:31:48,737 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:49,593 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22525
-2025-05-09 20:31:49,714 DEBUG: package_quantity response status for ASIN 0749924357: 200
-2025-05-09 20:31:49,715 DEBUG: package_quantity result for ASIN 0749924357: 0
-2025-05-09 20:31:49,715 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, 2189, 637165, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -3, 50, 3, -1, -1, 2788, 2589, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-2025-05-09 20:31:49,715 DEBUG: get_stat_value: key=current, index=3, value=637165
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg30, index=3, value=2064868
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg90, index=3, value=6062096
-2025-05-09 20:31:49,716 DEBUG: Sales Rank - 90 days avg. for ASIN 0749924357: {'Sales Rank - 90 days avg.': '6,062,096'}
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg180, index=3, value=8164208
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg365, index=3, value=8698511
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, 2189, 637165, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -3, 50, 3, -1, -1, 2788, 2589, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=current, index=2, value=2189
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg30, index=4, value=-1
-2025-05-09 20:31:49,716 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
-2025-05-09 20:31:49,717 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg90, index=4, value=-1
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg180, index=4, value=-1
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg365, index=4, value=-1
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
-2025-05-09 20:31:49,717 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
-2025-05-09 20:31:49,717 DEBUG: used_like_new result for ASIN 0749924357: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg30, index=5, value=-1
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
-2025-05-09 20:31:49,717 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
-2025-05-09 20:31:49,717 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg90, index=5, value=-1
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg180, index=5, value=-1
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg365, index=5, value=-1
-2025-05-09 20:31:49,718 DEBUG: used_very_good result for ASIN 0749924357: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg30, index=6, value=-1
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
-2025-05-09 20:31:49,718 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg90, index=6, value=-1
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg180, index=6, value=-1
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,718 DEBUG: get_stat_value: key=avg365, index=6, value=-1
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
-2025-05-09 20:31:49,719 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
-2025-05-09 20:31:49,719 DEBUG: used_good result for ASIN 0749924357: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg30, index=7, value=-1
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
-2025-05-09 20:31:49,719 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg90, index=7, value=-1
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg180, index=7, value=-1
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=avg365, index=7, value=-1
-2025-05-09 20:31:49,719 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
-2025-05-09 20:31:49,719 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
-2025-05-09 20:31:49,719 DEBUG: used_acceptable result for ASIN 0749924357: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2189, 637165, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -3, 50, 3, -1, -1, 2788, 2589, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=current, index=1, value=-1
-2025-05-09 20:31:49,720 DEBUG: new_3rd_party_fbm_current result for ASIN 0749924357: {'New, 3rd Party FBM - Current': '-'}
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg30, index=1, value=-1
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
-2025-05-09 20:31:49,720 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg90, index=1, value=-1
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg180, index=1, value=-1
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg365, index=1, value=-1
-2025-05-09 20:31:49,720 DEBUG: new_3rd_party_fbm result for ASIN 0749924357: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
-2025-05-09 20:31:49,720 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 7850, 2064868, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6294, 4778, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6674, -1]
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg30, index=8, value=-1
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
-2025-05-09 20:31:49,721 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, -1, 11545, 6062096, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10819, 7228, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg90, index=8, value=-1
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, -1, 8303, 8164208, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8976, -1]
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg180, index=8, value=-1
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[-1, -1, 4838, 8698511, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=avg365, index=8, value=-1
-2025-05-09 20:31:49,721 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
-2025-05-09 20:31:49,721 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
-2025-05-09 20:31:49,721 DEBUG: list_price result for ASIN 0749924357: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
-2025-05-09 20:31:49,721 INFO: Fetching ASIN B0CS6RL7D6 (3/5)
-2025-05-09 20:31:49,721 DEBUG: Fetching ASIN B0CS6RL7D6 for 365 days, history=1, offers=20...
-2025-05-09 20:31:49,723 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:50,135 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6&stats=365&offers=20&rating=1&stock=1&buyBox=1&history=1 HTTP/1.1" 200 16003
-2025-05-09 20:31:50,247 DEBUG: Response status: 200
-2025-05-09 20:31:50,247 DEBUG: Raw response: {"timestamp":1746837110224,"tokensLeft":269,"refillIn":31483,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":6,"processingTimeInMs":1,"products":[{"csv":[[6860150,2900,6885658,2995,6927280,2845,6990468,2655,7005236,2513,7005388,-1,7173184,2645,7186282,-1],[6860150,2900,6885658,2995,6927280,2845,6990468,2655,7005236,2513,7005388,2846,7012410,-1,7173184,2645,7186282,-1],[6860150,-1,6917984,2965,6929076,2817,6940644,2683,6953510,2549,6960656,-1,7082268,3500,7087276,2800,7090076,2749,710728...
-2025-05-09 20:31:50,248 DEBUG: Stats structure for ASIN B0CS6RL7D6: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerCondition3rdFBA', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedPrice', 'buyBoxUsedShipping', 'buyBoxUsedSellerId', 'buyBoxUsedIsFBA', 'buyBoxUsedCondition', 'buyBoxStats', 'buyBoxUsedStats'], current_length=34
-2025-05-09 20:31:50,249 DEBUG: CSV field for ASIN B0CS6RL7D6: [16, 18, 102, 1034, 72, 'None', 'None', 12, 'None', 10, 'None']
-2025-05-09 20:31:50,249 DEBUG: CSV raw data for ASIN B0CS6RL7D6: [[6860150, 2900, 6885658, 2995, 6927280, 2845, 6990468, 2655, 7005236, 2513], [6860150, 2900, 6885658, 2995, 6927280, 2845, 6990468, 2655, 7005236, 2513], [6860150, -1, 6917984, 2965, 6929076, 2817, 6940644, 2683, 6953510, 2549], [6860684, -1, 6867438, 196489, 6873140, 109303, 6875666, 145653, 6876436, 163977], [6860684, 2900, 6885846, 2995, 6990468, 2795, 7005236, 2645, 7031292, -1], None, None, [6944624, 2846, 0, 6954376, 2846, 1052, 6964212, 2846, 0, 7012410], None, [6918444, 2965, 6933532, 2817, 6940644, 2683, 6954376, 2549, 6960656, -1], None]
-2025-05-09 20:31:50,249 DEBUG: Sales Rank Drops for ASIN B0CS6RL7D6: drops90=-1
-2025-05-09 20:31:51,253 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:51,904 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13226
-2025-05-09 20:31:52,053 DEBUG: get_asin response status for ASIN B0CS6RL7D6: 200
-2025-05-09 20:31:52,054 DEBUG: get_asin result for ASIN B0CS6RL7D6: B0CS6RL7D6
-2025-05-09 20:31:52,056 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:52,621 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13228
-2025-05-09 20:31:52,829 DEBUG: get_title response status for ASIN B0CS6RL7D6: 200
-2025-05-09 20:31:52,830 DEBUG: get_title result for ASIN B0CS6RL7D6: CAPM Exam Prep 2024 : + 700 CAPM Exam Questions, A
-2025-05-09 20:31:52,832 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:53,648 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13229
-2025-05-09 20:31:53,650 DEBUG: package_quantity response status for ASIN B0CS6RL7D6: 200
-2025-05-09 20:31:53,651 DEBUG: package_quantity result for ASIN B0CS6RL7D6: -1
-2025-05-09 20:31:53,652 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, 2400, 1338914, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, 34, 11, -1, -1, -1, 2400, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2400, -1]
-2025-05-09 20:31:53,652 DEBUG: get_stat_value: key=current, index=3, value=1338914
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg30, index=3, value=1295805
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg90, index=3, value=1288616
-2025-05-09 20:31:53,653 DEBUG: Sales Rank - 90 days avg. for ASIN B0CS6RL7D6: {'Sales Rank - 90 days avg.': '1,288,616'}
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg180, index=3, value=2085323
-2025-05-09 20:31:53,653 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg365, index=3, value=1853582
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, 2400, 1338914, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, 34, 11, -1, -1, -1, 2400, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2400, -1]
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=current, index=2, value=2400
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg30, index=4, value=2645
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
-2025-05-09 20:31:53,654 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg90, index=4, value=2644
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg180, index=4, value=2644
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=avg365, index=4, value=2645
-2025-05-09 20:31:53,654 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
-2025-05-09 20:31:53,655 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
-2025-05-09 20:31:53,655 DEBUG: used_like_new result for ASIN B0CS6RL7D6: {'Used, like new - 30 days avg.': '$26.45', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$26.44', 'Used, like new - 180 days avg.': '$26.44', 'Used, like new - 365 days avg.': '$26.45', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg30, index=5, value=-1
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
-2025-05-09 20:31:53,655 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg90, index=5, value=-1
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg180, index=5, value=-1
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg365, index=5, value=-1
-2025-05-09 20:31:53,655 DEBUG: used_very_good result for ASIN B0CS6RL7D6: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,655 DEBUG: get_stat_value: key=avg30, index=6, value=-1
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
-2025-05-09 20:31:53,656 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg90, index=6, value=-1
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg180, index=6, value=-1
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg365, index=6, value=-1
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
-2025-05-09 20:31:53,656 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
-2025-05-09 20:31:53,656 DEBUG: used_good result for ASIN B0CS6RL7D6: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg30, index=7, value=-1
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
-2025-05-09 20:31:53,656 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
-2025-05-09 20:31:53,656 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg90, index=7, value=-1
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg180, index=7, value=-1
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg365, index=7, value=-1
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
-2025-05-09 20:31:53,657 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
-2025-05-09 20:31:53,657 DEBUG: used_acceptable result for ASIN B0CS6RL7D6: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2400, 1338914, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, 34, 11, -1, -1, -1, 2400, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2400, -1]
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=current, index=1, value=-1
-2025-05-09 20:31:53,657 DEBUG: new_3rd_party_fbm_current result for ASIN B0CS6RL7D6: {'New, 3rd Party FBM - Current': '-'}
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg30, index=1, value=-1
-2025-05-09 20:31:53,657 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
-2025-05-09 20:31:53,657 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg90, index=1, value=-1
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg180, index=1, value=-1
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg365, index=1, value=2644
-2025-05-09 20:31:53,658 DEBUG: new_3rd_party_fbm result for ASIN B0CS6RL7D6: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '$26.44', 'New, 3rd Party FBM - Stock': '0'}
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 8990, 1295805, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9152, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9152, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg30, index=8, value=-1
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
-2025-05-09 20:31:53,658 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, -1, 11697, 1288616, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10686, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10686, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg90, index=8, value=-1
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, -1, 9489, 2085323, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8871, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9388, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg180, index=8, value=-1
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[2644, 2644, 6800, 1853582, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8409, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7914, -1]
-2025-05-09 20:31:53,658 DEBUG: get_stat_value: key=avg365, index=8, value=-1
-2025-05-09 20:31:53,659 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
-2025-05-09 20:31:53,659 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
-2025-05-09 20:31:53,659 DEBUG: list_price result for ASIN B0CS6RL7D6: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
-2025-05-09 20:31:53,659 INFO: Fetching ASIN 1580626130 (4/5)
-2025-05-09 20:31:53,659 DEBUG: Fetching ASIN 1580626130 for 365 days, history=1, offers=20...
-2025-05-09 20:31:53,660 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:54,263 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130&stats=365&offers=20&rating=1&stock=1&buyBox=1&history=1 HTTP/1.1" 200 86831
-2025-05-09 20:31:54,673 DEBUG: Response status: 200
-2025-05-09 20:31:54,674 DEBUG: Raw response: {"timestamp":1746837114340,"tokensLeft":260,"refillIn":27367,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":6,"processingTimeInMs":1,"products":[{"csv":[[143280,-1],[138600,270,153780,268,172320,266,184800,260,215280,259,216660,250,228300,248,232740,241,238440,225,245280,224,246540,223,248460,220,250260,219,253020,217,255480,216,256980,215,260760,213,264180,212,267120,211,268920,223,270360,211,505980,269,588540,300,716940,1000,1025040,999,1070340,1000,1160220,997,1208760,1000,1373220,9...
-2025-05-09 20:31:54,678 DEBUG: Stats structure for ASIN 1580626130: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerConditionFBM', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedPrice', 'buyBoxUsedShipping', 'buyBoxUsedSellerId', 'buyBoxUsedIsFBA', 'buyBoxUsedCondition', 'buyBoxUsedStats'], current_length=34
-2025-05-09 20:31:54,678 DEBUG: CSV field for ASIN 1580626130: [2, 332, 1656, 6362, 154, 12, 'None', 60, 'None', 'None', 'None']
-2025-05-09 20:31:54,678 DEBUG: CSV raw data for ASIN 1580626130: [[143280, -1], [138600, 270, 153780, 268, 172320, 266, 184800, 260, 215280, 259], [138600, 1, 1373220, 60, 1440780, 65, 1478280, 64, 1481340, 60], [2152740, 1848577, 2156040, 1939140, 2159400, 2002504, 2162820, 2066905, 2167980, 2150570], [2283317, 595, 4829240, -1, 5587152, 595, 5589056, -1, 5593704, 595], [5877036, 19999, 5886142, 4999, 6002784, 2889, 6225308, -1, 6443460, 6445], None, [3372932, 2000, 399, 3661240, 2500, 399, 3915386, 1400, 399, 3969128], None, None, None]
-2025-05-09 20:31:54,678 DEBUG: Sales Rank Drops for ASIN 1580626130: drops90=-1
-2025-05-09 20:31:55,681 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:56,104 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68086
-2025-05-09 20:31:56,354 DEBUG: get_asin response status for ASIN 1580626130: 200
-2025-05-09 20:31:56,358 DEBUG: get_asin result for ASIN 1580626130: 1580626130
-2025-05-09 20:31:56,360 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:56,798 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68087
-2025-05-09 20:31:57,048 DEBUG: get_title response status for ASIN 1580626130: 200
-2025-05-09 20:31:57,052 DEBUG: get_title result for ASIN 1580626130: The Book of Rudy: The Wit and Wisdom of Rudy Boesc
-2025-05-09 20:31:57,057 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:57,445 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68092
-2025-05-09 20:31:57,679 DEBUG: package_quantity response status for ASIN 1580626130: 200
-2025-05-09 20:31:57,682 DEBUG: package_quantity result for ASIN 1580626130: 1
-2025-05-09 20:31:57,683 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, 2041, 470918, 595, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 3, 45, 18, -1, -1, -1, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,683 DEBUG: get_stat_value: key=current, index=3, value=470918
-2025-05-09 20:31:57,683 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,683 DEBUG: get_stat_value: key=avg30, index=3, value=2468234
-2025-05-09 20:31:57,683 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,683 DEBUG: get_stat_value: key=avg90, index=3, value=3191018
-2025-05-09 20:31:57,683 DEBUG: Sales Rank - 90 days avg. for ASIN 1580626130: {'Sales Rank - 90 days avg.': '3,191,018'}
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg180, index=3, value=3171034
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg365, index=3, value=2935988
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, 2041, 470918, 595, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 3, 45, 18, -1, -1, -1, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=current, index=2, value=2041
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg30, index=4, value=595
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
-2025-05-09 20:31:57,684 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg90, index=4, value=595
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,684 DEBUG: get_stat_value: key=avg180, index=4, value=594
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg365, index=4, value=595
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
-2025-05-09 20:31:57,685 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
-2025-05-09 20:31:57,685 DEBUG: used_like_new result for ASIN 1580626130: {'Used, like new - 30 days avg.': '$5.95', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$5.95', 'Used, like new - 180 days avg.': '$5.94', 'Used, like new - 365 days avg.': '$5.95', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg30, index=5, value=-1
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
-2025-05-09 20:31:57,685 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,685 DEBUG: get_stat_value: key=avg90, index=5, value=-1
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg180, index=5, value=-1
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg365, index=5, value=-1
-2025-05-09 20:31:57,686 DEBUG: used_very_good result for ASIN 1580626130: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg30, index=6, value=-1
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
-2025-05-09 20:31:57,686 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg90, index=6, value=-1
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg180, index=6, value=-1
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=avg365, index=6, value=-1
-2025-05-09 20:31:57,686 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
-2025-05-09 20:31:57,687 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
-2025-05-09 20:31:57,687 DEBUG: used_good result for ASIN 1580626130: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg30, index=7, value=-1
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
-2025-05-09 20:31:57,687 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg90, index=7, value=-1
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg180, index=7, value=-1
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=avg365, index=7, value=-1
-2025-05-09 20:31:57,687 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
-2025-05-09 20:31:57,687 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
-2025-05-09 20:31:57,687 DEBUG: used_acceptable result for ASIN 1580626130: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2041, 470918, 595, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 3, 45, 18, -1, -1, -1, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=current, index=1, value=-1
-2025-05-09 20:31:57,688 DEBUG: new_3rd_party_fbm_current result for ASIN 1580626130: {'New, 3rd Party FBM - Current': '-'}
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg30, index=1, value=-1
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
-2025-05-09 20:31:57,688 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg90, index=1, value=-1
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg180, index=1, value=-1
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg365, index=1, value=2798
-2025-05-09 20:31:57,688 DEBUG: new_3rd_party_fbm result for ASIN 1580626130: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '$27.98', 'New, 3rd Party FBM - Stock': '0'}
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 2041, 2468234, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
-2025-05-09 20:31:57,688 DEBUG: get_stat_value: key=avg30, index=8, value=-1
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
-2025-05-09 20:31:57,689 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, -1, 9205, 3191018, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13712, 11082, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11408, -1]
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg90, index=8, value=-1
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, -1, 6491, 3171034, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7396, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8302, -1]
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg180, index=8, value=-1
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[-1, 2798, 5052, 2935988, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6079, 3691, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=avg365, index=8, value=-1
-2025-05-09 20:31:57,689 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
-2025-05-09 20:31:57,689 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
-2025-05-09 20:31:57,689 DEBUG: list_price result for ASIN 1580626130: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
-2025-05-09 20:31:57,689 INFO: Fetching ASIN 184297291X (5/5)
-2025-05-09 20:31:57,689 DEBUG: Fetching ASIN 184297291X for 365 days, history=1, offers=20...
-2025-05-09 20:31:57,691 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:58,083 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X&stats=365&offers=20&rating=1&stock=1&buyBox=1&history=1 HTTP/1.1" 200 11753
-2025-05-09 20:31:58,183 DEBUG: Response status: 200
-2025-05-09 20:31:58,183 DEBUG: Raw response: {"timestamp":1746837118183,"tokensLeft":251,"refillIn":23524,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":6,"processingTimeInMs":1,"products":[{"csv":[[7231084,-1],[7231084,-1,7237286,3999,7278016,-1,7283048,3999,7301640,3899,7306034,-1,7315664,3899,7338028,-1,7357628,13609,7369238,13326,7371818,12967,7373700,13059,7375204,3899,7386492,12531,7388300,12494,7388548,12439,7391198,12420,7391650,12436,7392656,12550,7393030,12564,7393684,12473,7394618,12540,7395348,4899,7396778,3899,740253...
-2025-05-09 20:31:58,184 DEBUG: Stats structure for ASIN 184297291X: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerCondition3rdFBA', 'stockPerConditionFBM', 'stockBuyBox', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedPrice', 'buyBoxUsedShipping', 'buyBoxUsedSellerId', 'buyBoxUsedIsFBA', 'buyBoxUsedCondition', 'buyBoxStats', 'buyBoxUsedStats'], current_length=34
-2025-05-09 20:31:58,184 DEBUG: CSV field for ASIN 184297291X: [2, 98, 54, 876, 22, 'None', 'None', 81, 'None', 'None', 24]
-2025-05-09 20:31:58,185 DEBUG: CSV raw data for ASIN 184297291X: [[7231084, -1], [7231084, -1, 7237286, 3999, 7278016, -1, 7283048, 3999, 7301640, 3899], [7231084, -1, 7436944, 12595, 7439396, 15384, 7443744, 15376, 7446986, 15302], [7233188, -1, 7243990, 265358, 7244056, 292531, 7246692, 767924, 7251284, 1326834], [7237286, 11999, 7278016, -1, 7283048, 11999, 7306034, -1, 7315664, 11999], None, None, [7243990, 3999, 399, 7278016, -1, -1, 7357744, 13609, 0, 7378156], None, None, [7264276, 3999, 7278016, -1, 7285902, 3999, 7306034, -1, 7378156, 3899]]
-2025-05-09 20:31:58,185 DEBUG: Sales Rank Drops for ASIN 184297291X: drops90=-1
-2025-05-09 20:31:59,191 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:31:59,604 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8406
-2025-05-09 20:31:59,605 DEBUG: get_asin response status for ASIN 184297291X: 200
-2025-05-09 20:31:59,606 DEBUG: get_asin result for ASIN 184297291X: 184297291X
-2025-05-09 20:31:59,608 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:00,000 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8408
-2025-05-09 20:32:00,000 DEBUG: get_title response status for ASIN 184297291X: 200
-2025-05-09 20:32:00,001 DEBUG: get_title result for ASIN 184297291X: That Time I Got Drunk Collection Mead Mishaps Seri
-2025-05-09 20:32:00,003 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:00,400 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 12277
-2025-05-09 20:32:00,511 DEBUG: package_quantity response status for ASIN 184297291X: 200
-2025-05-09 20:32:00,512 DEBUG: package_quantity result for ASIN 184297291X: -1
-2025-05-09 20:32:00,512 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, 3899, 2495, 450662, 11999, -1, -1, 4004, -1, -1, 3899, 6, 1, -1, -1, 7, 50, 1, 3899, 2938, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,512 DEBUG: get_stat_value: key=current, index=3, value=450662
-2025-05-09 20:32:00,512 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg30, index=3, value=431028
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg90, index=3, value=510644
-2025-05-09 20:32:00,513 DEBUG: Sales Rank - 90 days avg. for ASIN 184297291X: {'Sales Rank - 90 days avg.': '510,644'}
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg180, index=3, value=618882
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg365, index=3, value=677804
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, 3899, 2495, 450662, 11999, -1, -1, 4004, -1, -1, 3899, 6, 1, -1, -1, 7, 50, 1, 3899, 2938, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=current, index=2, value=2495
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg30, index=4, value=11999
-2025-05-09 20:32:00,513 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
-2025-05-09 20:32:00,514 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg90, index=4, value=11999
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg180, index=4, value=11999
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg365, index=4, value=11998
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
-2025-05-09 20:32:00,514 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
-2025-05-09 20:32:00,514 DEBUG: used_like_new result for ASIN 184297291X: {'Used, like new - 30 days avg.': '$119.99', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$119.99', 'Used, like new - 180 days avg.': '$119.99', 'Used, like new - 365 days avg.': '$119.98', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg30, index=5, value=-1
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
-2025-05-09 20:32:00,514 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,514 DEBUG: get_stat_value: key=avg90, index=5, value=-1
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg180, index=5, value=-1
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg365, index=5, value=-1
-2025-05-09 20:32:00,515 DEBUG: used_very_good result for ASIN 184297291X: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg30, index=6, value=-1
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
-2025-05-09 20:32:00,515 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg90, index=6, value=-1
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg180, index=6, value=-1
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,515 DEBUG: get_stat_value: key=avg365, index=6, value=-1
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
-2025-05-09 20:32:00,516 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
-2025-05-09 20:32:00,516 DEBUG: used_good result for ASIN 184297291X: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg30, index=7, value=4968
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
-2025-05-09 20:32:00,516 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg90, index=7, value=9712
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg180, index=7, value=10858
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=avg365, index=7, value=9886
-2025-05-09 20:32:00,516 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
-2025-05-09 20:32:00,516 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
-2025-05-09 20:32:00,516 DEBUG: used_acceptable result for ASIN 184297291X: {'Used, acceptable - 30 days avg.': '$49.68', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '$97.12', 'Used, acceptable - 180 days avg.': '$108.58', 'Used, acceptable - 365 days avg.': '$98.86', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, 3899, 2495, 450662, 11999, -1, -1, 4004, -1, -1, 3899, 6, 1, -1, -1, 7, 50, 1, 3899, 2938, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=current, index=1, value=3899
-2025-05-09 20:32:00,517 DEBUG: new_3rd_party_fbm_current result for ASIN 184297291X: {'New, 3rd Party FBM - Current': '$38.99'}
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg30, index=1, value=3900
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
-2025-05-09 20:32:00,517 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg90, index=1, value=4151
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg180, index=1, value=5582
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg365, index=1, value=5306
-2025-05-09 20:32:00,517 DEBUG: new_3rd_party_fbm result for ASIN 184297291X: {'New, 3rd Party FBM - 30 days avg.': '$39.00', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '$41.51', 'New, 3rd Party FBM - 180 days avg.': '$55.82', 'New, 3rd Party FBM - 365 days avg.': '$53.06', 'New, 3rd Party FBM - Stock': '0'}
-2025-05-09 20:32:00,517 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, 3900, 6611, 431028, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6679, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg30, index=8, value=-1
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
-2025-05-09 20:32:00,518 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, 4151, 11439, 510644, 11999, -1, -1, 9712, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg90, index=8, value=-1
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, 5582, 11439, 618882, 11999, -1, -1, 10858, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg180, index=8, value=-1
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[-1, 5306, 11439, 677804, 11998, -1, -1, 9886, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15033, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=avg365, index=8, value=-1
-2025-05-09 20:32:00,518 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
-2025-05-09 20:32:00,518 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
-2025-05-09 20:32:00,518 DEBUG: list_price result for ASIN 184297291X: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
-2025-05-09 20:32:00,520 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:00,932 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=8178230968 HTTP/1.1" 200 62062
-2025-05-09 20:32:01,192 DEBUG: get_asin response status for ASIN 8178230968: 200
-2025-05-09 20:32:01,200 DEBUG: get_asin result for ASIN 8178230968: 8178230968
-2025-05-09 20:32:01,203 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:01,600 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=8178230968 HTTP/1.1" 200 62057
-2025-05-09 20:32:01,842 DEBUG: get_title response status for ASIN 8178230968: 200
-2025-05-09 20:32:01,845 DEBUG: get_title result for ASIN 8178230968: Bhagavad Gita: The Scripture of Mankind
-2025-05-09 20:32:01,845 WARNING: Missing headers for ASIN 8178230968: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
-2025-05-09 20:32:01,846 DEBUG: row_data for ASIN 8178230968: ['ASIN', 'Title', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current', 'Package Weight']
-2025-05-09 20:32:01,846 DEBUG: Wrote row for ASIN 8178230968
-2025-05-09 20:32:01,847 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:02,238 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22525
-2025-05-09 20:32:02,353 DEBUG: get_asin response status for ASIN 0749924357: 200
-2025-05-09 20:32:02,354 DEBUG: get_asin result for ASIN 0749924357: 0749924357
-2025-05-09 20:32:02,356 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:02,717 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 34913
-2025-05-09 20:32:02,867 DEBUG: get_title response status for ASIN 0749924357: 200
-2025-05-09 20:32:02,869 DEBUG: get_title result for ASIN 0749924357: Women Who Think Too Much : How to Break Free of Ov
-2025-05-09 20:32:02,870 WARNING: Missing headers for ASIN 0749924357: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
-2025-05-09 20:32:02,871 DEBUG: row_data for ASIN 0749924357: ['ASIN', 'Title', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current', 'Package Weight']
-2025-05-09 20:32:02,871 DEBUG: Wrote row for ASIN 0749924357
-2025-05-09 20:32:02,872 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:03,273 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13228
-2025-05-09 20:32:03,379 DEBUG: get_asin response status for ASIN B0CS6RL7D6: 200
-2025-05-09 20:32:03,380 DEBUG: get_asin result for ASIN B0CS6RL7D6: B0CS6RL7D6
-2025-05-09 20:32:03,382 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:04,097 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13230
-2025-05-09 20:32:04,215 DEBUG: get_title response status for ASIN B0CS6RL7D6: 200
-2025-05-09 20:32:04,217 DEBUG: get_title result for ASIN B0CS6RL7D6: CAPM Exam Prep 2024 : + 700 CAPM Exam Questions, A
-2025-05-09 20:32:04,218 WARNING: Missing headers for ASIN B0CS6RL7D6: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
-2025-05-09 20:32:04,218 DEBUG: row_data for ASIN B0CS6RL7D6: ['ASIN', 'Title', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current', 'Package Weight']
-2025-05-09 20:32:04,218 DEBUG: Wrote row for ASIN B0CS6RL7D6
-2025-05-09 20:32:04,219 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:04,631 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 108766
-2025-05-09 20:32:04,964 DEBUG: get_asin response status for ASIN 1580626130: 200
-2025-05-09 20:32:04,967 DEBUG: get_asin result for ASIN 1580626130: 1580626130
-2025-05-09 20:32:04,969 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:05,353 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68093
-2025-05-09 20:32:05,600 DEBUG: get_title response status for ASIN 1580626130: 200
-2025-05-09 20:32:05,603 DEBUG: get_title result for ASIN 1580626130: The Book of Rudy: The Wit and Wisdom of Rudy Boesc
-2025-05-09 20:32:05,605 WARNING: Missing headers for ASIN 1580626130: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
-2025-05-09 20:32:05,605 DEBUG: row_data for ASIN 1580626130: ['ASIN', 'Title', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current', 'Package Weight']
-2025-05-09 20:32:05,606 DEBUG: Wrote row for ASIN 1580626130
-2025-05-09 20:32:05,610 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:06,056 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8406
-2025-05-09 20:32:06,058 DEBUG: get_asin response status for ASIN 184297291X: 200
-2025-05-09 20:32:06,058 DEBUG: get_asin result for ASIN 184297291X: 184297291X
-2025-05-09 20:32:06,060 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
-2025-05-09 20:32:06,464 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8406
-2025-05-09 20:32:06,465 DEBUG: get_title response status for ASIN 184297291X: 200
-2025-05-09 20:32:06,466 DEBUG: get_title result for ASIN 184297291X: That Time I Got Drunk Collection Mead Mishaps Seri
-2025-05-09 20:32:06,467 WARNING: Missing headers for ASIN 184297291X: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
-2025-05-09 20:32:06,467 DEBUG: row_data for ASIN 184297291X: ['ASIN', 'Title', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current', 'Package Weight']
-2025-05-09 20:32:06,468 DEBUG: Wrote row for ASIN 184297291X
-2025-05-09 20:32:06,468 INFO: CSV written: Keepa_Deals_Export.csv
-2025-05-09 20:32:06,468 INFO: Writing CSV...
-2025-05-09 20:32:06,468 INFO: Script completed!
+2025-05-09 21:28:20,034 ERROR: No dealDate for deal: {'asin': '0749924357'}
+2025-05-09 21:28:20,036 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:20,470 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22545
+2025-05-09 21:28:20,669 DEBUG: get_asin response status for ASIN 0749924357: 200
+2025-05-09 21:28:20,671 DEBUG: get_asin result for ASIN 0749924357: 0749924357
+2025-05-09 21:28:20,674 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:21,271 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22540
+2025-05-09 21:28:21,389 DEBUG: get_title response status for ASIN 0749924357: 200
+2025-05-09 21:28:21,391 DEBUG: get_title result for ASIN 0749924357: Women Who Think Too Much : How to Break Free of Ov
+2025-05-09 21:28:21,395 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:21,805 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 34962
+2025-05-09 21:28:21,921 DEBUG: package_quantity response status for ASIN 0749924357: 200
+2025-05-09 21:28:21,922 DEBUG: package_quantity result for ASIN 0749924357: 0
+2025-05-09 21:28:21,922 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, 2189, 650023, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -3, 50, 3, -1, -1, 2788, 2589, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=current, index=3, value=650023
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg30, index=3, value=2063419
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg90, index=3, value=6057295
+2025-05-09 21:28:21,923 DEBUG: Sales Rank - 90 days avg. for ASIN 0749924357: {'Sales Rank - 90 days avg.': '6,057,295'}
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg180, index=3, value=8161970
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg365, index=3, value=8697721
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, 2189, 650023, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -3, 50, 3, -1, -1, 2788, 2589, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=current, index=2, value=2189
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,923 DEBUG: get_stat_value: key=avg30, index=4, value=-1
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-09 21:28:21,924 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg90, index=4, value=-1
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg180, index=4, value=-1
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg365, index=4, value=-1
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-09 21:28:21,924 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-09 21:28:21,924 DEBUG: used_like_new result for ASIN 0749924357: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg30, index=5, value=-1
+2025-05-09 21:28:21,924 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-09 21:28:21,924 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg90, index=5, value=-1
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg180, index=5, value=-1
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg365, index=5, value=-1
+2025-05-09 21:28:21,925 DEBUG: used_very_good result for ASIN 0749924357: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg30, index=6, value=-1
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-09 21:28:21,925 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg90, index=6, value=-1
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg180, index=6, value=-1
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,925 DEBUG: get_stat_value: key=avg365, index=6, value=-1
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-09 21:28:21,926 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-09 21:28:21,926 DEBUG: used_good result for ASIN 0749924357: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg30, index=7, value=-1
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-09 21:28:21,926 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg90, index=7, value=-1
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg180, index=7, value=-1
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=avg365, index=7, value=-1
+2025-05-09 21:28:21,926 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-09 21:28:21,926 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-09 21:28:21,927 DEBUG: used_acceptable result for ASIN 0749924357: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2189, 650023, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -3, 50, 3, -1, -1, 2788, 2589, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=current, index=1, value=-1
+2025-05-09 21:28:21,927 DEBUG: new_3rd_party_fbm_current result for ASIN 0749924357: {'New, 3rd Party FBM - Current': '-'}
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg30, index=1, value=-1
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-09 21:28:21,927 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg90, index=1, value=-1
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg180, index=1, value=-1
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg365, index=1, value=-1
+2025-05-09 21:28:21,927 DEBUG: new_3rd_party_fbm result for ASIN 0749924357: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-09 21:28:21,927 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 7839, 2063419, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 50, 3, -1, -1, 6283, 4763, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6668, -1]
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg30, index=8, value=-1
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
+2025-05-09 21:28:21,928 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, -1, 11542, 6057295, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 50, 3, -1, -1, 10812, 7222, 32669, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11228, -1]
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg90, index=8, value=-1
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, -1, 8303, 8161970, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 47, 436, -1, -1, 6913, 5317, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8980, -1]
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg180, index=8, value=-1
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[-1, -1, 4838, 8697721, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, 45, 773, -1, -1, 4057, 3913, 28586, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5820, -1]
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=avg365, index=8, value=-1
+2025-05-09 21:28:21,928 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
+2025-05-09 21:28:21,928 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
+2025-05-09 21:28:21,928 DEBUG: list_price result for ASIN 0749924357: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
+2025-05-09 21:28:21,928 INFO: Fetching ASIN B0CS6RL7D6 (3/5)
+2025-05-09 21:28:21,928 DEBUG: Fetching ASIN B0CS6RL7D6 for 365 days, history=1, offers=20...
+2025-05-09 21:28:21,930 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:27,594 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6&stats=365&offers=20&rating=1&stock=1&buyBox=1&history=1 HTTP/1.1" 200 16003
+2025-05-09 21:28:27,742 DEBUG: Response status: 200
+2025-05-09 21:28:27,742 DEBUG: Raw response: {"timestamp":1746840502404,"tokensLeft":269,"refillIn":6601,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":6,"processingTimeInMs":5224,"products":[{"csv":[[6860150,2900,6885658,2995,6927280,2845,6990468,2655,7005236,2513,7005388,-1,7173184,2645,7186282,-1],[6860150,2900,6885658,2995,6927280,2845,6990468,2655,7005236,2513,7005388,2846,7012410,-1,7173184,2645,7186282,-1],[6860150,-1,6917984,2965,6929076,2817,6940644,2683,6953510,2549,6960656,-1,7082268,3500,7087276,2800,7090076,2749,7107...
+2025-05-09 21:28:27,744 DEBUG: Stats structure for ASIN B0CS6RL7D6: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerCondition3rdFBA', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedPrice', 'buyBoxUsedShipping', 'buyBoxUsedSellerId', 'buyBoxUsedIsFBA', 'buyBoxUsedCondition', 'buyBoxStats', 'buyBoxUsedStats'], current_length=34
+2025-05-09 21:28:27,744 DEBUG: CSV field for ASIN B0CS6RL7D6: [16, 18, 102, 1036, 72, 'None', 'None', 12, 'None', 10, 'None']
+2025-05-09 21:28:27,744 DEBUG: CSV raw data for ASIN B0CS6RL7D6: [[6860150, 2900, 6885658, 2995, 6927280, 2845, 6990468, 2655, 7005236, 2513], [6860150, 2900, 6885658, 2995, 6927280, 2845, 6990468, 2655, 7005236, 2513], [6860150, -1, 6917984, 2965, 6929076, 2817, 6940644, 2683, 6953510, 2549], [6860684, -1, 6867438, 196489, 6873140, 109303, 6875666, 145653, 6876436, 163977], [6860684, 2900, 6885846, 2995, 6990468, 2795, 7005236, 2645, 7031292, -1], None, None, [6944624, 2846, 0, 6954376, 2846, 1052, 6964212, 2846, 0, 7012410], None, [6918444, 2965, 6933532, 2817, 6940644, 2683, 6954376, 2549, 6960656, -1], None]
+2025-05-09 21:28:27,744 DEBUG: Sales Rank Drops for ASIN B0CS6RL7D6: drops90=-1
+2025-05-09 21:28:28,745 ERROR: No dealDate for deal: {'asin': 'B0CS6RL7D6'}
+2025-05-09 21:28:28,747 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:29,168 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13233
+2025-05-09 21:28:29,370 DEBUG: get_asin response status for ASIN B0CS6RL7D6: 200
+2025-05-09 21:28:29,372 DEBUG: get_asin result for ASIN B0CS6RL7D6: B0CS6RL7D6
+2025-05-09 21:28:29,373 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:29,797 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 19349
+2025-05-09 21:28:29,920 DEBUG: get_title response status for ASIN B0CS6RL7D6: 200
+2025-05-09 21:28:29,922 DEBUG: get_title result for ASIN B0CS6RL7D6: CAPM Exam Prep 2024 : + 700 CAPM Exam Questions, A
+2025-05-09 21:28:29,926 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:30,370 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13230
+2025-05-09 21:28:30,496 DEBUG: package_quantity response status for ASIN B0CS6RL7D6: 200
+2025-05-09 21:28:30,499 DEBUG: package_quantity result for ASIN B0CS6RL7D6: -1
+2025-05-09 21:28:30,507 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, 2400, 1337190, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, 34, 11, -1, -1, -1, 2400, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2400, -1]
+2025-05-09 21:28:30,507 DEBUG: get_stat_value: key=current, index=3, value=1337190
+2025-05-09 21:28:30,509 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,510 DEBUG: get_stat_value: key=avg30, index=3, value=1295886
+2025-05-09 21:28:30,510 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,510 DEBUG: get_stat_value: key=avg90, index=3, value=1288630
+2025-05-09 21:28:30,510 DEBUG: Sales Rank - 90 days avg. for ASIN B0CS6RL7D6: {'Sales Rank - 90 days avg.': '1,288,630'}
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=avg180, index=3, value=2085126
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=avg365, index=3, value=1853666
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, 2400, 1337190, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, 34, 11, -1, -1, -1, 2400, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2400, -1]
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=current, index=2, value=2400
+2025-05-09 21:28:30,511 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,512 DEBUG: get_stat_value: key=avg30, index=4, value=2645
+2025-05-09 21:28:30,512 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-09 21:28:30,512 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg90, index=4, value=2644
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg180, index=4, value=2644
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg365, index=4, value=2645
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-09 21:28:30,513 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-09 21:28:30,513 DEBUG: used_like_new result for ASIN B0CS6RL7D6: {'Used, like new - 30 days avg.': '$26.45', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$26.44', 'Used, like new - 180 days avg.': '$26.44', 'Used, like new - 365 days avg.': '$26.45', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,513 DEBUG: get_stat_value: key=avg30, index=5, value=-1
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-09 21:28:30,514 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg90, index=5, value=-1
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg180, index=5, value=-1
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg365, index=5, value=-1
+2025-05-09 21:28:30,514 DEBUG: used_very_good result for ASIN B0CS6RL7D6: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg30, index=6, value=-1
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-09 21:28:30,514 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-09 21:28:30,514 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg90, index=6, value=-1
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg180, index=6, value=-1
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg365, index=6, value=-1
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-09 21:28:30,515 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-09 21:28:30,515 DEBUG: used_good result for ASIN B0CS6RL7D6: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg30, index=7, value=-1
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-09 21:28:30,515 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,515 DEBUG: get_stat_value: key=avg90, index=7, value=-1
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg180, index=7, value=-1
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg365, index=7, value=-1
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-09 21:28:30,516 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-09 21:28:30,516 DEBUG: used_acceptable result for ASIN B0CS6RL7D6: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2400, 1337190, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 1, 34, 11, -1, -1, -1, 2400, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2400, -1]
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=current, index=1, value=-1
+2025-05-09 21:28:30,516 DEBUG: new_3rd_party_fbm_current result for ASIN B0CS6RL7D6: {'New, 3rd Party FBM - Current': '-'}
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg30, index=1, value=-1
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-09 21:28:30,516 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-09 21:28:30,516 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg90, index=1, value=-1
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg180, index=1, value=-1
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg365, index=1, value=2644
+2025-05-09 21:28:30,517 DEBUG: new_3rd_party_fbm result for ASIN B0CS6RL7D6: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '$26.44', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 8957, 1295886, 2645, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 9118, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9118, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg30, index=8, value=-1
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
+2025-05-09 21:28:30,517 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, -1, 11692, 1288630, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 10682, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10682, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg90, index=8, value=-1
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, -1, 9486, 2085126, 2644, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 34, 11, -1, -1, -1, 8869, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 9385, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg180, index=8, value=-1
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[2644, 2644, 6799, 1853666, 2645, -1, -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, 34, 9, 2644, -1, 3104, 8407, 3198, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7912, -1]
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=avg365, index=8, value=-1
+2025-05-09 21:28:30,517 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
+2025-05-09 21:28:30,518 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
+2025-05-09 21:28:30,518 DEBUG: list_price result for ASIN B0CS6RL7D6: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
+2025-05-09 21:28:30,518 INFO: Fetching ASIN 1580626130 (4/5)
+2025-05-09 21:28:30,518 DEBUG: Fetching ASIN 1580626130 for 365 days, history=1, offers=20...
+2025-05-09 21:28:30,519 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:33,625 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130&stats=365&offers=20&rating=1&stock=1&buyBox=1&history=1 HTTP/1.1" 200 86876
+2025-05-09 21:28:33,872 DEBUG: Response status: 200
+2025-05-09 21:28:33,872 DEBUG: Raw response: {"timestamp":1746840511029,"tokensLeft":264,"refillIn":531,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":2,"processingTimeInMs":2669,"products":[{"csv":[[143280,-1],[138600,270,153780,268,172320,266,184800,260,215280,259,216660,250,228300,248,232740,241,238440,225,245280,224,246540,223,248460,220,250260,219,253020,217,255480,216,256980,215,260760,213,264180,212,267120,211,268920,223,270360,211,505980,269,588540,300,716940,1000,1025040,999,1070340,1000,1160220,997,1208760,1000,1373220,...
+2025-05-09 21:28:33,878 DEBUG: Stats structure for ASIN 1580626130: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerConditionFBM', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedPrice', 'buyBoxUsedShipping', 'buyBoxUsedSellerId', 'buyBoxUsedIsFBA', 'buyBoxUsedCondition', 'buyBoxUsedStats'], current_length=34
+2025-05-09 21:28:33,878 DEBUG: CSV field for ASIN 1580626130: [2, 332, 1656, 6364, 154, 12, 'None', 60, 'None', 'None', 'None']
+2025-05-09 21:28:33,878 DEBUG: CSV raw data for ASIN 1580626130: [[143280, -1], [138600, 270, 153780, 268, 172320, 266, 184800, 260, 215280, 259], [138600, 1, 1373220, 60, 1440780, 65, 1478280, 64, 1481340, 60], [2152740, 1848577, 2156040, 1939140, 2159400, 2002504, 2162820, 2066905, 2167980, 2150570], [2283317, 595, 4829240, -1, 5587152, 595, 5589056, -1, 5593704, 595], [5877036, 19999, 5886142, 4999, 6002784, 2889, 6225308, -1, 6443460, 6445], None, [3372932, 2000, 399, 3661240, 2500, 399, 3915386, 1400, 399, 3969128], None, None, None]
+2025-05-09 21:28:33,879 DEBUG: Sales Rank Drops for ASIN 1580626130: drops90=-1
+2025-05-09 21:28:34,880 ERROR: No dealDate for deal: {'asin': '1580626130'}
+2025-05-09 21:28:34,882 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:36,411 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68122
+2025-05-09 21:28:36,760 DEBUG: get_asin response status for ASIN 1580626130: 200
+2025-05-09 21:28:36,764 DEBUG: get_asin result for ASIN 1580626130: 1580626130
+2025-05-09 21:28:36,766 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:37,159 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 108750
+2025-05-09 21:28:37,510 DEBUG: get_title response status for ASIN 1580626130: 200
+2025-05-09 21:28:37,513 DEBUG: get_title result for ASIN 1580626130: The Book of Rudy: The Wit and Wisdom of Rudy Boesc
+2025-05-09 21:28:37,516 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:37,895 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68129
+2025-05-09 21:28:38,150 DEBUG: package_quantity response status for ASIN 1580626130: 200
+2025-05-09 21:28:38,153 DEBUG: package_quantity result for ASIN 1580626130: 1
+2025-05-09 21:28:38,154 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, -1, 2041, 487606, 595, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 3, 45, 18, -1, -1, -1, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,154 DEBUG: get_stat_value: key=current, index=3, value=487606
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg30, index=3, value=2467314
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg90, index=3, value=3189634
+2025-05-09 21:28:38,155 DEBUG: Sales Rank - 90 days avg. for ASIN 1580626130: {'Sales Rank - 90 days avg.': '3,189,634'}
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg180, index=3, value=3170416
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg365, index=3, value=2935557
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, -1, 2041, 487606, 595, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 3, 45, 18, -1, -1, -1, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=current, index=2, value=2041
+2025-05-09 21:28:38,155 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg30, index=4, value=595
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-09 21:28:38,156 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg90, index=4, value=595
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg180, index=4, value=594
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg365, index=4, value=595
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-09 21:28:38,156 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-09 21:28:38,156 DEBUG: used_like_new result for ASIN 1580626130: {'Used, like new - 30 days avg.': '$5.95', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$5.95', 'Used, like new - 180 days avg.': '$5.94', 'Used, like new - 365 days avg.': '$5.95', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,156 DEBUG: get_stat_value: key=avg30, index=5, value=-1
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-09 21:28:38,157 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg90, index=5, value=-1
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg180, index=5, value=-1
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg365, index=5, value=-1
+2025-05-09 21:28:38,157 DEBUG: used_very_good result for ASIN 1580626130: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg30, index=6, value=-1
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-09 21:28:38,157 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-09 21:28:38,157 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg90, index=6, value=-1
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg180, index=6, value=-1
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg365, index=6, value=-1
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-09 21:28:38,158 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-09 21:28:38,158 DEBUG: used_good result for ASIN 1580626130: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg30, index=7, value=-1
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-09 21:28:38,158 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg90, index=7, value=-1
+2025-05-09 21:28:38,158 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg180, index=7, value=-1
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg365, index=7, value=-1
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-09 21:28:38,159 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-09 21:28:38,159 DEBUG: used_acceptable result for ASIN 1580626130: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2041, 487606, 595, -1, -1, -1, -1, -1, -1, -1, 3, -1, -1, 3, 45, 18, -1, -1, -1, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=current, index=1, value=-1
+2025-05-09 21:28:38,159 DEBUG: new_3rd_party_fbm_current result for ASIN 1580626130: {'New, 3rd Party FBM - Current': '-'}
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg30, index=1, value=-1
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-09 21:28:38,159 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,159 DEBUG: get_stat_value: key=avg90, index=1, value=-1
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg180, index=1, value=-1
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg365, index=1, value=2798
+2025-05-09 21:28:38,160 DEBUG: new_3rd_party_fbm result for ASIN 1580626130: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '$27.98', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 2041, 2467314, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 2450, 2449, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, -1]
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg30, index=8, value=-1
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
+2025-05-09 21:28:38,160 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, -1, 9200, 3189634, 595, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 13714, 11078, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11404, -1]
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg90, index=8, value=-1
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, -1, 6490, 3170416, 594, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 45, 18, -1, -1, 11791, 7395, 2066, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8301, -1]
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg180, index=8, value=-1
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[-1, 2798, 5052, 2935557, 595, -1, -1, -1, -1, -1, -1, 0, 3, -1, -1, -1, 45, 18, -1, -1, 10144, 6078, 3690, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6671, -1]
+2025-05-09 21:28:38,160 DEBUG: get_stat_value: key=avg365, index=8, value=-1
+2025-05-09 21:28:38,161 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
+2025-05-09 21:28:38,161 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
+2025-05-09 21:28:38,161 DEBUG: list_price result for ASIN 1580626130: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
+2025-05-09 21:28:38,161 INFO: Fetching ASIN 184297291X (5/5)
+2025-05-09 21:28:38,161 DEBUG: Fetching ASIN 184297291X for 365 days, history=1, offers=20...
+2025-05-09 21:28:38,162 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:46,348 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X&stats=365&offers=20&rating=1&stock=1&buyBox=1&history=1 HTTP/1.1" 200 17280
+2025-05-09 21:28:46,472 DEBUG: Response status: 200
+2025-05-09 21:28:46,472 DEBUG: Raw response: {"timestamp":1746840518642,"tokensLeft":260,"refillIn":48080,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":6,"processingTimeInMs":7707,"products":[{"csv":[[7231084,-1],[7231084,-1,7237286,3999,7278016,-1,7283048,3999,7301640,3899,7306034,-1,7315664,3899,7338028,-1,7357628,13609,7369238,13326,7371818,12967,7373700,13059,7375204,3899,7386492,12531,7388300,12494,7388548,12439,7391198,12420,7391650,12436,7392656,12550,7393030,12564,7393684,12473,7394618,12540,7395348,4899,7396778,3899,740...
+2025-05-09 21:28:46,473 DEBUG: Stats structure for ASIN 184297291X: keys=['current', 'avg', 'avg30', 'avg90', 'avg180', 'avg365', 'atIntervalStart', 'min', 'max', 'minInInterval', 'maxInInterval', 'isLowest', 'isLowest90', 'outOfStockPercentageInInterval', 'outOfStockPercentage365', 'outOfStockPercentage180', 'outOfStockPercentage90', 'outOfStockPercentage30', 'outOfStockCountAmazon30', 'outOfStockCountAmazon90', 'deltaPercent90_monthlySold', 'stockPerCondition3rdFBA', 'stockPerConditionFBM', 'stockBuyBox', 'retrievedOfferCount', 'totalOfferCount', 'tradeInPrice', 'lastOffersUpdate', 'isAddonItem', 'lightningDealInfo', 'sellerIdsLowestFBA', 'sellerIdsLowestFBM', 'offerCountFBA', 'offerCountFBM', 'salesRankDrops30', 'salesRankDrops90', 'salesRankDrops180', 'salesRankDrops365', 'buyBoxPrice', 'buyBoxShipping', 'buyBoxIsUnqualified', 'buyBoxIsShippable', 'buyBoxIsPreorder', 'buyBoxIsFBA', 'buyBoxIsAmazon', 'buyBoxIsMAP', 'buyBoxIsUsed', 'buyBoxIsBackorder', 'buyBoxIsPrimeExclusive', 'buyBoxIsFreeShippingEligible', 'buyBoxIsPrimePantry', 'buyBoxIsPrimeEligible', 'buyBoxMinOrderQuantity', 'buyBoxMaxOrderQuantity', 'buyBoxCondition', 'lastBuyBoxUpdate', 'buyBoxAvailabilityMessage', 'buyBoxShippingCountry', 'buyBoxSellerId', 'buyBoxIsWarehouseDeal', 'buyBoxUsedPrice', 'buyBoxUsedShipping', 'buyBoxUsedSellerId', 'buyBoxUsedIsFBA', 'buyBoxUsedCondition', 'buyBoxStats', 'buyBoxUsedStats'], current_length=34
+2025-05-09 21:28:46,473 DEBUG: CSV field for ASIN 184297291X: [2, 98, 54, 878, 22, 'None', 'None', 81, 'None', 'None', 24]
+2025-05-09 21:28:46,473 DEBUG: CSV raw data for ASIN 184297291X: [[7231084, -1], [7231084, -1, 7237286, 3999, 7278016, -1, 7283048, 3999, 7301640, 3899], [7231084, -1, 7436944, 12595, 7439396, 15384, 7443744, 15376, 7446986, 15302], [7233188, -1, 7243990, 265358, 7244056, 292531, 7246692, 767924, 7251284, 1326834], [7237286, 11999, 7278016, -1, 7283048, 11999, 7306034, -1, 7315664, 11999], None, None, [7243990, 3999, 399, 7278016, -1, -1, 7357744, 13609, 0, 7378156], None, None, [7264276, 3999, 7278016, -1, 7285902, 3999, 7306034, -1, 7378156, 3899]]
+2025-05-09 21:28:46,473 DEBUG: Sales Rank Drops for ASIN 184297291X: drops90=-1
+2025-05-09 21:28:47,475 ERROR: No dealDate for deal: {'asin': '184297291X'}
+2025-05-09 21:28:47,477 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:47,854 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8423
+2025-05-09 21:28:47,855 DEBUG: get_asin response status for ASIN 184297291X: 200
+2025-05-09 21:28:47,855 DEBUG: get_asin result for ASIN 184297291X: 184297291X
+2025-05-09 21:28:47,857 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:48,340 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8424
+2025-05-09 21:28:48,341 DEBUG: get_title response status for ASIN 184297291X: 200
+2025-05-09 21:28:48,343 DEBUG: get_title result for ASIN 184297291X: That Time I Got Drunk Collection Mead Mishaps Seri
+2025-05-09 21:28:48,345 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:48,739 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8422
+2025-05-09 21:28:48,742 DEBUG: package_quantity response status for ASIN 184297291X: 200
+2025-05-09 21:28:48,743 DEBUG: package_quantity result for ASIN 184297291X: -1
+2025-05-09 21:28:48,744 DEBUG: get_stat_value: key=current, index=3, stats[current]=[-1, 3899, 2495, 463214, 11999, -1, -1, 4004, -1, -1, 3899, 6, 1, -1, -1, 7, 50, 1, 3899, 2938, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,744 DEBUG: get_stat_value: key=current, index=3, value=463214
+2025-05-09 21:28:48,744 DEBUG: get_stat_value: key=avg30, index=3, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,744 DEBUG: get_stat_value: key=avg30, index=3, value=430324
+2025-05-09 21:28:48,744 DEBUG: get_stat_value: key=avg90, index=3, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg90, index=3, value=510729
+2025-05-09 21:28:48,745 DEBUG: Sales Rank - 90 days avg. for ASIN 184297291X: {'Sales Rank - 90 days avg.': '510,729'}
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg180, index=3, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg180, index=3, value=618919
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg365, index=3, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg365, index=3, value=677763
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=current, index=2, stats[current]=[-1, 3899, 2495, 463214, 11999, -1, -1, 4004, -1, -1, 3899, 6, 1, -1, -1, 7, 50, 1, 3899, 2938, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=current, index=2, value=2495
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg30, index=4, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg30, index=4, value=11999
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg60, index=4, stats[avg60]=[]
+2025-05-09 21:28:48,745 WARNING: get_stat_value: No data for key=avg60, index=4, returning '-'
+2025-05-09 21:28:48,745 DEBUG: get_stat_value: key=avg90, index=4, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg90, index=4, value=11999
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg180, index=4, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg180, index=4, value=11999
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg365, index=4, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg365, index=4, value=11998
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=outOfStock90, index=4, stats[outOfStock90]=[]
+2025-05-09 21:28:48,746 WARNING: get_stat_value: No data for key=outOfStock90, index=4, returning '-'
+2025-05-09 21:28:48,746 DEBUG: used_like_new result for ASIN 184297291X: {'Used, like new - 30 days avg.': '$119.99', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$119.99', 'Used, like new - 180 days avg.': '$119.99', 'Used, like new - 365 days avg.': '$119.98', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg30, index=5, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg30, index=5, value=-1
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg60, index=5, stats[avg60]=[]
+2025-05-09 21:28:48,746 WARNING: get_stat_value: No data for key=avg60, index=5, returning '-'
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg90, index=5, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg90, index=5, value=-1
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg180, index=5, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,746 DEBUG: get_stat_value: key=avg180, index=5, value=-1
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg365, index=5, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg365, index=5, value=-1
+2025-05-09 21:28:48,747 DEBUG: used_very_good result for ASIN 184297291X: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg30, index=6, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg30, index=6, value=-1
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg60, index=6, stats[avg60]=[]
+2025-05-09 21:28:48,747 WARNING: get_stat_value: No data for key=avg60, index=6, returning '-'
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg90, index=6, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg90, index=6, value=-1
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg180, index=6, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg180, index=6, value=-1
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg365, index=6, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=avg365, index=6, value=-1
+2025-05-09 21:28:48,747 DEBUG: get_stat_value: key=outOfStock90, index=6, stats[outOfStock90]=[]
+2025-05-09 21:28:48,747 WARNING: get_stat_value: No data for key=outOfStock90, index=6, returning '-'
+2025-05-09 21:28:48,748 DEBUG: used_good result for ASIN 184297291X: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg30, index=7, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg30, index=7, value=4968
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg60, index=7, stats[avg60]=[]
+2025-05-09 21:28:48,748 WARNING: get_stat_value: No data for key=avg60, index=7, returning '-'
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg90, index=7, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg90, index=7, value=9707
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg180, index=7, value=10856
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=avg365, index=7, value=9885
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
+2025-05-09 21:28:48,748 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
+2025-05-09 21:28:48,748 DEBUG: used_acceptable result for ASIN 184297291X: {'Used, acceptable - 30 days avg.': '$49.68', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '$97.07', 'Used, acceptable - 180 days avg.': '$108.56', 'Used, acceptable - 365 days avg.': '$98.85', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+2025-05-09 21:28:48,748 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, 3899, 2495, 463214, 11999, -1, -1, 4004, -1, -1, 3899, 6, 1, -1, -1, 7, 50, 1, 3899, 2938, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=current, index=1, value=3899
+2025-05-09 21:28:48,749 DEBUG: new_3rd_party_fbm_current result for ASIN 184297291X: {'New, 3rd Party FBM - Current': '$38.99'}
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg30, index=1, value=3900
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
+2025-05-09 21:28:48,749 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg90, index=1, value=4151
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg180, index=1, value=5581
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg365, index=1, value=5306
+2025-05-09 21:28:48,749 DEBUG: new_3rd_party_fbm result for ASIN 184297291X: {'New, 3rd Party FBM - 30 days avg.': '$39.00', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '$41.51', 'New, 3rd Party FBM - 180 days avg.': '$55.81', 'New, 3rd Party FBM - 365 days avg.': '$53.06', 'New, 3rd Party FBM - Stock': '0'}
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, 3900, 6594, 430324, 11999, -1, -1, 4968, -1, -1, 3902, 5, 1, -1, -1, -1, 50, 1, 3900, 2937, -1, 6667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,749 DEBUG: get_stat_value: key=avg30, index=8, value=-1
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg60, index=8, stats[avg60]=[]
+2025-05-09 21:28:48,750 WARNING: get_stat_value: No data for key=avg60, index=8, returning '-'
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg90, index=8, stats[avg90]=[-1, 4151, 11434, 510729, 11999, -1, -1, 9707, -1, -1, 4194, 4, 0, -1, -1, -1, 50, 1, 4151, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg90, index=8, value=-1
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg180, index=8, stats[avg180]=[-1, 5581, 11434, 618919, 11999, -1, -1, 10856, -1, -1, 4117, 2, 0, -1, -1, -1, 50, 1, 4062, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg180, index=8, value=-1
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg365, index=8, stats[avg365]=[-1, 5306, 11434, 677763, 11998, -1, -1, 9885, -1, -1, 4106, 2, 0, -1, -1, -1, 50, 1, 4075, 15013, -1, 9387, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2938, -1]
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=avg365, index=8, value=-1
+2025-05-09 21:28:48,750 DEBUG: get_stat_value: key=outOfStock90, index=8, stats[outOfStock90]=[]
+2025-05-09 21:28:48,750 WARNING: get_stat_value: No data for key=outOfStock90, index=8, returning '-'
+2025-05-09 21:28:48,750 DEBUG: list_price result for ASIN 184297291X: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
+2025-05-09 21:28:48,752 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:49,129 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=8178230968 HTTP/1.1" 200 62063
+2025-05-09 21:28:49,393 DEBUG: get_asin response status for ASIN 8178230968: 200
+2025-05-09 21:28:49,396 DEBUG: get_asin result for ASIN 8178230968: 8178230968
+2025-05-09 21:28:49,398 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:49,785 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=8178230968 HTTP/1.1" 200 62065
+2025-05-09 21:28:50,037 DEBUG: get_title response status for ASIN 8178230968: 200
+2025-05-09 21:28:50,040 DEBUG: get_title result for ASIN 8178230968: Bhagavad Gita: The Scripture of Mankind
+2025-05-09 21:28:50,041 WARNING: Missing headers for ASIN 8178230968: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-09 21:28:50,041 DEBUG: row_data for ASIN 8178230968: ['ASIN', 'Title', 'Deal found', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current']
+2025-05-09 21:28:50,042 DEBUG: Wrote row for ASIN 8178230968
+2025-05-09 21:28:50,043 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:50,434 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22545
+2025-05-09 21:28:50,550 DEBUG: get_asin response status for ASIN 0749924357: 200
+2025-05-09 21:28:50,551 DEBUG: get_asin result for ASIN 0749924357: 0749924357
+2025-05-09 21:28:50,555 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:50,956 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=0749924357 HTTP/1.1" 200 22541
+2025-05-09 21:28:51,078 DEBUG: get_title response status for ASIN 0749924357: 200
+2025-05-09 21:28:51,079 DEBUG: get_title result for ASIN 0749924357: Women Who Think Too Much : How to Break Free of Ov
+2025-05-09 21:28:51,080 WARNING: Missing headers for ASIN 0749924357: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-09 21:28:51,080 DEBUG: row_data for ASIN 0749924357: ['ASIN', 'Title', 'Deal found', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current']
+2025-05-09 21:28:51,080 DEBUG: Wrote row for ASIN 0749924357
+2025-05-09 21:28:51,081 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:51,495 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13232
+2025-05-09 21:28:51,617 DEBUG: get_asin response status for ASIN B0CS6RL7D6: 200
+2025-05-09 21:28:51,618 DEBUG: get_asin result for ASIN B0CS6RL7D6: B0CS6RL7D6
+2025-05-09 21:28:51,620 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:52,087 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=B0CS6RL7D6 HTTP/1.1" 200 13230
+2025-05-09 21:28:52,193 DEBUG: get_title response status for ASIN B0CS6RL7D6: 200
+2025-05-09 21:28:52,194 DEBUG: get_title result for ASIN B0CS6RL7D6: CAPM Exam Prep 2024 : + 700 CAPM Exam Questions, A
+2025-05-09 21:28:52,195 WARNING: Missing headers for ASIN B0CS6RL7D6: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-09 21:28:52,195 DEBUG: row_data for ASIN B0CS6RL7D6: ['ASIN', 'Title', 'Deal found', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current']
+2025-05-09 21:28:52,195 DEBUG: Wrote row for ASIN B0CS6RL7D6
+2025-05-09 21:28:52,196 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:52,579 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68128
+2025-05-09 21:28:52,814 DEBUG: get_asin response status for ASIN 1580626130: 200
+2025-05-09 21:28:52,817 DEBUG: get_asin result for ASIN 1580626130: 1580626130
+2025-05-09 21:28:52,819 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:53,257 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=1580626130 HTTP/1.1" 200 68124
+2025-05-09 21:28:53,490 DEBUG: get_title response status for ASIN 1580626130: 200
+2025-05-09 21:28:53,493 DEBUG: get_title result for ASIN 1580626130: The Book of Rudy: The Wit and Wisdom of Rudy Boesc
+2025-05-09 21:28:53,495 WARNING: Missing headers for ASIN 1580626130: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-09 21:28:53,495 DEBUG: row_data for ASIN 1580626130: ['ASIN', 'Title', 'Deal found', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current']
+2025-05-09 21:28:53,495 DEBUG: Wrote row for ASIN 1580626130
+2025-05-09 21:28:53,496 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:53,904 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 8422
+2025-05-09 21:28:53,905 DEBUG: get_asin response status for ASIN 184297291X: 200
+2025-05-09 21:28:53,906 DEBUG: get_asin result for ASIN 184297291X: 184297291X
+2025-05-09 21:28:53,910 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-09 21:28:54,684 DEBUG: https://api.keepa.com:443 "GET /product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=184297291X HTTP/1.1" 200 12299
+2025-05-09 21:28:54,685 DEBUG: get_title response status for ASIN 184297291X: 200
+2025-05-09 21:28:54,686 DEBUG: get_title result for ASIN 184297291X: That Time I Got Drunk Collection Mead Mishaps Seri
+2025-05-09 21:28:54,687 WARNING: Missing headers for ASIN 184297291X: ['Percent Down 90', 'Avg. Price 90', 'Percent Down 365', 'Avg. Price 365', 'Price Now']
+2025-05-09 21:28:54,688 DEBUG: row_data for ASIN 184297291X: ['ASIN', 'Title', 'Deal found', 'Package - Quantity', 'Sales Rank - Current', 'Sales Rank - 30 days avg.', 'Sales Rank - 90 days avg.', 'Sales Rank - 180 days avg.', 'Sales Rank - 365 days avg.', 'Used - Current']
+2025-05-09 21:28:54,688 DEBUG: Wrote row for ASIN 184297291X
+2025-05-09 21:28:54,688 INFO: CSV written: Keepa_Deals_Export.csv
+2025-05-09 21:28:54,689 INFO: Writing CSV...
+2025-05-09 21:28:54,689 INFO: Script completed!
