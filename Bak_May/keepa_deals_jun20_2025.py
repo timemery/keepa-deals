@@ -42,30 +42,15 @@ def fetch_deals(page):
     deal_query = {
         "page": page,
         "domainId": "1",
-        "excludeCategories": [],
         "includeCategories": [283155],
-        "priceTypes": [2],  # Restored to Keepa Deals query
-        "deltaRange": [1950, 9900],
-        "deltaPercentRange": [50, 2147483647],
-        "salesRankRange": [50000, 1500000],
-        "currentRange": [2000, 30100],
-        "minRating": 10,
-        "isLowest": False,
-        "isLowest90": False,
-        "isLowestOffer": False,
-        "isOutOfStock": False,
-        "titleSearch": "",
-        "isRangeEnabled": True,
+        "priceTypes": [0],  # Reference code used broader price types
+        "deltaPercentRange": [50, 90],
+        "salesRankRange": [1, 1500000],
+        "currentRange": [1000, 50000],
+        "sortType": 0,
+        "dateRange": "7",
         "isFilterEnabled": True,
-        "filterErotic": False,
-        "singleVariation": True,
-        "hasReviews": False,
-        "isPrimeExclusive": False,
-        "mustHaveAmazonOffer": False,
-        "mustNotHaveAmazonOffer": False,
-        "sortType": 4,  # Restored to Keepa Deals query
-        "dateRange": "3",  # Restored to Keepa Deals query
-        "warehouseConditions": [2, 3, 4, 5]
+        "filterErotic": True
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
     logging.debug(f"Raw query JSON: {query_json}")
