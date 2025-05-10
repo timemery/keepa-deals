@@ -81,9 +81,8 @@ def fetch_deals(page):
         data = response.json()
         deals = data.get('deals', {}).get('dr', [])
         logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
-        logging.debug(f"fetch_deals raw response: {data}")
         print(f"Fetched {len(deals)} deals")
-        return deals[:5]  # Return full deal objects for first 5
+        return [{'asin': deal['asin']} for deal in deals[:5]]
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
@@ -129,6 +128,105 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
+
+def list_price(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
+        'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
+        'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
+        'List Price - 180 days avg.': get_stat_value(stats, 'avg180', 8, divisor=100, is_price=True),
+        'List Price - 365 days avg.': get_stat_value(stats, 'avg365', 8, divisor=100, is_price=True),
+        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
+        'List Price - Stock': '-'
+    }
+    logging.debug(f"list_price result for ASIN {asin}: {result}")
+    print(f"List Price for ASIN {asin}: {result}")
+    return result
+
+def new_3rd_party_fbm(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+    result = {
+        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
+    print(f"New, 3rd Party FBM for ASIN {asin}: {result}")
+    return result
+
+def used_like_new(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
+    result = {
+        'Used, like new - 30 days avg.': get_stat_value(stats, 'avg30', 4, divisor=100, is_price=True),
+        'Used, like new - 60 days avg.': get_stat_value(stats, 'avg60', 4, divisor=100, is_price=True),
+        'Used, like new - 90 days avg.': get_stat_value(stats, 'avg90', 4, divisor=100, is_price=True),
+        'Used, like new - 180 days avg.': get_stat_value(stats, 'avg180', 4, divisor=100, is_price=True),
+        'Used, like new - 365 days avg.': get_stat_value(stats, 'avg365', 4, divisor=100, is_price=True),
+        'Used, like new - 90 days OOS': get_stat_value(stats, 'outOfStock90', 4, is_price=False),
+        'Used, like new - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
+    print(f"Used, like new for ASIN {asin}: {result}")
+    return result
+
+def used_very_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
+    result = {
+        'Used, very good - 30 days avg.': get_stat_value(stats, 'avg30', 5, divisor=100, is_price=True),
+        'Used, very good - 60 days avg.': get_stat_value(stats, 'avg60', 5, divisor=100, is_price=True),
+        'Used, very good - 90 days avg.': get_stat_value(stats, 'avg90', 5, divisor=100, is_price=True),
+        'Used, very good - 180 days avg.': get_stat_value(stats, 'avg180', 5, divisor=100, is_price=True),
+        'Used, very good - 365 days avg.': get_stat_value(stats, 'avg365', 5, divisor=100, is_price=True),
+        'Used, very good - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+    print(f"Used, very good for ASIN {asin}: {result}")
+    return result
+
+def used_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
+    result = {
+        'Used, good - 30 days avg.': get_stat_value(stats, 'avg30', 6, divisor=100, is_price=True),
+        'Used, good - 60 days avg.': get_stat_value(stats, 'avg60', 6, divisor=100, is_price=True),
+        'Used, good - 90 days avg.': get_stat_value(stats, 'avg90', 6, divisor=100, is_price=True),
+        'Used, good - 180 days avg.': get_stat_value(stats, 'avg180', 6, divisor=100, is_price=True),
+        'Used, good - 365 days avg.': get_stat_value(stats, 'avg365', 6, divisor=100, is_price=True),
+        'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
+        'Used, good - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_good result for ASIN {asin}: {result}")
+    print(f"Used, good for ASIN {asin}: {result}")
+    return result
+
+def used_acceptable(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
+    result = {
+        'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
+        'Used, acceptable - 60 days avg.': get_stat_value(stats, 'avg60', 7, divisor=100, is_price=True),
+        'Used, acceptable - 90 days avg.': get_stat_value(stats, 'avg90', 7, divisor=100, is_price=True),
+        'Used, acceptable - 180 days avg.': get_stat_value(stats, 'avg180', 7, divisor=100, is_price=True),
+        'Used, acceptable - 365 days avg.': get_stat_value(stats, 'avg365', 7, divisor=100, is_price=True),
+        'Used, acceptable - 90 days OOS': get_stat_value(stats, 'outOfStock90', 7, is_price=False),
+        'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
+    print(f"Used, acceptable for ASIN {asin}: {result}")
+    return result
 # Chunk 3 ends
 
 # Chunk 4 starts
@@ -189,7 +287,9 @@ def main():
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
             row = {}
+            # Handle stable_deals.py functions
             row.update({'Deal found': deal_found(deal)['Deal found']})
+            # Handle stable_products.py functions
             row.update({'ASIN': get_asin(asin, api_key)['ASIN']})
             row.update({'Title': get_title(asin, api_key)['Title']})
             row.update({'Package - Quantity': package_quantity(asin, api_key)['Package - Quantity']})
