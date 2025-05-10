@@ -44,7 +44,7 @@ def fetch_deals(page):
         "domainId": "1",
         "excludeCategories": [],
         "includeCategories": [283155],
-        "priceTypes": [2],
+        "priceTypes": [2],  # Restored to Keepa Deals query
         "deltaRange": [1950, 9900],
         "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
@@ -63,8 +63,8 @@ def fetch_deals(page):
         "isPrimeExclusive": False,
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
-        "sortType": 4,
-        "dateRange": "7",  # Broadened to increase deal availability
+        "sortType": 4,  # Restored to Keepa Deals query
+        "dateRange": "3",  # Restored to Keepa Deals query
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
