@@ -20,16 +20,17 @@ def fetch_deals_for_deals(page, api_key):
         "page": page,
         "domainId": "1",
         "includeCategories": [283155],
-        "priceTypes": [2],
-        "deltaRange": [1950, 9900],
-        "deltaPercentRange": [50, 2147483647],
-        "salesRankRange": [50000, 1500000],
-        "currentRange": [2000, 30100],
-        "minRating": 10,
+        "priceTypes": [0],  # Reference code used broader price types
+        "deltaPercentRange": [50, 90],
+        "salesRankRange": [1, 1500000],
+        "currentRange": [1000, 50000],
         "sortType": 0,
-        "dateRange": "7"
+        "dateRange": "7",
+        "isFilterEnabled": True,
+        "filterErotic": True
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
+    logging.debug(f"Raw query JSON: {query_json}")
     encoded_selection = urllib.parse.quote(query_json)
     url = f"https://api.keepa.com/deal?key={api_key}&selection={encoded_selection}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
