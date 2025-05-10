@@ -9,3 +9,14 @@
 2025-05-10 15:46:09,336 WARNING: No deals fetched, writing diagnostic CSV
 2025-05-10 15:46:09,336 INFO: Diagnostic CSV written: Keepa_Deals_Export.csv
 2025-05-10 15:46:09,337 INFO: CSV written: Keepa_Deals_Export.csv
+2025-05-10 16:23:00,439 DEBUG: Loaded headers: 216 fields
+2025-05-10 16:23:00,440 INFO: Starting Keepa_Deals...
+2025-05-10 16:23:02,440 DEBUG: Fetching deals page 0...
+2025-05-10 16:23:02,441 DEBUG: Deal URL: https://api.keepa.com/deal?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&selection=%7B%22currentRange%22%3A%5B2000%2C30100%5D%2C%22dateRange%22%3A%227%22%2C%22deltaPercentRange%22%3A%5B50%2C2147483647%5D%2C%22deltaRange%22%3A%5B1950%2C9900%5D%2C%22domainId%22%3A%221%22%2C%22includeCategories%22%3A%5B283155%5D%2C%22minRating%22%3A10%2C%22page%22%3A0%2C%22priceTypes%22%3A%5B2%5D%2C%22salesRankRange%22%3A%5B50000%2C1500000%5D%2C%22sortType%22%3A0%7D
+2025-05-10 16:23:02,444 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-10 16:23:03,060 DEBUG: https://api.keepa.com:443 "GET /deal?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&selection=%7B%22currentRange%22%3A%5B2000%2C30100%5D%2C%22dateRange%22%3A%227%22%2C%22deltaPercentRange%22%3A%5B50%2C2147483647%5D%2C%22deltaRange%22%3A%5B1950%2C9900%5D%2C%22domainId%22%3A%221%22%2C%22includeCategories%22%3A%5B283155%5D%2C%22minRating%22%3A10%2C%22page%22%3A0%2C%22priceTypes%22%3A%5B2%5D%2C%22salesRankRange%22%3A%5B50000%2C1500000%5D%2C%22sortType%22%3A0%7D HTTP/1.1" 400 206
+2025-05-10 16:23:03,062 DEBUG: Deal response: {"timestamp":1746908583688,"tokensLeft":300,"refillIn":28133,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":0,"processingTimeInMs":0,"error":{"type":"invalidParameter","message":"The queryJSON is of invalid format.","details":"dateRange"}}...
+2025-05-10 16:23:03,062 ERROR: Deal fetch failed: 400, {"timestamp":1746908583688,"tokensLeft":300,"refillIn":28133,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":0,"processingTimeInMs":0,"error":{"type":"invalidParameter","message":"The queryJSON is of invalid format.","details":"dateRange"}}
+2025-05-10 16:23:03,062 WARNING: No deals fetched, writing diagnostic CSV
+2025-05-10 16:23:03,063 INFO: Diagnostic CSV written: Keepa_Deals_Export.csv
+2025-05-10 16:23:03,063 INFO: CSV written: Keepa_Deals_Export.csv
