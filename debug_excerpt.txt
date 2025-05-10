@@ -1,15 +1,3 @@
-2025-05-10 16:35:28,290 DEBUG: get_stat_value: key=current, index=1, value=-1
-2025-05-10 16:35:28,290 DEBUG: new_3rd_party_fbm_current result for ASIN 8178230968: {'New, 3rd Party FBM - Current': '-'}
-2025-05-10 16:35:28,290 DEBUG: get_stat_value: key=avg30, index=1, stats[avg30]=[-1, -1, 2346, 4733756, 595, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 44, 38, -1, -1, -1, 2911, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2912, -1]
-2025-05-10 16:35:28,290 DEBUG: get_stat_value: key=avg30, index=1, value=-1
-2025-05-10 16:35:28,290 DEBUG: get_stat_value: key=avg60, index=1, stats[avg60]=[]
-2025-05-10 16:35:28,290 WARNING: get_stat_value: No data for key=avg60, index=1, returning '-'
-2025-05-10 16:35:28,290 DEBUG: get_stat_value: key=avg90, index=1, stats[avg90]=[-1, -1, 10884, 4755819, 594, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 44, 38, -1, -1, -1, 12015, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12016, -1]
-2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg90, index=1, value=-1
-2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg180, index=1, stats[avg180]=[-1, -1, 14785, 4635886, 595, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 44, 37, -1, -1, -1, 15931, 29013, -1, -1, -1, -1, -1, -1, -1, -1, -1, 15931, -1]
-2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg180, index=1, value=-1
-2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg365, index=1, stats[avg365]=[-1, -1, 12806, 4093528, 594, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 43, 36, -1, -1, 9679, 14372, 29013, -1, -1, -1, -1, -1, -1, -1, -1, -1, 14466, -1]
-2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg365, index=1, value=-1
 2025-05-10 16:35:28,291 DEBUG: new_3rd_party_fbm result for ASIN 8178230968: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
 2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg30, index=8, stats[avg30]=[-1, -1, 2346, 4733756, 595, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, 44, 38, -1, -1, -1, 2911, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2912, -1]
 2025-05-10 16:35:28,291 DEBUG: get_stat_value: key=avg30, index=8, value=-1
@@ -498,3 +486,15 @@
 2025-05-10 16:36:15,892 INFO: CSV written: Keepa_Deals_Export.csv
 2025-05-10 16:36:15,892 INFO: Writing CSV...
 2025-05-10 16:36:15,893 INFO: Script completed!
+2025-05-10 17:05:52,683 DEBUG: Loaded headers: 216 fields
+2025-05-10 17:05:52,683 INFO: Starting Keepa_Deals...
+2025-05-10 17:05:54,684 DEBUG: Fetching deals page 0...
+2025-05-10 17:05:54,685 DEBUG: Raw query JSON: {"currentRange":[2000,30100],"dateRange":"7","deltaPercentRange":[50,2147483647],"deltaRange":[1950,9900],"domainId":"1","excludeCategories":[],"filterErotic":false,"hasReviews":false,"includeCategories":[283155],"isFilterEnabled":true,"isLowest":false,"isLowest90":false,"isLowestOffer":false,"isOutOfStock":false,"isPrimeExclusive":false,"isRangeEnabled":true,"minRating":10,"mustHaveAmazonOffer":false,"mustNotHaveAmazonOffer":false,"page":0,"priceTypes":[2],"salesRankRange":[50000,1500000],"singleVariation":true,"sortType":4,"titleSearch":"","warehouseConditions":[2,3,4,5]}
+2025-05-10 17:05:54,685 DEBUG: Deal URL: https://api.keepa.com/deal?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&selection=%7B%22currentRange%22%3A%5B2000%2C30100%5D%2C%22dateRange%22%3A%227%22%2C%22deltaPercentRange%22%3A%5B50%2C2147483647%5D%2C%22deltaRange%22%3A%5B1950%2C9900%5D%2C%22domainId%22%3A%221%22%2C%22excludeCategories%22%3A%5B%5D%2C%22filterErotic%22%3Afalse%2C%22hasReviews%22%3Afalse%2C%22includeCategories%22%3A%5B283155%5D%2C%22isFilterEnabled%22%3Atrue%2C%22isLowest%22%3Afalse%2C%22isLowest90%22%3Afalse%2C%22isLowestOffer%22%3Afalse%2C%22isOutOfStock%22%3Afalse%2C%22isPrimeExclusive%22%3Afalse%2C%22isRangeEnabled%22%3Atrue%2C%22minRating%22%3A10%2C%22mustHaveAmazonOffer%22%3Afalse%2C%22mustNotHaveAmazonOffer%22%3Afalse%2C%22page%22%3A0%2C%22priceTypes%22%3A%5B2%5D%2C%22salesRankRange%22%3A%5B50000%2C1500000%5D%2C%22singleVariation%22%3Atrue%2C%22sortType%22%3A4%2C%22titleSearch%22%3A%22%22%2C%22warehouseConditions%22%3A%5B2%2C3%2C4%2C5%5D%7D
+2025-05-10 17:05:54,692 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-10 17:05:55,618 DEBUG: https://api.keepa.com:443 "GET /deal?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&selection=%7B%22currentRange%22%3A%5B2000%2C30100%5D%2C%22dateRange%22%3A%227%22%2C%22deltaPercentRange%22%3A%5B50%2C2147483647%5D%2C%22deltaRange%22%3A%5B1950%2C9900%5D%2C%22domainId%22%3A%221%22%2C%22excludeCategories%22%3A%5B%5D%2C%22filterErotic%22%3Afalse%2C%22hasReviews%22%3Afalse%2C%22includeCategories%22%3A%5B283155%5D%2C%22isFilterEnabled%22%3Atrue%2C%22isLowest%22%3Afalse%2C%22isLowest90%22%3Afalse%2C%22isLowestOffer%22%3Afalse%2C%22isOutOfStock%22%3Afalse%2C%22isPrimeExclusive%22%3Afalse%2C%22isRangeEnabled%22%3Atrue%2C%22minRating%22%3A10%2C%22mustHaveAmazonOffer%22%3Afalse%2C%22mustNotHaveAmazonOffer%22%3Afalse%2C%22page%22%3A0%2C%22priceTypes%22%3A%5B2%5D%2C%22salesRankRange%22%3A%5B50000%2C1500000%5D%2C%22singleVariation%22%3Atrue%2C%22sortType%22%3A4%2C%22titleSearch%22%3A%22%22%2C%22warehouseConditions%22%3A%5B2%2C3%2C4%2C5%5D%7D HTTP/1.1" 400 242
+2025-05-10 17:05:55,620 DEBUG: Deal response: {"timestamp":1746911156096,"tokensLeft":300,"refillIn":44736,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":0,"processingTimeInMs":0,"error":{"type":"invalidParameter","message":"The queryJSON is of invalid format.","details":"dateRange"}}...
+2025-05-10 17:05:55,620 ERROR: Deal fetch failed: 400, {"timestamp":1746911156096,"tokensLeft":300,"refillIn":44736,"refillRate":5,"tokenFlowReduction":0.0,"tokensConsumed":0,"processingTimeInMs":0,"error":{"type":"invalidParameter","message":"The queryJSON is of invalid format.","details":"dateRange"}}
+2025-05-10 17:05:55,621 WARNING: No deals fetched, writing diagnostic CSV
+2025-05-10 17:05:55,623 INFO: Diagnostic CSV written: Keepa_Deals_Export.csv
+2025-05-10 17:05:55,623 INFO: CSV written: Keepa_Deals_Export.csv
