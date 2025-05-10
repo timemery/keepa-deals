@@ -19,6 +19,7 @@ def fetch_deals_for_deals(page, api_key):
     deal_query = {
         "page": page,
         "domainId": "1",
+        "excludeCategories": [],
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
@@ -26,8 +27,22 @@ def fetch_deals_for_deals(page, api_key):
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
         "minRating": 10,
-        "sortType": 0,
-        "dateRange": "7"
+        "isLowest": False,
+        "isLowest90": False,
+        "isLowestOffer": False,
+        "isOutOfStock": False,
+        "titleSearch": "",
+        "isRangeEnabled": True,
+        "isFilterEnabled": True,
+        "filterErotic": False,
+        "singleVariation": True,
+        "hasReviews": False,
+        "isPrimeExclusive": False,
+        "mustHaveAmazonOffer": False,
+        "mustNotHaveAmazonOffer": False,
+        "sortType": 0,  # Changed to match reference code
+        "dateRange": "7",  # Changed to match reference code
+        "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
     encoded_selection = urllib.parse.quote(query_json)
