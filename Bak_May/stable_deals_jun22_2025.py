@@ -23,10 +23,10 @@ def fetch_deals_for_deals(page, api_key):
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
-        "deltaPercentRange": [10, 90],  # Broadened to match reference code
+        "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
-        "minRating": 0,  # Relaxed to increase deal matches
+        "minRating": 10,
         "isLowest": False,
         "isLowest90": False,
         "isLowestOffer": False,
@@ -41,7 +41,7 @@ def fetch_deals_for_deals(page, api_key):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "7",
+        "dateRange": "7",  # Broadened to increase deal availability
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
@@ -69,7 +69,6 @@ def fetch_deals_for_deals(page, api_key):
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
         return []
-        
 # Deal Found starts
 def deal_found(deal):
     logging.debug(f"deal_found input keys: {list(deal.keys())}")
