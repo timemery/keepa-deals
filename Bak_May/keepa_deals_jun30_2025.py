@@ -46,6 +46,7 @@ def fetch_deals(page):
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
+        "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
         "isLowest": False,

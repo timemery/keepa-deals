@@ -3,8 +3,9 @@ Headers loaded: 216 fields
 Starting Keepa_Deals...
 Fetching deals page 0 for Deal found...
 Fetched 150 deals
-Deals ASINs: ['950644045X', '8178230968', '0749924357', '1889520098', '3680004850']
+Deals ASINs: ['950644045X', '8178230968', '0749924357', '1889520098', 'B0CS6RL7D6']
 Fetching ASIN 950644045X...
+Fetch failed: HTTPSConnectionPool(host='api.keepa.com', port=443): Read timed out. (read timeout=30)
 Used, like new for ASIN 950644045X: {'Used, like new - 30 days avg.': '-', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '-', 'Used, like new - 180 days avg.': '-', 'Used, like new - 365 days avg.': '-', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
 Used, very good for ASIN 950644045X: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
 Used, good for ASIN 950644045X: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
@@ -32,19 +33,19 @@ Used, good for ASIN 1889520098: {'Used, good - 30 days avg.': '-', 'Used, good -
 Used, acceptable for ASIN 1889520098: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
 New, 3rd Party FBM for ASIN 1889520098: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
 List Price for ASIN 1889520098: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
-Fetching ASIN 3680004850...
-Used, like new for ASIN 3680004850: {'Used, like new - 30 days avg.': '$175.00', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$175.00', 'Used, like new - 180 days avg.': '$175.00', 'Used, like new - 365 days avg.': '$175.00', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
-Used, very good for ASIN 3680004850: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '$62.12', 'Used, very good - Stock': '0'}
-Used, good for ASIN 3680004850: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
-Used, acceptable for ASIN 3680004850: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
-New, 3rd Party FBM for ASIN 3680004850: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '-', 'New, 3rd Party FBM - Stock': '0'}
-List Price for ASIN 3680004850: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
+Fetching ASIN B0CS6RL7D6...
+Used, like new for ASIN B0CS6RL7D6: {'Used, like new - 30 days avg.': '$26.45', 'Used, like new - 60 days avg.': '-', 'Used, like new - 90 days avg.': '$26.44', 'Used, like new - 180 days avg.': '$26.44', 'Used, like new - 365 days avg.': '$26.45', 'Used, like new - 90 days OOS': '-', 'Used, like new - Stock': '0'}
+Used, very good for ASIN B0CS6RL7D6: {'Used, very good - 30 days avg.': '-', 'Used, very good - 60 days avg.': '-', 'Used, very good - 90 days avg.': '-', 'Used, very good - 180 days avg.': '-', 'Used, very good - 365 days avg.': '-', 'Used, very good - Stock': '0'}
+Used, good for ASIN B0CS6RL7D6: {'Used, good - 30 days avg.': '-', 'Used, good - 60 days avg.': '-', 'Used, good - 90 days avg.': '-', 'Used, good - 180 days avg.': '-', 'Used, good - 365 days avg.': '-', 'Used, good - 90 days OOS': '-', 'Used, good - Stock': '0'}
+Used, acceptable for ASIN B0CS6RL7D6: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '-', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
+New, 3rd Party FBM for ASIN B0CS6RL7D6: {'New, 3rd Party FBM - 30 days avg.': '-', 'New, 3rd Party FBM - 60 days avg.': '-', 'New, 3rd Party FBM - 90 days avg.': '-', 'New, 3rd Party FBM - 180 days avg.': '-', 'New, 3rd Party FBM - 365 days avg.': '$26.44', 'New, 3rd Party FBM - Stock': '0'}
+List Price for ASIN B0CS6RL7D6: {'List Price - 30 days avg.': '-', 'List Price - 60 days avg.': '-', 'List Price - 90 days avg.': '-', 'List Price - 180 days avg.': '-', 'List Price - 365 days avg.': '-', 'List Price - 90 days OOS': '-', 'List Price - Stock': '-'}
 Writing row for ASIN 950644045X...
 Writing row for ASIN 8178230968...
 Writing row for ASIN 0749924357...
 Writing row for ASIN 1889520098...
-Writing row for ASIN 3680004850...
+Writing row for ASIN B0CS6RL7D6...
 CSV written: Keepa_Deals_Export.csv
 Writing CSV...
 Script completed!
-Processed ASINs: ['="950644045X"', '="8178230968"', '="0749924357"', '="1889520098"', '="3680004850"']
+Processed ASINs: ['="950644045X"', '="8178230968"', '="0749924357"', '="1889520098"', '="B0CS6RL7D6"']

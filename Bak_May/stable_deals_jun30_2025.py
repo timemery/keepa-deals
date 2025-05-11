@@ -36,6 +36,7 @@ def fetch_deals_for_deals(page):
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
+        "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
         "isLowest": False,
@@ -52,7 +53,7 @@ def fetch_deals_for_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3"
+        "dateRange": "3"  # Matches Keepa Deals query
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
     logging.debug(f"Raw query JSON: {query_json}")
