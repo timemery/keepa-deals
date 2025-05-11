@@ -1,5 +1,5 @@
 # Keepa_Deals.py
-# Chuck 1 starts
+# Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
 from stable_deals import validate_asin, deal_found, fetch_deals_for_deals
@@ -46,10 +46,10 @@ def fetch_deals(page):
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
-        "deltaPercentRange": [10, 90],  # Broadened to match reference code
+        "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
-        "minRating": 0,  # Relaxed to increase deal matches
+        "minRating": 10,
         "isLowest": False,
         "isLowest90": False,
         "isLowestOffer": False,
@@ -64,7 +64,7 @@ def fetch_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "7",
+        "dateRange": "7",  # Broadened to increase deal availability
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
@@ -276,7 +276,7 @@ def main():
         logging.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...")
         time.sleep(2)
-        deals = fetch_deals_for_deals(0, api_key)
+        deals = fetch_deals(0)
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")
