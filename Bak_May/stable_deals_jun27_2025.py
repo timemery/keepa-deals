@@ -6,9 +6,6 @@ import json
 import urllib.parse
 from retrying import retry
 
-# Configure logging
-logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-
 # Load API key
 try:
     with open('config.json') as f:
@@ -54,8 +51,8 @@ def fetch_deals_for_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3"
-        # Removed warehouseConditions to simplify query
+        "dateRange": "3",
+        "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
     logging.debug(f"Raw query JSON: {query_json}")
