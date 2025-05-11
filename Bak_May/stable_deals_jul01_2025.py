@@ -27,8 +27,8 @@ def validate_asin(asin):
 
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_deals_for_deals(page):
-    logging.debug(f"Fetching deals page {page} for Percent Down 90...")
-    print(f"Fetching deals page {page} for Percent Down 90...")
+    logging.debug(f"Fetching deals page {page} for Deal found...")
+    print(f"Fetching deals page {page} for Deal found...")
     deal_query = {
         "page": page,
         "domainId": "1",
@@ -36,10 +36,8 @@ def fetch_deals_for_deals(page):
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
-        "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
-        "minRating": 10,
         "isLowest": False,
         "isLowest90": False,
         "isLowestOffer": False,
@@ -85,15 +83,15 @@ def fetch_deals_for_deals(page):
 # Deal Found starts
 def deal_found(deal):
     logging.debug(f"deal_found input: {deal}")
-    delta_90 = deal.get('delta90', -1)
-    if delta_90 == -1:
-        logging.error(f"No delta90 for deal: {deal}")
-        return {'Percent Down 90': '-'}
+    deal_date = deal.get('dealStartDate', -1)
+    if deal_date == -1:
+        logging.error(f"No dealStartDate for deal: {deal}")
+        return {'Deal found': '-'}
     try:
-        percent = f"{delta_90}%"
-        logging.debug(f"deal_found result: {percent}")
-        return {'Percent Down 90': percent}
+        date = datetime.fromtimestamp(deal_date / 1000).strftime('%Y-%m-%d %H:%M:%S')
+        logging.debug(f"deal_found result: {date}")
+        return {'Deal found': date}
     except Exception as e:
         logging.error(f"deal_found failed: {str(e)}")
-        return {'Percent Down 90': '-'}
+        return {'Deal found': '-'}
 # Deal Found ends
