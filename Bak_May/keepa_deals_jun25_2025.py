@@ -46,10 +46,10 @@ def fetch_deals(page):
         "includeCategories": [283155],
         "priceTypes": [2],
         "deltaRange": [1950, 9900],
-        "deltaPercentRange": [50, 2147483647],
+        "deltaPercentRange": [50, 2147483647],  # Restored to Keepa Deals query
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
-        "minRating": 10,
+        "minRating": 10,  # Restored to Keepa Deals query
         "isLowest": False,
         "isLowest90": False,
         "isLowestOffer": False,
@@ -64,7 +64,7 @@ def fetch_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3",  # Reverted to Keepa Deals query
+        "dateRange": "3",
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
@@ -78,7 +78,7 @@ def fetch_deals(page):
         logging.debug(f"Deal response: {response.text[:1000]}...")
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
-            print(f"Deal fetch failed: {response.status_code}, {response.text}")
+            print(f"Deal fetch failed: {response.status_code}")
             return []
         data = response.json()
         deals = data.get('deals', {}).get('dr', [])
