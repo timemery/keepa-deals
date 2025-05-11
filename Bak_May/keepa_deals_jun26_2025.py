@@ -1,5 +1,5 @@
 # Keepa_Deals.py
-# Chunk 1 starts
+# Chuck 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
 from stable_deals import validate_asin, deal_found, fetch_deals_for_deals
@@ -64,7 +64,7 @@ def fetch_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3",
+        "dateRange": "3",  # Reverted to Keepa Deals query
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
@@ -276,7 +276,7 @@ def main():
         logging.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...")
         time.sleep(2)
-        deals = fetch_deals_for_deals(0)  # Fixed: Removed api_key argument
+        deals = fetch_deals_for_deals(0, api_key)
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")

@@ -51,7 +51,7 @@ def fetch_deals_for_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3",
+        "dateRange": "3",  # Reverted to Keepa Deals query
         "warehouseConditions": [2, 3, 4, 5]
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
