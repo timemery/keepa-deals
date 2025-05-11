@@ -39,6 +39,7 @@ def fetch_deals_for_deals(page):
         "deltaPercentRange": [50, 2147483647],
         "salesRankRange": [50000, 1500000],
         "currentRange": [2000, 30100],
+        "minRating": 10,
         "isLowest": False,
         "isLowest90": False,
         "isLowestOffer": False,
@@ -53,7 +54,8 @@ def fetch_deals_for_deals(page):
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3"  # Matches Keepa Deals query
+        "dateRange": "3"
+        # Removed warehouseConditions to simplify query
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
     logging.debug(f"Raw query JSON: {query_json}")
@@ -63,17 +65,17 @@ def fetch_deals_for_deals(page):
     logging.debug(f"Deal URL: {url}")
     try:
         response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Full deal response: {response.text}")
+        logging.debug(f"Deal response: {response.text[:1000]}...")
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
             print(f"Deal fetch failed: {response.status_code}, {response.text}")
             return []
         data = response.json()
         deals = data.get('deals', {}).get('dr', [])
-        logging.debug(f"Fetched {len(deals)} deals: {[d.get('asin', '-') for d in deals]}")
+        logging.debug(f"Fetched {len(deals)} deals: {[d.get('asin', '-') for d in deals[:5]]}")
         logging.debug(f"Deal response structure: {list(data.get('deals', {}).keys())}")
-        logging.debug(f"All deal keys: {[list(d.keys()) for d in deals]}")
-        logging.debug(f"Full deals: {deals}")
+        logging.debug(f"First deal keys: {[list(d.keys()) for d in deals[:1]]}")
+        logging.debug(f"First deal full: {deals[:1]}")
         print(f"Fetched {len(deals)} deals")
         return deals[:5]
     except Exception as e:
@@ -83,7 +85,7 @@ def fetch_deals_for_deals(page):
         
 # Deal Found starts
 def deal_found(deal):
-    logging.debug(f"deal_found input: {deal}")
+    logging.debug(f"deal_found input keys: {list(deal.keys())}")
     deal_date = deal.get('dealStartDate', -1)
     if deal_date == -1:
         logging.error(f"No dealStartDate for deal: {deal}")
