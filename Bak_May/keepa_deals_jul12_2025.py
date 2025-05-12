@@ -10,8 +10,7 @@ from stable_products import (
     package_weight, package_height, package_length, package_width,
     used_like_new, used_very_good, used_good, used_acceptable,
     new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
-    get_stat_value, percent_down_90, amz_link, keepa_link,
-    categories_root, categories_sub, categories_tree
+    get_stat_value, percent_down_90, amz_link, keepa_link
 )
 from stable_calculations import *  # Empty import
 
@@ -307,7 +306,7 @@ def main():
                 package_weight, package_height, package_length, package_width,
                 used_like_new, used_very_good, used_good, used_acceptable,
                 new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
-                amz_link, keepa_link, categories_root, categories_sub, categories_tree
+                amz_link, keepa_link
             ]
 # this comment serves to provide proper indents for Groks update
             for func in functions:

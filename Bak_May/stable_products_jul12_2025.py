@@ -298,30 +298,6 @@ def keepa_link(product):
     return result
 # Keepa Link ends
 
-# Categories - Root starts
-def categories_root(product):
-    category_tree = product.get('categoryTree', [])
-    result = {'Categories - Root': category_tree[0]['name'] if category_tree else '-'}
-    logging.debug(f"categories_root result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Categories - Root ends
-
-# Categories - Sub starts
-def categories_sub(product):
-    category_tree = product.get('categoryTree', [])
-    result = {'Categories - Sub': ', '.join(cat['name'] for cat in category_tree[2:]) if len(category_tree) > 2 else '-'}
-    logging.debug(f"categories_sub result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Categories - Sub ends
-
-# Categories - Tree starts
-def categories_tree(product):
-    category_tree = product.get('categoryTree', [])
-    result = {'Categories - Tree': ' > '.join(cat['name'] for cat in category_tree) if category_tree else '-'}
-    logging.debug(f"categories_tree result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Categories - Tree ends
-
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
 #    stats = product.get('stats', {})

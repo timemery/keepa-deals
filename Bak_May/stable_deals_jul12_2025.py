@@ -125,7 +125,6 @@ def last_update(deal):
 # Last update ends
 
 # Last price change starts
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
 def last_price_change(deal):
     logging.debug(f"last_price_change input: {deal}")
     ts = deal.get('currentSince', [-1] * 20)[11]
