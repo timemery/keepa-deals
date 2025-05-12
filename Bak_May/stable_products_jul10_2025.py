@@ -282,22 +282,6 @@ def percent_down_90(product):
         return {'Percent Down 90': '-'}
 # Percent Down 90 ends
 
-# AMZ link starts
-def amz_link(product):
-    asin = product.get('asin', '-')
-    result = {'AMZ link': f"https://www.amazon.com/dp/{asin}" if asin != '-' else '-'}
-    logging.debug(f"amz_link result for ASIN {asin}: {result}")
-    return result
-# AMZ link ends
-
-# Keepa Link starts
-def keepa_link(product):
-    asin = product.get('asin', '-')
-    result = {'Keepa Link': f"https://keepa.com/#!product/1-{asin}" if asin != '-' else '-'}
-    logging.debug(f"keepa_link result for ASIN {asin}: {result}")
-    return result
-# Keepa Link ends
-
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
 #    stats = product.get('stats', {})
