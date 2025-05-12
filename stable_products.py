@@ -262,3 +262,22 @@ def list_price(product):
     logging.debug(f"list_price result for ASIN {asin}: {result}")
     return result
 # List Price ends
+
+# Percent Down 90 starts
+def percent_down_90(product):
+    logging.debug(f"percent_down_90 input: {product.get('asin', '-')}")
+    stats_90 = product.get('stats', {})
+    avg = stats_90.get('avg90', [-1] * 20)[2]  # Used price
+    curr = stats_90.get('current', [-1] * 20)[2]  # Used price
+    if avg <= 0 or curr < 0 or avg is None or curr is None:
+        logging.error(f"No valid avg90 or current for ASIN {product.get('asin', '-')}: avg={avg}, curr={curr}")
+        return {'Percent Down 90': '-'}
+    try:
+        value = ((avg - curr) / avg * 100)
+        percent = f"{value:.0f}%"
+        logging.debug(f"percent_down_90 result: {percent}")
+        return {'Percent Down 90': percent}
+    except Exception as e:
+        logging.error(f"percent_down_90 failed: {str(e)}")
+        return {'Percent Down 90': '-'}
+# Percent Down 90 ends
