@@ -326,8 +326,7 @@ def categories_tree(product):
 def tracking_since(product):
     ts = product.get('trackingSince', 0) / 1000  # Convert milliseconds to seconds
     from datetime import datetime
-    from pytz import utc
-    result = {'Tracking since': datetime.fromtimestamp(ts, tz=utc).strftime('%Y-%m-%d') if ts > 0 else '-'}
+    result = {'Tracking since': datetime.fromtimestamp(ts).strftime('%Y-%m-%d') if ts > 0 else '-'}
     logging.debug(f"tracking_since result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
 # Tracking since ends
