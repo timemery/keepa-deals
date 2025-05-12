@@ -104,19 +104,19 @@ def deal_found(deal):
 # Deal Found ends
 
 # Last update starts
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
 def last_update(deal):
     logging.debug(f"last_update input: {deal}")
-    ts = deal.get('lastUpdate', 0) / 1000  # Convert milliseconds to seconds
-    from datetime import datetime
-    from pytz import utc, timezone
+    ts = deal.get('lastUpdate', 0)
+    from datetime import datetime, timedelta
+    from pytz import timezone
+    KEEPA_EPOCH = datetime(2011, 1, 1)
     TORONTO_TZ = timezone('America/Toronto')
     if ts <= 100000:
         logging.error(f"No valid lastUpdate for deal: {deal}")
         return {'last update': '-'}
     try:
-        dt = datetime.fromtimestamp(ts, tz=utc)
-        formatted = dt.astimezone(TORONTO_TZ).strftime('%Y-%m-%d %H:%M:%S')
+        dt = KEEPA_EPOCH + timedelta(minutes=ts)
+        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S')
         logging.debug(f"last_update result: {formatted}")
         return {'last update': formatted}
     except Exception as e:
@@ -128,16 +128,17 @@ def last_update(deal):
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def last_price_change(deal):
     logging.debug(f"last_price_change input: {deal}")
-    ts = deal.get('currentSince', [-1] * 20)[11] / 1000  # Convert milliseconds to seconds
-    from datetime import datetime
-    from pytz import utc, timezone
+    ts = deal.get('currentSince', [-1] * 20)[11]
+    from datetime import datetime, timedelta
+    from pytz import timezone
+    KEEPA_EPOCH = datetime(2011, 1, 1)
     TORONTO_TZ = timezone('America/Toronto')
     if ts <= 100000:
         logging.error(f"No valid currentSince[11] for deal: {deal}")
         return {'last price change': '-'}
     try:
-        dt = datetime.fromtimestamp(ts, tz=utc)
-        formatted = dt.astimezone(TORONTO_TZ).strftime('%Y-%m-%d %H:%M:%S')
+        dt = KEEPA_EPOCH + timedelta(minutes=ts)
+        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S')
         logging.debug(f"last_price_change result: {formatted}")
         return {'last price change': formatted}
     except Exception as e:
