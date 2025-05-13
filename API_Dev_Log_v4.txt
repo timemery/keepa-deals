@@ -540,3 +540,6 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 
 - Success: `Manufacturer`, `Brand`, `Product Group` added, matching Keepa Deals (commit `6d8552a2236b633ac5e644a58544f60fccea9318`). Minor `Manufacturer` discrepancy due to data refresh.
 - Update: Added `Author`, `Contributors`, `Binding` to `stable_products.py`, updated `Keepa_Deals.py`. Compared with `ReferenceONLY-WorkingColumns` (commit `6b6a866b8ea41733f458c59df14d02bd85fa536f`).
+
+- Error: CSV only wrote headers, no data (commit `32f0b6857079fea805231881c828eec778beb526`) due to `Keepa_Deals.py`’s multi-field `list_price`, `new_3rd_party_fbm`, `used_like_new`, `used_very_good`, `used_good`, `used_acceptable` overriding `stable_products.py`’s single-field versions, causing key mismatches.
+- Solution: Removed conflicting multi-field functions from `Keepa_Deals.py`, retained confirmed single-field functions in `stable_products.py`, removed unconfirmed `new_3rd_party_fbm` from `functions`, enhanced `write_csv` logging for header mismatches. Verified no dependencies on `Keepa_Deals.py` logic. Compared with `ReferenceONLY-WorkingColumns` (commit `6b6a866b8ea41733f458c59df14d02bd85fa536f`).
