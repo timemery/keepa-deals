@@ -346,33 +346,6 @@ def tracking_since(product):
         return {'Tracking since': '-'}
 # Tracking since ends
 
-# Manufacturer starts
-def manufacturer(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('manufacturer', '-')
-    result = {'Manufacturer': value if value else '-'}
-    logging.debug(f"manufacturer result for ASIN {asin}: {result}")
-    return result
-# Manufacturer ends
-
-# Brand starts
-def brand(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('brand', '-')
-    result = {'Brand': value if value else '-'}
-    logging.debug(f"brand result for ASIN {asin}: {result}")
-    return result
-# Brand ends
-
-# Product Group starts
-def product_group(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('productGroup', '-')
-    result = {'Product Group': value if value else '-'}
-    logging.debug(f"product_group result for ASIN {asin}: {result}")
-    return result
-# Product Group ends
-
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
 #    stats = product.get('stats', {})

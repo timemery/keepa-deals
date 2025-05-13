@@ -531,9 +531,3 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 
 - Error: `NameError: name 'datetime' is not defined` in `stable_products.py` (commit `2f1c8fcfddf31694b6b3bb16075fafb218bf431a`) due to missing `datetime` and `timedelta` imports for `KEEPA_EPOCH`.
 - Solution: Added `from datetime import datetime, timedelta` to `stable_products.py`. Verified against `ReferenceONLY-WorkingColumns` (commit `6b6a866b8ea41733f458c59df14d02bd85fa536f`).
-
-- Success: `Deal found`, `last update`, `last price change`, `Tracking since` fixed, matching Keepa Deals (commit `36869407e2455a1c3154b1b47fb04b38651efeba`). Verified timestamps within hours.
-- Update: Added `Manufacturer`, `Brand`, `Product Group` to `stable_products.py`, updated `Keepa_Deals.py` and `headers.json`. Compared with `ReferenceONLY-WorkingColumns` (commit `6b6a866b8ea41733f458c59df14d02bd85fa536f`).
-
-- Success: `Deal found`, `last update`, `last price change`, `Tracking since` fixed, matching Keepa Deals (commit `36869407e2455a1c3154b1b47fb04b38651efeba`). Verified timestamps within hours.
-- Update: Added `Manufacturer`, `Brand`, `Product Group` to `stable_products.py`, updated `Keepa_Deals.py` and `headers.json`. Compared with `ReferenceONLY-WorkingColumns` (commit `6b6a866b8ea41733f458c59df14d02bd85fa536f`).
