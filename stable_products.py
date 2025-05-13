@@ -400,6 +400,30 @@ def binding(product):
     return result
 # Binding ends
 
+# ASIN from Product starts
+def get_asin_from_product(product):
+    asin = product.get('asin', '-')
+    result = {'ASIN': f'="{asin}"' if asin != '-' else '-'}
+    logging.debug(f"get_asin_from_product result for ASIN {asin}: {result}")
+    return result
+# ASIN from Product ends
+
+# Title from Product starts
+def get_title_from_product(product):
+    title = product.get('title', '-')
+    result = {'Title': title}
+    logging.debug(f"get_title_from_product result for ASIN {product.get('asin', 'unknown')}: {title[:50]}")
+    return result
+# Title from Product ends
+
+# Package Quantity from Product starts
+def package_quantity_from_product(product):
+    quantity = product.get('packageQuantity', -1)
+    result = {'Package - Quantity': str(quantity) if quantity != -1 else '-'}
+    logging.debug(f"package_quantity_from_product result for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Package Quantity from Product ends
+
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
 #    stats = product.get('stats', {})
