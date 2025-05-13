@@ -522,3 +522,6 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 
 - Error: Inconsistent indentation (5/8 spaces) in `Keepa_Deals.py` Chunk 5; `tracking_since`, `last_update`, `last_price_change` returned `'-'` or `1970-01-01` due to potential empty `deal`/`product` from `fetch_product` or `get_asin` (commit `af7721536216927e3a519b8f43924951916e1ff5`).
 - Solution: Standardized indentation to 4 spaces; enhanced `fetch_product` logging to inspect response structure; provided full `Keepa_Deals.py` to avoid formatting issues.
+
+- Error: `tracking_since`, `last_update`, `last_price_change` returned `'-'` or `1970-01-01`; last row missing `Percent Down 90` and most data (commit `e83301e15e51d211f6e0d68d620e58aeade559a7`). Likely due to incomplete `product` from `fetch_product` or `get_asin`.
+- Solution: Reverted Chunk 5 to `af7721536216927e3a519b8f43924951916e1ff5` structure; fixed indentation to 4 spaces; added error handling in `main` to skip incomplete products; enhanced `fetch_product` logging.
