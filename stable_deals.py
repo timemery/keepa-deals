@@ -1,4 +1,4 @@
-# stable_deals.py
+# stable_deals.py update for git sake
 import logging
 import requests
 import json

@@ -1,4 +1,4 @@
-# Keepa_Deals.py (added to make this show in the changes window on git)
+# Keepa_Deals.py
 # Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time, datetime
 from retrying import retry
