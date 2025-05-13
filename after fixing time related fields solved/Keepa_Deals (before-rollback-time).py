@@ -11,8 +11,7 @@ from stable_products import (
     used_like_new, used_very_good, used_good, used_acceptable,
     new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
     get_stat_value, percent_down_90, amz_link, keepa_link,
-    categories_root, categories_sub, categories_tree, tracking_since,
-    manufacturer, brand, product_group
+    categories_root, categories_sub, categories_tree, tracking_since
 )
 from stable_calculations import *  # Empty import
 
@@ -293,36 +292,31 @@ def main():
                 continue
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
             product = fetch_product(asin)
-            if not product or 'stats' not in product:
-                logging.error(f"Incomplete product data for ASIN {asin}")
-                continue
             row = {}
-            try:
-                logging.debug(f"Processing deal: {deal}")
-                logging.debug(f"Processing product: {product}")
-                row.update({'Percent Down 90': percent_down_90(product)['Percent Down 90']})
-                row.update({'Deal found': deal_found(deal)['Deal found']})
-                row.update({'last update': last_update(deal)['last update']})
-                row.update({'last price change': last_price_change(deal)['last price change']})
-                row.update({'Tracking since': tracking_since(product)['Tracking since']})
-                row.update({'ASIN': get_asin(asin, api_key)['ASIN']})
-                row.update({'Title': get_title(asin, api_key)['Title']})
-                row.update({'Package - Quantity': package_quantity(asin, api_key)['Package - Quantity']})
-                functions = [
-                    sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
-                    sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                    package_weight, package_height, package_length, package_width,
-                    used_like_new, used_very_good, used_good, used_acceptable,
-                    new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
-                    amz_link, keepa_link, categories_root, categories_sub, categories_tree,
-                    tracking_since, manufacturer, brand, product_group
-                ]
-                for func in functions:
-                    row.update(func(product))
-                rows.append(row)
-            except Exception as e:
-                logging.error(f"Error processing ASIN {asin}: {str(e)}")
-                continue
+# this comment serves to provide proper indents for Groks update
+            logging.debug(f"Processing deal: {deal}")
+            logging.debug(f"Processing product: {product}")
+            row.update({'Percent Down 90': percent_down_90(product)['Percent Down 90']})
+            row.update({'Deal found': deal_found(deal)['Deal found']})
+            row.update({'last update': last_update(deal)['last update']})
+            row.update({'last price change': last_price_change(deal)['last price change']})
+            row.update({'Tracking since': tracking_since(product)['Tracking since']})
+            row.update({'ASIN': get_asin(asin, api_key)['ASIN']})
+            row.update({'Title': get_title(asin, api_key)['Title']})
+            row.update({'Package - Quantity': package_quantity(asin, api_key)['Package - Quantity']})
+            functions = [
+                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
+                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
+                package_weight, package_height, package_length, package_width,
+                used_like_new, used_very_good, used_good, used_acceptable,
+                new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
+                amz_link, keepa_link, categories_root, categories_sub, categories_tree,
+                tracking_since
+            ]
+# this comment serves to provide proper indents for Groks update
+            for func in functions:
+                row.update(func(product))
+            rows.append(row)
         write_csv(rows, deals)
         logging.info("Writing CSV...")
         print("Writing CSV...")
