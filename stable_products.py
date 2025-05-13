@@ -373,6 +373,33 @@ def product_group(product):
     return result
 # Product Group ends
 
+# Author starts
+def author(product):
+    asin = product.get('asin', 'unknown')
+    value = product.get('author', '-')
+    result = {'Author': value if value else '-'}
+    logging.debug(f"author result for ASIN {asin}: {result}")
+    return result
+# Author ends
+
+# Contributors starts
+def contributors(product):
+    asin = product.get('asin', 'unknown')
+    value = product.get('contributors', [])
+    result = {'Contributors': ', '.join(value) if value else '-'}
+    logging.debug(f"contributors result for ASIN {asin}: {result}")
+    return result
+# Contributors ends
+
+# Binding starts
+def binding(product):
+    asin = product.get('asin', 'unknown')
+    value = product.get('binding', '-')
+    result = {'Binding': value if value else '-'}
+    logging.debug(f"binding result for ASIN {asin}: {result}")
+    return result
+# Binding ends
+
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
 #    stats = product.get('stats', {})

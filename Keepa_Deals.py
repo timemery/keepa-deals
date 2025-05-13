@@ -12,7 +12,7 @@ from stable_products import (
     new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
     get_stat_value, percent_down_90, amz_link, keepa_link,
     categories_root, categories_sub, categories_tree, tracking_since,
-    manufacturer, brand, product_group
+    manufacturer, brand, product_group, author, contributors, binding
 )
 from stable_calculations import *  # Empty import
 
@@ -315,7 +315,8 @@ def main():
                     used_like_new, used_very_good, used_good, used_acceptable,
                     new_3rd_party_fbm_current, new_3rd_party_fbm, list_price,
                     amz_link, keepa_link, categories_root, categories_sub, categories_tree,
-                    tracking_since, manufacturer, brand, product_group
+                    tracking_since, manufacturer, brand, product_group,
+                    author, contributors, binding
                 ]
                 for func in functions:
                     row.update(func(product))
