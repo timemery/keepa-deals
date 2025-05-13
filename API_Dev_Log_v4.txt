@@ -519,3 +519,6 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 
 - Error: `tracking_since`, `last_update`, `last_price_change` used incorrect timestamp units (seconds or minutes from 2011-01-01) instead of milliseconds from 1970-01-01 UTC, causing dates like 1969/1970 or outdated years (commit `fb8f47963b129048413ddade272e92b3c613ebf3`).
 - Solution: Divide `trackingSince`, `lastUpdate`, `currentSince[11]` by 1000, use UTC epoch with Toronto timezone conversion via `datetime.fromtimestamp(ts, tz=utc).astimezone(TORONTO_TZ)`.
+
+- Error: Inconsistent indentation (5/8 spaces) in `Keepa_Deals.py` Chunk 5; `tracking_since`, `last_update`, `last_price_change` returned `'-'` or `1970-01-01` due to potential empty `deal`/`product` from `fetch_product` or `get_asin` (commit `af7721536216927e3a519b8f43924951916e1ff5`).
+- Solution: Standardized indentation to 4 spaces; enhanced `fetch_product` logging to inspect response structure; provided full `Keepa_Deals.py` to avoid formatting issues.
