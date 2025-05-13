@@ -1,4 +1,4 @@
-# stable_products.py
+# stable_products.py update for git sake
 import requests
 import logging
 from retrying import retry
