@@ -1,4 +1,4 @@
-# stable_products.py update for git sake
+# stable_products.py
 import requests
 import logging
 from retrying import retry
@@ -345,60 +345,6 @@ def tracking_since(product):
         logging.error(f"tracking_since failed: {str(e)}")
         return {'Tracking since': '-'}
 # Tracking since ends
-
-# Manufacturer starts
-def manufacturer(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('manufacturer', '-')
-    result = {'Manufacturer': value if value else '-'}
-    logging.debug(f"manufacturer result for ASIN {asin}: {result}")
-    return result
-# Manufacturer ends
-
-# Brand starts
-def brand(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('brand', '-')
-    result = {'Brand': value if value else '-'}
-    logging.debug(f"brand result for ASIN {asin}: {result}")
-    return result
-# Brand ends
-
-# Product Group starts
-def product_group(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('productGroup', '-')
-    result = {'Product Group': value if value else '-'}
-    logging.debug(f"product_group result for ASIN {asin}: {result}")
-    return result
-# Product Group ends
-
-# Author starts
-def author(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('author', '-')
-    result = {'Author': value if value else '-'}
-    logging.debug(f"author result for ASIN {asin}: {result}")
-    return result
-# Author ends
-
-# Contributors starts
-def contributors(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('contributors', [])
-    result = {'Contributors': ', '.join(value) if value else '-'}
-    logging.debug(f"contributors result for ASIN {asin}: {result}")
-    return result
-# Contributors ends
-
-# Binding starts
-def binding(product):
-    asin = product.get('asin', 'unknown')
-    value = product.get('binding', '-')
-    result = {'Binding': value if value else '-'}
-    logging.debug(f"binding result for ASIN {asin}: {result}")
-    return result
-# Binding ends
 
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
