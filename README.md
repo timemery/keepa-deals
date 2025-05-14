@@ -19,6 +19,8 @@ Output: Keepa_Deals_Export.csv with 216 columns (e.g., Title, ASIN, Used Offer C
 source keepa_venv/bin/activate
 pip install -r requirements.txt
 python3 Keepa_Deals.py
+- External files: `headers.json` (protected CSV columns), `config.json` (API key), `deal_filters.json` (deal parameters).
+- Output: `Keepa_Deals_Export.csv`
 
 ## Development Setup
 
