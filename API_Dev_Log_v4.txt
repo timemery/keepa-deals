@@ -586,3 +586,5 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 - Added `sales_rank_drops_last_30_days` to `stable_products.py` and `Keepa_Deals.py` using `product.stats.salesRankDrops30`. `Publication Date` remains blank in CSV (excluded from imports and `stable_products.py`). Tested with 5 ASINs from commit `e2e4771ab646c2ccf986981fbcb7c19753f56e43`. Token status: 300 left, May 14, 2025, 17:49 EDT.
 
 - Added `buy_box_current` to `stable_products.py` and `Keepa_Deals.py` using `product.stats.current[0]`. `Publication Date` remains blank in CSV. Tested with 5 ASINs from commit `34c29c72edf35298954ac158ce270259fc577809`. Token status: 300 left, May 14, 2025, 18:23 EDT.
+
+- Fixed `Buy Box - Current` for fifth ASIN (showed '-' instead of '$38.99'). Enhanced logging in `buy_box_current` to include `stats.current` array. Retested with 5 ASINs from commit `031eb2477e66e3fc62b60d1b79ee226717bb2be1`. Token status: 300 left, May 14, 2025, 18:42 EDT.
