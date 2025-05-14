@@ -372,15 +372,23 @@ def binding(product):
 
 # Publication Date starts
 def publication_date(product):
-    ts = product.get('publicationDate', 0)
+    value = product.get('publicationDate', 0)
     asin = product.get('asin', 'unknown')
-    logging.debug(f"Publication Date - raw ts={ts} for ASIN {asin}")
-    if ts <= 0:
-        logging.info(f"No valid publicationDate (ts={ts}) for ASIN {asin}")
+    logging.debug(f"Publication Date - raw value={value} for ASIN {asin}")
+    if not value or value in [-1, 'None', '', 0]:
+        logging.info(f"No valid publicationDate (value={value}) for ASIN {asin}")
         return {'Publication Date': '-'}
     try:
-        dt = datetime.fromtimestamp(ts / 1000)
-        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
+        if isinstance(value, str) and len(value) == 8:
+            dt = datetime.strptime(value, '%Y%m%d')
+            formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
+        else:
+            ts = int(value)
+            if ts <= 0:
+                logging.info(f"Invalid publicationDate timestamp (ts={ts}) for ASIN {asin}")
+                return {'Publication Date': '-'}
+            dt = datetime.fromtimestamp(ts / 1000)
+            formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
         logging.debug(f"Publication Date result for ASIN {asin}: {formatted}")
         return {'Publication Date': formatted}
     except Exception as e:
