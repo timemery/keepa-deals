@@ -388,6 +388,24 @@ def listed_since(product):
         return {'Listed since': '-'}
 # Listed since ends
 
+# Sales Rank - Drops last 365 days starts
+def sales_rank_drops_last_365_days(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    value = stats.get('salesRankDrops365', -1)
+    logging.debug(f"Sales Rank - Drops last 365 days - raw value={value} for ASIN {asin}")
+    if value < 0:
+        logging.info(f"No valid Sales Rank - Drops last 365 days (value={value}) for ASIN {asin}")
+        return {'Sales Rank - Drops last 365 days': '-'}
+    try:
+        formatted = str(value)
+        logging.debug(f"Sales Rank - Drops last 365 days result for ASIN {asin}: {formatted}")
+        return {'Sales Rank - Drops last 365 days': formatted}
+    except Exception as e:
+        logging.error(f"sales_rank_drops_last_365_days failed for ASIN {asin}: {str(e)}")
+        return {'Sales Rank - Drops last 365 days': '-'}
+# Sales Rank - Drops last 365 days ends
+
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
 #    stats = product.get('stats', {})
