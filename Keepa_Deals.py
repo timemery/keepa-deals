@@ -14,7 +14,7 @@ from stable_products import (
     categories_root, categories_sub, categories_tree, tracking_since,
     manufacturer, author, binding, listed_since,
     sales_rank_drops_last_365_days, sales_rank_drops_last_30_days,
-    buy_box_current
+    buy_box_current, amazon_current
 )
 from stable_calculations import *  # Empty import
 
@@ -319,7 +319,7 @@ def main():
                     amz_link, keepa_link, categories_root, categories_sub, categories_tree,
                     tracking_since, manufacturer, author, binding, listed_since,
                     sales_rank_drops_last_365_days, sales_rank_drops_last_30_days,
-                    buy_box_current
+                    buy_box_current, amazon_current
                 ]
                 for func in functions:
                     row.update(func(product))

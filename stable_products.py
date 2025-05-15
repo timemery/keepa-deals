@@ -15,7 +15,7 @@ def fetch_product_for_retry(asin):
     api = Keepa(config['api_key'])
     product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=False)
     return product[0] if product else {}
-    
+
 # Constants
 KEEPA_EPOCH = datetime(2011, 1, 1)
 TORONTO_TZ = timezone('America/Toronto')
@@ -463,6 +463,25 @@ def buy_box_current(product):
         logging.error(f"buy_box_current failed for ASIN {asin}: {str(e)}")
         return {'Buy Box - Current': '-'}
 # Buy Box - Current ends
+
+# Amazon - Current starts
+def amazon_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    current = stats.get('current', [-1] * 20)
+    value = current[10]
+    logging.debug(f"Amazon - Current - raw value={value}, current array={current} for ASIN {asin}")
+    if value <= 0:
+        logging.info(f"No valid Amazon - Current (value={value}) for ASIN {asin}")
+        return {'Amazon - Current': '-'}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"Amazon - Current result for ASIN {asin}: {formatted}")
+        return {'Amazon - Current': formatted}
+    except Exception as e:
+        logging.error(f"amazon_current failed for ASIN {asin}: {str(e)}")
+        return {'Amazon - Current': '-'}
+# Amazon - Current ends
 
 # Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
 #def price_now(product):
