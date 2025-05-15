@@ -595,3 +595,5 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 
 - Fixed `Amazon - Current` (fourth ASIN showed '$99.00' instead of '-', fifth showed '-' instead of '$9.44'). Added retry logic to `amazon_current` using `fetch_product_for_retry`. `Buy Box - Current` for fifth ASIN still '-'. Tested with 5 ASINs from commit `21f09d3f40664166ce61b84dc8d8f2180ff7e87c`. `Publication Date` remains blank. Token status: 300 left, May 15, 2025, 09:34 EDT.
 
+- Simplified `buy_box_current` and `amazon_current` by removing retry logic and enhancing logging to diagnose swapped values (fourth ASIN: `Buy Box - Current` '-' instead of '$99.00', `Amazon - Current` '$99.00' instead of '-'; fifth: `Buy Box - Current` '$9.44' correct, `Amazon - Current` '-' instead of '$9.44'). Tested with 5 ASINs from commit `28e7ea71ca440145215a4094feea017f07db8b6b`. `Publication Date` remains blank. Token status: 300 left, May 15, 2025, 10:30 EDT.
+
