@@ -590,3 +590,5 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 - Fixed `Buy Box - Current` for fifth ASIN (showed '-' instead of '$38.99'). Enhanced logging in `buy_box_current` to include `stats.current` array. Retested with 5 ASINs from commit `031eb2477e66e3fc62b60d1b79ee226717bb2be1`. Token status: 300 left, May 14, 2025, 18:42 EDT.
 
 - Added retry logic with `fetch_product_for_retry` to `buy_box_current` in `stable_products.py` for fifth ASIN (showed '-' instead of '$38.99'). Added `keepa` and `json` imports. Retested with 5 ASINs from commit `0ed88ea8386fb4c497e1c622ef6946c68b26e5c9`. `Publication Date` remains blank. Token status: 300 left, May 14, 2025, 18:51 EDT.
+
+- Added `amazon_current` to `stable_products.py` and `Keepa_Deals.py` using `product.stats.current[10]`. `Buy Box - Current` for fifth ASIN still '-' (likely no Buy Box offer). `Publication Date` remains blank. Tested with 5 ASINs from commit `6975aa4d32ed656f8979cb4496adb2f82b2256b2`. Token status: 300 left, May 14, 2025, 19:01 EDT.
