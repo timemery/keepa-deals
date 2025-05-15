@@ -1,4 +1,4 @@
-# stable_products.py
+# stable_products.py - changed to force it into the Git change window
 import requests
 import logging
 from retrying import retry
