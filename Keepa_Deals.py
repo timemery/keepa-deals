@@ -6,6 +6,7 @@ import keepa
 import logging
 from datetime import datetime
 from field_mappings import FUNCTION_LIST
+from stable_products import get_stat_value
 # Chunk 1 ends
 
 # Chunk 2 starts
