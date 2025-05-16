@@ -194,7 +194,7 @@ from stable_products import (
     # Used, acceptable - Highest 365 days,
     # Used, acceptable - 90 days OOS,
     # Used, acceptable - Stock,
-    list_price,                     # List Price - Current
+    # List Price - Current
     # List Price - 30 days avg.,
     # List Price - 60 days avg.,
     # List Price - 90 days avg.,
