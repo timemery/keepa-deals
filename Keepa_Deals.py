@@ -27,7 +27,7 @@ def initialize_api(api_key):
 # Chunk 5 starts
 def main():
     config = load_config()
-    api_key = config['keepa_api_key']
+    api_key = config['api_key']  # Changed from keepa_api_key
     api = initialize_api(api_key)
     
     with open('deal_filters.json', 'r') as f:
