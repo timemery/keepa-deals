@@ -1,10 +1,11 @@
-# stable_products.py - changed to force it into the Git change window
+# stable_products.py
+# Unchanged imports and globals
 import requests
 import logging
 from retrying import retry
 from datetime import datetime, timedelta
 from pytz import timezone
-from stable_deals import validate_asin  # Import at top
+from stable_deals import validate_asin
 import json
 from keepa import Keepa
 
@@ -46,28 +47,11 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
 # Global stuff ends
 
 # ASIN starts
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
-def get_asin(asin, api_key):
-    if not validate_asin(asin):
-        return {'ASIN': '-'}
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
-    try:
-        response = requests.get(url, headers=API_HEADERS, timeout=30)
-        logging.debug(f"get_asin response status for ASIN {asin}: {response.status_code}")
-        if response.status_code != 200:
-            logging.error(f"get_asin request failed for ASIN {asin}: {response.status_code}")
-            return {'ASIN': '-'}
-        data = response.json()
-        products = data.get('products', [])
-        if not products:
-            logging.error(f"get_asin no product data for ASIN {asin}")
-            return {'ASIN': '-'}
-        asin_value = products[0].get('asin', '-')
-        logging.debug(f"get_asin result for ASIN {asin}: {asin_value}")
-        return {'ASIN': f'="{asin_value}"' if asin_value != '-' else '-'}
-    except Exception as e:
-        logging.error(f"get_asin fetch failed for ASIN {asin}: {str(e)}")
-        return {'ASIN': '-'}
+def get_asin(product):
+    asin = product.get('asin', '-')
+    result = {'ASIN': f'="{asin}"' if asin != '-' else '-'}
+    logging.debug(f"get_asin result for ASIN {asin}: {result}")
+    return result
 # ASIN ends
 
 # Title starts

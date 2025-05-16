@@ -1,4 +1,4 @@
-# stable_deals.py changed to force it to be included in the Git change window
+# stable_deals.py unchanged as yet... 
 import logging
 import requests
 import json
