@@ -633,7 +633,7 @@ FUNCTION_LIST = [
     None,                           # Used, acceptable - Highest 365 days
     None,                           # Used, acceptable - 90 days OOS
     None,                           # Used, acceptable - Stock
-    list_price,                     # List Price - Current
+    None,	                        # List Price - Current
     None,                           # List Price - 30 days avg.
     None,                           # List Price - 60 days avg.
     None,                           # List Price - 90 days avg.
