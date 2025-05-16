@@ -602,3 +602,6 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 - Commented out `list_price`, `new_3rd_party_fbm`, `used_like_new`, `used_very_good`, `used_good`, `used_acceptable` in `Keepa_Deals.py` to diagnose `Buy Box - Current` (first ASIN '-' instead of '$24.99', fifth '-' instead of '$99.00') and `Amazon - Current` (fifth '$99.00' instead of '-'). Debug logs show `stats.current[0]=-1`. Tested with 5 ASINs from commit `c595b90bc65ebe8b6dbd814316249570820ab9bf`. `Publication Date` remains blank. Token status: 300 left, May 15, 2025, 12:48 EDT.
 
 - Fixed incorrect imports in `Keepa_Deals.py` (removed `list_price`, `used_like_new`, etc., from `stable_products`). `Buy Box - Current` still wrong (first ASIN '-' instead of '$24.99', fifth '-' instead of '$99.00'); `Amazon - Current` wrong (fifth '$99.00' instead of '-'). Debug shows `stats.current[0]=-1`. Tested with 5 ASINs from commit `a8f2775836ff64c968ceb17df84dcd6d562eb1bb`. `Publication Date` blank. Token status: 300 left, May 15, 2025, 14:12 EDT.
+
+# 2025-05-16 12:45 EDT
+- Converted get_asin to (product) in stable_products.py to reduce API calls. Kept field_mappings.py unchanged (list_price commented). Testing ASIN column in CSV. List Price columns confirmed non-working (all '-'), will add list_price_current next. Token status: ~290 left.
