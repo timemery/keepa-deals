@@ -1,9 +1,3 @@
-2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=avg90, index=7, value=-1
-2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=avg180, index=7, stats[avg180]=[-1, -1, 10222, 2040218, 2634, 28423, -1, -1, -1, -1, -1, -1, 2, -1, 0, -1, 46, 159, -1, -1, 2749, 4047, -1, -1, -1, 31480, -1, -1, -1, 917, -1, -1, 2465, -1]
-2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=avg180, index=7, value=-1
-2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=avg365, index=7, stats[avg365]=[2495, 3330, 3523, 1741979, 2567, 28423, -1, 3715, -1, -1, -1, 1, 2, -1, 0, -1, 46, 156, 2495, 4202, 2399, 2233, 2452, -1, -1, 31480, -1, -1, -1, 935, -1, -1, 1745, -1]
-2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=avg365, index=7, value=3715
-2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=outOfStock90, index=7, stats[outOfStock90]=[]
 2025-05-16 11:08:59,276 WARNING: get_stat_value: No data for key=outOfStock90, index=7, returning '-'
 2025-05-16 11:08:59,276 DEBUG: used_acceptable result for ASIN 8498388899: {'Used, acceptable - 30 days avg.': '-', 'Used, acceptable - 60 days avg.': '-', 'Used, acceptable - 90 days avg.': '-', 'Used, acceptable - 180 days avg.': '-', 'Used, acceptable - 365 days avg.': '$37.15', 'Used, acceptable - 90 days OOS': '-', 'Used, acceptable - Stock': '0'}
 2025-05-16 11:08:59,276 DEBUG: get_stat_value: key=current, index=1, stats[current]=[-1, -1, 2175, 1061756, 2695, 11685, -1, -1, -1, -1, -1, -1, 3, -1, 1, 4, 46, 165, -1, -1, 2574, 2500, -1, -1, -1, 12585, -1, -1, -1, 917, -1, -1, 2500, -1]
@@ -498,3 +492,9 @@
 2025-05-16 11:09:27,882 INFO: Script completed!
 2025-05-16 14:28:55,758 DEBUG: API key loaded: bg903...
 2025-05-16 15:33:30,503 DEBUG: API key loaded: bg903...
+2025-05-16 15:38:20,703 DEBUG: API key loaded: bg903...
+2025-05-16 15:38:20,704 INFO: Connecting to keepa using key ending in p7b08b
+2025-05-16 15:38:20,707 DEBUG: Starting new HTTPS connection (1): api.keepa.com:443
+2025-05-16 15:38:21,368 DEBUG: https://api.keepa.com:443 "GET /token/?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b HTTP/1.1" 200 145
+2025-05-16 15:38:21,370 DEBUG: 0 tokens consumed
+2025-05-16 15:38:21,371 INFO: 300 tokens remain
