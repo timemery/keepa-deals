@@ -38,7 +38,7 @@ from stable_products import (
     # Number of Pages,
     # Publication Date,
     # Languages,
-    package_quantity,               # Package - Quantity
+    # Package - Quantity
     package_weight,                 # Package Weight
     package_height,                 # Package Height
     package_length,                 # Package Length
@@ -477,7 +477,7 @@ FUNCTION_LIST = [
     None,                           # Number of Pages
     None,                           # Publication Date
     None,                           # Languages
-    package_quantity,               # Package - Quantity
+    None,                           # Package - Quantity
     package_weight,                 # Package Weight
     package_height,                 # Package Height
     package_length,                 # Package Length
