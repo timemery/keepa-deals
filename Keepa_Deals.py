@@ -74,6 +74,9 @@ def write_csv(rows, deals, diagnostic=False):
                 for deal, row in zip(deals[:len(rows)], rows):
                     try:
                         row_data = row.copy()
+                        # Ensure Title is populated directly if missing
+                        if 'Title' not in row_data or row_data['Title'] == '-':
+                            row_data['Title'] = deal.get('title', '-') if deal.get('title') else '-'
                         missing_headers = [h for h in HEADERS if h not in row_data]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal.get('asin', '-')}: {missing_headers[:5]}")
