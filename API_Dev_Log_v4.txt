@@ -605,3 +605,81 @@ Weighted vs. Simple Average: Keepa API documentation (keepaapi.readthedocs.io) a
 
 # 2025-05-16 12:45 EDT
 - Converted get_asin to (product) in stable_products.py to reduce API calls. Kept field_mappings.py unchanged (list_price commented). Testing ASIN column in CSV. List Price columns confirmed non-working (all '-'), will add list_price_current next. Token status: ~290 left.
+
+Based on our prior discussions, the goal was to:
+
+Centralize Mappings: Use field_mappings.py to define all functions (FUNCTION_LIST) in the exact order of headers.json, covering both stable_products.py and stable_deals.py functions.
+Remove Redundant Calls: Eliminate direct calls like row.update(deal_found(deal)) in Keepa_Deals.py, as they were redundant with FUNCTION_LIST and caused overwrites or misaligned data.
+Streamline Processing: Iterate through FUNCTION_LIST to process all fields, passing product for stable_products functions and deal for stable_deals functions, ensuring no duplicate processing.
+Maintain Header Order: Use the commented structure in field_mappings.py to align FUNCTION_LIST with headers.json, preserving the three sections: stable_products imports, stable_deals imports, and FUNCTION_LIST.
+Fix CSV Output: Ensure Keepa_Deals_Export.csv includes data rows, not just headers, by fixing the row processing loop in main().
+Issues with Previous Update
+The provided Keepa_Deals.py reintroduced redundant calls (row.update(deal_found(deal)), etc.), which we had removed to avoid conflicts. It also didn’t fully leverage FUNCTION_LIST for deal-related functions, breaking the streamlined design. This was a step backward from the new setup we developed, which used field_mappings.py to handle all mappings cleanly.
+
+Key Changes
+Aligned with field_mappings.py:
+Removed redundant imports of individual functions from stable_products.py and stable_deals.py in Keepa_Deals.py.
+Imported FUNCTION_LIST and HEADERS directly from field_mappings.py, which centralizes all function mappings and header order.
+Ensured FUNCTION_LIST drives all processing, maintaining the exact order of headers.json as defined in field_mappings.py.
+Removed Redundant Calls:
+Eliminated row.update(deal_found(deal)), row.update(last_update(deal)), and row.update(last_price_change(deal)) from main(), as these are now handled by FUNCTION_LIST for the headers Deal found, last update, and last price change.
+Dynamic Input Handling:
+Modified the main() loop to pass the correct input to each function: deal for stable_deals functions (deal_found, last_update, last_price_change) and product for stable_products functions (e.g., get_asin, get_title, buy_box_current).
+This ensures compatibility with the mixed function types in FUNCTION_LIST.
+Preserved Header Order:
+The for header, func in zip(HEADERS, FUNCTION_LIST) loop respects the order defined in field_mappings.py, which matches headers.json and includes commented placeholders for future fields.
+Fixed CSV Output:
+Simplified the write_csv function to ensure data rows are written correctly, addressing the issue where only headers appeared.
+Added logging for missing headers to aid debugging.
+Maintained Stable Functions:
+Relies on the working functions from stable_products.py and stable_deals.py as provided, ensuring no changes to their logic.
+Supports all specified fields: get_asin, get_title, sales_rank_current, used_current, buy_box_current, amazon_current, deal_found, last_update, last_price_change, etc.
+
+# Dev Log Entry: Successful Implementation of Field Mappings - May 17, 2025
+
+## Overview
+On May 17, 2025, we achieved a significant milestone in the Keepa Deals project by successfully implementing the `field_mappings.py` design, restoring functionality for all specified fields from `stable_products.py` and `stable_deals.py`, and resolving conflicts that previously caused missing or overwritten data in `Keepa_Deals_Export.csv`. This entry details the struggles encountered and the solutions that led to this success.
+
+## Struggles
+1. **Redundant Code and Overwrites**:
+   - Early versions of `Keepa_Deals.py` (pre-May 15, 2025) used direct function calls like `row.update(deal_found(deal))` alongside `FUNCTION_LIST`, causing data overwrites and misaligned headers. This led to incomplete CSV outputs, with only headers or missing fields like `Buy Box - Current`.
+   - Direct API calls (e.g., `get_title(asin, api_key)`) were initially reliable but consumed excessive Keepa API tokens and conflicted with `fetch_product` data.
+
+2. **CSV Output Issues**:
+   - The CSV often contained only headers, due to errors in the `main()` loop or row processing, making it difficult to verify field accuracy.
+
+3. **Misaligned Header Order**:
+   - Inconsistent header ordering between `headers.json` and function processing caused fields to appear in the wrong columns, complicating data validation.
+
+4. **Fallback Risks**:
+   - Attempts to use fallbacks (e.g., direct API calls for `get_title`) risked masking errors with incorrect data, violating the rule to prioritize accuracy.
+
+5. **Import Errors**:
+   - A recent error (May 17, 2025) involved importing `HEADERS` from `field_mappings.py`, which didn’t define it, causing an `ImportError`.
+
+## Solutions
+1. **Centralized Field Mappings** (May 15–16, 2025):
+   - Introduced `field_mappings.py` to define `FUNCTION_LIST`, mapping all functions to headers in the exact order of `headers.json`. This consolidated imports from `stable_products.py` (e.g., `get_asin`, `buy_box_current`) and `stable_deals.py` (e.g., `deal_found`, `last_update`), eliminating redundant calls.
+   - Added commented placeholders in `field_mappings.py` to maintain header order and support future fields.
+
+2. **Streamlined Processing**:
+   - Updated `Keepa_Deals.py` to process all fields via `FUNCTION_LIST`, passing `deal` for `stable_deals` functions and `product` for `stable_products` functions. Removed direct calls like `row.update(deal_found(deal))` to prevent overwrites.
+   - Fixed the `main()` loop to ensure rows were correctly populated, addressing the headers-only CSV issue.
+
+3. **Header Consistency**:
+   - Loaded `HEADERS` from `headers.json` in `Keepa_Deals.py`, ensuring alignment with `FUNCTION_LIST` and preserving the intended column order.
+
+4. **Error Resolution**:
+   - Fixed the `ImportError` by correcting the import statement to load `FUNCTION_LIST` from `field_mappings.py` and `HEADERS` from `headers.json` (May 17, 2025).
+
+## Outcome
+- The script now produces `Keepa_Deals_Export.csv` with data rows for all specified fields, including `ASIN`, `Title`, `Buy Box - Current`, `Amazon - Current`, and `Deal found`, with improved accuracy for `X - Current` columns.
+- The `FUNCTION_LIST` approach reduces API token usage, preparing the script for processing 900–1000+ ASINs.
+- A local backup, `Successful Field Mappings Implemented`, was created to preserve this milestone.
+
+## Next Steps
+- Compare `Keepa_Deals_Export.csv` with five Keepa Deals documents to verify data accuracy, accounting for messy formatting (e.g., OOS garbage code, unformatted dollars).
+- Prioritize validation of key fields (to be specified) and address any discrepancies.
+- Continue adding paused fields (e.g., remaining `X - Current`) one at a time.
+
+This success reflects a collaborative effort to refine the codebase, eliminate conflicts, and prioritize data integrity, setting a strong foundation for future enhancements.
