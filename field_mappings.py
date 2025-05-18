@@ -1,4 +1,4 @@
-# field_mappings.py (change to force it to Git change window)
+# field_mappings.py change window
 # Chunk 1 starts
 from stable_products import (
     get_stat_value,                 # Utility function, not a header

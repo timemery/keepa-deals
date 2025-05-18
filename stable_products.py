@@ -1,5 +1,5 @@
 # Chunk 1 starts
-# stable_products.py force change window
+# stable_products.py change window
 import requests
 import logging
 from retrying import retry
@@ -539,5 +539,48 @@ def buy_box_used_current(asin, api_key):
         return f"${value / 100.0:.2f}" if value is not None and value >= 0 else '-'
     except Exception:
         return '-'
+
+# Used, like new - Current starts
+def used_like_new(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
+    result = {'Used, like new - Current': current_price}
+    logging.debug(f"used_like_new for ASIN {asin}: stats.current={stats.get('current', [])}, current_price={current_price}")
+    return result
+# Used, like new - Current ends
+
+# Used, very good - Current starts
+def used_very_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+    return result
+# Used, very good - Current ends
+
+# Used, good - Current starts
+def used_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_good result for ASIN {asin}: {result}")
+    return result
+# Used, good - Current ends
+
+# Used, acceptable - Current starts
+def used_acceptable(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
+    return result
+# Used, acceptable - Current ends
 
 # Chunk 1 ends
