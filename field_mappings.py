@@ -9,8 +9,8 @@ from stable_products import (
     # Price Now,
     # Price Now Source,
     # Deal found,
-    amz_link,                       # AMZ link
-    keepa_link,                     # Keepa Link
+    # AMZ link,
+    # Keepa Link,
     get_title,                      # Title
     # last update,
     # last price change,
@@ -227,8 +227,8 @@ from stable_deals import (
     # Price Now,
     # Price Now Source,
     deal_found,                     # Deal found
-    # AMZ link,
-    # Keepa Link,
+    amz_link,                       # AMZ link
+    keepa_link,                     # Keepa Link
     # Title,
     last_update,                    # last update
     last_price_change,              # last price change

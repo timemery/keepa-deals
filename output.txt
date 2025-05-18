@@ -3,4 +3,4 @@ Traceback (most recent call last):
     from field_mappings import FUNCTION_LIST
   File "/home/timscripts/keepa_api/keepa-deals/field_mappings.py", line 3, in <module>
     from stable_products import (
-ImportError: cannot import name 'amz_link' from 'stable_products' (/home/timscripts/keepa_api/keepa-deals/stable_products.py)
+ImportError: cannot import name 'used_like_new' from 'stable_products' (/home/timscripts/keepa_api/keepa-deals/stable_products.py)
