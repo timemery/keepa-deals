@@ -1,12 +1,21 @@
-# Keepa_Deals.py force it to Git change window
+# Keepa_Deals.py change window
 # Chunk 1 starts
 import json, csv, logging, sys, requests, urllib.parse, time
+print("Starting imports...")
 from retrying import retry
 from stable_deals import validate_asin, fetch_deals_for_deals
-from field_mappings import FUNCTION_LIST
+print("Imported stable_deals")
+try:
+    from field_mappings import FUNCTION_LIST
+    print("Imported FUNCTION_LIST")
+except ImportError as e:
+    print(f"ImportError: {str(e)}")
+    sys.exit(1)
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+print("Logging configured")
+logging.debug("Keepa_Deals.py started")
 
 # Cache config and headers
 try:
