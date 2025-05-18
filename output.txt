@@ -3,7 +3,4 @@ Traceback (most recent call last):
     from field_mappings import FUNCTION_LIST
   File "/home/timscripts/keepa_api/keepa-deals/field_mappings.py", line 3, in <module>
     from stable_products import (
-  File "/home/timscripts/keepa_api/keepa-deals/stable_products.py", line 1573
-    if not products:
-                    ^
-IndentationError: expected an indented block after 'if' statement on line 1573
+ImportError: cannot import name 'get_stat_value' from 'stable_products' (/home/timscripts/keepa_api/keepa-deals/stable_products.py)

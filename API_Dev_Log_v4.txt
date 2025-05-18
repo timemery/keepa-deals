@@ -688,3 +688,9 @@ Idea: Replace @retry with pre-call pause for Keepa API queries.
 - Rationale: fetch_product_for_retry with history=False often misses fields (e.g., title). Retries consume tokens/compute. A pause (e.g., time.sleep(1)) before calls may stabilize responses, reducing token usage.
 - Status: Not implemented. Revisit post-current fixes to optimize token efficiency.
 - Location: /home/timscripts/keepa_api/keepa-deals/dev_log_may18.txt
+
+Issue: Used condition-specific columns missing in stable_products.py
+- Columns: Used, very good - Current; Used, good - Current; Used, acceptable - Current
+- Rationale: Not implemented in stable_products.py. Keepa API provides stats.current[4-7] for these prices. Add functions later when needed.
+- Status: Not implemented. Revisit when expanding columns.
+- Location: /home/timscripts/keepa_api/keepa-deals/dev_log_may18.txt
