@@ -683,3 +683,8 @@ On May 17, 2025, we achieved a significant milestone in the Keepa Deals project 
 - Continue adding paused fields (e.g., remaining `X - Current`) one at a time.
 
 This success reflects a collaborative effort to refine the codebase, eliminate conflicts, and prioritize data integrity, setting a strong foundation for future enhancements.
+
+Idea: Replace @retry with pre-call pause for Keepa API queries.
+- Rationale: fetch_product_for_retry with history=False often misses fields (e.g., title). Retries consume tokens/compute. A pause (e.g., time.sleep(1)) before calls may stabilize responses, reducing token usage.
+- Status: Not implemented. Revisit post-current fixes to optimize token efficiency.
+- Location: /home/timscripts/keepa_api/keepa-deals/dev_log_may18.txt

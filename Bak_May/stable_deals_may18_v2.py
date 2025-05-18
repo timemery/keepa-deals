@@ -1,5 +1,4 @@
-# Chunk 1 starts
-# stable_deals.py
+# stable_deals.py unchanged as yet... 
 import logging
 import requests
 import json
@@ -7,7 +6,6 @@ import urllib.parse
 from retrying import retry
 from datetime import datetime, timedelta
 from pytz import timezone
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -16,19 +14,26 @@ logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asc
 KEEPA_EPOCH = datetime(2011, 1, 1)
 TORONTO_TZ = timezone('America/Toronto')
 
+# Load API key
+try:
+    with open('config.json') as f:
+        config = json.load(f)
+        api_key = config['api_key']
+        logging.debug(f"API key loaded: {api_key[:5]}...")
+except Exception as e:
+    logging.error(f"API key load failed: {str(e)}")
+    raise SystemExit(1)
+
+def validate_asin(asin):
+    if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
+        logging.error(f"Invalid ASIN format: {asin}")
+        return False
+    return True
+
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_deals_for_deals(page: int) -> list:
+def fetch_deals_for_deals(page):
     logging.debug(f"Fetching deals page {page} for Percent Down 90...")
     print(f"Fetching deals page {page} for Percent Down 90...")
-    try:
-        with open('config.json') as f:
-            config = json.load(f)
-            api_key = config['api_key']
-            logging.debug(f"API key loaded: {api_key[:5]}...")
-    except Exception as e:
-        logging.error(f"API key load failed: {str(e)}")
-        return []
-    
     deal_query = {
         "page": page,
         "domainId": "1",
@@ -54,8 +59,7 @@ def fetch_deals_for_deals(page: int) -> list:
         "mustHaveAmazonOffer": False,
         "mustNotHaveAmazonOffer": False,
         "sortType": 4,
-        "dateRange": "3",
-        "warehouseConditions": [2, 3, 4, 5]
+        "dateRange": "3"
     }
     query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
     logging.debug(f"Raw query JSON: {query_json}")
@@ -82,55 +86,47 @@ def fetch_deals_for_deals(page: int) -> list:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")
         return []
+        
+# Deal Found starts
+def deal_found(deal):
+    ts = deal.get('creationDate', 0)
+    logging.debug(f"Deal found - raw ts={ts}")
+    dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
+    return {'Deal found': TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'}
+# Deal Found ends
 
-def validate_asin(asin: str) -> bool:
-    """Validate ASIN format (10 characters, alphanumeric)."""
-    if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
-        logging.error(f"Invalid ASIN format: {asin}")
-        return False
-    return True
+# Last update starts
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
+def last_update(deal):
+    ts = deal.get('lastUpdate', 0)
+    logging.debug(f"last update - raw ts={ts}")
+    if ts <= 100000:
+        logging.error(f"No valid lastUpdate for deal: {deal}")
+        return {'last update': '-'}
+    try:
+        dt = KEEPA_EPOCH + timedelta(minutes=ts)
+        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S')
+        logging.debug(f"last update result: {formatted}")
+        return {'last update': formatted}
+    except Exception as e:
+        logging.error(f"last_update failed: {str(e)}")
+        return {'last update': '-'}
+# Last update ends
 
-def deal_found(deal: Dict[str, Any]) -> str:
-    deal_time = deal.get('dealTime', None)
-    if deal_time:
-        try:
-            dt = datetime.fromtimestamp(deal_time / 1000, tz=TORONTO_TZ)
-            return dt.strftime('%Y-%m-%d %H:%M:%S')
-        except Exception as e:
-            logging.error(f"deal_found failed for deal: {str(e)}")
-            return '-'
-    logging.debug(f"No valid dealTime for deal: {deal}")
-    return '-'
-
-def amz_link(deal: Dict[str, Any]) -> str:
-    asin = deal.get('asin', '-')
-    return f"https://www.amazon.com/dp/{asin}" if asin != '-' else '-'
-
-def keepa_link(deal: Dict[str, Any]) -> str:
-    asin = deal.get('asin', '-')
-    return f"https://keepa.com/#!product/1-{asin}" if asin != '-' else '-'
-
-def last_update(deal: Dict[str, Any]) -> str:
-    update_time = deal.get('lastUpdate', None)
-    if update_time:
-        try:
-            dt = datetime.fromtimestamp(update_time, tz=TORONTO_TZ)
-            return dt.strftime('%Y-%m-%d %H:%M:%S')
-        except Exception as e:
-            logging.error(f"last_update failed for deal: {str(e)}")
-            return '-'
-    logging.debug(f"No valid lastUpdate for deal: {deal}")
-    return '-'
-
-def last_price_change(deal: Dict[str, Any]) -> str:
-    price_change_time = deal.get('lastPriceChange', None)
-    if price_change_time:
-        try:
-            dt = datetime.fromtimestamp(price_change_time, tz=TORONTO_TZ)
-            return dt.strftime('%Y-%m-%d %H:%M:%S')
-        except Exception as e:
-            logging.error(f"last_price_change failed for deal: {str(e)}")
-            return '-'
-    logging.debug(f"No valid lastPriceChange for deal: {deal}")
-    return '-'
-# Chunk 1 ends
+# Last price change starts
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
+def last_price_change(deal):
+    ts = deal.get('currentSince', [-1] * 20)[11]
+    logging.debug(f"last price change - raw ts={ts}")
+    if ts <= 100000:
+        logging.error(f"No valid currentSince[11] for deal: {deal}")
+        return {'last price change': '-'}
+    try:
+        dt = KEEPA_EPOCH + timedelta(minutes=ts)
+        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S')
+        logging.debug(f"last price change result: {formatted}")
+        return {'last price change': formatted}
+    except Exception as e:
+        logging.error(f"last_price_change failed: {str(e)}")
+        return {'last price change': '-'}
+# Last price change ends
