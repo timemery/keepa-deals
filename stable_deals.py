@@ -17,16 +17,30 @@ KEEPA_EPOCH = datetime(2011, 1, 1)
 TORONTO_TZ = timezone('America/Toronto')
 
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_deals_for_deals(page: int) -> list:
-    logging.debug(f"Fetching deals page {page} for Percent Down 90...")
-    print(f"Fetching deals page {page} for Percent Down 90...")
+def fetch_deals_for_deals(start_index):
+    print(f"DEBUG: Starting deal fetch from index {start_index}", flush=True)
+    logging.debug(f"Fetching deals from index {start_index}")
+    url = f"https://api.keepa.com/deals?key={api_key}&domain=1&startIndex={start_index}"
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        with open('config.json') as f:
-            config = json.load(f)
-            api_key = config['api_key']
-            logging.debug(f"API key loaded: {api_key[:5]}...")
+        print(f"DEBUG: Sending request to {url[:50]}...", flush=True)
+        start_time = time.time()
+        response = requests.get(url, headers=headers, timeout=30)
+        fetch_time = time.time() - start_time
+        print(f"DEBUG: Deal fetch status: {response.status_code}, took {fetch_time:.2f}s", flush=True)
+        logging.debug(f"Deal fetch status: {response.status_code}")
+        if response.status_code != 200:
+            logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
+            print(f"DEBUG: Deal fetch failed: {response.status_code}, {response.text[:100]}", flush=True)
+            return []
+        data = response.json()
+        deals = data.get('deals', [])
+        print(f"DEBUG: Fetched {len(deals)} deals", flush=True)
+        logging.debug(f"Fetched {len(deals)} deals")
+        return deals
     except Exception as e:
-        logging.error(f"API key load failed: {str(e)}")
+        logging.error(f"Deal fetch failed: {str(e)}")
+        print(f"DEBUG: Deal fetch failed: {str(e)}", flush=True)
         return []
     
     deal_query = {
