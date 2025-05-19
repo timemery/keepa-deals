@@ -13,10 +13,6 @@ DEBUG: Main function started
 Starting Keepa_Deals...
 Fetching deals...
 DEBUG: Starting deal fetch from index 0
-DEBUG: Sending request to https://api.keepa.com/deals?key=bg9037ndr2jrlore45...
-DEBUG: Deal fetch status: 404, took 0.66s
-DEBUG: Deal fetch failed: 404, 404 Not Found
-Fetched 0 deals in 0.66 seconds
-No deals fetched, writing diagnostic CSV
-Diagnostic CSV written: Keepa_Deals_Export.csv
-CSV written: Keepa_Deals_Export.csv
+DEBUG: Sending request to https://api.keepa.com/deal?key=bg9037ndr2jrlore45a...
+DEBUG: Deal fetch status: 200, took 1.59s
+DEBUG: Fetched 150 deals
