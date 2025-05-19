@@ -1,26 +1,56 @@
-# Keepa_Deals.py
+# Keepa_Deals.py force it to Git change_win_3
+# Environment: Python 3.11 in /home/timscripts/keepa_venv/, activate with 'source /home/timscripts/keepa_venv/bin/activate'
+# Dependencies: Install with 'pip install -r /home/timscripts/keepa_api/keepa-deals/requirements.txt'
 # Chunk 1 starts
-import json, csv, logging, sys, requests, urllib.parse, time
-from retrying import retry
-from stable_deals import validate_asin, fetch_deals_for_deals
-from field_mappings import FUNCTION_LIST
+print("Attempting script start...")
+try:
+    import json, csv, logging, sys, requests, urllib.parse, time
+    print("Standard modules loaded")
+    from retrying import retry
+    print("Imported retrying")
+    from stable_deals import validate_asin, fetch_deals_for_deals
+    print("Imported stable_deals")
+    from field_mappings import FUNCTION_LIST
+    print("Imported FUNCTION_LIST")
+except Exception as e:
+    with open('early_error.txt', 'w') as f:
+        f.write(f"Import failure: {str(e)}\n")
+    print(f"Import failure: {str(e)}")
+    sys.exit(1)
+
+with open('startup.txt', 'w') as f:
+    f.write("Script invoked at " + time.ctime() + "\n")
+print("Wrote startup.txt")
 
 # Logging
-logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+try:
+    logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+    print("Logging configured")
+    logging.debug("Keepa_Deals.py started")
+except Exception as e:
+    with open('early_error.txt', 'a') as f:
+        f.write(f"Logging failure: {str(e)}\n")
+    print(f"Logging failure: {str(e)}")
+    sys.exit(1)
+# Chunk 1 ends
 
 # Cache config and headers
 try:
+    print("Loading config.json...")
     with open('config.json') as f:
         config = json.load(f)
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
+    print("Loading headers.json...")
     with open('headers.json') as f:
         HEADERS = json.load(f)
-        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
         print(f"Headers loaded: {len(HEADERS)} fields")
+        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
 except Exception as e:
-    logging.error(f"Startup failed: {str(e)}")
-    print(f"Startup failed: {str(e)}")
+    with open('early_error.txt', 'a') as f:
+        f.write(f"Config failure: {str(e)}\n")
+    print(f"Config failure: {str(e)}")
+    logging.error(f"Config failure: {str(e)}")
     sys.exit(1)
 # Chunk 1 ends
 
@@ -74,6 +104,9 @@ def write_csv(rows, deals, diagnostic=False):
                 for deal, row in zip(deals[:len(rows)], rows):
                     try:
                         row_data = row.copy()
+                        # Ensure Title is populated directly if missing
+                        if 'Title' not in row_data or row_data['Title'] == '-':
+                            row_data['Title'] = deal.get('title', '-') if deal.get('title') else '-'
                         missing_headers = [h for h in HEADERS if h not in row_data]
                         if missing_headers:
                             logging.warning(f"Missing headers for ASIN {deal.get('asin', '-')}: {missing_headers[:5]}")
@@ -94,48 +127,72 @@ def write_csv(rows, deals, diagnostic=False):
 # Chunk 4 starts
 def main():
     try:
+        print("DEBUG: Main function started", flush=True)
+        logging.info("DEBUG: Main function started")
         logging.info("Starting Keepa_Deals...")
-        print("Starting Keepa_Deals...")
+        print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
-        deals = fetch_deals_for_deals(0)
+        print("Fetching deals...", flush=True)
+        start_time = time.time()
+        deals = fetch_deals_for_deals(api_key, 0)
+        fetch_time = time.time() - start_time
+        print(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
+        logging.debug(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")
             print("No deals fetched, writing diagnostic CSV")
             write_csv([], [], diagnostic=True)
             return
+# deal processing loop
         logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
-        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
-        for deal in deals:
+        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}", flush=True)
+        for i, deal in enumerate(deals, 1):
             asin = deal.get('asin', '-')
+            print(f"DEBUG: Processing deal {i}/{len(deals)}: ASIN {asin}", flush=True)
+            logging.debug(f"Validating ASIN {asin}")
             if not validate_asin(asin):
-                logging.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}")
+                logging.warning(f"Skipping invalid ASIN for deal {i}")
+                print(f"DEBUG: Skipping invalid ASIN: {asin}", flush=True)
                 continue
-            logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            logging.info(f"Fetching ASIN {asin} ({i}/{len(deals)})")
+            print(f"DEBUG: Fetching product for ASIN {asin}", flush=True)
+            start_time = time.time()
             product = fetch_product(asin)
+            fetch_time = time.time() - start_time
+            print(f"DEBUG: Fetched product for ASIN {asin} in {fetch_time:.2f} seconds", flush=True)
             if not product or 'stats' not in product:
                 logging.error(f"Incomplete product data for ASIN {asin}")
+                print(f"DEBUG: Incomplete product data for ASIN {asin}", flush=True)
                 continue
             row = {}
+            print(f"DEBUG: Processing FUNCTION_LIST for ASIN {asin}", flush=True)
             try:
                 # Process all functions using FUNCTION_LIST
-                for header, func in zip(HEADERS, FUNCTION_LIST):
+                for header, func in FUNCTION_LIST:
                     if func:
                         try:
                             # Pass deal for stable_deals functions, product for stable_products
                             input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
-                            result = func(input_data)
-                            row.update(result)
+                            print(f"DEBUG: Running {func.__name__} for ASIN {asin}", flush=True)
+                            # Pass api_key for functions that need it, otherwise just input_data
+                            result = func(input_data, api_key) if header not in ['Deal found', 'last update', 'last price change', 'amz_link', 'keepa_link'] else func(input_data)
+                            row[header] = str(result) if result else '-'
                         except Exception as e:
                             logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
+                            print(f"DEBUG: Function {func.__name__} failed for ASIN {asin}: {str(e)}", flush=True)
                             row[header] = '-'
                 rows.append(row)
+                print(f"DEBUG: Processed ASIN: {asin}", flush=True)
+# deal processing loop
             except Exception as e:
                 logging.error(f"Error processing ASIN {asin}: {str(e)}")
+                print(f"Error processing ASIN {asin}: {str(e)}")
                 continue
+        print("Writing CSV...")
         write_csv(rows, deals)
         logging.info("Writing CSV...")
-        print("Writing CSV...")
+        print("CSV written")
         logging.info("Script completed!")
         print("Script completed!")
         print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}")
@@ -143,7 +200,7 @@ def main():
         logging.error(f"Main failed: {str(e)}")
         print(f"Main failed: {str(e)}")
         sys.exit(1)
-
+# Chunk 4 ends
 if __name__ == "__main__":
     main()
-# Chunk 4 ends
+# End of keepa_deals.py
