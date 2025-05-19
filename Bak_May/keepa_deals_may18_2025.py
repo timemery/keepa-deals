@@ -130,7 +130,12 @@ def main():
         logging.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...")
         time.sleep(2)
+        print("Fetching deals...")
+        start_time = time.time()
         deals = fetch_deals_for_deals(0)
+        fetch_time = time.time() - start_time
+        print(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
+        logging.debug(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")
@@ -139,15 +144,21 @@ def main():
             return
         logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
         print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
-        for deal in deals:
+        for i, deal in enumerate(deals, 1):
             asin = deal.get('asin', '-')
+            print(f"Processing deal {i}/{len(deals)}: ASIN {asin}")
             if not validate_asin(asin):
-                logging.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}")
+                logging.warning(f"Skipping invalid ASIN for deal {i}")
+                print(f"Skipping invalid ASIN: {asin}")
                 continue
-            logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            logging.info(f"Fetching ASIN {asin} ({i}/{len(deals)})")
+            start_time = time.time()
             product = fetch_product(asin)
+            fetch_time = time.time() - start_time
+            print(f"Fetched product for ASIN {asin} in {fetch_time:.2f} seconds")
             if not product or 'stats' not in product:
                 logging.error(f"Incomplete product data for ASIN {asin}")
+                print(f"Incomplete product data for ASIN {asin}")
                 continue
             row = {}
             try:
@@ -163,12 +174,15 @@ def main():
                             logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
                             row[header] = '-'
                 rows.append(row)
+                print(f"Processed ASIN: {asin}")
             except Exception as e:
                 logging.error(f"Error processing ASIN {asin}: {str(e)}")
+                print(f"Error processing ASIN {asin}: {str(e)}")
                 continue
+        print("Writing CSV...")
         write_csv(rows, deals)
         logging.info("Writing CSV...")
-        print("Writing CSV...")
+        print("CSV written")
         logging.info("Script completed!")
         print("Script completed!")
         print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}")
