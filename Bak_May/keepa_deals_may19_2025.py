@@ -1,95 +1,63 @@
-# Keepa_Deals.py
-import json, csv, logging, sys, requests, urllib.parse, time, datetime
-from retrying import retry
-from stable import (
-    get_stat_value, get_title, get_asin, sales_rank_current, used_current,
-    sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg,
-    sales_rank_365_days_avg, package_quantity, package_weight, package_height,
-    package_length, package_width, used_like_new, used_very_good, used_good,
-    used_acceptable, new_3rd_party_fbm_current
-)
-
+# Keepa_Deals.py force it to Git change window
+# Environment: Python 3.11 in /home/timscripts/keepa_venv/, activate with 'source /home/timscripts/keepa_venv/bin/activate'
+# Dependencies: Install with 'pip install -r /home/timscripts/keepa_api/keepa-deals/requirements.txt'
 # Chunk 1 starts
-# Logging
-logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-
-# Cache headers globally
+print("Attempting script start...")
 try:
+    import json, csv, logging, sys, requests, urllib.parse, time
+    print("Standard modules loaded")
+    from retrying import retry
+    print("Imported retrying")
+    from stable_deals import validate_asin, fetch_deals_for_deals
+    print("Imported stable_deals")
+    from field_mappings import FUNCTION_LIST
+    print("Imported FUNCTION_LIST")
+except Exception as e:
+    with open('early_error.txt', 'w') as f:
+        f.write(f"Import failure: {str(e)}\n")
+    print(f"Import failure: {str(e)}")
+    sys.exit(1)
+
+with open('startup.txt', 'w') as f:
+    f.write("Script invoked at " + time.ctime() + "\n")
+print("Wrote startup.txt")
+
+# Logging
+try:
+    logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+    print("Logging configured")
+    logging.debug("Keepa_Deals.py started")
+except Exception as e:
+    with open('early_error.txt', 'a') as f:
+        f.write(f"Logging failure: {str(e)}\n")
+    print(f"Logging failure: {str(e)}")
+    sys.exit(1)
+# Chunk 1 ends
+
+# Cache config and headers
+try:
+    print("Loading config.json...")
     with open('config.json') as f:
         config = json.load(f)
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
+    print("Loading headers.json...")
     with open('headers.json') as f:
-        global HEADERS
         HEADERS = json.load(f)
-        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
         print(f"Headers loaded: {len(HEADERS)} fields")
+        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
 except Exception as e:
-    logging.error(f"Startup failed: {str(e)}")
-    print(f"Startup failed: {str(e)}")
+    with open('early_error.txt', 'a') as f:
+        f.write(f"Config failure: {str(e)}\n")
+    print(f"Config failure: {str(e)}")
+    logging.error(f"Config failure: {str(e)}")
     sys.exit(1)
 # Chunk 1 ends
 
 # Chunk 2 starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_deals(page):
-    logging.debug(f"Fetching deals page {page}...")
-    print(f"Fetching deals page {page}...")
-    deal_query = {
-        "page": page,
-        "domainId": "1",
-        "excludeCategories": [],
-        "includeCategories": [283155],
-        "priceTypes": [2],
-        "deltaRange": [1950, 9900],
-        "deltaPercentRange": [50, 2147483647],
-        "salesRankRange": [50000, 1500000],
-        "currentRange": [2000, 30100],
-        "minRating": 10,
-        "isLowest": False,
-        "isLowest90": False,
-        "isLowestOffer": False,
-        "isOutOfStock": False,
-        "titleSearch": "",
-        "isRangeEnabled": True,
-        "isFilterEnabled": True,
-        "filterErotic": False,
-        "singleVariation": True,
-        "hasReviews": False,
-        "isPrimeExclusive": False,
-        "mustHaveAmazonOffer": False,
-        "mustNotHaveAmazonOffer": False,
-        "sortType": 4,
-        "dateRange": "3",
-        "warehouseConditions": [2, 3, 4, 5]
-    }
-    query_json = json.dumps(deal_query, separators=(',', ':'), sort_keys=True)
-    encoded_selection = urllib.parse.quote(query_json)
-    url = f"https://api.keepa.com/deal?key={api_key}&selection={encoded_selection}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
-    logging.debug(f"Deal URL: {url}")
-    try:
-        response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Deal response: {response.text[:500]}...")
-        if response.status_code != 200:
-            logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
-            print(f"Deal fetch failed: {response.status_code}")
-            return []
-        data = response.json()
-        deals = data.get('deals', {}).get('dr', [])
-        logging.debug(f"Fetched {len(deals)} deals: {[d['asin'] for d in deals[:5]]}")
-        print(f"Fetched {len(deals)} deals")
-        return [{}] for deal in deals[:5]
-    except Exception as e:
-        logging.error(f"Deal fetch exception: {str(e)}")
-        print(f"Deal fetch exception: {str(e)}")
-        return []
-# Chunk 2 ends
-
-# Chunk 3 starts
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_product(asin, days=365, offers=20, rating=1, history=1):
-    if not isinstance(asin, str) or len(asin) != 10 or not asin.isalnum():
+    if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
@@ -100,7 +68,6 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
     try:
         response = requests.get(url, headers=headers, timeout=30)
         logging.debug(f"Response status: {response.status_code}")
-        logging.debug(f"Raw response: {response.text[:500]}...")
         if response.status_code != 200:
             logging.error(f"Request failed: {response.status_code}, {response.text}")
             print(f"Request failed: {response.status_code}")
@@ -115,118 +82,15 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}")
-        csv_field = product.get('csv', [[] for _ in range(11)])
-        logging.debug(f"CSV field for ASIN {asin}: {[len(x) if isinstance(x, list) else 'None' for x in csv_field[:11]]}")
-        logging.debug(f"CSV raw data for ASIN {asin}: {[x[:10] if isinstance(x, list) else x for x in csv_field[:11]]}")
-        logging.debug(f"Sales Rank Drops for ASIN {asin}: drops90={stats.get('salesDrops90', -1)}")
         time.sleep(1)
         return product
     except Exception as e:
         logging.error(f"Fetch failed for ASIN {asin}: {str(e)}")
         print(f"Fetch failed: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
+# Chunk 2 ends
 
-def list_price(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'List Price - 30 days avg.': get_stat_value(stats, 'avg30', 8, divisor=100, is_price=True),
-        'List Price - 60 days avg.': get_stat_value(stats, 'avg60', 8, divisor=100, is_price=True),
-        'List Price - 90 days avg.': get_stat_value(stats, 'avg90', 8, divisor=100, is_price=True),
-        'List Price - 180 days avg.': get_stat_value(stats, 'avg180', 8, divisor=100, is_price=True),
-        'List Price - 365 days avg.': get_stat_value(stats, 'avg365', 8, divisor=100, is_price=True),
-        'List Price - 90 days OOS': get_stat_value(stats, 'outOfStock90', 8, is_price=False),
-        'List Price - Stock': '-'
-    }
-    logging.debug(f"list_price result for ASIN {asin}: {result}")
-    print(f"List Price for ASIN {asin}: {result}")
-    return result
-
-def new_3rd_party_fbm(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
-    result = {
-        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
-    print(f"New, 3rd Party FBM for ASIN {asin}: {result}")
-    return result
-
-def used_like_new(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Like New' and o.get('stock', 0) > 0)
-    result = {
-        'Used, like new - 30 days avg.': get_stat_value(stats, 'avg30', 4, divisor=100, is_price=True),
-        'Used, like new - 60 days avg.': get_stat_value(stats, 'avg60', 4, divisor=100, is_price=True),
-        'Used, like new - 90 days avg.': get_stat_value(stats, 'avg90', 4, divisor=100, is_price=True),
-        'Used, like new - 180 days avg.': get_stat_value(stats, 'avg180', 4, divisor=100, is_price=True),
-        'Used, like new - 365 days avg.': get_stat_value(stats, 'avg365', 4, divisor=100, is_price=True),
-        'Used, like new - 90 days OOS': get_stat_value(stats, 'outOfStock90', 4, is_price=False),
-        'Used, like new - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"used_like_new result for ASIN {asin}: {result}")
-    print(f"Used, like new for ASIN {asin}: {result}")
-    return result
-
-def used_very_good(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Very Good' and o.get('stock', 0) > 0)
-    result = {
-        'Used, very good - 30 days avg.': get_stat_value(stats, 'avg30', 5, divisor=100, is_price=True),
-        'Used, very good - 60 days avg.': get_stat_value(stats, 'avg60', 5, divisor=100, is_price=True),
-        'Used, very good - 90 days avg.': get_stat_value(stats, 'avg90', 5, divisor=100, is_price=True),
-        'Used, very good - 180 days avg.': get_stat_value(stats, 'avg180', 5, divisor=100, is_price=True),
-        'Used, very good - 365 days avg.': get_stat_value(stats, 'avg365', 5, divisor=100, is_price=True),
-        'Used, very good - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
-    print(f"Used, very good for ASIN {asin}: {result}")
-    return result
-
-def used_good(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Good' and o.get('stock', 0) > 0)
-    result = {
-        'Used, good - 30 days avg.': get_stat_value(stats, 'avg30', 6, divisor=100, is_price=True),
-        'Used, good - 60 days avg.': get_stat_value(stats, 'avg60', 6, divisor=100, is_price=True),
-        'Used, good - 90 days avg.': get_stat_value(stats, 'avg90', 6, divisor=100, is_price=True),
-        'Used, good - 180 days avg.': get_stat_value(stats, 'avg180', 6, divisor=100, is_price=True),
-        'Used, good - 365 days avg.': get_stat_value(stats, 'avg365', 6, divisor=100, is_price=True),
-        'Used, good - 90 days OOS': get_stat_value(stats, 'outOfStock90', 6, is_price=False),
-        'Used, good - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"used_good result for ASIN {asin}: {result}")
-    print(f"Used, good for ASIN {asin}: {result}")
-    return result
-
-def used_acceptable(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'Used - Acceptable' and o.get('stock', 0) > 0)
-    result = {
-        'Used, acceptable - 30 days avg.': get_stat_value(stats, 'avg30', 7, divisor=100, is_price=True),
-        'Used, acceptable - 60 days avg.': get_stat_value(stats, 'avg60', 7, divisor=100, is_price=True),
-        'Used, acceptable - 90 days avg.': get_stat_value(stats, 'avg90', 7, divisor=100, is_price=True),
-        'Used, acceptable - 180 days avg.': get_stat_value(stats, 'avg180', 7, divisor=100, is_price=True),
-        'Used, acceptable - 365 days avg.': get_stat_value(stats, 'avg365', 7, divisor=100, is_price=True),
-        'Used, acceptable - 90 days OOS': get_stat_value(stats, 'outOfStock90', 7, is_price=False),
-        'Used, acceptable - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
-    print(f"Used, acceptable for ASIN {asin}: {result}")
-    return result
-# Chunk 3 ends
-
-# Chunk 4 starts
+# Chunk 3 starts
 def write_csv(rows, deals, diagnostic=False):
     try:
         with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
@@ -239,35 +103,41 @@ def write_csv(rows, deals, diagnostic=False):
             else:
                 for deal, row in zip(deals[:len(rows)], rows):
                     try:
-                        row_data = {
-                            'ASIN': get_asin(asin=deal['asin'], api_key=api_key)['ASIN'],
-                            'Title': get_title(asin=deal['asin'], api_key=api_key)
-                        }
-                        row_data.update(row)
+                        row_data = row.copy()
+                        # Ensure Title is populated directly if missing
+                        if 'Title' not in row_data or row_data['Title'] == '-':
+                            row_data['Title'] = deal.get('title', '-') if deal.get('title') else '-'
                         missing_headers = [h for h in HEADERS if h not in row_data]
                         if missing_headers:
-                            logging.warning(f"Missing headers for ASIN {deal['asin']}: {missing_headers[:5]}")
-                        logging.debug(f"row_data for ASIN {deal['asin']}: {list(row_data.keys())[:10]}")
-                        print(f"Writing row for ASIN {deal['asin']}...")
+                            logging.warning(f"Missing headers for ASIN {deal.get('asin', '-')}: {missing_headers[:5]}")
+                        logging.debug(f"row_data for ASIN {deal.get('asin', '-')}: {list(row_data.keys())[:10]}")
+                        print(f"Writing row for ASIN {deal.get('asin', '-')}...")
                         writer.writerow([row_data.get(header, '-') for header in HEADERS])
-                        logging.debug(f"Wrote row for ASIN {deal['asin']}")
+                        logging.debug(f"Wrote row for ASIN {deal.get('asin', '-')}")
                     except Exception as e:
-                        logging.error(f"Failed to write row for ASIN {deal['asin']}: {str(e)}")
-                        print(f"Failed to write row for ASIN {deal['asin']}: {str(e)}")
+                        logging.error(f"Failed to write row for ASIN {deal.get('asin', '-')}: {str(e)}")
+                        print(f"Failed to write row for ASIN {deal.get('asin', '-')}: {str(e)}")
         logging.info(f"CSV written: Keepa_Deals_Export.csv")
         print(f"CSV written: Keepa_Deals_Export.csv")
     except Exception as e:
         logging.error(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
         print(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
-# Chunk 4 ends
+# Chunk 3 ends
 
-# Chunk 5 starts
+# Chunk 4 starts
 def main():
     try:
+        print("DEBUG: Main function started", flush=True)
+        logging.info("DEBUG: Main function started")
         logging.info("Starting Keepa_Deals...")
-        print("Starting Keepa_Deals...")
+        print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
-        deals = fetch_deals(0)
+        print("Fetching deals...", flush=True)
+        start_time = time.time()
+        deals = fetch_deals_for_deals(0)
+        fetch_time = time.time() - start_time
+        print(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
+        logging.debug(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")
@@ -276,25 +146,45 @@ def main():
             return
         logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
         print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
-        for deal in deals[:5]:
+        for i, deal in enumerate(deals, 1):
             asin = deal.get('asin', '-')
-            logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            print(f"Processing deal {i}/{len(deals)}: ASIN {asin}")
+            if not validate_asin(asin):
+                logging.warning(f"Skipping invalid ASIN for deal {i}")
+                print(f"Skipping invalid ASIN: {asin}")
+                continue
+            logging.info(f"Fetching ASIN {asin} ({i}/{len(deals)})")
+            start_time = time.time()
             product = fetch_product(asin)
+            fetch_time = time.time() - start_time
+            print(f"Fetched product for ASIN {asin} in {fetch_time:.2f} seconds")
+            if not product or 'stats' not in product:
+                logging.error(f"Incomplete product data for ASIN {asin}")
+                print(f"Incomplete product data for ASIN {asin}")
+                continue
             row = {}
-            functions = [
-                sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg,
-                sales_rank_180_days_avg, sales_rank_365_days_avg, used_current,
-                lambda x: package_quantity(asin, api_key),  # Updated to pass asin, api_key
-                package_weight, package_height, package_length, package_width,
-                used_like_new, used_very_good, used_good, used_acceptable,
-                new_3rd_party_fbm_current, new_3rd_party_fbm, list_price
-            ]
-            for func in functions:
-                row.update(func(product))
-            rows.append(row)
+            try:
+                # Process all functions using FUNCTION_LIST
+                for header, func in FUNCTION_LIST:
+                    if func:
+                        try:
+                            # Pass deal for stable_deals functions, product for stable_products
+                            input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
+                            result = func(input_data)
+                            row[header] = str(result) if result else '-'
+                        except Exception as e:
+                            logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
+                            row[header] = '-'
+                rows.append(row)
+                print(f"Processed ASIN: {asin}")
+            except Exception as e:
+                logging.error(f"Error processing ASIN {asin}: {str(e)}")
+                print(f"Error processing ASIN {asin}: {str(e)}")
+                continue
+        print("Writing CSV...")
         write_csv(rows, deals)
         logging.info("Writing CSV...")
-        print("Writing CSV...")
+        print("CSV written")
         logging.info("Script completed!")
         print("Script completed!")
         print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}")
@@ -302,7 +192,7 @@ def main():
         logging.error(f"Main failed: {str(e)}")
         print(f"Main failed: {str(e)}")
         sys.exit(1)
-
+# Chunk 4 ends
 if __name__ == "__main__":
     main()
-# Chunk 5 ends
+# End of keepa_deals.py

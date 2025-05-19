@@ -127,10 +127,12 @@ def write_csv(rows, deals, diagnostic=False):
 # Chunk 4 starts
 def main():
     try:
+        print("DEBUG: Main function started", flush=True)
+        logging.info("DEBUG: Main function started")
         logging.info("Starting Keepa_Deals...")
-        print("Starting Keepa_Deals...")
+        print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
-        print("Fetching deals...")
+        print("Fetching deals...", flush=True)
         start_time = time.time()
         deals = fetch_deals_for_deals(0)
         fetch_time = time.time() - start_time
