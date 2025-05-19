@@ -1,35 +1,56 @@
-# Keepa_Deals.py change window
+# Keepa_Deals.py force it to Git change window
+# Environment: Python 3.11 in /home/timscripts/keepa_venv/, activate with 'source /home/timscripts/keepa_venv/bin/activate'
+# Dependencies: Install with 'pip install -r /home/timscripts/keepa_api/keepa-deals/requirements.txt'
 # Chunk 1 starts
-import json, csv, logging, sys, requests, urllib.parse, time
-print("Starting imports...")
-from retrying import retry
-from stable_deals import validate_asin, fetch_deals_for_deals
-print("Imported stable_deals")
+print("Attempting script start...")
 try:
+    import json, csv, logging, sys, requests, urllib.parse, time
+    print("Standard modules loaded")
+    from retrying import retry
+    print("Imported retrying")
+    from stable_deals import validate_asin, fetch_deals_for_deals
+    print("Imported stable_deals")
     from field_mappings import FUNCTION_LIST
     print("Imported FUNCTION_LIST")
-except ImportError as e:
-    print(f"ImportError: {str(e)}")
+except Exception as e:
+    with open('early_error.txt', 'w') as f:
+        f.write(f"Import failure: {str(e)}\n")
+    print(f"Import failure: {str(e)}")
     sys.exit(1)
 
+with open('startup.txt', 'w') as f:
+    f.write("Script invoked at " + time.ctime() + "\n")
+print("Wrote startup.txt")
+
 # Logging
-logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-print("Logging configured")
-logging.debug("Keepa_Deals.py started")
+try:
+    logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+    print("Logging configured")
+    logging.debug("Keepa_Deals.py started")
+except Exception as e:
+    with open('early_error.txt', 'a') as f:
+        f.write(f"Logging failure: {str(e)}\n")
+    print(f"Logging failure: {str(e)}")
+    sys.exit(1)
+# Chunk 1 ends
 
 # Cache config and headers
 try:
+    print("Loading config.json...")
     with open('config.json') as f:
         config = json.load(f)
         api_key = config['api_key']
         print(f"API key loaded: {api_key[:5]}...")
+    print("Loading headers.json...")
     with open('headers.json') as f:
         HEADERS = json.load(f)
-        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
         print(f"Headers loaded: {len(HEADERS)} fields")
+        logging.debug(f"Loaded headers: {len(HEADERS)} fields")
 except Exception as e:
-    logging.error(f"Startup failed: {str(e)}")
-    print(f"Startup failed: {str(e)}")
+    with open('early_error.txt', 'a') as f:
+        f.write(f"Config failure: {str(e)}\n")
+    print(f"Config failure: {str(e)}")
+    logging.error(f"Config failure: {str(e)}")
     sys.exit(1)
 # Chunk 1 ends
 
