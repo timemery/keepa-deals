@@ -1,0 +1,265 @@
+Attempting script start...
+Standard modules loaded
+Imported retrying
+Imported stable_deals
+Imported FUNCTION_LIST
+Wrote startup.txt
+Logging configured
+Loading config.json...
+API key loaded: bg903...
+Loading headers.json...
+Headers loaded: 216 fields
+DEBUG: Main function started
+Starting Keepa_Deals...
+Fetching deals...
+DEBUG: Starting deal fetch from index 0
+DEBUG: Sending request to https://api.keepa.com/deal?key=bg9037ndr2jrlore45a...
+DEBUG: Deal fetch status: 200, took 1.14s
+DEBUG: Fetched 150 deals
+Fetched 5 deals in 1.18 seconds
+Deals ASINs: ['1402744250', '150137012X', '0395139384', 'B0B6XSNMY6', 'B0CS6RL7D6']
+DEBUG: Processing deal 1/5: ASIN 1402744250
+DEBUG: Fetching product for ASIN 1402744250
+Fetching ASIN 1402744250...
+DEBUG: Fetched product for ASIN 1402744250 in 6.95 seconds
+DEBUG: Processing FUNCTION_LIST for ASIN 1402744250
+DEBUG: Running percent_down_90 for ASIN 1402744250
+DEBUG: Running deal_found for ASIN 1402744250
+DEBUG: Running amz_link for ASIN 1402744250
+DEBUG: Function amz_link failed for ASIN 1402744250: amz_link() takes 1 positional argument but 2 were given
+DEBUG: Running keepa_link for ASIN 1402744250
+DEBUG: Function keepa_link failed for ASIN 1402744250: keepa_link() takes 1 positional argument but 2 were given
+DEBUG: Running get_title for ASIN 1402744250
+DEBUG: Running last_update for ASIN 1402744250
+DEBUG: Running last_price_change for ASIN 1402744250
+DEBUG: Running tracking_since for ASIN 1402744250
+DEBUG: Running categories_root for ASIN 1402744250
+DEBUG: Running categories_sub for ASIN 1402744250
+DEBUG: Running categories_tree for ASIN 1402744250
+DEBUG: Running get_asin for ASIN 1402744250
+DEBUG: Running manufacturer for ASIN 1402744250
+DEBUG: Running author for ASIN 1402744250
+DEBUG: Running binding for ASIN 1402744250
+DEBUG: Running package_weight for ASIN 1402744250
+DEBUG: Running package_height for ASIN 1402744250
+DEBUG: Running package_length for ASIN 1402744250
+DEBUG: Running package_width for ASIN 1402744250
+DEBUG: Running listed_since for ASIN 1402744250
+DEBUG: Running sales_rank_current for ASIN 1402744250
+DEBUG: Running sales_rank_30_days_avg for ASIN 1402744250
+DEBUG: Running sales_rank_90_days_avg for ASIN 1402744250
+DEBUG: Running sales_rank_180_days_avg for ASIN 1402744250
+DEBUG: Running sales_rank_365_days_avg for ASIN 1402744250
+DEBUG: Running sales_rank_drops_last_30_days for ASIN 1402744250
+DEBUG: Running sales_rank_drops_last_365_days for ASIN 1402744250
+DEBUG: Running buy_box_current for ASIN 1402744250
+DEBUG: Running amazon_current for ASIN 1402744250
+DEBUG: Running new_3rd_party_fbm_current for ASIN 1402744250
+DEBUG: Running used_current for ASIN 1402744250
+DEBUG: Running used_like_new for ASIN 1402744250
+DEBUG: Function used_like_new failed for ASIN 1402744250: used_like_new() takes 1 positional argument but 2 were given
+DEBUG: Running used_very_good for ASIN 1402744250
+DEBUG: Function used_very_good failed for ASIN 1402744250: used_very_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_good for ASIN 1402744250
+DEBUG: Function used_good failed for ASIN 1402744250: used_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_acceptable for ASIN 1402744250
+DEBUG: Function used_acceptable failed for ASIN 1402744250: used_acceptable() takes 1 positional argument but 2 were given
+DEBUG: Processed ASIN: 1402744250
+DEBUG: Processing deal 2/5: ASIN 150137012X
+DEBUG: Fetching product for ASIN 150137012X
+Fetching ASIN 150137012X...
+DEBUG: Fetched product for ASIN 150137012X in 1.74 seconds
+DEBUG: Processing FUNCTION_LIST for ASIN 150137012X
+DEBUG: Running percent_down_90 for ASIN 150137012X
+DEBUG: Running deal_found for ASIN 150137012X
+DEBUG: Running amz_link for ASIN 150137012X
+DEBUG: Function amz_link failed for ASIN 150137012X: amz_link() takes 1 positional argument but 2 were given
+DEBUG: Running keepa_link for ASIN 150137012X
+DEBUG: Function keepa_link failed for ASIN 150137012X: keepa_link() takes 1 positional argument but 2 were given
+DEBUG: Running get_title for ASIN 150137012X
+DEBUG: Running last_update for ASIN 150137012X
+DEBUG: Running last_price_change for ASIN 150137012X
+DEBUG: Running tracking_since for ASIN 150137012X
+DEBUG: Running categories_root for ASIN 150137012X
+DEBUG: Running categories_sub for ASIN 150137012X
+DEBUG: Running categories_tree for ASIN 150137012X
+DEBUG: Running get_asin for ASIN 150137012X
+DEBUG: Running manufacturer for ASIN 150137012X
+DEBUG: Running author for ASIN 150137012X
+DEBUG: Running binding for ASIN 150137012X
+DEBUG: Running package_weight for ASIN 150137012X
+DEBUG: Running package_height for ASIN 150137012X
+DEBUG: Running package_length for ASIN 150137012X
+DEBUG: Running package_width for ASIN 150137012X
+DEBUG: Running listed_since for ASIN 150137012X
+DEBUG: Running sales_rank_current for ASIN 150137012X
+DEBUG: Running sales_rank_30_days_avg for ASIN 150137012X
+DEBUG: Running sales_rank_90_days_avg for ASIN 150137012X
+DEBUG: Running sales_rank_180_days_avg for ASIN 150137012X
+DEBUG: Running sales_rank_365_days_avg for ASIN 150137012X
+DEBUG: Running sales_rank_drops_last_30_days for ASIN 150137012X
+DEBUG: Running sales_rank_drops_last_365_days for ASIN 150137012X
+DEBUG: Running buy_box_current for ASIN 150137012X
+DEBUG: Running amazon_current for ASIN 150137012X
+DEBUG: Running new_3rd_party_fbm_current for ASIN 150137012X
+DEBUG: Running used_current for ASIN 150137012X
+DEBUG: Running used_like_new for ASIN 150137012X
+DEBUG: Function used_like_new failed for ASIN 150137012X: used_like_new() takes 1 positional argument but 2 were given
+DEBUG: Running used_very_good for ASIN 150137012X
+DEBUG: Function used_very_good failed for ASIN 150137012X: used_very_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_good for ASIN 150137012X
+DEBUG: Function used_good failed for ASIN 150137012X: used_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_acceptable for ASIN 150137012X
+DEBUG: Function used_acceptable failed for ASIN 150137012X: used_acceptable() takes 1 positional argument but 2 were given
+DEBUG: Processed ASIN: 150137012X
+DEBUG: Processing deal 3/5: ASIN 0395139384
+DEBUG: Fetching product for ASIN 0395139384
+Fetching ASIN 0395139384...
+DEBUG: Fetched product for ASIN 0395139384 in 13.94 seconds
+DEBUG: Processing FUNCTION_LIST for ASIN 0395139384
+DEBUG: Running percent_down_90 for ASIN 0395139384
+DEBUG: Running deal_found for ASIN 0395139384
+DEBUG: Running amz_link for ASIN 0395139384
+DEBUG: Function amz_link failed for ASIN 0395139384: amz_link() takes 1 positional argument but 2 were given
+DEBUG: Running keepa_link for ASIN 0395139384
+DEBUG: Function keepa_link failed for ASIN 0395139384: keepa_link() takes 1 positional argument but 2 were given
+DEBUG: Running get_title for ASIN 0395139384
+DEBUG: Running last_update for ASIN 0395139384
+DEBUG: Running last_price_change for ASIN 0395139384
+DEBUG: Running tracking_since for ASIN 0395139384
+DEBUG: Running categories_root for ASIN 0395139384
+DEBUG: Running categories_sub for ASIN 0395139384
+DEBUG: Running categories_tree for ASIN 0395139384
+DEBUG: Running get_asin for ASIN 0395139384
+DEBUG: Running manufacturer for ASIN 0395139384
+DEBUG: Running author for ASIN 0395139384
+DEBUG: Running binding for ASIN 0395139384
+DEBUG: Running package_weight for ASIN 0395139384
+DEBUG: Running package_height for ASIN 0395139384
+DEBUG: Running package_length for ASIN 0395139384
+DEBUG: Running package_width for ASIN 0395139384
+DEBUG: Running listed_since for ASIN 0395139384
+DEBUG: Running sales_rank_current for ASIN 0395139384
+DEBUG: Running sales_rank_30_days_avg for ASIN 0395139384
+DEBUG: Running sales_rank_90_days_avg for ASIN 0395139384
+DEBUG: Running sales_rank_180_days_avg for ASIN 0395139384
+DEBUG: Running sales_rank_365_days_avg for ASIN 0395139384
+DEBUG: Running sales_rank_drops_last_30_days for ASIN 0395139384
+DEBUG: Running sales_rank_drops_last_365_days for ASIN 0395139384
+DEBUG: Running buy_box_current for ASIN 0395139384
+DEBUG: Running amazon_current for ASIN 0395139384
+DEBUG: Running new_3rd_party_fbm_current for ASIN 0395139384
+DEBUG: Running used_current for ASIN 0395139384
+DEBUG: Running used_like_new for ASIN 0395139384
+DEBUG: Function used_like_new failed for ASIN 0395139384: used_like_new() takes 1 positional argument but 2 were given
+DEBUG: Running used_very_good for ASIN 0395139384
+DEBUG: Function used_very_good failed for ASIN 0395139384: used_very_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_good for ASIN 0395139384
+DEBUG: Function used_good failed for ASIN 0395139384: used_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_acceptable for ASIN 0395139384
+DEBUG: Function used_acceptable failed for ASIN 0395139384: used_acceptable() takes 1 positional argument but 2 were given
+DEBUG: Processed ASIN: 0395139384
+DEBUG: Processing deal 4/5: ASIN B0B6XSNMY6
+DEBUG: Fetching product for ASIN B0B6XSNMY6
+Fetching ASIN B0B6XSNMY6...
+DEBUG: Fetched product for ASIN B0B6XSNMY6 in 13.02 seconds
+DEBUG: Processing FUNCTION_LIST for ASIN B0B6XSNMY6
+DEBUG: Running percent_down_90 for ASIN B0B6XSNMY6
+DEBUG: Running deal_found for ASIN B0B6XSNMY6
+DEBUG: Running amz_link for ASIN B0B6XSNMY6
+DEBUG: Function amz_link failed for ASIN B0B6XSNMY6: amz_link() takes 1 positional argument but 2 were given
+DEBUG: Running keepa_link for ASIN B0B6XSNMY6
+DEBUG: Function keepa_link failed for ASIN B0B6XSNMY6: keepa_link() takes 1 positional argument but 2 were given
+DEBUG: Running get_title for ASIN B0B6XSNMY6
+DEBUG: Running last_update for ASIN B0B6XSNMY6
+DEBUG: Running last_price_change for ASIN B0B6XSNMY6
+DEBUG: Running tracking_since for ASIN B0B6XSNMY6
+DEBUG: Running categories_root for ASIN B0B6XSNMY6
+DEBUG: Running categories_sub for ASIN B0B6XSNMY6
+DEBUG: Running categories_tree for ASIN B0B6XSNMY6
+DEBUG: Running get_asin for ASIN B0B6XSNMY6
+DEBUG: Running manufacturer for ASIN B0B6XSNMY6
+DEBUG: Running author for ASIN B0B6XSNMY6
+DEBUG: Running binding for ASIN B0B6XSNMY6
+DEBUG: Running package_weight for ASIN B0B6XSNMY6
+DEBUG: Running package_height for ASIN B0B6XSNMY6
+DEBUG: Running package_length for ASIN B0B6XSNMY6
+DEBUG: Running package_width for ASIN B0B6XSNMY6
+DEBUG: Running listed_since for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_current for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_30_days_avg for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_90_days_avg for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_180_days_avg for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_365_days_avg for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_drops_last_30_days for ASIN B0B6XSNMY6
+DEBUG: Running sales_rank_drops_last_365_days for ASIN B0B6XSNMY6
+DEBUG: Running buy_box_current for ASIN B0B6XSNMY6
+DEBUG: Running amazon_current for ASIN B0B6XSNMY6
+DEBUG: Running new_3rd_party_fbm_current for ASIN B0B6XSNMY6
+DEBUG: Running used_current for ASIN B0B6XSNMY6
+DEBUG: Running used_like_new for ASIN B0B6XSNMY6
+DEBUG: Function used_like_new failed for ASIN B0B6XSNMY6: used_like_new() takes 1 positional argument but 2 were given
+DEBUG: Running used_very_good for ASIN B0B6XSNMY6
+DEBUG: Function used_very_good failed for ASIN B0B6XSNMY6: used_very_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_good for ASIN B0B6XSNMY6
+DEBUG: Function used_good failed for ASIN B0B6XSNMY6: used_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_acceptable for ASIN B0B6XSNMY6
+DEBUG: Function used_acceptable failed for ASIN B0B6XSNMY6: used_acceptable() takes 1 positional argument but 2 were given
+DEBUG: Processed ASIN: B0B6XSNMY6
+DEBUG: Processing deal 5/5: ASIN B0CS6RL7D6
+DEBUG: Fetching product for ASIN B0CS6RL7D6
+Fetching ASIN B0CS6RL7D6...
+DEBUG: Fetched product for ASIN B0CS6RL7D6 in 8.89 seconds
+DEBUG: Processing FUNCTION_LIST for ASIN B0CS6RL7D6
+DEBUG: Running percent_down_90 for ASIN B0CS6RL7D6
+DEBUG: Running deal_found for ASIN B0CS6RL7D6
+DEBUG: Running amz_link for ASIN B0CS6RL7D6
+DEBUG: Function amz_link failed for ASIN B0CS6RL7D6: amz_link() takes 1 positional argument but 2 were given
+DEBUG: Running keepa_link for ASIN B0CS6RL7D6
+DEBUG: Function keepa_link failed for ASIN B0CS6RL7D6: keepa_link() takes 1 positional argument but 2 were given
+DEBUG: Running get_title for ASIN B0CS6RL7D6
+DEBUG: Running last_update for ASIN B0CS6RL7D6
+DEBUG: Running last_price_change for ASIN B0CS6RL7D6
+DEBUG: Running tracking_since for ASIN B0CS6RL7D6
+DEBUG: Running categories_root for ASIN B0CS6RL7D6
+DEBUG: Running categories_sub for ASIN B0CS6RL7D6
+DEBUG: Running categories_tree for ASIN B0CS6RL7D6
+DEBUG: Running get_asin for ASIN B0CS6RL7D6
+DEBUG: Running manufacturer for ASIN B0CS6RL7D6
+DEBUG: Running author for ASIN B0CS6RL7D6
+DEBUG: Running binding for ASIN B0CS6RL7D6
+DEBUG: Running package_weight for ASIN B0CS6RL7D6
+DEBUG: Running package_height for ASIN B0CS6RL7D6
+DEBUG: Running package_length for ASIN B0CS6RL7D6
+DEBUG: Running package_width for ASIN B0CS6RL7D6
+DEBUG: Running listed_since for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_current for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_30_days_avg for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_90_days_avg for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_180_days_avg for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_365_days_avg for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_drops_last_30_days for ASIN B0CS6RL7D6
+DEBUG: Running sales_rank_drops_last_365_days for ASIN B0CS6RL7D6
+DEBUG: Running buy_box_current for ASIN B0CS6RL7D6
+DEBUG: Running amazon_current for ASIN B0CS6RL7D6
+DEBUG: Running new_3rd_party_fbm_current for ASIN B0CS6RL7D6
+DEBUG: Running used_current for ASIN B0CS6RL7D6
+DEBUG: Running used_like_new for ASIN B0CS6RL7D6
+DEBUG: Function used_like_new failed for ASIN B0CS6RL7D6: used_like_new() takes 1 positional argument but 2 were given
+DEBUG: Running used_very_good for ASIN B0CS6RL7D6
+DEBUG: Function used_very_good failed for ASIN B0CS6RL7D6: used_very_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_good for ASIN B0CS6RL7D6
+DEBUG: Function used_good failed for ASIN B0CS6RL7D6: used_good() takes 1 positional argument but 2 were given
+DEBUG: Running used_acceptable for ASIN B0CS6RL7D6
+DEBUG: Function used_acceptable failed for ASIN B0CS6RL7D6: used_acceptable() takes 1 positional argument but 2 were given
+DEBUG: Processed ASIN: B0CS6RL7D6
+Writing CSV...
+Writing row for ASIN 1402744250...
+Writing row for ASIN 150137012X...
+Writing row for ASIN 0395139384...
+Writing row for ASIN B0B6XSNMY6...
+Writing row for ASIN B0CS6RL7D6...
+CSV written: Keepa_Deals_Export.csv
+CSV written
+Script completed!
+Processed ASINs: ['-', '-', '-', '-', '-']
