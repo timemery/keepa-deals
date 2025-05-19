@@ -13,6 +13,9 @@ DEBUG: Main function started
 Starting Keepa_Deals...
 Fetching deals...
 DEBUG: Starting deal fetch from index 0
-DEBUG: Starting deal fetch from index 0
-DEBUG: Starting deal fetch from index 0
-Main failed: name 'api_key' is not defined
+DEBUG: Sending request to https://api.keepa.com/deals?key=bg9037ndr2jrlore45...
+DEBUG: Deal fetch failed: name 'time' is not defined
+Fetched 0 deals in 0.00 seconds
+No deals fetched, writing diagnostic CSV
+Diagnostic CSV written: Keepa_Deals_Export.csv
+CSV written: Keepa_Deals_Export.csv

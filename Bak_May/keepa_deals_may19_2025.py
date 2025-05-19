@@ -134,7 +134,7 @@ def main():
         time.sleep(2)
         print("Fetching deals...", flush=True)
         start_time = time.time()
-        deals = fetch_deals_for_deals(0)
+        deals = fetch_deals_for_deals(api_key, 0)
         fetch_time = time.time() - start_time
         print(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
         logging.debug(f"Fetched {len(deals)} deals in {fetch_time:.2f} seconds")
