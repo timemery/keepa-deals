@@ -1,5 +1,5 @@
 # Chunk 1 starts
-# stable_deals.py change_win_1
+# stable_deals.py change_win_2
 import logging
 import requests
 import json
@@ -17,7 +17,7 @@ KEEPA_EPOCH = datetime(2011, 1, 1)
 TORONTO_TZ = timezone('America/Toronto')
 
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_deals_for_deals(start_index):
+def fetch_deals_for_deals(api_key, start_index):
     print(f"DEBUG: Starting deal fetch from index {start_index}", flush=True)
     logging.debug(f"Fetching deals from index {start_index}")
     url = f"https://api.keepa.com/deals?key={api_key}&domain=1&startIndex={start_index}"
