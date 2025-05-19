@@ -144,25 +144,29 @@ def main():
             print("No deals fetched, writing diagnostic CSV")
             write_csv([], [], diagnostic=True)
             return
+# deal processing loop
         logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
-        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
+        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}", flush=True)
         for i, deal in enumerate(deals, 1):
             asin = deal.get('asin', '-')
-            print(f"Processing deal {i}/{len(deals)}: ASIN {asin}")
+            print(f"DEBUG: Processing deal {i}/{len(deals)}: ASIN {asin}", flush=True)
+            logging.debug(f"Validating ASIN {asin}")
             if not validate_asin(asin):
                 logging.warning(f"Skipping invalid ASIN for deal {i}")
-                print(f"Skipping invalid ASIN: {asin}")
+                print(f"DEBUG: Skipping invalid ASIN: {asin}", flush=True)
                 continue
             logging.info(f"Fetching ASIN {asin} ({i}/{len(deals)})")
+            print(f"DEBUG: Fetching product for ASIN {asin}", flush=True)
             start_time = time.time()
             product = fetch_product(asin)
             fetch_time = time.time() - start_time
-            print(f"Fetched product for ASIN {asin} in {fetch_time:.2f} seconds")
+            print(f"DEBUG: Fetched product for ASIN {asin} in {fetch_time:.2f} seconds", flush=True)
             if not product or 'stats' not in product:
                 logging.error(f"Incomplete product data for ASIN {asin}")
-                print(f"Incomplete product data for ASIN {asin}")
+                print(f"DEBUG: Incomplete product data for ASIN {asin}", flush=True)
                 continue
             row = {}
+            print(f"DEBUG: Processing FUNCTION_LIST for ASIN {asin}", flush=True)
             try:
                 # Process all functions using FUNCTION_LIST
                 for header, func in FUNCTION_LIST:
@@ -170,13 +174,17 @@ def main():
                         try:
                             # Pass deal for stable_deals functions, product for stable_products
                             input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
-                            result = func(input_data)
+                            print(f"DEBUG: Running {func.__name__} for ASIN {asin}", flush=True)
+                            # Pass api_key for functions that need it, otherwise just input_data
+                            result = func(input_data, api_key) if header not in ['Deal found', 'last update', 'last price change', 'amz_link', 'keepa_link'] else func(input_data)
                             row[header] = str(result) if result else '-'
                         except Exception as e:
                             logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
+                            print(f"DEBUG: Function {func.__name__} failed for ASIN {asin}: {str(e)}", flush=True)
                             row[header] = '-'
                 rows.append(row)
-                print(f"Processed ASIN: {asin}")
+                print(f"DEBUG: Processed ASIN: {asin}", flush=True)
+# deal processing loop
             except Exception as e:
                 logging.error(f"Error processing ASIN {asin}: {str(e)}")
                 print(f"Error processing ASIN {asin}: {str(e)}")
