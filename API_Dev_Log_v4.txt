@@ -693,4 +693,4 @@ Issue: Used condition-specific columns missing in stable_products.py
 - Columns: Used, very good - Current; Used, good - Current; Used, acceptable - Current
 - Rationale: Not implemented in stable_products.py. Keepa API provides stats.current[4-7] for these prices. Add functions later when needed.
 - Status: Not implemented. Revisit when expanding columns.
-- Location: /home/timscripts/keepa_api/keepa-deals/dev_log_may18.txt
+- Location: /home/timscripts/keepa_api/keepa-deals/dev_log_may18.txt 

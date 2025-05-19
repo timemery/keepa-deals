@@ -1,5 +1,5 @@
 # Chunk 1 starts
-# stable_deals.py change window
+# stable_deals.py change_win_1
 import logging
 import requests
 import json
