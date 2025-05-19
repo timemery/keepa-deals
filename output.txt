@@ -12,3 +12,7 @@ Headers loaded: 216 fields
 DEBUG: Main function started
 Starting Keepa_Deals...
 Fetching deals...
+DEBUG: Starting deal fetch from index 0
+DEBUG: Starting deal fetch from index 0
+DEBUG: Starting deal fetch from index 0
+Main failed: name 'api_key' is not defined
