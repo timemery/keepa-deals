@@ -21,31 +21,8 @@ TORONTO_TZ = timezone('America/Toronto')
 def fetch_deals_for_deals(api_key, start_index):
     print(f"DEBUG: Starting deal fetch from index {start_index}", flush=True)
     logging.debug(f"Fetching deals from index {start_index}")
-    url = f"https://api.keepa.com/deals?key={api_key}&domain=1&startIndex={start_index}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
-    try:
-        print(f"DEBUG: Sending request to {url[:50]}...", flush=True)
-        start_time = time.time()
-        response = requests.get(url, headers=headers, timeout=30)
-        fetch_time = time.time() - start_time
-        print(f"DEBUG: Deal fetch status: {response.status_code}, took {fetch_time:.2f}s", flush=True)
-        logging.debug(f"Deal fetch status: {response.status_code}")
-        if response.status_code != 200:
-            logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
-            print(f"DEBUG: Deal fetch failed: {response.status_code}, {response.text[:100]}", flush=True)
-            return []
-        data = response.json()
-        deals = data.get('deals', [])
-        print(f"DEBUG: Fetched {len(deals)} deals", flush=True)
-        logging.debug(f"Fetched {len(deals)} deals")
-        return deals
-    except Exception as e:
-        logging.error(f"Deal fetch failed: {str(e)}")
-        print(f"DEBUG: Deal fetch failed: {str(e)}", flush=True)
-        return []
-    
     deal_query = {
-        "page": page,
+        "page": start_index,
         "domainId": "1",
         "excludeCategories": [],
         "includeCategories": [283155],
@@ -77,25 +54,25 @@ def fetch_deals_for_deals(api_key, start_index):
     encoded_selection = urllib.parse.quote(query_json)
     url = f"https://api.keepa.com/deal?key={api_key}&selection={encoded_selection}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
-    logging.debug(f"Deal URL: {url}")
     try:
+        print(f"DEBUG: Sending request to {url[:50]}...", flush=True)
+        start_time = time.time()
         response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Full deal response: {response.text}")
+        fetch_time = time.time() - start_time
+        print(f"DEBUG: Deal fetch status: {response.status_code}, took {fetch_time:.2f}s", flush=True)
+        logging.debug(f"Deal fetch status: {response.status_code}")
         if response.status_code != 200:
             logging.error(f"Deal fetch failed: {response.status_code}, {response.text}")
-            print(f"Deal fetch failed: {response.status_code}, {response.text}")
+            print(f"DEBUG: Deal fetch failed: {response.status_code}, {response.text[:100]}", flush=True)
             return []
         data = response.json()
         deals = data.get('deals', {}).get('dr', [])
+        print(f"DEBUG: Fetched {len(deals)} deals", flush=True)
         logging.debug(f"Fetched {len(deals)} deals: {[d.get('asin', '-') for d in deals]}")
-        logging.debug(f"Deal response structure: {list(data.get('deals', {}).keys())}")
-        logging.debug(f"All deal keys: {[list(d.keys()) for d in deals]}")
-        logging.debug(f"Full deals: {deals}")
-        print(f"Fetched {len(deals)} deals")
         return deals[:5]
     except Exception as e:
-        logging.error(f"Deal fetch exception: {str(e)}")
-        print(f"Deal fetch exception: {str(e)}")
+        logging.error(f"Deal fetch failed: {str(e)}")
+        print(f"DEBUG: Deal fetch failed: {str(e)}", flush=True)
         return []
 
 def validate_asin(asin: str) -> bool:
