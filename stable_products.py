@@ -220,6 +220,10 @@ def new_3rd_party_fbm_current(product):
     return result
 # New, 3rd Party FBM - Current ends
 
+
+
+# FIX THIS ONE!
+# !!! this one doesn't work!!!
 # New, 3rd Party FBM starts
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
@@ -236,6 +240,25 @@ def new_3rd_party_fbm(product):
     logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
     return result
 # New, 3rd Party FBM ends
+# !!! this one doesn't work!!!
+
+
+# VERIFY THIS WHEN THERE'S DATA
+# impossible to verify since both Keepa and the csv were all "-" 
+# New, 3rd Party FBA - Current starts
+def new_3rd_party_fba_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    offers = product.get('offers', [])
+    current_price = get_stat_value(stats, 'current', 11, divisor=100, is_price=True)
+    fba_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False)]
+    if not fba_prices or current_price == '-' or not any(abs(float(current_price[1:]) - p) < 0.01 for p in fba_prices):
+        logging.warning(f"No valid FBA price for ASIN {asin}: stats={current_price}, offers={fba_prices}")
+        return {'New, 3rd Party FBA - Current': '-'}
+    result = {'New, 3rd Party FBA - Current': current_price}
+    logging.debug(f"new_3rd_party_fba_current result for ASIN {asin}: {result}")
+    return result
+# New, 3rd Party FBA - Current ends
 
 # List Price starts
 def list_price(product):
@@ -423,6 +446,27 @@ def buy_box_current(product):
         return {'Buy Box - Current': '-'}
 # Buy Box - Current ends
 
+# New - Current starts
+def new_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    current = stats.get('current', [-1] * 20)
+    value = current[1] if len(current) > 1 else -1
+    logging.debug(f"New - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid New - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        return {'New - Current': '-'}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"New - Current result for ASIN {asin}: {formatted}")
+        return {'New - Current': formatted}
+    except Exception as e:
+        logging.error(f"new_current failed for ASIN {asin}: {str(e)}")
+        return {'New - Current': '-'}
+# New - Current ends
+
+# This one doesn't work - but we're keeping it as a reminder:
+# 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current. 
 # Amazon - Current starts
 def amazon_current(product):
     asin = product.get('asin', 'unknown')

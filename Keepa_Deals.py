@@ -25,6 +25,7 @@ except Exception as e:
 # Chunk 1 ends
 
 # Chunk 2 starts
+# 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current.
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_product(asin, days=365, offers=20, rating=1, history=1):
     if not validate_asin(asin):

@@ -30,6 +30,7 @@ def validate_asin(asin):
         return False
     return True
 
+# Do not modify fetch_deals_for_deals! It mirrors the "Show API query" (https://api.keepa.com/deal), with critical parameters.
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_deals_for_deals(page):
     logging.debug(f"Fetching deals page {page} for Percent Down 90...")

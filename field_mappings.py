@@ -86,7 +86,7 @@ from stable_products import (
     # Amazon - Highest 365 days,
     # Amazon - 90 days OOS,
     # Amazon - Stock,
-    # New - Current,
+    new_current,                    # New - Current,
     # New - 30 days avg.,
     # New - 60 days avg.,
     # New - 90 days avg.,
@@ -98,7 +98,7 @@ from stable_products import (
     # New - Highest 365 days,
     # New - 90 days OOS,
     # New - Stock,
-    # New, 3rd Party FBA - Current,
+    new_3rd_party_fba_current,      # New, 3rd Party FBA - Current,
     # New, 3rd Party FBA - 30 days avg.,
     # New, 3rd Party FBA - 60 days avg.,
     # New, 3rd Party FBA - 90 days avg.,
@@ -525,7 +525,7 @@ FUNCTION_LIST = [
     None,                           # Amazon - Highest 365 days
     None,                           # Amazon - 90 days OOS
     None,                           # Amazon - Stock
-    None,                           # New - Current
+    new_current,                    # New - Current
     None,                           # New - 30 days avg.
     None,                           # New - 60 days avg.
     None,                           # New - 90 days avg.
@@ -537,7 +537,7 @@ FUNCTION_LIST = [
     None,                           # New - Highest 365 days
     None,                           # New - 90 days OOS
     None,                           # New - Stock
-    None,                           # New, 3rd Party FBA - Current
+    new_3rd_party_fba_current,      # New, 3rd Party FBA - Current
     None,                           # New, 3rd Party FBA - 30 days avg.
     None,                           # New, 3rd Party FBA - 60 days avg.
     None,                           # New, 3rd Party FBA - 90 days avg.
