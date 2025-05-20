@@ -428,10 +428,10 @@ def amazon_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
-    value = current[10]
+    value = current[10] if len(current) > 10 else -1
     logging.debug(f"Amazon - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
-    if value <= 0:
-        logging.info(f"No valid Amazon - Current (value={value}) for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid Amazon - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
         return {'Amazon - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
