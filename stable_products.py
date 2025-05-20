@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from stable_deals import validate_asin
 import json
-from keepa import Keepa
+# Removed unused import: from keepa import Keepa
 
 @retry(stop_max_attempt_number=3, wait_fixed=2000)
 def fetch_product_for_retry(asin):
@@ -55,28 +55,13 @@ def get_asin(product):
 # ASIN ends
 
 # Title starts
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
-def get_title(asin, api_key):
-    if not validate_asin(asin):
-        return {'Title': '-'}
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
-    try:
-        response = requests.get(url, headers=API_HEADERS, timeout=30)
-        logging.debug(f"get_title response status for ASIN {asin}: {response.status_code}")
-        if response.status_code != 200:
-            logging.error(f"get_title request failed for ASIN {asin}: {response.status_code}")
-            return {'Title': '-'}
-        data = response.json()
-        products = data.get('products', [])
-        if not products:
-            logging.error(f"get_title no product data for ASIN {asin}")
-            return {'Title': '-'}
-        title = products[0].get('title', '-')
-        logging.debug(f"get_title result for ASIN {asin}: {title[:50]}")
-        return {'Title': title}
-    except Exception as e:
-        logging.error(f"get_title fetch failed for ASIN {asin}: {str(e)}")
-        return {'Title': '-'}
+def get_title(product):
+    title = product.get('title', '-')
+    asin = product.get('asin', 'unknown')
+    if title == '-':
+        logging.warning(f"get_title: No title found for ASIN {asin}")
+    logging.debug(f"get_title result for ASIN {asin}: {title[:50]}")
+    return {'Title': title}
 # Title ends
 
 # Sales Rank - Current starts
