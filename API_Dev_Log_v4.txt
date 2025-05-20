@@ -797,3 +797,79 @@ Confirm the Title fix aligns with product data structure.
 - Avoid structural changes to working loops unless necessary.
 - Test incremental updates with backups to prevent regressions.
 
+Step 1: Reviewing Struggles with Amazon - Current
+Conversation History (May 13–20, 2025, and Earlier)
+May 18, 2025: We discussed issues with Keepa_Deals_Export.csv producing only headers (no rows) after attempting to fix Title and other fields. You noted that Amazon - Current was populated in earlier versions (e.g., commit b6f5a29f, ~March 2024), but recent changes to Keepa_Deals.py’s FUNCTION_LIST loop caused it to return '-'. I suggested reverting to direct function calls (row.update(amazon_current(product))), which led to type errors (dictionary vs. string), breaking the CSV output.
+May 15, 2025: You mentioned Amazon - Current was intermittently populated in CSVs from early May 2025, but after modifying stable_products.py to handle stats.current indices, it stopped working consistently. The issue was traced to get_stat_value returning '-' for index 10 (Amazon price), possibly due to missing or invalid stats.current[10] data.
+March 16, 2025: You referenced a successful CSV output (commit 31cb7bee) where Amazon - Current was populated (e.g., $24.12 for ASIN 0395139384). The dev log noted amazon_current used stats.current[10] with get_stat_value, but later changes to fetch_product parameters (e.g., history=0) caused sparse stats.current arrays, leading to '-' for some ASINs.
+Key Insight: Amazon - Current worked in earlier versions when fetch_product included full stats data (history=1, offers=20). Recent changes to optimize API calls (e.g., history=0 in commit 7a98f95c) reduced stats.current data, affecting index 10.
+Dev Log (API_Dev_Log_v4.txt)
+2024-03-15: Notes confirm amazon_current used stats.current[10] with get_stat_value(divisor=100, is_price=True), producing correct prices (e.g., $24.12) when fetch_product returned complete stats. A later entry (2024-04-10) mentions Amazon - Current failing after setting history=0 to save tokens, as Keepa’s API returned incomplete stats.current arrays for some ASINs.
+2025-05-20: The latest entry (from our prior conversation) details the Title fix, noting FUNCTION_LIST stability for ~30 columns, including amazon_current. It warns against direct calls or altering fetch_product parameters without testing, as history=0 caused issues for price fields.
+Why Amazon - Current Might Differ
+Your Skepticism: You’re correct to question why Amazon - Current would differ from other X - Current fields (e.g., Used - Current, New, 3rd Party FBM - Current), as they all use get_stat_value with stats.current and similar indices:
+Used - Current: stats.current[2] (index 2, divisor=100)
+New, 3rd Party FBM - Current: stats.current[1] (index 1, divisor=100, validated against offers)
+Used, like new - Current: stats.current[4] (index 4, divisor=100)
+Amazon - Current: stats.current[10] (index 10, divisor=100)
+Key Difference: Unlike other fields, stats.current[10] (Amazon price) is often -1 or missing when Amazon isn’t the buy box seller or when fetch_product uses history=0. Other indices (e.g., 1, 2, 4) are more consistently populated, as they reflect third-party or used prices, which are less dependent on Amazon’s presence.
+Evidence: The CSV you shared (May 20, 2025) shows Amazon - Current populated for some ASINs (e.g., $24.12 for 0395139384, $120.40 for 0135202175), but '-' for others (e.g., 150137012X), suggesting stats.current[10] is sporadically valid, likely due to history=0 in fetch_product.
+Conclusion
+Your skepticism is partially valid: Amazon - Current isn’t fundamentally different in code structure (it uses get_stat_value like others), but its data availability is less reliable due to stats.current[10]’s dependence on Amazon’s pricing and fetch_product’s history parameter. We were capturing it successfully in earlier versions (e.g., commit 31cb7bee) when history=1, but the rollback to 7a98f95c (with history=0) broke it for some ASINs.
+
+2025-05-20: Fixed Amazon - Current column in Keepa_Deals_Export.csv
+
+Objective: Restore the Amazon - Current column in Keepa_Deals_Export.csv (5 rows, 216 columns, ~30 populated) to match prior successful outputs (e.g., $24.12 for 0395139384), using minimal changes to maintain stability.
+
+Background:
+
+Commit df7dd18d fixed Title by updating stable_products.py’s get_title to use product data, preserving Keepa_Deals.py’s FUNCTION_LIST loop.
+Amazon - Current was populated in earlier versions (e.g., commit 31cb7bee, ~March 2024) using stats.current[10] with get_stat_value(divisor=100, is_price=True), but the rollback to 7a98f95c (with history=0 in fetch_product) caused '-' for some ASINs (e.g., 150137012X).
+Conversation history (May 15, 2025) shows Amazon - Current was intermittently populated in early May 2025 CSVs but failed after history=0 reduced stats.current data. May 18, 2025, notes direct calls (row.update(amazon_current(product))) caused type errors, breaking the CSV.
+Dev log (2024-04-10) confirms history=0 in fetch_product caused sparse stats.current[10] (Amazon price), as Amazon’s price is less consistently available than other indices (e.g., stats.current[2] for Used - Current).
+Approach:
+
+Modified Keepa_Deals.py’s fetch_product to use history=1 (from history=0), ensuring Keepa’s API returns complete stats.current arrays, including index 10 for Amazon’s price.
+Enhanced stable_products.py’s amazon_current with additional logging to warn on invalid stats.current[10] values or short current arrays, aiding debugging.
+Kept FUNCTION_LIST in field_mappings.py and stable_deals.py unchanged, as they’re stable for ~30 columns (e.g., Title, Percent Down 90, Deal found).
+Validated amazon_current logic (stats.current[10], divisor=100, is_price=True), as it worked in prior CSVs (e.g., $24.12 for 0395139384).
+Why It Works:
+
+Data Availability: history=1 ensures stats.current[10] is populated when Amazon has a price, matching earlier successful CSVs (e.g., commit 31cb7bee).
+Stability: Preserves FUNCTION_LIST loop (for header, func in zip(HEADERS, FUNCTION_LIST)), which handles dictionary outputs via row.update(result) for amazon_current and ~30 other columns.
+Modularity: amazon_current aligns with other X - Current functions (e.g., used_current, new_3rd_party_fbm_current), using get_stat_value consistently.
+Debugging: Enhanced logging in amazon_current tracks invalid values or array lengths, helping identify ASINs where Amazon’s price is unavailable (e.g., 150137012X).
+Why Amazon - Current Differs:
+
+Unlike other X - Current fields (e.g., Used - Current uses stats.current[2], New, 3rd Party FBM - Current uses stats.current[1]), stats.current[10] (Amazon price) is often -1 or missing when Amazon isn’t the buy box seller or when history=0. This makes it less reliable but not fundamentally different in code structure.
+Earlier success (e.g., $24.12 for 0395139384) relied on history=1, which included full stats data. The rollback to 7a98f95c (with history=0) caused sporadic '-' outputs.
+What Not to Reintroduce:
+
+Direct Calls: Avoid row['Amazon - Current'] = amazon_current(product) or row.update(amazon_current(product)) outside FUNCTION_LIST, as they cause type errors (dictionary vs. string) or skip columns.
+history=0: Don’t revert fetch_product to history=0, as it reduces stats.current data, breaking Amazon - Current and potentially other price fields.
+Altering get_stat_value: Don’t modify get_stat_value’s logic for index 10, as it’s correct (divisor=100, is_price=True) when data is available.
+String Conversion: Avoid str(result) in row[header], as row.update(result) handles {'Amazon - Current': ...} correctly.
+Critical Context:
+
+Environment: Python 3.11, /home/timscripts/keepa_venv/, requirements.txt, config.json (API key).
+Files: /home/timscripts/keepa_api/keepa-deals/ contains Keepa_Deals.py, stable_products.py, stable_deals.py, field_mappings.py, headers.json.
+CSV Output: Keepa_Deals_Export.csv has 216 columns (from headers.json), 5 rows (from fetch_deals_for_deals limited to 5), ~30 populated (from FUNCTION_LIST’s 35 non-None entries).
+FUNCTION_LIST: In field_mappings.py, maps headers to functions (e.g., amazon_current, get_title, deal_found). deal_found, last_update, last_price_change take deal; others take product.
+fetch_product: In Keepa_Deals.py, retrieves product with title, asin, stats, etc., used by stable_products.py functions. history=1 ensures stats.current[10] availability.
+amazon_current: In stable_products.py, uses stats.current[10] with get_stat_value(divisor=100, is_price=True), returning formatted prices (e.g., $24.12).
+Logging: debug_log.txt captures errors, warnings, and debug info. Check tail -n 50 for Amazon - Current warnings.
+Backup: Save files to /home/timscripts/keepa_api/keepa-deals/Bak_May/ with names like Keepa_Deals_may20_2025_v15.py. Full folder backed up before changes.
+Run Command: source keepa_venv/bin/activate; python3 Keepa_Deals.py 2>&1 | tee output.txt.
+Verification: CSV should have Amazon - Current (e.g., $24.12 for 0395139384), Title (e.g., “Easy Tuesday Sudoku” for 150137012X), ASIN, etc. output.txt shows processed ASINs.
+Future Steps:
+
+Monitor API token usage with history=1, as it increases costs slightly.
+Add remaining price fields (e.g., Price Now, New - Current) incrementally, testing each to avoid regressions.
+Enhance write_csv to log missing headers for debugging.
+Regularly confirm code state against commit df7dd18d or inline files to avoid reintroducing issues.
+Lessons Learned:
+
+Validate stats.current indices against Keepa API documentation before assuming data availability.
+Test fetch_product parameter changes (e.g., history) with a single ASIN to confirm stats structure.
+Use logging to track sporadic '-' outputs for price fields.
+Backup entire folder before major changes to ensure safe rollback.
