@@ -873,3 +873,65 @@ Validate stats.current indices against Keepa API documentation before assuming d
 Test fetch_product parameter changes (e.g., history) with a single ASIN to confirm stats structure.
 Use logging to track sporadic '-' outputs for price fields.
 Backup entire folder before major changes to ensure safe rollback.
+
+2025-05-20: Final attempt to fix Amazon - Current column in Keepa_Deals_Export.csv
+
+Objective: Populate Amazon - Current in Keepa_Deals_Export.csv (5 rows, 216 columns, ~30 populated) to reflect live Amazon prices (e.g., $6.26 for 150137012X), reverting to a known working state.
+
+Background:
+
+Commit ba06608c enhanced amazon_current logging, but Amazon - Current was '-' for all rows (e.g., 150137012X expected $6.26).
+debug_log.txt confirms No valid Amazon - Current (value=-1, current_length=30) for ASIN 150137012X, indicating stats.current[10] = -1.
+Commit df7dd18d fixed Title, proving FUNCTION_LIST stability. Amazon - Current worked in March 2024 (commit 31cb7bee, e.g., $24.12 for 0395139384) with fetch_product using days=365, offers=20, history=1, no buyBox.
+Conversation (May 15, 2025) notes Amazon - Current populated in early May 2025 but failed after fetch_product added buyBox=1, stock=1, rating=1 in commit 7a98f95c (April 2024).
+Conversation (May 20, 2025) confirms 150137012X has a live $6.26 Amazon offer on Keepa deals, but stats.current[10] = -1, due to buyBox=1 in fetch_product’s URL.
+Keepa API docs: stats.current[10] (Amazon price) is independent of buyBox. history=1 includes it, but buyBox=1 may set stats.current[10] = -1 when Amazon isn’t the Buy Box seller.
+stable_deals.py uses mustNotHaveAmazonOffer: False, allowing Amazon offers, so 150137012X is included.
+Approach:
+
+Modified Keepa_Deals.py’s fetch_product URL to remove &buyBox=1, reverting to 31cb7bee (days=365, offers=20, history=1, rating=1, stock=1).
+Kept history=1, ensuring stats.current[10] availability, and rating=1, stock=1 for future fields.
+Preserved stable_products.py’s amazon_current (stats.current[10], divisor=100, is_price=True), as it worked in 31cb7bee.
+Left stable_deals.py’s fetch_deals_for_deals at mustHaveAmazonOffer: False, mustNotHaveAmazonOffer: False, allowing Amazon offers.
+Left FUNCTION_LIST in field_mappings.py unchanged, handling ~30 columns.
+Why It Should Work:
+
+Restores Working State: 31cb7bee populated Amazon - Current without buyBox=1. buyBox=1 (added in 7a98f95c) causes stats.current[10] = -1, despite $6.26 offer for 150137012X.
+Data Availability: history=1 ensures stats.current[10] = 626, per Keepa API docs. Removing buyBox=1 avoids interference.
+Stability: FUNCTION_LIST loop (for header, func in zip(HEADERS, FUNCTION_LIST)) handles amazon_current’s {'Amazon - Current': '$6.26'} via row.update(result).
+Debugging: amazon_current’s logging reports raw value=626, confirming success.
+Why Amazon - Current Differs:
+
+stats.current[10] is -1 when Amazon’s offer isn’t prioritized, unlike stats.current[2] (Used), which is more consistent. buyBox=1 suppresses stats.current[10] if Amazon isn’t the Buy Box seller.
+Prior success (31cb7bee) used no buyBox, confirming it’s unnecessary.
+What Not to Reintroduce:
+
+buyBox=1: Avoid &buyBox=1 in fetch_product, as it causes stats.current[10] = -1.
+Direct Calls: Avoid row['Amazon - Current'] = amazon_current(product), causing type errors.
+history=0: Don’t use history=0, as it omits stats.current.
+String Conversion: Avoid str(result) in row[header], as row.update(result) handles dictionaries.
+Critical Context:
+
+Environment: Python 3.11, /home/timscripts/keepa_venv/, requirements.txt, config.json (API key).
+Files: /home/timscripts/keepa_api/keepa-deals/ contains Keepa_Deals.py, stable_products.py, stable_deals.py, field_mappings.py, headers.json.
+CSV Output: Keepa_Deals_Export.csv has 216 columns (headers.json), 5 rows (fetch_deals_for_deals limit), ~30 populated (FUNCTION_LIST’s 35 non-None).
+FUNCTION_LIST: Maps headers to functions (e.g., amazon_current, get_title). deal_found, last_update, last_price_change take deal; others take product.
+fetch_product: Uses history=1, offers=20, rating=1, stock=1, no buyBox. Should return stats.current[10] = 626.
+amazon_current: Uses stats.current[10], get_stat_value(divisor=100, is_price=True), returns $6.26 if value=626.
+fetch_deals_for_deals: Uses mustNotHaveAmazonOffer: False, allowing Amazon offers.
+Logging: debug_log.txt logs No valid Amazon - Current (value=-1, ...) if failed, or raw value=626 if successful.
+Backup: Save to /home/timscripts/keepa_api/keepa-deals/Bak_May/ (e.g., Keepa_Deals_may20_2025_v19.py). Full folder backed up.
+Run Command: source keepa_venv/bin/activate; python3 Keepa_Deals.py 2>&1 | tee output.txt.
+Verification: CSV should have Amazon - Current (e.g., $6.26 for 150137012X), Title, ASIN. Log should show raw value=626.
+Future Steps:
+
+If this fails, move to Used - Current (stats.current[2]), which is more reliable.
+Target other X - Current fields (e.g., New, 3rd Party FBM - Current, stats.current[1]).
+Monitor token usage without buyBox=1.
+Enhance write_csv to log missing headers.
+Lessons Learned:
+
+Verify fetch_product URL parameters against commits (e.g., 31cb7bee).
+Confirm log warnings (e.g., value=-1) before fixes.
+Cross-check ASIN data (e.g., $6.26 for 150137012X) with Keepa deals site.
+Avoid unneeded parameters (buyBox=1).
