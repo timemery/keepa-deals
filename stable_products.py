@@ -205,17 +205,19 @@ def used_acceptable(product):
 
 # New, 3rd Party FBM - Current starts
 def new_3rd_party_fbm_current(product):
-    stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
     offers = product.get('offers', [])
-    current_price = get_stat_value(stats, 'current', 1, divisor=100, is_price=True)
     fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and not o.get('isFBA', False)]
-    if fbm_prices and current_price != '-' and not any(abs(float(current_price[1:]) - p) < 0.01 for p in fbm_prices):
-        logging.warning(f"FBM price mismatch for ASIN {asin}: stats={current_price}, offers={fbm_prices}")
-        current_price = '-'
-    result = {
-        'New, 3rd Party FBM - Current': current_price
-    }
+    if not fbm_prices or all(p <= 0 for p in fbm_prices):
+        logging.warning(f"No valid FBM offers for ASIN {asin}: offers={fbm_prices}")
+        return {'New, 3rd Party FBM - Current': '-'}
+    current_price = get_stat_value(stats, 'current', 1, divisor=100, is_price=True)
+    lowest_fbm = min(p for p in fbm_prices if p > 0)
+    if current_price == '-' or abs(float(current_price[1:]) - lowest_fbm) > 0.01:
+        logging.debug(f"FBM price using offers for ASIN {asin}: stats={current_price}, lowest_fbm={lowest_fbm}")
+        current_price = f"${lowest_fbm:.2f}"
+    result = {'New, 3rd Party FBM - Current': current_price}
     logging.debug(f"new_3rd_party_fbm_current result for ASIN {asin}: {result}")
     return result
 # New, 3rd Party FBM - Current ends
@@ -243,8 +245,7 @@ def new_3rd_party_fbm(product):
 # !!! this one doesn't work!!!
 
 
-# VERIFY THIS WHEN THERE'S DATA
-# impossible to verify since both Keepa and the csv were all "-" 
+# 2025-05-20: Impossible to verify New, 3rd Party FBA - Current, as CSV and Keepa showed all '-' for 5 ASINs (commit 7ef4629e). Update uses offers array for reliability.
 # New, 3rd Party FBA - Current starts
 def new_3rd_party_fba_current(product):
     asin = product.get('asin', 'unknown')
@@ -426,7 +427,7 @@ def sales_rank_drops_last_30_days(product):
         return {'Sales Rank - Drops last 30 days': '-'}
 # Sales Rank - Drops last 30 days ends
 
-# Buy Box - Current starts
+# Buy Box - Current starts - stopped working after a change to new_3rd_party_fbm_current
 def buy_box_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
