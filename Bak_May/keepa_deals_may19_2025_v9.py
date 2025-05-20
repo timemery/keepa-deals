@@ -118,21 +118,21 @@ def main():
                 continue
             row = {}
             try:
-                #Process all functions using FUNCTION_LIST
-                for header, func in FUNCTION_LIST:
-                    if func:
-                        try:
-                            #Pass deal for stable_deals functions, product for stable_products
-                            input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
-                            print(f"DEBUG: Running {func.__name__} for ASIN {asin}", flush=True)
-                            #Pass api_key only for get_title
-                            result = func(input_data, api_key) if func.__name__ == 'get_title' else func(input_data)
-                            row[header] = str(result) if result else '-'
-                        except Exception as e:
-                            logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
-                            print(f"DEBUG: Function {func.__name__} failed for ASIN {asin}: {str(e)}", flush=True)
-                            row[header] = '-'
-                #Process all functions using FUNCTION_LIST
+#Process all functions using FUNCTION_LIST
+            for header, func in FUNCTION_LIST:
+                if func:
+                    try:
+                        #Pass deal for stable_deals functions, product for stable_products
+                        input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
+                        print(f"DEBUG: Running {func.__name__} for ASIN {asin}", flush=True)
+                        #Pass api_key only for get_title
+                        result = func(input_data, api_key) if func.__name__ == 'get_title' else func(input_data)
+                        row[header] = str(result) if result else '-'
+                    except Exception as e:
+                        logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
+                        print(f"DEBUG: Function {func.__name__} failed for ASIN {asin}: {str(e)}", flush=True)
+                        row[header] = '-'
+#Process all functions using FUNCTION_LIST
                 rows.append(row)
             except Exception as e:
                 logging.error(f"Error processing ASIN {asin}: {str(e)}")
