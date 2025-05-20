@@ -118,23 +118,23 @@ def main():
                 continue
             row = {}
             try:
-#Process all functions using FUNCTION_LIST
-                for header, func in FUNCTION_LIST:
-                    if func:
-                        try:
-#Pass deal for stable_deals functions, product for stable_products
-                            input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
-                            print(f"DEBUG: Running {func.__name__} for ASIN {asin}", flush=True)
-#Pass api_key for stable_products functions
-                            from stable_products import get_title, percent_down_90, amz_link, keepa_link, tracking_since, categories_root, categories_sub, categories_tree, get_asin, manufacturer, author, binding, package_quantity, package_weight, package_height, package_length, package_width, listed_since, sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, sales_rank_drops_last_30_days, sales_rank_drops_last_365_days, buy_box_current, amazon_current, new_3rd_party_fbm_current, used_current, used_like_new, used_very_good, used_good, used_acceptable
-                            stable_products_funcs = {f.__name__ for f in [get_title, percent_down_90, amz_link, keepa_link, tracking_since, categories_root, categories_sub, categories_tree, get_asin, manufacturer, author, binding, package_quantity, package_weight, package_height, package_length, package_width, listed_since, sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, sales_rank_drops_last_30_days, sales_rank_drops_last_365_days, buy_box_current, amazon_current, new_3rd_party_fbm_current, used_current, used_like_new, used_very_good, used_good, used_acceptable]}
-                            result = func(input_data, api_key) if func.__name__ in stable_products_funcs else func(input_data)
-                            row[header] = str(result) if result else '-'
-                        except Exception as e:
-                            logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
-                            print(f"DEBUG: Function {func.__name__} failed for ASIN {asin}: {str(e)}", flush=True)
-                            row[header] = '-'
-#Process all functions using FUNCTION_LIST
+# Process all functions using FUNCTION_LIST
+           for header, func in FUNCTION_LIST:
+               if func:
+                   try:
+# Pass deal for stable_deals functions, product for stable_products
+                       input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
+                       print(f"DEBUG: Running {func.__name__} for ASIN {asin}", flush=True)
+# Pass api_key for stable_products functions
+                       from stable_products import get_title, percent_down_90, amz_link, keepa_link, tracking_since, categories_root, categories_sub, categories_tree, get_asin, manufacturer, author, binding, package_quantity, package_weight, package_height, package_length, package_width, listed_since, sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, sales_rank_drops_last_30_days, sales_rank_drops_last_365_days, buy_box_current, amazon_current, new_3rd_party_fbm_current, used_current, used_like_new, used_very_good, used_good, used_acceptable
+                       stable_products_funcs = {f.__name__ for f in [get_title, percent_down_90, amz_link, keepa_link, tracking_since, categories_root, categories_sub, categories_tree, get_asin, manufacturer, author, binding, package_quantity, package_weight, package_height, package_length, package_width, listed_since, sales_rank_current, sales_rank_30_days_avg, sales_rank_90_days_avg, sales_rank_180_days_avg, sales_rank_365_days_avg, sales_rank_drops_last_30_days, sales_rank_drops_last_365_days, buy_box_current, amazon_current, new_3rd_party_fbm_current, used_current, used_like_new, used_very_good, used_good, used_acceptable]}
+                       result = func(input_data, api_key) if func.__name__ in stable_products_funcs else func(input_data)
+                       row[header] = str(result) if result else '-'
+                   except Exception as e:
+                       logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
+                       print(f"DEBUG: Function {func.__name__} failed for ASIN {asin}: {str(e)}", flush=True)
+                       row[header] = '-'
+# Process all functions using FUNCTION_LIST
                 rows.append(row)
             except Exception as e:
                 logging.error(f"Error processing ASIN {asin}: {str(e)}")
