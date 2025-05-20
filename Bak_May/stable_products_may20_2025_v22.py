@@ -220,10 +220,6 @@ def new_3rd_party_fbm_current(product):
     return result
 # New, 3rd Party FBM - Current ends
 
-
-
-# FIX THIS ONE!
-# !!! this one doesn't work!!!
 # New, 3rd Party FBM starts
 def new_3rd_party_fbm(product):
     stats = product.get('stats', {})
@@ -240,25 +236,6 @@ def new_3rd_party_fbm(product):
     logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
     return result
 # New, 3rd Party FBM ends
-# !!! this one doesn't work!!!
-
-
-# VERIFY THIS WHEN THERE'S DATA
-# impossible to verify since both Keepa and the csv were all "-" 
-# New, 3rd Party FBA - Current starts
-def new_3rd_party_fba_current(product):
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    offers = product.get('offers', [])
-    current_price = get_stat_value(stats, 'current', 11, divisor=100, is_price=True)
-    fba_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False)]
-    if not fba_prices or current_price == '-' or not any(abs(float(current_price[1:]) - p) < 0.01 for p in fba_prices):
-        logging.warning(f"No valid FBA price for ASIN {asin}: stats={current_price}, offers={fba_prices}")
-        return {'New, 3rd Party FBA - Current': '-'}
-    result = {'New, 3rd Party FBA - Current': current_price}
-    logging.debug(f"new_3rd_party_fba_current result for ASIN {asin}: {result}")
-    return result
-# New, 3rd Party FBA - Current ends
 
 # List Price starts
 def list_price(product):
