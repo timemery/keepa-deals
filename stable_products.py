@@ -16,6 +16,7 @@ def fetch_product_for_retry(asin):
         config = json.load(f)
     api = Keepa(config['api_key'])
     product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
+    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_current={product[0].get('stats', {}).get('current', [])} if product else {}, offers_count={len(product[0].get('offers', [])) if product else 0}")
     return product[0] if product else {}
 # Fetch Product for Retry - ends
 
@@ -489,7 +490,7 @@ def new_3rd_party_fba_current(product):
 # New, 3rd Party FBA - Stock
 
 # New, 3rd Party FBM - Current starts
-# 2025-05-21: Filter price > 0 upfront to match Keepa query (commit 1be843da).
+# 2025-05-21: Keep minimal filters to match Keepa query (commit bc10b1c4).
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
@@ -546,15 +547,15 @@ def new_3rd_party_fbm(product):
 
 
 # Buy Box Used - Current starts
-# 2025-05-21: Enhanced logging to diagnose stats.current[9] failure (commit 1be843da).
+# 2025-05-21: Enhanced logging for stats.current[9] debugging (commit bc10b1c4).
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers={product.get('offers', [])} for ASIN {asin}")
     if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}, stats={stats}) for ASIN {asin}")
+        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}, stats={stats}, offers_count={len(product.get('offers', []))}) for ASIN {asin}")
         return {'Buy Box Used - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
