@@ -214,7 +214,7 @@ def new_3rd_party_fbm_current(product):
     if not fbm_prices:
         logging.warning(f"No FBM offers for ASIN {asin}: offers={fbm_prices}")
         return {'New, 3rd Party FBM - Current': '-'}
-    lowest_fbm = min(fbm_prices)
+    lowest_fbm = min(p for p in fbm_prices if p > 0) if any(p > 0 for p in fbm_prices) else -1
     if lowest_fbm <= 0:
         logging.warning(f"No valid FBM price for ASIN {asin}: lowest_fbm={lowest_fbm}")
         return {'New, 3rd Party FBM - Current': '-'}
@@ -448,18 +448,23 @@ def buy_box_current(product):
         return {'Buy Box - Current': '-'}
 # Buy Box - Current ends
 
-# Buy Box Used - Current starts - updated at the same time as FBM to fix conflict
-# Buy Box Used - Current starts
+# Buy Box Used - Current starts 
 # 2025-05-21: Enhanced logging to debug missing stats.current[9] (commit 285c4900).
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
+    offers = product.get('offers', [])
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats={stats}, offers={product.get('offers', [])} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats={stats}, offers={offers} for ASIN {asin}")
     if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
-        return {'Buy Box Used - Current': '-'}
+        used_offers = [o.get('price', -1) / 100 for o in offers if o.get('condition') in ['Used', 'Used - Like New', 'Used - Very Good', 'Used - Good', 'Used - Acceptable'] and o.get('isBuyBox', False)]
+        if used_offers and any(p > 0 for p in used_offers):
+            value = min(p for p in used_offers if p > 0)
+            logging.debug(f"Buy Box Used - Current - using offer price={value} for ASIN {asin}")
+        else:
+            logging.warning(f"No valid Buy Box Used - Current (value={value}, offers={used_offers}) for ASIN {asin}")
+            return {'Buy Box Used - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
         logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
