@@ -489,17 +489,17 @@ def new_3rd_party_fba_current(product):
 # New, 3rd Party FBA - Stock
 
 # New, 3rd Party FBM - Current starts
-# 2025-05-21: Removed lowest_fbm <= 0 filter to match Keepa query (commit 15d08395).
+# 2025-05-21: Filter price > 0 upfront to match Keepa query (commit 1be843da).
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
     logging.debug(f"FBM offers for ASIN {asin}: {offers}")
-    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False]
+    fbm_prices = [o.get('price') / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
     if not fbm_prices:
-        logging.warning(f"No FBM offers for ASIN {asin}: offers={fbm_prices}")
+        logging.warning(f"No valid FBM offers for ASIN {asin}: offers={fbm_prices}")
         return {'New, 3rd Party FBM - Current': '-'}
     lowest_fbm = min(fbm_prices)
-    formatted = f"${lowest_fbm:.2f}" if lowest_fbm > 0 else '-'
+    formatted = f"${lowest_fbm:.2f}"
     logging.debug(f"New, 3rd Party FBM - Current - result={formatted} for ASIN {asin}")
     return {'New, 3rd Party FBM - Current': formatted}
 # New, 3rd Party FBM - Current ends
@@ -546,15 +546,15 @@ def new_3rd_party_fbm(product):
 
 
 # Buy Box Used - Current starts
-# 2025-05-21: Removed fallback, strict stats.current[9] to avoid incorrect data (commit 15d08395).
+# 2025-05-21: Enhanced logging to diagnose stats.current[9] failure (commit 1be843da).
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats={stats}, offers={product.get('offers', [])} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
     if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}, stats={stats}) for ASIN {asin}")
         return {'Buy Box Used - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
