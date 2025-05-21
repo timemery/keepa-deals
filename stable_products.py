@@ -208,16 +208,17 @@ def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
     logging.debug(f"FBM offers for ASIN {asin}: {offers}")
-    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
+    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False]
     if not fbm_prices:
-        logging.warning(f"No valid FBM offers for ASIN {asin}: offers={fbm_prices}")
+        logging.warning(f"No FBM offers for ASIN {asin}: offers={fbm_prices}")
         return {'New, 3rd Party FBM - Current': '-'}
-    lowest_fbm = min(fbm_prices)
-    logging.debug(f"New, 3rd Party FBM - Current - lowest_fbm={lowest_fbm} for ASIN {asin}")
+    lowest_fbm = min(fbm_prices) if any(p > 0 for p in fbm_prices) else -1
+    if lowest_fbm <= 0:
+        logging.warning(f"No valid FBM price for ASIN {asin}: lowest_fbm={lowest_fbm}")
+        return {'New, 3rd Party FBM - Current': '-'}
     formatted = f"${lowest_fbm:.2f}"
-    result = {'New, 3rd Party FBM - Current': formatted}
-    logging.debug(f"new_3rd_party_fbm_current result for ASIN {asin}: {result}")
-    return result
+    logging.debug(f"New, 3rd Party FBM - Current - result={formatted} for ASIN {asin}")
+    return {'New, 3rd Party FBM - Current': formatted}
 # New, 3rd Party FBM - Current ends
 
 
@@ -426,6 +427,25 @@ def sales_rank_drops_last_30_days(product):
 # Sales Rank - Drops last 30 days ends
 
 # Buy Box - Current starts - stopped working after a change to new_3rd_party_fbm_current
+# Buy Box - Current starts
+def buy_box_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    current = stats.get('current', [-1] * 20)
+    value = current[0] if len(current) > 0 else -1
+    logging.debug(f"Buy Box - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid Buy Box - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        return {'Buy Box - Current': '-'}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"Buy Box - Current result for ASIN {asin}: {formatted}")
+        return {'Buy Box - Current': formatted}
+    except Exception as e:
+        logging.error(f"buy_box_current failed for ASIN {asin}: {str(e)}")
+        return {'Buy Box - Current': '-'}
+# Buy Box - Current ends
+
 # Buy Box Used - Current starts - updated at the same time as FBM to fix conflict
 # Buy Box Used - Current starts
 # 2025-05-21: Removed offers fallback to avoid masking missing Buy Box Used price (commit bd89f066).
