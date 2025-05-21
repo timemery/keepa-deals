@@ -122,7 +122,7 @@ from stable_products import (
     # New, 3rd Party FBM - Highest 365 days,
     # New, 3rd Party FBM - 90 days OOS,
     # New, 3rd Party FBM - Stock,
-    # Buy Box Used - Current,
+    buy_box_used_current,           # Buy Box Used - Current,
     # Buy Box Used - 30 days avg.,
     # Buy Box Used - 60 days avg.,
     # Buy Box Used - 90 days avg.,
@@ -561,7 +561,7 @@ FUNCTION_LIST = [
     None,                           # New, 3rd Party FBM - Highest 365 days
     None,                           # New, 3rd Party FBM - 90 days OOS
     None,                           # New, 3rd Party FBM - Stock
-    None,                           # Buy Box Used - Current
+    buy_box_used_current,           # Buy Box Used - Current
     None,                           # Buy Box Used - 30 days avg.
     None,                           # Buy Box Used - 60 days avg.
     None,                           # Buy Box Used - 90 days avg.
