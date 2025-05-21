@@ -9,13 +9,15 @@ from stable_deals import validate_asin
 import json
 # Removed unused import: from keepa import Keepa
 
+# Fetch Product for Retry - starts
 @retry(stop_max_attempt_number=3, wait_fixed=2000)
 def fetch_product_for_retry(asin):
     with open('config.json') as f:
         config = json.load(f)
     api = Keepa(config['api_key'])
-    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=False)
+    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
     return product[0] if product else {}
+# Fetch Product for Retry - ends
 
 # Constants
 KEEPA_EPOCH = datetime(2011, 1, 1)
@@ -212,7 +214,7 @@ def new_3rd_party_fbm_current(product):
     if not fbm_prices:
         logging.warning(f"No FBM offers for ASIN {asin}: offers={fbm_prices}")
         return {'New, 3rd Party FBM - Current': '-'}
-    lowest_fbm = min(fbm_prices) if any(p > 0 for p in fbm_prices) else -1
+    lowest_fbm = min(fbm_prices)
     if lowest_fbm <= 0:
         logging.warning(f"No valid FBM price for ASIN {asin}: lowest_fbm={lowest_fbm}")
         return {'New, 3rd Party FBM - Current': '-'}
@@ -448,13 +450,13 @@ def buy_box_current(product):
 
 # Buy Box Used - Current starts - updated at the same time as FBM to fix conflict
 # Buy Box Used - Current starts
-# 2025-05-21: Removed offers fallback to avoid masking missing Buy Box Used price (commit bd89f066).
+# 2025-05-21: Enhanced logging to debug missing stats.current[9] (commit 285c4900).
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats={stats}, offers={product.get('offers', [])} for ASIN {asin}")
     if value <= 0 or value == -1:
         logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
         return {'Buy Box Used - Current': '-'}
