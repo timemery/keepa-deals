@@ -48,13 +48,55 @@ def get_stat_value(stats, key, index, divisor=1, is_price=False):
         return '-'
 # Global stuff ends
 
-# ASIN starts
-def get_asin(product):
+# Percent Down 90 starts
+def percent_down_90(product):
+    logging.debug(f"percent_down_90 input: {product.get('asin', '-')}")
+    stats_90 = product.get('stats', {})
+    avg = stats_90.get('avg90', [-1] * 20)[2]  # Used price
+    curr = stats_90.get('current', [-1] * 20)[2]  # Used price
+    if avg <= 0 or curr < 0 or avg is None or curr is None:
+        logging.error(f"No valid avg90 or current for ASIN {product.get('asin', '-')}: avg={avg}, curr={curr}")
+        return {'Percent Down 90': '-'}
+    try:
+        value = ((avg - curr) / avg * 100)
+        percent = f"{value:.0f}%"
+        logging.debug(f"percent_down_90 result: {percent}")
+        return {'Percent Down 90': percent}
+    except Exception as e:
+        logging.error(f"percent_down_90 failed: {str(e)}")
+        return {'Percent Down 90': '-'}
+# Percent Down 90 ends
+
+# Avg. Price 90,
+# Percent Down 365,
+# Avg. Price 365,
+
+# Price Now starts - This produces correct data for Sales Rank - Current -- NOT Price Now
+#def price_now(product):
+#    stats = product.get('stats', {})
+#    result = {'Price Now': get_stat_value(stats, 'current', 3, divisor=100, is_price=True)}
+#    logging.debug(f"price_now result for ASIN {product.get('asin', 'unknown')}: {result}")
+#    return result
+# Price Now ends
+
+# Price Now Source,
+# Deal found (stable_deals) 
+
+# AMZ link starts
+def amz_link(product):
     asin = product.get('asin', '-')
-    result = {'ASIN': f'="{asin}"' if asin != '-' else '-'}
-    logging.debug(f"get_asin result for ASIN {asin}: {result}")
+    result = {'AMZ link': f"https://www.amazon.com/dp/{asin}" if asin != '-' else '-'}
+    logging.debug(f"amz_link result for ASIN {asin}: {result}")
     return result
-# ASIN ends
+# AMZ link ends
+
+# Keepa Link starts
+def keepa_link(product):
+    asin = product.get('asin', '-')
+    result = {'Keepa Link': f"https://keepa.com/#!product/1-{asin}" if asin != '-' else '-'}
+    logging.debug(f"keepa_link result for ASIN {asin}: {result}")
+    return result
+# Keepa Link ends
 
 # Title starts
 def get_title(product):
@@ -66,50 +108,105 @@ def get_title(product):
     return {'Title': title}
 # Title ends
 
-# Sales Rank - Current starts
-def sales_rank_current(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - Current': get_stat_value(stats, 'current', 3, is_price=False)}
-    return result
-# Sales Rank - Current ends
+# last update (stable_deals) 
+# last price change (stable_deals)
+# Sales Rank - Reference
+# Reviews - Rating
+# Reviews - Review Count
+# FBA Pick&Pack Fee
+# Referral Fee %
 
-# Used - Current starts
-def used_current(product):
-    stats = product.get('stats', {})
-    result = {'Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
-    return result
-# Used - Current ends
+# Tracking since starts
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
+def tracking_since(product):
+    ts = product.get('trackingSince', 0)
+    logging.debug(f"Tracking since - raw ts={ts}")
+    if ts <= 100000:
+        logging.error(f"No valid trackingSince for ASIN {product.get('asin', 'unknown')}")
+        return {'Tracking since': '-'}
+    try:
+        dt = KEEPA_EPOCH + timedelta(minutes=ts)
+        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
+        logging.debug(f"Tracking since result for ASIN {product.get('asin', 'unknown')}: {formatted}")
+        return {'Tracking since': formatted}
+    except Exception as e:
+        logging.error(f"tracking_since failed: {str(e)}")
+        return {'Tracking since': '-'}
+# Tracking since ends
 
-# Sales Rank - 30 days avg starts
-def sales_rank_30_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 30 days avg.': get_stat_value(stats, 'avg30', 3, is_price=False)}
+# Categories - Root starts
+def categories_root(product):
+    category_tree = product.get('categoryTree', [])
+    result = {'Categories - Root': category_tree[0]['name'] if category_tree else '-'}
+    logging.debug(f"categories_root result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
-# Sales Rank - 30 days avg ends
+# Categories - Root ends
 
-# Sales Rank - 90 days avg starts
-def sales_rank_90_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 90 days avg.': get_stat_value(stats, 'avg90', 3, is_price=False)}
-    logging.debug(f"Sales Rank - 90 days avg. for ASIN {product.get('asin', 'unknown')}: {result}")
+# Categories - Sub starts
+def categories_sub(product):
+    category_tree = product.get('categoryTree', [])
+    result = {'Categories - Sub': ', '.join(cat['name'] for cat in category_tree[2:]) if len(category_tree) > 2 else '-'}
+    logging.debug(f"categories_sub result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
-# Sales Rank - 90 days avg ends
+# Categories - Sub ends
 
-# Sales Rank - 180 days avg starts
-def sales_rank_180_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 180 days avg.': get_stat_value(stats, 'avg180', 3, is_price=False)}
+# Categories - Tree starts
+def categories_tree(product):
+    category_tree = product.get('categoryTree', [])
+    result = {'Categories - Tree': ' > '.join(cat['name'] for cat in category_tree) if category_tree else '-'}
+    logging.debug(f"categories_tree result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
-# Sales Rank - 180 days avg ends
+# Categories - Tree ends
 
-# Sales Rank - 365 days avg starts
-def sales_rank_365_days_avg(product):
-    stats = product.get('stats', {})
-    result = {'Sales Rank - 365 days avg.': get_stat_value(stats, 'avg365', 3, is_price=False)}
+# ASIN starts
+def get_asin(product):
+    asin = product.get('asin', '-')
+    result = {'ASIN': f'="{asin}"' if asin != '-' else '-'}
+    logging.debug(f"get_asin result for ASIN {asin}: {result}")
     return result
-# Sales Rank - 365 days avg ends
+# ASIN ends
+
+# Freq. Bought Together
+# Type
+
+# Manufacturer starts
+def manufacturer(product):
+    manufacturer_value = product.get('manufacturer', '-')
+    result = {'Manufacturer': manufacturer_value}
+    logging.debug(f"manufacturer result for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Manufacturer ends
+
+# Brand
+# Product Group
+# Variation Attributes
+# Item Type
+
+# Author starts
+def author(product):
+    author_value = product.get('author', '-')
+    result = {'Author': author_value}
+    logging.debug(f"author result for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Author ends
+
+# Contributors
+
+# Binding starts
+def binding(product):
+    binding_value = product.get('binding', '-')
+    result = {'Binding': binding_value}
+    logging.debug(f"binding result for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Binding ends
+
+# Number of Items
+# Number of Pages
+# Publication Date
+# Languages
 
 # Package - Quantity starts
+# This one doesn't work - but we're keeping it as a reminder:
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def package_quantity(asin, api_key):
     if not validate_asin(asin):
@@ -162,218 +259,6 @@ def package_width(product):
     return result
 # Package Width ends
 
-# Used, like new - Current starts
-def used_like_new(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
-    result = {'Used, like new - Current': current_price}
-    logging.debug(f"used_like_new for ASIN {asin}: stats.current={stats.get('current', [])}, current_price={current_price}")
-    return result
-# Used, like new - Current ends
-
-# Used, very good - Current starts
-def used_very_good(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
-    return result
-# Used, very good - Current ends
-
-# Used, good - Current starts
-def used_good(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_good result for ASIN {asin}: {result}")
-    return result
-# Used, good - Current ends
-
-# Used, acceptable - Current starts
-def used_acceptable(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
-    return result
-# Used, acceptable - Current ends
-
-# New, 3rd Party FBM - Current starts
-def new_3rd_party_fbm_current(product):
-    asin = product.get('asin', 'unknown')
-    offers = product.get('offers', [])
-    logging.debug(f"FBM offers for ASIN {asin}: {offers}")
-    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False]
-    if not fbm_prices:
-        logging.warning(f"No FBM offers for ASIN {asin}: offers={fbm_prices}")
-        return {'New, 3rd Party FBM - Current': '-'}
-    lowest_fbm = min(p for p in fbm_prices if p > 0) if any(p > 0 for p in fbm_prices) else -1
-    if lowest_fbm <= 0:
-        logging.warning(f"No valid FBM price for ASIN {asin}: lowest_fbm={lowest_fbm}")
-        return {'New, 3rd Party FBM - Current': '-'}
-    formatted = f"${lowest_fbm:.2f}"
-    logging.debug(f"New, 3rd Party FBM - Current - result={formatted} for ASIN {asin}")
-    return {'New, 3rd Party FBM - Current': formatted}
-# New, 3rd Party FBM - Current ends
-
-
-
-# FIX THIS ONE!
-# !!! this one doesn't work!!!
-# New, 3rd Party FBM starts
-def new_3rd_party_fbm(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
-    result = {
-        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
-    return result
-# New, 3rd Party FBM ends
-# !!! this one doesn't work!!!
-
-
-# 2025-05-20: Impossible to verify New, 3rd Party FBA - Current, as CSV and Keepa showed all '-' for 5 ASINs (commit 7ef4629e). Update uses offers array for reliability.
-# New, 3rd Party FBA - Current starts
-def new_3rd_party_fba_current(product):
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    offers = product.get('offers', [])
-    current_price = get_stat_value(stats, 'current', 11, divisor=100, is_price=True)
-    fba_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False)]
-    if not fba_prices or current_price == '-' or not any(abs(float(current_price[1:]) - p) < 0.01 for p in fba_prices):
-        logging.warning(f"No valid FBA price for ASIN {asin}: stats={current_price}, offers={fba_prices}")
-        return {'New, 3rd Party FBA - Current': '-'}
-    result = {'New, 3rd Party FBA - Current': current_price}
-    logging.debug(f"new_3rd_party_fba_current result for ASIN {asin}: {result}")
-    return result
-# New, 3rd Party FBA - Current ends
-
-# List Price starts
-def list_price(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    result = {
-        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True)
-    }
-    logging.debug(f"list_price result for ASIN {asin}: {result}")
-    return result
-# List Price ends
-
-# Percent Down 90 starts
-def percent_down_90(product):
-    logging.debug(f"percent_down_90 input: {product.get('asin', '-')}")
-    stats_90 = product.get('stats', {})
-    avg = stats_90.get('avg90', [-1] * 20)[2]  # Used price
-    curr = stats_90.get('current', [-1] * 20)[2]  # Used price
-    if avg <= 0 or curr < 0 or avg is None or curr is None:
-        logging.error(f"No valid avg90 or current for ASIN {product.get('asin', '-')}: avg={avg}, curr={curr}")
-        return {'Percent Down 90': '-'}
-    try:
-        value = ((avg - curr) / avg * 100)
-        percent = f"{value:.0f}%"
-        logging.debug(f"percent_down_90 result: {percent}")
-        return {'Percent Down 90': percent}
-    except Exception as e:
-        logging.error(f"percent_down_90 failed: {str(e)}")
-        return {'Percent Down 90': '-'}
-# Percent Down 90 ends
-
-# AMZ link starts
-def amz_link(product):
-    asin = product.get('asin', '-')
-    result = {'AMZ link': f"https://www.amazon.com/dp/{asin}" if asin != '-' else '-'}
-    logging.debug(f"amz_link result for ASIN {asin}: {result}")
-    return result
-# AMZ link ends
-
-# Keepa Link starts
-def keepa_link(product):
-    asin = product.get('asin', '-')
-    result = {'Keepa Link': f"https://keepa.com/#!product/1-{asin}" if asin != '-' else '-'}
-    logging.debug(f"keepa_link result for ASIN {asin}: {result}")
-    return result
-# Keepa Link ends
-
-# Categories - Root starts
-def categories_root(product):
-    category_tree = product.get('categoryTree', [])
-    result = {'Categories - Root': category_tree[0]['name'] if category_tree else '-'}
-    logging.debug(f"categories_root result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Categories - Root ends
-
-# Categories - Sub starts
-def categories_sub(product):
-    category_tree = product.get('categoryTree', [])
-    result = {'Categories - Sub': ', '.join(cat['name'] for cat in category_tree[2:]) if len(category_tree) > 2 else '-'}
-    logging.debug(f"categories_sub result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Categories - Sub ends
-
-# Categories - Tree starts
-def categories_tree(product):
-    category_tree = product.get('categoryTree', [])
-    result = {'Categories - Tree': ' > '.join(cat['name'] for cat in category_tree) if category_tree else '-'}
-    logging.debug(f"categories_tree result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Categories - Tree ends
-
-# Tracking since starts
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
-def tracking_since(product):
-    ts = product.get('trackingSince', 0)
-    logging.debug(f"Tracking since - raw ts={ts}")
-    if ts <= 100000:
-        logging.error(f"No valid trackingSince for ASIN {product.get('asin', 'unknown')}")
-        return {'Tracking since': '-'}
-    try:
-        dt = KEEPA_EPOCH + timedelta(minutes=ts)
-        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
-        logging.debug(f"Tracking since result for ASIN {product.get('asin', 'unknown')}: {formatted}")
-        return {'Tracking since': formatted}
-    except Exception as e:
-        logging.error(f"tracking_since failed: {str(e)}")
-        return {'Tracking since': '-'}
-# Tracking since ends
-
-# Manufacturer starts
-def manufacturer(product):
-    manufacturer_value = product.get('manufacturer', '-')
-    result = {'Manufacturer': manufacturer_value}
-    logging.debug(f"manufacturer result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Manufacturer ends
-
-# Author starts
-def author(product):
-    author_value = product.get('author', '-')
-    result = {'Author': author_value}
-    logging.debug(f"author result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Author ends
-
-# Binding starts
-def binding(product):
-    binding_value = product.get('binding', '-')
-    result = {'Binding': binding_value}
-    logging.debug(f"binding result for ASIN {product.get('asin', 'unknown')}: {result}")
-    return result
-# Binding ends
-
 # Listed since starts
 def listed_since(product):
     ts = product.get('listedSince', 0)
@@ -392,23 +277,52 @@ def listed_since(product):
         return {'Listed since': '-'}
 # Listed since ends
 
-# Sales Rank - Drops last 365 days starts
-def sales_rank_drops_last_365_days(product):
-    asin = product.get('asin', 'unknown')
+# Edition
+# Release Date
+# Format
+
+# Sales Rank - Current starts
+def sales_rank_current(product):
     stats = product.get('stats', {})
-    value = stats.get('salesRankDrops365', -1)
-    logging.debug(f"Sales Rank - Drops last 365 days - raw value={value} for ASIN {asin}")
-    if value < 0:
-        logging.info(f"No valid Sales Rank - Drops last 365 days (value={value}) for ASIN {asin}")
-        return {'Sales Rank - Drops last 365 days': '-'}
-    try:
-        formatted = str(value)
-        logging.debug(f"Sales Rank - Drops last 365 days result for ASIN {asin}: {formatted}")
-        return {'Sales Rank - Drops last 365 days': formatted}
-    except Exception as e:
-        logging.error(f"sales_rank_drops_last_365_days failed for ASIN {asin}: {str(e)}")
-        return {'Sales Rank - Drops last 365 days': '-'}
-# Sales Rank - Drops last 365 days ends
+    result = {'Sales Rank - Current': get_stat_value(stats, 'current', 3, is_price=False)}
+    return result
+# Sales Rank - Current ends
+
+# Sales Rank - 30 days avg starts
+def sales_rank_30_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 30 days avg.': get_stat_value(stats, 'avg30', 3, is_price=False)}
+    return result
+# Sales Rank - 30 days avg ends
+
+# Sales Rank - 60 days avg.
+
+# Sales Rank - 90 days avg starts
+def sales_rank_90_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 90 days avg.': get_stat_value(stats, 'avg90', 3, is_price=False)}
+    logging.debug(f"Sales Rank - 90 days avg. for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Sales Rank - 90 days avg ends
+
+# Sales Rank - 180 days avg starts
+def sales_rank_180_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 180 days avg.': get_stat_value(stats, 'avg180', 3, is_price=False)}
+    return result
+# Sales Rank - 180 days avg ends
+
+# Sales Rank - 365 days avg starts
+def sales_rank_365_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Sales Rank - 365 days avg.': get_stat_value(stats, 'avg365', 3, is_price=False)}
+    return result
+# Sales Rank - 365 days avg ends
+
+# Sales Rank - Lowest
+# Sales Rank - Lowest 365 days
+# Sales Rank - Highest
+# Sales Rank - Highest 365 days
 
 # Sales Rank - Drops last 30 days starts
 def sales_rank_drops_last_30_days(product):
@@ -427,6 +341,28 @@ def sales_rank_drops_last_30_days(product):
         logging.error(f"sales_rank_drops_last_30_days failed for ASIN {asin}: {str(e)}")
         return {'Sales Rank - Drops last 30 days': '-'}
 # Sales Rank - Drops last 30 days ends
+
+# Sales Rank - Drops last 60 days
+# Sales Rank - Drops last 90 days
+# Sales Rank - Drops last 180 days
+
+# Sales Rank - Drops last 365 days starts
+def sales_rank_drops_last_365_days(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    value = stats.get('salesRankDrops365', -1)
+    logging.debug(f"Sales Rank - Drops last 365 days - raw value={value} for ASIN {asin}")
+    if value < 0:
+        logging.info(f"No valid Sales Rank - Drops last 365 days (value={value}) for ASIN {asin}")
+        return {'Sales Rank - Drops last 365 days': '-'}
+    try:
+        formatted = str(value)
+        logging.debug(f"Sales Rank - Drops last 365 days result for ASIN {asin}: {formatted}")
+        return {'Sales Rank - Drops last 365 days': formatted}
+    except Exception as e:
+        logging.error(f"sales_rank_drops_last_365_days failed for ASIN {asin}: {str(e)}")
+        return {'Sales Rank - Drops last 365 days': '-'}
+# Sales Rank - Drops last 365 days ends
 
 # Buy Box - Current starts - stopped working after a change to new_3rd_party_fbm_current
 # Buy Box - Current starts
@@ -448,50 +384,17 @@ def buy_box_current(product):
         return {'Buy Box - Current': '-'}
 # Buy Box - Current ends
 
-# Buy Box Used - Current starts 
-# 2025-05-21: Enhanced logging to debug missing stats.current[9] (commit 285c4900).
-def buy_box_used_current(product):
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    offers = product.get('offers', [])
-    current = stats.get('current', [-1] * 20)
-    value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats={stats}, offers={offers} for ASIN {asin}")
-    if value <= 0 or value == -1:
-        used_offers = [o.get('price', -1) / 100 for o in offers if o.get('condition') in ['Used', 'Used - Like New', 'Used - Very Good', 'Used - Good', 'Used - Acceptable'] and o.get('isBuyBox', False)]
-        if used_offers and any(p > 0 for p in used_offers):
-            value = min(p for p in used_offers if p > 0)
-            logging.debug(f"Buy Box Used - Current - using offer price={value} for ASIN {asin}")
-        else:
-            logging.warning(f"No valid Buy Box Used - Current (value={value}, offers={used_offers}) for ASIN {asin}")
-            return {'Buy Box Used - Current': '-'}
-    try:
-        formatted = f"${value / 100:.2f}"
-        logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
-        return {'Buy Box Used - Current': formatted}
-    except Exception as e:
-        logging.error(f"buy_box_used_current failed for ASIN {asin}: {str(e)}")
-        return {'Buy Box Used - Current': '-'}
-# Buy Box Used - Current ends
-
-# New - Current starts
-def new_current(product):
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    current = stats.get('current', [-1] * 20)
-    value = current[1] if len(current) > 1 else -1
-    logging.debug(f"New - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
-    if value <= 0 or value == -1:
-        logging.warning(f"No valid New - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
-        return {'New - Current': '-'}
-    try:
-        formatted = f"${value / 100:.2f}"
-        logging.debug(f"New - Current result for ASIN {asin}: {formatted}")
-        return {'New - Current': formatted}
-    except Exception as e:
-        logging.error(f"new_current failed for ASIN {asin}: {str(e)}")
-        return {'New - Current': '-'}
-# New - Current ends
+# Buy Box - 30 days avg.
+# Buy Box - 60 days avg.
+# Buy Box - 90 days avg.
+# Buy Box - 180 days avg.
+# Buy Box - 365 days avg.
+# Buy Box - Lowest
+# Buy Box - Lowest 365 days
+# Buy Box - Highest
+# Buy Box - Highest 365 days
+# Buy Box - 90 days OOS
+# Buy Box - Stock
 
 # This one doesn't work - but we're keeping it as a reminder:
 # 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current. 
@@ -514,18 +417,298 @@ def amazon_current(product):
         return {'Amazon - Current': '-'}
 # Amazon - Current ends
 
-# Price Now starts - this produces correct data for Sales Rank - Current NOT Price Now
-#def price_now(product):
-#    stats = product.get('stats', {})
-#    result = {'Price Now': get_stat_value(stats, 'current', 3, divisor=100, is_price=True)}
-#    logging.debug(f"price_now result for ASIN {product.get('asin', 'unknown')}: {result}")
-#    return result
-# Price Now ends
+# Amazon - 30 days avg.
+# Amazon - 60 days avg.
+# Amazon - 90 days avg.
+# Amazon - 180 days avg.
+# Amazon - 365 days avg.
+# Amazon - Lowest
+# Amazon - Lowest 365 days
+# Amazon - Highest
+# Amazon - Highest 365 days
+# Amazon - 90 days OOS
+# Amazon - Stock
 
-# Price Now - Reference - though this one looks wrong due to "product_90.get" 
-#    elif header == "Price Now":
-#        value = stats_90.get('current', [-1] * 20)[2]  # Used
-#        logging.debug(f"Price Now (ASIN {product_90.get('asin')}): used={value}")
-#        if value is not None and value >= 2000 and value <= 30100:  # $20-$301
-#            return f"${value / 100:.2f}"
-#        return '-'
+# New - Current starts
+def new_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    current = stats.get('current', [-1] * 20)
+    value = current[1] if len(current) > 1 else -1
+    logging.debug(f"New - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid New - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        return {'New - Current': '-'}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"New - Current result for ASIN {asin}: {formatted}")
+        return {'New - Current': formatted}
+    except Exception as e:
+        logging.error(f"new_current failed for ASIN {asin}: {str(e)}")
+        return {'New - Current': '-'}
+# New - Current ends
+
+# New - 30 days avg.
+# New - 60 days avg.
+# New - 90 days avg.
+# New - 180 days avg.
+# New - 365 days avg.
+# New - Lowest
+# New - Lowest 365 days
+# New - Highest
+# New - Highest 365 days
+# New - 90 days OOS
+# New - Stock
+
+# New, 3rd Party FBA - Current starts
+# 2025-05-20: Impossible to verify New, 3rd Party FBA - Current, as CSV and Keepa showed all '-' for 5 ASINs (commit 7ef4629e). Update uses offers array for reliability.
+def new_3rd_party_fba_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    offers = product.get('offers', [])
+    current_price = get_stat_value(stats, 'current', 11, divisor=100, is_price=True)
+    fba_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False)]
+    if not fba_prices or current_price == '-' or not any(abs(float(current_price[1:]) - p) < 0.01 for p in fba_prices):
+        logging.warning(f"No valid FBA price for ASIN {asin}: stats={current_price}, offers={fba_prices}")
+        return {'New, 3rd Party FBA - Current': '-'}
+    result = {'New, 3rd Party FBA - Current': current_price}
+    logging.debug(f"new_3rd_party_fba_current result for ASIN {asin}: {result}")
+    return result
+# New, 3rd Party FBA - Current ends
+
+# New, 3rd Party FBA - 30 days avg.
+# New, 3rd Party FBA - 60 days avg.
+# New, 3rd Party FBA - 90 days avg.
+# New, 3rd Party FBA - 180 days avg.
+# New, 3rd Party FBA - 365 days avg.
+# New, 3rd Party FBA - Lowest
+# New, 3rd Party FBA - Lowest 365 days
+# New, 3rd Party FBA - Highest
+# New, 3rd Party FBA - Highest 365 days
+# New, 3rd Party FBA - 90 days OOS
+# New, 3rd Party FBA - Stock
+
+# New, 3rd Party FBM - Current starts
+# 2025-05-21: Removed lowest_fbm <= 0 filter to match Keepa query (commit 15d08395).
+def new_3rd_party_fbm_current(product):
+    asin = product.get('asin', 'unknown')
+    offers = product.get('offers', [])
+    logging.debug(f"FBM offers for ASIN {asin}: {offers}")
+    fbm_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False]
+    if not fbm_prices:
+        logging.warning(f"No FBM offers for ASIN {asin}: offers={fbm_prices}")
+        return {'New, 3rd Party FBM - Current': '-'}
+    lowest_fbm = min(fbm_prices)
+    formatted = f"${lowest_fbm:.2f}" if lowest_fbm > 0 else '-'
+    logging.debug(f"New, 3rd Party FBM - Current - result={formatted} for ASIN {asin}")
+    return {'New, 3rd Party FBM - Current': formatted}
+# New, 3rd Party FBM - Current ends
+
+
+
+
+
+# New, 3rd Party FBM starts
+# !!! This one doesn't work - these should all be individual ... maybe !!!
+def new_3rd_party_fbm(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+    result = {
+        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
+        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
+    }
+    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
+    return result
+# New, 3rd Party FBM ends
+# !!! This one doesn't work - these should all be individual ... maybe !!!
+
+# New, 3rd Party FBM - 30 days avg. -- ABOVE - but doesn't work ... 
+# New, 3rd Party FBM - 60 days avg. -- ABOVE - but doesn't work ... 
+# New, 3rd Party FBM - 90 days avg. -- ABOVE - but doesn't work ... 
+# New, 3rd Party FBM - 180 days avg. -- ABOVE - but doesn't work ... 
+# New, 3rd Party FBM - 365 days avg. -- ABOVE - but doesn't work ... 
+
+# New, 3rd Party FBM - Lowest
+# New, 3rd Party FBM - Lowest 365 days
+# New, 3rd Party FBM - Highest
+# New, 3rd Party FBM - Highest 365 days
+# New, 3rd Party FBM - 90 days OOS
+
+# New, 3rd Party FBM - Stock -- ABOVE - but doesn't work ... 
+
+
+
+
+
+# Buy Box Used - Current starts
+# 2025-05-21: Removed fallback, strict stats.current[9] to avoid incorrect data (commit 15d08395).
+def buy_box_used_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    current = stats.get('current', [-1] * 20)
+    value = current[9] if len(current) > 9 else -1
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats={stats}, offers={product.get('offers', [])} for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        return {'Buy Box Used - Current': '-'}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
+        return {'Buy Box Used - Current': formatted}
+    except Exception as e:
+        logging.error(f"buy_box_used_current failed for ASIN {asin}: {str(e)}")
+        return {'Buy Box Used - Current': '-'}
+# Buy Box Used - Current ends
+
+# Buy Box Used - 30 days avg.
+# Buy Box Used - 60 days avg.
+# Buy Box Used - 90 days avg.
+# Buy Box Used - 180 days avg.
+# Buy Box Used - 365 days avg.
+# Buy Box Used - Lowest
+# Buy Box Used - Lowest 365 days
+# Buy Box Used - Highest
+# Buy Box Used - Highest 365 days
+# Buy Box Used - 90 days OOS
+# Buy Box Used - Stock
+
+# Used - Current starts
+def used_current(product):
+    stats = product.get('stats', {})
+    result = {'Used - Current': get_stat_value(stats, 'current', 2, divisor=100, is_price=True)}
+    return result
+# Used - Current ends
+
+# Used - 30 days avg.
+# Used - 60 days avg.
+# Used - 90 days avg.
+# Used - 180 days avg.
+# Used - 365 days avg.
+# Used - Lowest
+# Used - Lowest 365 days
+# Used - Highest
+# Used - Highest 365 days
+# Used - 90 days OOS
+# Used - Stock
+
+# Used, like new - Current starts
+def used_like_new(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
+    result = {'Used, like new - Current': current_price}
+    logging.debug(f"used_like_new for ASIN {asin}: stats.current={stats.get('current', [])}, current_price={current_price}")
+    return result
+# Used, like new - Current ends
+
+# Used, like new - 30 days avg.,
+# Used, like new - 60 days avg.,
+# Used, like new - 90 days avg.,
+# Used, like new - 180 days avg.,
+# Used, like new - 365 days avg.,
+# Used, like new - Lowest,
+# Used, like new - Lowest 365 days,
+# Used, like new - Highest,
+# Used, like new - Highest 365 days,
+# Used, like new - 90 days OOS,
+# Used, like new - Stock,
+
+# Used, very good - Current starts
+def used_very_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+    return result
+# Used, very good - Current ends
+
+# Used, very good - 30 days avg.,
+# Used, very good - 60 days avg.,
+# Used, very good - 90 days avg.,
+# Used, very good - 180 days avg.,
+# Used, very good - 365 days avg.,
+# Used, very good - Lowest,
+# Used, very good - Lowest 365 days,
+# Used, very good - Highest,
+# Used, very good - Highest 365 days,
+# Used, very good - 90 days OOS,
+# Used, very good - Stock,
+
+# Used, good - Current starts
+def used_good(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_good result for ASIN {asin}: {result}")
+    return result
+# Used, good - Current ends
+
+# Used, good - 30 days avg.,
+# Used, good - 60 days avg.,
+# Used, good - 90 days avg.,
+# Used, good - 180 days avg.,
+# Used, good - 365 days avg.,
+# Used, good - Lowest,
+# Used, good - Lowest 365 days,
+# Used, good - Highest,
+# Used, good - Highest 365 days,
+# Used, good - 90 days OOS,
+# Used, good - Stock,
+
+# Used, acceptable - Current starts
+def used_acceptable(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True)
+    }
+    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
+    return result
+# Used, acceptable - Current ends
+
+# Used, acceptable - 30 days avg.,
+# Used, acceptable - 60 days avg.,
+# Used, acceptable - 90 days avg.,
+# Used, acceptable - 180 days avg.,
+# Used, acceptable - 365 days avg.,
+# Used, acceptable - Lowest,
+# Used, acceptable - Lowest 365 days,
+# Used, acceptable - Highest,
+# Used, acceptable - Highest 365 days,
+# Used, acceptable - 90 days OOS,
+# Used, acceptable - Stock,
+
+# List Price starts
+# This one doesn't work - But we're keeping it as a reminder:
+def list_price(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    result = {
+        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True)
+    }
+    logging.debug(f"list_price result for ASIN {asin}: {result}")
+    return result
+# List Price ends
+
+# List Price - 30 days avg.,
+# List Price - 60 days avg.,
+# List Price - 90 days avg.,
+# List Price - 180 days avg.,
+# List Price - 365 days avg.,
+# List Price - Lowest,
+# List Price - Lowest 365 days,
+# List Price - Highest,
+# List Price - Highest 365 days,
+# List Price - 90 days OOS,
+# List Price - Stock,
+
+#### END OF FILE ####
