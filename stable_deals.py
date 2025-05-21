@@ -1,4 +1,4 @@
-# stable_deals.py unchanged as yet... 
+# stable_deals.py force change window
 import logging
 import requests
 import json
