@@ -82,7 +82,7 @@ def fetch_deals_for_deals(page):
         logging.debug(f"All deal keys: {[list(d.keys()) for d in deals]}")
         logging.debug(f"Deals data: {[{'asin': d.get('asin', '-'), 'current': d.get('current', []), 'current[9]': d.get('current', [-1] * 20)[9] if len(d.get('current', [])) > 9 else -1, 'current[1]': d.get('current', [-1] * 20)[1] if len(d.get('current', [])) > 1 else -1} for d in deals]}")
         print(f"Fetched {len(deals)} deals")
-        return deals[:5]
+        return deals[:10]
     except Exception as e:
         logging.error(f"Deal fetch exception: {str(e)}")
         print(f"Deal fetch exception: {str(e)}")

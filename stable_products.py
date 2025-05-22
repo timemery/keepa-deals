@@ -15,12 +15,15 @@ def fetch_product_for_retry(asin):
     with open('config.json') as f:
         config = json.load(f)
     api = Keepa(config['api_key'])
-    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=100)
-    stats = product[0].get('stats', {}) if product else {}
-    stats_current = stats.get('current', [])
-    offers = product[0].get('offers', []) if product else []
-    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, offers_count={len(offers)}, offers={offers}")
-    return product[0] if product else {}
+    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
+    if not product or not product[0]:
+        logging.error(f"fetch_product_for_retry failed: no product data for ASIN {asin}")
+        return {}
+    stats = product[0].get('stats', {})
+    stats_current = stats.get('current', [-1] * 20)
+    offers = product[0].get('offers', [])
+    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, stats_raw={stats}, offers_count={len(offers)}")
+    return product[0]
 # Fetch Product for Retry - ends
 
 # Constants
@@ -735,7 +738,7 @@ def list_price(product):
     asin = product.get('asin', 'unknown')
     current = stats.get('current', [-1] * 20)
     value = current[8] if len(current) > 8 else -1
-    logging.debug(f"List Price - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+    logging.debug(f"List Price - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_raw={stats} for ASIN {asin}")
     if value <= 0 or value == -1:
         logging.warning(f"No valid List Price - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
         return {'List Price - Current': '-'}
