@@ -30,14 +30,14 @@ except Exception as e:
 # 2025-05-22: Switched to Python client, offers=100 (commit 69d2801d).
 # 2025-05-22: Reverted to HTTP, offers=100, added Python client fallback (commit e1f6f52e).
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=100, rating=1, history=1):
+def fetch_product(asin, days=365, history=1):
     if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
-    logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
+    logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}...")
     print(f"Fetching ASIN {asin}...")
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&history={history}"
+    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&buybox=1&history={history}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=30)
@@ -56,7 +56,7 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
-        logging.debug(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, offers_count={len(offers)}")
+        logging.debug(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, offers_count={len(offers)}, stats_raw={stats}")
         time.sleep(1)
         return product
     except Exception as e:
