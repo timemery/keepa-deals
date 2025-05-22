@@ -5,10 +5,16 @@ Fetching deals page 0 for Percent Down 90...
 Fetched 150 deals
 Deals ASINs: ['0367672960', '0060906235', '0395139384', '0882581120', '0965453022']
 Fetching ASIN 0367672960...
+  0%|          | 0/1 [00:00<?, ?it/s]  0%|          | 0/1 [00:21<?, ?it/s]
+Fetch failed: HTTPSConnectionPool(host='api.keepa.com', port=443): Read timed out. (read timeout=10.0)
 Fetching ASIN 0060906235...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:02<00:00,  2.27s/it]100%|██████████| 1/1 [00:02<00:00,  2.28s/it]
 Fetching ASIN 0395139384...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.18s/it]100%|██████████| 1/1 [00:01<00:00,  1.18s/it]
 Fetching ASIN 0882581120...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.35s/it]100%|██████████| 1/1 [00:01<00:00,  1.35s/it]
 Fetching ASIN 0965453022...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:09<00:00,  9.04s/it]100%|██████████| 1/1 [00:09<00:00,  9.05s/it]
 Writing row for ASIN 0367672960...
 Writing row for ASIN 0060906235...
 Writing row for ASIN 0395139384...

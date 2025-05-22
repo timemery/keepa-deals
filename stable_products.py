@@ -368,7 +368,7 @@ def sales_rank_drops_last_365_days(product):
         return {'Sales Rank - Drops last 365 days': '-'}
 # Sales Rank - Drops last 365 days ends
 
-# Buy Box - Current starts - stopped working after a change to new_3rd_party_fbm_current
+# Buy Box - Current starts - stopped working after a change to new 3rd party fbm current
 # Buy Box - Current starts
 def buy_box_current(product):
     asin = product.get('asin', 'unknown')
@@ -496,6 +496,7 @@ def new_3rd_party_fba_current(product):
 # 2025-05-21: Minimal filters, enhanced logging (commit 83b9e853).
 # 2025-05-21: Minimal filters, detailed offer logging (commit 923d4e20).
 # 2025-05-22: Enhanced logging for offers=100 (commit a03ceb87).
+# 2025-05-22: Enhanced logging for Python client, offers=100 (commit 69d2801d).
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
@@ -555,6 +556,7 @@ def new_3rd_party_fbm(product):
 # 2025-05-21: Enhanced logging for stats.current[9] debugging (commit 83b9e853).
 # 2025-05-21: Detailed logging for stats.current[9] (commit 923d4e20).
 # 2025-05-22: Enhanced logging for stats.current[9], offers=100 (commit a03ceb87).
+# 2025-05-22: Enhanced logging for Python client, stats.current[9], offers=100 (commit 69d2801d).
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})

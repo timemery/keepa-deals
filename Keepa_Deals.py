@@ -27,6 +27,8 @@ except Exception as e:
 # Chunk 2 starts
 # 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current.
 # 2025-05-22: Updated offers=100, enhanced logging (commit a03ceb87).
+# 2025-05-22: Switched to Python client, offers=100 (commit 69d2801d).
+from keepa import Keepa
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not validate_asin(asin):
@@ -35,22 +37,16 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
     print(f"Fetching ASIN {asin}...")
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&history={history}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=30)
-        logging.debug(f"Response status: {response.status_code}")
-        if response.status_code != 200:
-            logging.error(f"Request failed: {response.status_code}, {response.text}")
-            print(f"Request failed: {response.status_code}")
-            return {'stats': {'current': [-1] * 30}, 'asin': asin}
-        data = response.json()
-        products = data.get('products', [])
-        if not products:
+        with open('config.json') as f:
+            config = json.load(f)
+        api = Keepa(config['api_key'])
+        product = api.query(asin, product_code_is_asin=True, stats=days, domain='US', history=history, offers=offers, rating=rating, stock=1)
+        if not product:
             logging.error(f"No product data for ASIN {asin}")
             print(f"No product data for ASIN {asin}")
             return {'stats': {'current': [-1] * 30}, 'asin': asin}
-        product = products[0]
+        product = product[0]
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', [])
