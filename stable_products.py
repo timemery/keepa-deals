@@ -211,28 +211,28 @@ def binding(product):
 
 # Package - Quantity starts
 # This one doesn't work - but we're keeping it as a reminder:
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
-def package_quantity(asin, api_key):
-    if not validate_asin(asin):
-        return {'Package - Quantity': '-'}
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
-    try:
-        response = requests.get(url, headers=API_HEADERS, timeout=30)
-        logging.debug(f"package_quantity response status for ASIN {asin}: {response.status_code}")
-        if response.status_code != 200:
-            logging.error(f"package_quantity request failed for ASIN {asin}: {response.status_code}")
-            return {'Package - Quantity': '-'}
-        data = response.json()
-        products = data.get('products', [])
-        if not products:
-            logging.error(f"package_quantity no product data for ASIN {asin}")
-            return {'Package - Quantity': '-'}
-        quantity = products[0].get('packageQuantity', -1)
-        logging.debug(f"package_quantity result for ASIN {asin}: {quantity}")
-        return {'Package - Quantity': str(quantity) if quantity != -1 else '-'}
-    except Exception as e:
-        logging.error(f"package_quantity fetch failed for ASIN {asin}: {str(e)}")
-        return {'Package - Quantity': '-'}
+#@retry(stop_max_attempt_number=3, wait_fixed=5000)
+#def package_quantity(asin, api_key):
+#    if not validate_asin(asin):
+#        return {'Package - Quantity': '-'}
+#    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}"
+#    try:
+#        response = requests.get(url, headers=API_HEADERS, timeout=30)
+#        logging.debug(f"package_quantity response status for ASIN {asin}: {response.status_code}")
+#        if response.status_code != 200:
+#            logging.error(f"package_quantity request failed for ASIN {asin}: {response.status_code}")
+#            return {'Package - Quantity': '-'}
+#        data = response.json()
+#        products = data.get('products', [])
+#        if not products:
+#            logging.error(f"package_quantity no product data for ASIN {asin}")
+#            return {'Package - Quantity': '-'}
+#        quantity = products[0].get('packageQuantity', -1)
+#        logging.debug(f"package_quantity result for ASIN {asin}: {quantity}")
+#        return {'Package - Quantity': str(quantity) if quantity != -1 else '-'}
+#    except Exception as e:
+#        logging.error(f"package_quantity fetch failed for ASIN {asin}: {str(e)}")
+#        return {'Package - Quantity': '-'}
 # Package - Quantity ends
 
 # Package Weight starts
@@ -403,22 +403,22 @@ def buy_box_current(product):
 # This one doesn't work - but we're keeping it as a reminder:
 # 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current. 
 # Amazon - Current starts
-def amazon_current(product):
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    current = stats.get('current', [-1] * 20)
-    value = current[10] if len(current) > 10 else -1
-    logging.debug(f"Amazon - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
-    if value <= 0 or value == -1:
-        logging.warning(f"No valid Amazon - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
-        return {'Amazon - Current': '-'}
-    try:
-        formatted = f"${value / 100:.2f}"
-        logging.debug(f"Amazon - Current result for ASIN {asin}: {formatted}")
-        return {'Amazon - Current': formatted}
-    except Exception as e:
-        logging.error(f"amazon_current failed for ASIN {asin}: {str(e)}")
-        return {'Amazon - Current': '-'}
+# def amazon_current(product):
+#    asin = product.get('asin', 'unknown')
+#    stats = product.get('stats', {})
+#    current = stats.get('current', [-1] * 20)
+#    value = current[10] if len(current) > 10 else -1
+#    logging.debug(f"Amazon - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+#    if value <= 0 or value == -1:
+#        logging.warning(f"No valid Amazon - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+#        return {'Amazon - Current': '-'}
+#    try:
+#        formatted = f"${value / 100:.2f}"
+#        logging.debug(f"Amazon - Current result for ASIN {asin}: {formatted}")
+#        return {'Amazon - Current': formatted}
+#    except Exception as e:
+#        logging.error(f"amazon_current failed for ASIN {asin}: {str(e)}")
+#        return {'Amazon - Current': '-'}
 # Amazon - Current ends
 
 # Amazon - 30 days avg.
@@ -532,20 +532,20 @@ def new_3rd_party_fbm_current(product):
 
 # New, 3rd Party FBM starts
 # !!! This one doesn't work - these should all be individual ... maybe !!!
-def new_3rd_party_fbm(product):
-    stats = product.get('stats', {})
-    asin = product.get('asin', 'unknown')
-    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
-    result = {
-        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
-        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
-    }
-    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
-    return result
+#def new_3rd_party_fbm(product):
+#    stats = product.get('stats', {})
+#    asin = product.get('asin', 'unknown')
+#    stock = sum(1 for o in product.get('offers', []) if o.get('condition') == 'New' and not o.get('isFBA', False) and o.get('stock', 0) > 0)
+#    result = {
+#        'New, 3rd Party FBM - 30 days avg.': get_stat_value(stats, 'avg30', 1, divisor=100, is_price=True),
+#        'New, 3rd Party FBM - 60 days avg.': get_stat_value(stats, 'avg60', 1, divisor=100, is_price=True),
+#        'New, 3rd Party FBM - 90 days avg.': get_stat_value(stats, 'avg90', 1, divisor=100, is_price=True),
+#        'New, 3rd Party FBM - 180 days avg.': get_stat_value(stats, 'avg180', 1, divisor=100, is_price=True),
+#        'New, 3rd Party FBM - 365 days avg.': get_stat_value(stats, 'avg365', 1, divisor=100, is_price=True),
+#        'New, 3rd Party FBM - Stock': str(stock) if stock > 0 else '0'
+#    }
+#    logging.debug(f"new_3rd_party_fbm result for ASIN {asin}: {result}")
+#    return result
 # New, 3rd Party FBM ends
 # !!! This one doesn't work - these should all be individual ... maybe !!!
 
