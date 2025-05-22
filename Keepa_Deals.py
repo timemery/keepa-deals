@@ -26,8 +26,9 @@ except Exception as e:
 
 # Chunk 2 starts
 # 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current.
+# 2025-05-22: Updated offers=100, enhanced logging (commit a03ceb87).
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def fetch_product(asin, days=365, offers=20, rating=1, history=1):
+def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
@@ -52,7 +53,8 @@ def fetch_product(asin, days=365, offers=20, rating=1, history=1):
         product = products[0]
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
-        logging.debug(f"Stats structure for ASIN {asin}: keys={list(stats.keys())}, current_length={len(current)}")
+        offers = product.get('offers', [])
+        logging.debug(f"Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, offers_count={len(offers)}")
         time.sleep(1)
         return product
     except Exception as e:
@@ -144,7 +146,9 @@ def main():
         logging.error(f"Main failed: {str(e)}")
         print(f"Main failed: {str(e)}")
         sys.exit(1)
+# Chunk 4 ends
 
 if __name__ == "__main__":
     main()
-# Chunk 4 ends
+
+#### END OF FILE ####
