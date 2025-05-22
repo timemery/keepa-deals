@@ -15,13 +15,13 @@ def fetch_product_for_retry(asin):
     with open('config.json') as f:
         config = json.load(f)
     api = Keepa(config['api_key'])
-    product = api.query(asin, product_code_is_asin=True, stats=365, domain='US', history=True, buybox=True)
+    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
     if not product or not product[0]:
         logging.error(f"fetch_product_for_retry failed: no product data for ASIN {asin}")
         return {}
     stats = product[0].get('stats', {})
-    stats_current = stats.get('current', [-1] * 30)
-    offers = product.get('offers', [])
+    stats_current = stats.get('current', [-1] * 20)
+    offers = product.get('offers', []) if product.get('offers') is not None else []
     logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, stats_raw={stats}, offers_count={len(offers)}")
     return product[0]
 # Fetch Product for Retry - ends
