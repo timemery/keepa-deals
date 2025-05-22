@@ -194,7 +194,7 @@ from stable_products import (
     # Used, acceptable - Highest 365 days,
     # Used, acceptable - 90 days OOS,
     # Used, acceptable - Stock,
-    # List Price - Current
+    list_price,                     # List Price - Current
     # List Price - 30 days avg.,
     # List Price - 60 days avg.,
     # List Price - 90 days avg.,
@@ -633,7 +633,7 @@ FUNCTION_LIST = [
     None,                           # Used, acceptable - Highest 365 days
     None,                           # Used, acceptable - 90 days OOS
     None,                           # Used, acceptable - Stock
-    None,	                        # List Price - Current
+    list_price,	                        # List Price - Current
     None,                           # List Price - 30 days avg.
     None,                           # List Price - 60 days avg.
     None,                           # List Price - 90 days avg.

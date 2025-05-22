@@ -935,3 +935,20 @@ Verify fetch_product URL parameters against commits (e.g., 31cb7bee).
 Confirm log warnings (e.g., value=-1) before fixes.
 Cross-check ASIN data (e.g., $6.26 for 150137012X) with Keepa deals site.
 Avoid unneeded parameters (buyBox=1).
+
+# Keepa Deals Dev Log - May 22, 2025
+## Issue: Missing Data in Buy Box Used, FBM, FBA Fields
+- **Problem**: `New, 3rd Party FBM - Current`, `Buy Box Used - Current`, `New, 3rd Party FBA - Current` showed `'-'` in `Keepa_Deals_Export.csv`. First row (`0367672960`) lost data (commit `e1f6f52e`).
+- **Attempts**:
+  - Switched `fetch_product` to `keepa.query` (commit `69d2801d`). Result: Sparse `stats.current[9]`, `offers`; broke `Sales Rank - Current`.
+  - Reverted to HTTP `fetch_product`, added Python client fallback for problematic fields (commit `d664f5e3`). Result: Restored `Buy Box - Current`, `New - Current`; FBM/FBA still `'-'`.
+- **Findings**:
+  - `keepa.query` omits `offers`, `current[9]` for `/deal` ASINs (https://discuss.keepa.com/t/deal-object/412).
+  - HTTP API with `offers=100` reliable for most fields (March 18, 2025, commit `31cb7bee`).
+- **Solution**: Hybrid approach (HTTP default, Python client for FBM/FBA). Comment out failing fields to focus on `Used, very good - Current`.
+
+# Keepa Deals Dev Log - May 22, 2025
+## Issue: List Price - Current Not Working
+- **Problem**: `List Price - Current` (stats.current[8]) marked as non-working in `stable_products.py` (commit 68c61701). Previously functional, now returns '-'.
+- **Context**: Follows commenting out `new_3rd_party_fbm`, `price_now`, `amazon_current` to resolve conflicts (commit 68c61701). `Buy Box - Current` still broken, suggesting deeper issue.
+- **Plan**: Restore `list_price` with enhanced logging. Update `field_mappings.py`. Test with ASIN 150137012X (expected $29.95). Verify no conflicts with `fetch_product`.

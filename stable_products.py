@@ -728,17 +728,25 @@ def used_acceptable(product):
 # Used, acceptable - 90 days OOS,
 # Used, acceptable - Stock,
 
-# List Price starts
-# This one doesn't work - But we're keeping it as a reminder:
+# List Price - Current starts
+# This one was not working - We're trying to solve this one now:
 def list_price(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    result = {
-        'List Price - Current': get_stat_value(stats, 'current', 8, divisor=100, is_price=True)
-    }
-    logging.debug(f"list_price result for ASIN {asin}: {result}")
-    return result
-# List Price ends
+    current = stats.get('current', [-1] * 20)
+    value = current[8] if len(current) > 8 else -1
+    logging.debug(f"List Price - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid List Price - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        return {'List Price - Current': '-'}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"List Price - Current result for ASIN {asin}: {formatted}")
+        return {'List Price - Current': formatted}
+    except Exception as e:
+        logging.error(f"list_price failed for ASIN {asin}: {str(e)}")
+        return {'List Price - Current': '-'}
+# List Price - Current ends
 
 # List Price - 30 days avg.,
 # List Price - 60 days avg.,
