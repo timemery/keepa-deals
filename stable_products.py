@@ -497,14 +497,29 @@ def new_3rd_party_fba_current(product):
 # 2025-05-21: Minimal filters, detailed offer logging (commit 923d4e20).
 # 2025-05-22: Enhanced logging for offers=100 (commit a03ceb87).
 # 2025-05-22: Enhanced logging for Python client, offers=100 (commit 69d2801d).
+# 2025-05-22: Added Python client fallback for offers (commit e1f6f52e).
+from keepa import Keepa
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
-    logging.debug(f"FBM offers for ASIN {asin}: count={len(offers)}, offers={offers}")
+    logging.debug(f"HTTP FBM offers for ASIN {asin}: count={len(offers)}, offers={offers}")
     fbm_prices = [o.get('price') / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
     if not fbm_prices:
-        logging.warning(f"No valid FBM offers for ASIN {asin}: fbm_prices={fbm_prices}, raw_offers={offers}")
-        return {'New, 3rd Party FBM - Current': '-'}
+        logging.warning(f"No valid HTTP FBM offers for ASIN {asin}: fbm_prices={fbm_prices}, raw_offers={offers}")
+        try:
+            with open('config.json') as f:
+                config = json.load(f)
+            api = Keepa(config['api_key'])
+            py_product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=100)
+            py_offers = py_product[0].get('offers', []) if py_product else []
+            fbm_prices = [o.get('price') / 100 for o in py_offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
+            logging.debug(f"Python FBM offers for ASIN {asin}: count={len(py_offers)}, offers={py_offers}")
+            if not fbm_prices:
+                logging.warning(f"No valid Python FBM offers for ASIN {asin}: fbm_prices={fbm_prices}, raw_offers={py_offers}")
+                return {'New, 3rd Party FBM - Current': '-'}
+        except Exception as e:
+            logging.error(f"Python fetch failed for ASIN {asin}: {str(e)}")
+            return {'New, 3rd Party FBM - Current': '-'}
     lowest_fbm = min(fbm_prices)
     formatted = f"${lowest_fbm:.2f}"
     logging.debug(f"New, 3rd Party FBM - Current - lowest_fbm={lowest_fbm}, result={formatted} for ASIN {asin}")
@@ -557,15 +572,31 @@ def new_3rd_party_fbm(product):
 # 2025-05-21: Detailed logging for stats.current[9] (commit 923d4e20).
 # 2025-05-22: Enhanced logging for stats.current[9], offers=100 (commit a03ceb87).
 # 2025-05-22: Enhanced logging for Python client, stats.current[9], offers=100 (commit 69d2801d).
+# 2025-05-22: Added Python client fallback for stats.current[9] (commit e1f6f52e).
+from keepa import Keepa
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current HTTP - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
     if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}, stats={stats}, offers_count={len(product.get('offers', []))}) for ASIN {asin}")
-        return {'Buy Box Used - Current': '-'}
+        logging.warning(f"No valid HTTP Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        try:
+            with open('config.json') as f:
+                config = json.load(f)
+            api = Keepa(config['api_key'])
+            py_product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=100)
+            py_stats = py_product[0].get('stats', {}) if py_product else {}
+            py_current = py_stats.get('current', [-1] * 20)
+            value = py_current[9] if len(py_current) > 9 else -1
+            logging.debug(f"Buy Box Used - Current Python - raw value={value}, current array={py_current}, stats_keys={list(py_stats.keys())} for ASIN {asin}")
+            if value <= 0 or value == -1:
+                logging.warning(f"No valid Python Buy Box Used - Current (value={value}, current_length={len(py_current)}) for ASIN {asin}")
+                return {'Buy Box Used - Current': '-'}
+        except Exception as e:
+            logging.error(f"Python fetch failed for ASIN {asin}: {str(e)}")
+            return {'Buy Box Used - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
         logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
