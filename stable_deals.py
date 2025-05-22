@@ -80,7 +80,7 @@ def fetch_deals_for_deals(page):
         logging.debug(f"Fetched {len(deals)} deals: {[d.get('asin', '-') for d in deals]}")
         logging.debug(f"Deal response structure: {list(data.get('deals', {}).keys())}")
         logging.debug(f"All deal keys: {[list(d.keys()) for d in deals]}")
-        logging.debug(f"Full deals: {deals}")
+        logging.debug(f"Deals data: {[{'asin': d.get('asin', '-'), 'current': d.get('current', [])} for d in deals]}")
         print(f"Fetched {len(deals)} deals")
         return deals[:5]
     except Exception as e:
@@ -131,3 +131,5 @@ def last_price_change(deal):
         logging.error(f"last_price_change failed: {str(e)}")
         return {'last price change': '-'}
 # Last price change ends
+
+#### END OF FILE ####

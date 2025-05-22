@@ -15,11 +15,11 @@ def fetch_product_for_retry(asin):
     with open('config.json') as f:
         config = json.load(f)
     api = Keepa(config['api_key'])
-    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
+    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=100)
     stats = product[0].get('stats', {}) if product else {}
     stats_current = stats.get('current', [])
     offers = product[0].get('offers', []) if product else []
-    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, offers={offers}")
+    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, offers_count={len(offers)}, offers={offers}")
     return product[0] if product else {}
 # Fetch Product for Retry - ends
 
@@ -495,6 +495,7 @@ def new_3rd_party_fba_current(product):
 # New, 3rd Party FBM - Current starts
 # 2025-05-21: Minimal filters, enhanced logging (commit 83b9e853).
 # 2025-05-21: Minimal filters, detailed offer logging (commit 923d4e20).
+# 2025-05-22: Enhanced logging for offers=100 (commit a03ceb87).
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
@@ -553,14 +554,15 @@ def new_3rd_party_fbm(product):
 # Buy Box Used - Current starts
 # 2025-05-21: Enhanced logging for stats.current[9] debugging (commit 83b9e853).
 # 2025-05-21: Detailed logging for stats.current[9] (commit 923d4e20).
+# 2025-05-22: Enhanced logging for stats.current[9], offers=100 (commit a03ceb87).
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers={product.get('offers', [])} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
     if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}, stats={stats}, offers={product.get('offers', [])}) for ASIN {asin}")
+        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}, stats={stats}, offers_count={len(product.get('offers', []))}) for ASIN {asin}")
         return {'Buy Box Used - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
