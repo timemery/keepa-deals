@@ -1,11 +1,10 @@
-keepa_full_deals_v6.csv
-April7Bak/
-Old_Files/
-Script_BAK/
-v2_working_fallback/
+# .gitignore
+*.pyc
+__pycache__/
+*_backup_*.py
+*_backup_*.json
+Keepa_Deals_Export.csv
+debug_log.txt
 keepa_full_deals_v6.csv
 API_Dev_Log_v2.txt
-API_Dev_Log_v2.txt
-/__pycache__
-/Bak_Old_Chuff
 API_Dev_Log_v3.txt
