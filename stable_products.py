@@ -501,7 +501,7 @@ def new_3rd_party_fba_current(product):
 # 2025-05-22: Enhanced logging for offers=100 (commit a03ceb87).
 # 2025-05-22: Enhanced logging for Python client, offers=100 (commit 69d2801d).
 # 2025-05-22: Added Python client fallback for offers (commit e1f6f52e).
-from keepa import Keepa
+# 2025-05-22: Removed Python client, use HTTP fetch_product offers=100.
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
     offers = product.get('offers', [])
@@ -509,20 +509,7 @@ def new_3rd_party_fbm_current(product):
     fbm_prices = [o.get('price') / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
     if not fbm_prices:
         logging.warning(f"No valid HTTP FBM offers for ASIN {asin}: fbm_prices={fbm_prices}, raw_offers={offers}")
-        try:
-            with open('config.json') as f:
-                config = json.load(f)
-            api = Keepa(config['api_key'])
-            py_product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=100)
-            py_offers = py_product[0].get('offers', []) if py_product else []
-            fbm_prices = [o.get('price') / 100 for o in py_offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
-            logging.debug(f"Python FBM offers for ASIN {asin}: count={len(py_offers)}, offers={py_offers}")
-            if not fbm_prices:
-                logging.warning(f"No valid Python FBM offers for ASIN {asin}: fbm_prices={fbm_prices}, raw_offers={py_offers}")
-                return {'New, 3rd Party FBM - Current': '-'}
-        except Exception as e:
-            logging.error(f"Python fetch failed for ASIN {asin}: {str(e)}")
-            return {'New, 3rd Party FBM - Current': '-'}
+        return {'New, 3rd Party FBM - Current': '-'}
     lowest_fbm = min(fbm_prices)
     formatted = f"${lowest_fbm:.2f}"
     logging.debug(f"New, 3rd Party FBM - Current - lowest_fbm={lowest_fbm}, result={formatted} for ASIN {asin}")

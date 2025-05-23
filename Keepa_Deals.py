@@ -29,7 +29,8 @@ except Exception as e:
 # 2025-05-22: Updated offers=100, enhanced logging (commit a03ceb87).
 # 2025-05-22: Switched to Python client, offers=100 (commit 69d2801d).
 # 2025-05-22: Reverted to HTTP, offers=100, added Python client fallback (commit e1f6f52e).
-@retry(stop_max_attempt_number=3, wait_fixed=5000)
+# 2025-05-22: Increased timeout=60, wait_fixed=10000, sleep=2 to fix timeouts for ASINs 1848638930, B0CS6RL7D6, B0C1VSRNNH.
+@retry(stop_max_attempt_number=3, wait_fixed=10000)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
@@ -40,7 +41,7 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&history={history}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=30)
+        response = requests.get(url, headers=headers, timeout=60)
         logging.debug(f"Response status: {response.status_code}")
         if response.status_code != 200:
             logging.error(f"Request failed: {response.status_code}, {response.text}")
@@ -57,7 +58,7 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', []) if product.get('offers') is not None else []
         logging.debug(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, offers_count={len(offers)}")
-        time.sleep(1)
+        time.sleep(2)  # Mitigate server delays
         return product
     except Exception as e:
         logging.error(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
