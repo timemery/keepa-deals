@@ -1,12 +1,13 @@
 ## Keepa API Deals Project
 
 Processes Keepa deals with Keepa_Deals.py to generate Keepa_Deals_Export.csv.
-Environment
 
-Virtualenv: /home/timscripts/keepa_venv/
-Python: 3.11
-Dependencies: `requests==2.32.3`, `retrying==1.3.4`, `pandas==2.2.3`, `pytz==2025.2` (see `requirements.txt`)
-Config: config.json (Keepa API key)
+## Environment
+
+- Virtualenv: `/home/timscripts/keepa_venv/`
+- Python: 3.11
+- Dependencies: `requests==2.32.3`, `retrying==1.3.4`, `pandas==2.2.3`, `pytz==2025.2` (see `requirements.txt`)
+- Config: `config.json` (API key)
 
 ## Rules
 
