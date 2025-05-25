@@ -10,20 +10,21 @@ import json
 # Removed unused import: from keepa import Keepa
 
 # Fetch Product for Retry - starts
-@retry(stop_max_attempt_number=3, wait_fixed=2000)
-def fetch_product_for_retry(asin):
-    with open('config.json') as f:
-        config = json.load(f)
-    api = Keepa(config['api_key'])
-    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
-    if not product or not product[0]:
-        logging.error(f"fetch_product_for_retry failed: no product data for ASIN {asin}")
-        return {}
-    stats = product[0].get('stats', {})
-    stats_current = stats.get('current', [-1] * 20)
-    offers = product.get('offers', []) if product.get('offers') is not None else []
-    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, stats_raw={stats}, offers_count={len(offers)}")
-    return product[0]
+# We removed this whole chunk - I'm leaving it here commented out to remind us that we don't want it.
+#@retry(stop_max_attempt_number=3, wait_fixed=2000)
+#def fetch_product_for_retry(asin):
+#    with open('config.json') as f:
+#        config = json.load(f)
+#    api = Keepa(config['api_key'])
+#    product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=20)
+#    if not product or not product[0]:
+#        logging.error(f"fetch_product_for_retry failed: no product data for ASIN {asin}")
+#        return {}
+#    stats = product[0].get('stats', {})
+#    stats_current = stats.get('current', [-1] * 20)
+#    offers = product.get('offers', []) if product.get('offers') is not None else []
+#    logging.debug(f"fetch_product_for_retry response for ASIN {asin}: stats_keys={list(stats.keys())}, stats_current={stats_current}, stats_raw={stats}, offers_count={len(offers)}")
+#    return product[0]
 # Fetch Product for Retry - ends
 
 # Constants
@@ -563,30 +564,16 @@ def new_3rd_party_fbm_current(product):
 # 2025-05-22: Enhanced logging for stats.current[9], offers=100 (commit a03ceb87).
 # 2025-05-22: Enhanced logging for Python client, stats.current[9], offers=100 (commit 69d2801d).
 # 2025-05-22: Added Python client fallback for stats.current[9] (commit e1f6f52e).
-from keepa import Keepa
+# from keepa import Keepa - we removed this - I'm keeping it commented out to remind us we don't want it
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
     value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current HTTP - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_current={stats.get('current', [])}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
     if value <= 0 or value == -1:
-        logging.warning(f"No valid HTTP Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
-        try:
-            with open('config.json') as f:
-                config = json.load(f)
-            api = Keepa(config['api_key'])
-            py_product = api.query(asin, product_code_is_asin=True, stats=90, domain='US', history=True, offers=100)
-            py_stats = py_product[0].get('stats', {}) if py_product else {}
-            py_current = py_stats.get('current', [-1] * 20)
-            value = py_current[9] if len(py_current) > 9 else -1
-            logging.debug(f"Buy Box Used - Current Python - raw value={value}, current array={py_current}, stats_keys={list(py_stats.keys())} for ASIN {asin}")
-            if value <= 0 or value == -1:
-                logging.warning(f"No valid Python Buy Box Used - Current (value={value}, current_length={len(py_current)}) for ASIN {asin}")
-                return {'Buy Box Used - Current': '-'}
-        except Exception as e:
-            logging.error(f"Python fetch failed for ASIN {asin}: {str(e)}")
-            return {'Buy Box Used - Current': '-'}
+        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
+        return {'Buy Box Used - Current': '-'}
     try:
         formatted = f"${value / 100:.2f}"
         logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
