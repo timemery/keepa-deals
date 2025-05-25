@@ -567,16 +567,20 @@ def new_3rd_party_fbm_current(product):
 # from keepa import Keepa - we removed this - I'm keeping it commented out to remind us we don't want it
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
-    offers = product.get('offers', [])
-    logging.debug(f"Buy Box Used - Current - offers_count={len(offers)} for ASIN {asin}")
-    used_prices = [o.get('price') / 100 for o in offers if o.get('condition') in ['Used - Like New', 'Used - Very Good', 'Used - Good', 'Used - Acceptable'] and o.get('price', -1) > 0]
-    if not used_prices:
-        logging.warning(f"No valid Buy Box Used - Current offers for ASIN {asin}: used_prices={used_prices}, offers_count={len(offers)}")
+    stats = product.get('stats', {})
+    current = stats.get('current', [-1] * 20)
+    value = current[9] if len(current) > 9 else -1
+    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
+    if value <= 0 or value == -1:
+        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
         return {'Buy Box Used - Current': '-'}
-    lowest_used = min(used_prices)
-    formatted = f"${lowest_used:.2f}"
-    logging.debug(f"Buy Box Used - Current - lowest_used={lowest_used}, result={formatted} for ASIN {asin}")
-    return {'Buy Box Used - Current': formatted}
+    try:
+        formatted = f"${value / 100:.2f}"
+        logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
+        return {'Buy Box Used - Current': formatted}
+    except Exception as e:
+        logging.error(f"buy_box_used_current failed for ASIN {asin}: {str(e)}")
+        return {'Buy Box Used - Current': '-'}
 # Buy Box Used - Current ends
 
 # Buy Box Used - 30 days avg.
