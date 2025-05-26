@@ -952,3 +952,49 @@ Avoid unneeded parameters (buyBox=1).
 - **Problem**: `List Price - Current` (stats.current[8]) marked as non-working in `stable_products.py` (commit 68c61701). Previously functional, now returns '-'.
 - **Context**: Follows commenting out `new_3rd_party_fbm`, `price_now`, `amazon_current` to resolve conflicts (commit 68c61701). `Buy Box - Current` still broken, suggesting deeper issue.
 - **Plan**: Restore `list_price` with enhanced logging. Update `field_mappings.py`. Test with ASIN 150137012X (expected $29.95). Verify no conflicts with `fetch_product`.
+
+Keepa Deals Dev Log - Package Cleanup
+Date: May 25, 2025Project: Keepa Deals (/home/timscripts/keepa_api/keepa-deals/, Python 3.11)Author: timscripts  
+Overview
+On May 25, 2025, while debugging KeepaDeals.py and stable_products.py, we discovered unexpected tqdm progress bars in debug_log.txt, suggesting the Keepa Python client (keepa) was active despite KeepaDeals.py using requests. A pip list revealed 27 packages in the virtualenv (/home/timscripts/keepa_venv/), far exceeding the expected requests==2.32.3, retrying==1.3.4, pandas==2.2.3, and pytz==2025.2. This log documents the source of these packages and the cleanup process.
+Issue
+
+Symptoms: debug_log.txt showed tqdm bars (e.g., 100%|██████████| 10/10), and stable_products.py imported keepa, causing client-like behavior. CSVs matched except for used_good returning -, linked to empty offers in API responses.
+Discovery: pip list (May 25, 02:15 PM EDT) listed:aiohappyeyeballs==2.6.1, aiohttp==3.11.18, aiosignal==1.3.2, annotated-types==0.7.0, attrs==25.3.0, certifi==2025.4.26, charset-normalizer==3.4.2, frozenlist==1.6.0, idna==3.10, jsonpickle==3.0.4, keepa==1.3.14, multidict==6.4.3, numpy==2.2.6, pandas==2.2.3, pip==23.0.1, propcache==0.3.1, pydantic==2.11.4, pydantic_core==2.33.2, python-dateutil==2.9.0.post0, pytz==2025.2, requests==2.32.3, retrying==1.3.4, setuptools==66.1.1, six==1.17.0, tqdm==4.67.1, typing_extensions==4.13.2, typing-inspection==0.4.0, tzdata==2025.2, urllib3==2.4.0, yarl==1.20.0
+
+
+Cause: The extra packages were likely installed during trial-and-error experiments (e.g., testing keepa client, aiohttp for async calls) between May 18-22, 2025, as seen in KeepaDeals.py commit notes (e.g., commit 69d2801d for Python client, reverted in e1f6f52e). These were forgotten in requirements.txt or manual pip install commands.
+Jules’ Role: Jules’ environment is a read-only clone of ours, unable to modify /home/timscripts/keepa_venv/. His global uninstalls (May 25, 12:28 PM EDT) had no impact on our virtualenv. His inability to access /home/timscripts/keepa_venv/ (error: “No such file or directory”) is due to permissions or user mismatch (not timscripts).
+
+Actions Taken
+
+Verified Virtualenv: Confirmed /home/timscripts/keepa_venv/ exists (drwxr-xr-x timscripts timscripts, May 18, 2025) with bin/activate (-rw-r--r-- timscripts timscripts).
+Cleaned Virtualenv: Ran pip uninstall (May 25, 02:18 PM EDT) to remove 26 packages:keepa, tqdm, aiohttp, aiosignal, multidict, yarl, frozenlist, pydantic, pydantic-core, propcache, annotated-types, attrs, typing-inspection, aiohappyeyeballs, certifi, charset-normalizer, idna, jsonpickle, numpy, python-dateutil, setuptools, six, typing_extensions, tzdata, urllib3
+
+(Note: async-timeout was not installed.)
+Post-Cleanup: pip list shows only:pandas==2.2.3, pip==23.0.1, pytz==2025.2, requests==2.32.3, retrying==1.3.4
+
+Next Steps
+
+Jules’ Environment:
+Fix virtualenv access: Confirm user (whoami) and path (pwd), source /home/timscripts/keepa_venv/bin/activate.
+Verify: pip list should match ours.
+
+Remove keepa Dependency:
+Delete from keepa import Keepa and fetch_product_for_retry in stable_products.py.
+Remove keepa fallback in buy_box_used_current.
+
+Fix used_good:
+Update used_good to parse offers array, addressing empty stats.current[6].
+
+Prevent Recurrence:
+Update requirements.txt to lock dependencies.
+Document manual pip install attempts in future logs.
+
+Notes
+
+The keepa client in stable_products.py caused tqdm bars, not KeepaDeals.py, which uses requests.
+Jules’ virtualenv access issue is ongoing, likely permissions or user mismatch.
+Message limit warnings (May 25) require careful task prioritization.
+
+Signed: timscripts, May 25, 2025
