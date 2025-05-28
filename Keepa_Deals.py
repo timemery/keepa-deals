@@ -1,9 +1,16 @@
-# Keepa_Deals.py force change window
-# Chunk 1 starts
-import json, csv, logging, sys, requests, urllib.parse, time
+# Keepa_Deals.py 
+
+# Chunk 1 starts: 
+# Added argparse
+import json, csv, logging, sys, requests, urllib.parse, time, argparse
 from retrying import retry
 from stable_deals import validate_asin, fetch_deals_for_deals
 from field_mappings import FUNCTION_LIST
+
+# Command-line arguments
+parser = argparse.ArgumentParser(description="Keepa Deals Script")
+parser.add_argument("--no-cache", action="store_true", help="Force fresh Keepa API calls")
+args = parser.parse_args()
 
 # Logging
 logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -30,13 +37,14 @@ except Exception as e:
 # 2025-05-22: Switched to Python client, offers=100 (commit 69d2801d).
 # 2025-05-22: Reverted to HTTP, offers=100, added Python client fallback (commit e1f6f52e).
 # 2025-05-22: Increased timeout=60, wait_fixed=10000, sleep=2 to fix timeouts for ASINs 1848638930, B0CS6RL7D6, B0C1VSRNNH.
+# 2025-05-26: Added --no-cache flag to force fresh API calls.
 @retry(stop_max_attempt_number=3, wait_fixed=10000)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
-    logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}...")
+    logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}, no_cache={args.no_cache}")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&stock=1&history={history}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}

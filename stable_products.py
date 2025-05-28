@@ -1,4 +1,5 @@
 # stable_products.py
+
 # Unchanged imports and globals
 import requests
 import logging
@@ -404,6 +405,19 @@ def buy_box_current(product):
 # Buy Box - 90 days OOS
 # Buy Box - Stock
 
+# Amazon - Current starts
+def amazon_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    price = stats.get('current', [None] * 23)[1]
+    if price is None or price <= 0:
+        logging.warning(f"No valid Amazon - Current price for ASIN {asin}")
+        return {'Amazon - Current': '-'}
+    formatted = f"${price / 100:.2f}"
+    logging.debug(f"Amazon - Current result for ASIN {asin}: {formatted}")
+    return {'Amazon - Current': formatted}
+# Amazon - Current ends
+
 # This one doesn't work - but we're keeping it as a reminder:
 # 2025-05-20: Removed &buyBox=1 from fetch_product URL (commit 95aac66e) to fix Amazon - Current, but stats.current[10] still -1 for ASIN 150137012X despite $6.26 offer. Reverted to commit 31cb7bee setup. Pivoted to New - Current. 
 # Amazon - Current starts
@@ -684,13 +698,15 @@ def used_good(product):
 
 # Used, acceptable - Current starts
 def used_acceptable(product):
-    stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    result = {
-        'Used, acceptable - Current': get_stat_value(stats, 'current', 7, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_acceptable result for ASIN {asin}: {result}")
-    return result
+    stats = product.get('stats', {})
+    price = stats.get('current', [None] * 23)[22]
+    if price is None or price <= 0:
+        logging.warning(f"No valid Used - Acceptable price for ASIN {asin}")
+        return {'Used, acceptable - Current': '-'}
+    formatted = f"${price / 100:.2f}"
+    logging.debug(f"Used, acceptable - Current result for ASIN {asin}: {formatted}")
+    return {'Used, acceptable - Current': formatted}
 # Used, acceptable - Current ends
 
 # Used, acceptable - 30 days avg.,
