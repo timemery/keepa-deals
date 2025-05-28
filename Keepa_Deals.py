@@ -38,18 +38,18 @@ except Exception as e:
 # 2025-05-22: Reverted to HTTP, offers=100, added Python client fallback (commit e1f6f52e).
 # 2025-05-22: Increased timeout=60, wait_fixed=10000, sleep=2 to fix timeouts for ASINs 1848638930, B0CS6RL7D6, B0C1VSRNNH.
 # 2025-05-26: Added --no-cache flag to force fresh API calls.
-@retry(stop_max_attempt_number=3, wait_fixed=20000)
+@retry(stop_max_attempt_number=3, wait_fixed=10000)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}, no_cache={args.no_cache}")
-    print(f"Fetching {asin} ASIN...")
+    print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&history={history}&stock=1"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
-        response = requests.get(url, headers=headers, timeout=30)
+        response = requests.get(url, headers=headers, timeout=60)
         logging.debug(f"Response status: {response.status_code}, url={url}")
         if response.status_code != 200:
             logging.error(f"Request failed: {response.status_code}, {response.text}")
@@ -65,12 +65,14 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', []) if product.get('offers') is not None else []
-        logging.debug(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, stats={stats}, offers_count={len(offers)}")
-        time.sleep(1)  # Reduced delay
+        logging.info(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, offers_count={len(offers)}, stats_raw={stats}")
+        if current[1] == -1:
+            logging.warning(f"Invalid Amazon - Current price for ASIN {asin}: current[1]={current[1]}")
+        time.sleep(2)  # Restore delay to avoid rate limits
         return product
     except Exception as e:
         logging.error(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
-        print(f"Error fetching ASIN {asin}: {str(e)}")
+        print(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 # Chunk 2 ends
 
