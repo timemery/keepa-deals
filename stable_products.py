@@ -11,7 +11,7 @@ import json
 # Removed unused import: from keepa import Keepa
 
 # Fetch Product for Retry - starts
-# We removed this whole chunk - I'm leaving it here commented out to remind us that we don't want it.
+# We removed this whole chunk - I'm leaving it here commented out to remind us that we don't want it. Amazon - Current is unique because it relies on stats.current[1], which requires a direct Keepa API call
 #@retry(stop_max_attempt_number=3, wait_fixed=2000)
 #def fetch_product_for_retry(asin):
 #    with open('config.json') as f:
@@ -406,6 +406,9 @@ def buy_box_current(product):
 # Buy Box - Stock
 
 # Amazon - Current starts
+# Amazon - Current is unique because it relies on stats.current[1], which requires a direct Keepa API call.
+from retrying import retry
+@retry(stop_max_attempt_number=3, wait_fixed=5000)
 def amazon_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
