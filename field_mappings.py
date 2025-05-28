@@ -1,4 +1,5 @@
-# field_mappings.py force change window
+# field_mappings.py 
+
 # Chunk 1 starts
 from stable_products import (
     get_stat_value,                 # Utility function, not a header

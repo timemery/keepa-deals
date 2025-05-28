@@ -998,3 +998,34 @@ Jules’ virtualenv access issue is ongoing, likely permissions or user mismatch
 Message limit warnings (May 25) require careful task prioritization.
 
 Signed: timscripts, May 25, 2025
+
+Dev Log Update (May 20–27, 2025)
+Project: Keepa Deals ScraperPath: /home/timscripts/keepa_api/keepa-deals/Backup Path: /home/timscripts/keepa_api/Bak_May/Environment: Python 3.10.17 (/home/timscripts/keepa_venv/)Commit: b56f829Objective: Stabilize Keepa_Deals.py for accurate Keepa_Deals_Export.csv, hand off to Jules.
+Struggles and Resolutions
+
+Workspace Sync Issue (May 20)Problem: I stopped responding in "Keepa Deals Workspace" due to context limits.Resolution: Suggested new session, checked status.x.ai. Resumed debugging.
+
+Python 3.11 Environment Confusion (May 21–23)Problem: myenv (3.11.2) and test_venv (3.10.17) risked mismatches.Resolution: Confirmed keepa_venv (3.10.17) via python3 --version. Listed venvs with find.
+
+Backup Directory Error (May 26–27)Problem: tar failed due to Bak_May path confusion, nested May 16 backups.Resolution: Confirmed path, fixed permissions (chmod u+rwx), merged nested folders.
+
+Venv Cleanup (May 27)Problem: Multiple venvs risked confusion for Jules.Resolution: Backed up and deleted myenv, test_venv. Verified only keepa_venv.
+
+Python 3.10 Downgrade and Data Accuracy (May 23–27)Problem: Python 3.11 captured less data; Used, acceptable - Current inaccurate.Resolution: Downgraded to 3.10.17, proposed used_acceptable fix, planned test.
+
+Jules Handoff Preparation (May 23–27)Problem: Stabilize for Jules to fix unimplemented/inaccurate columns.Resolution: Cleaned venvs, planned codebase zip.
+
+
+Current Status
+
+Environment: Stable Python 3.10.17.
+Backup Path: /home/timscripts/keepa_api/Bak_May/.
+Script: New - Current accurate, used_acceptable pending.
+Disk: /dev/vdc 1.8G available.
+Next: Test used_acceptable, compare CSV, hand off to Jules.
+
+# 2025-05-27 15:06 EDT - Used, acceptable - Current Fix
+- Issue: 'Used, acceptable - Current' in Keepa_Deals_Export.csv showed '-' instead of prices (e.g., $176.37 for 1616890622, $99.97 for 0073529591) compared to Keepa Deals.
+- Debug: Tested ASIN 1616890622 via Keepa API URL (https://api.keepa.com/product?key=...&asin=1616890622&stats=90&offers=20&rating=1). Found price 17637 in stats.current[22], not offers array. Confirmed stats.current[22] is Used - Acceptable price, matching other fields (e.g., New - Current uses stats.current[X]).
+- Fix: Updated used_acceptable in stable_products.py to use stats.current[22]. Retested with --no-cache, perfect match.
+- Next: Apply API URL method to fix other columns (e.g., Avg. Price 90). Hand off to Jules.
