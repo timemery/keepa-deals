@@ -7,13 +7,38 @@ from retrying import retry
 from stable_deals import validate_asin, fetch_deals_for_deals
 from field_mappings import FUNCTION_LIST
 
+# Logging for terminal and file output - starts
+import sys
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),  # Terminal output
+        logging.FileHandler('debug_log.txt')  # File output
+    ]
+)
+# Force flush for real-time output
+logging.getLogger().handlers[0].flush = sys.stdout.flush
+
+#kept but commented out in case the new one above doesn't work.
+#logging.basicConfig(
+#    level=logging.INFO,
+#    format='%(asctime)s - %(message)s',
+#    handlers=[
+#        logging.StreamHandler(),  # Terminal output
+#        logging.FileHandler('debug_log.txt')  # File output
+#    ]
+#)
+#logger = logging.getLogger(__name__)
+# Logging for terminal and file output - ends
+
 # Command-line arguments
 parser = argparse.ArgumentParser(description="Keepa Deals Script")
 parser.add_argument("--no-cache", action="store_true", help="Force fresh Keepa API calls")
 args = parser.parse_args()
 
-# Logging
-logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+# Logging - removed this one since we have a new/better one above
+#logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 # Cache config and headers
 try:
@@ -110,24 +135,31 @@ def write_csv(rows, deals, diagnostic=False):
 # Chunk 4 starts
 def main():
     try:
+# Logging stuff - starts
         logging.info("Starting Keepa_Deals...")
-        print("Starting Keepa_Deals...")
+        print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
         deals = fetch_deals_for_deals(0)
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")
-            print("No deals fetched, writing diagnostic CSV")
+            print("No deals fetched, writing diagnostic CSV", flush=True)
             write_csv([], [], diagnostic=True)
             return
         logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
-        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
+        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}", flush=True)
+        logging.info(f"Starting ASIN processing, found {len(deals)} deals")
+        print(f"Starting ASIN processing, found {len(deals)} deals", flush=True)
+# Logging stuff - ends
         for deal in deals:
             asin = deal.get('asin', '-')
             if not validate_asin(asin):
                 logging.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}")
                 continue
+            logging.info(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            print(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
             logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            print(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
             product = fetch_product(asin)
             if not product or 'stats' not in product:
                 logging.error(f"Incomplete product data for ASIN {asin}")
