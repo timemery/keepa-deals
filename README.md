@@ -10,6 +10,7 @@ Processes Keepa deals with `Keepa_Deals.py` to generate `Keepa_Deals_Export.csv`
 
 ## Rules
 - Maintain chunk markers (e.g., `# Chunk X starts/ends`) in Python files for modular updates.
+- Preserve all field-order comments (e.g., `# Percent Down 90`, `# Author starts/ends`) wherever they exist in Python files. These are critical for tracking yet-to-be-solved columns and ensuring their correct order in the CSV file (216 columns). Do not remove or modify these comments.
 - No auto-updates to dependencies or Python for stability.
 - Output: `Keepa_Deals_Export.csv` (216 columns, e.g., Title, ASIN, Used Offer Count - Current).
 
