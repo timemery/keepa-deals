@@ -756,4 +756,4 @@ def list_price(product):
 # List Price - 90 days OOS,
 # List Price - Stock,
 
-#### END OF FILE ####
+#### END of stable_products.py ####

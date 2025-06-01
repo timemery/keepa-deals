@@ -75,7 +75,7 @@ from stable_products import (
     # Buy Box - Highest 365 days,
     # Buy Box - 90 days OOS,
     # Buy Box - Stock,
-    # amazon_current,                 # Amazon - Current
+    amazon_current,                   # Amazon - Current
     # Amazon - 30 days avg.,
     # Amazon - 60 days avg.,
     # Amazon - 90 days avg.,
@@ -661,4 +661,4 @@ FUNCTION_LIST = [
 ]
 # Chunk 2 ends
 
-#### END OF FILE ####
+#### END of field_mappings.py ####

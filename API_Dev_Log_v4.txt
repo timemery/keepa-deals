@@ -1162,3 +1162,45 @@ Keepa_api.py
 May 30, 2025 - Setup Notes from Jules
 - File Fetch: `git clone` failed due to tool errors. Used `wget` to download individual files from raw GitHub URLs (e.g., `wget https://raw.githubusercontent.com/timemery/keepa-deals/main/Keepa_api.py`) into `/app/keepa-deals/`.
 - Venv Fix: `python3.10 -m venv venv` failed due to tool errors. Created venv with `virtualenv -p /usr/bin/python3.10 venv` and activated via `source /app/keepa-deals/venv/bin/activate`.
+
+Date: June 1, 2025, 11:30 AM EDT
+
+Issue: Amazon - Current mismatch; New - Current correct.
+
+Details:
+
+CSV’s New - Current matches Keepa’s Current & Average (e.g., 1848638930: $86.57), confirming new_current uses stats.current[3].
+Amazon - Current (- for 1848638930) correct in CSV, but Jules’ $86.76 suggests misparsing. Live prices sparse (8408295837: $61.10, 1507622465: $48.00, 8412943066: $18.99).
+Jules’ “invalid path” error persists despite drwxr-xr-x permissions, indicating platform issue, not OS permissions. Plan:
+You’ll run Keepa_Deals.py, select 3 ASINs with live prices.
+Jules analyzes stable_products.py, modifies amazon_current only, tests with ASINs.
+Output notes.txt to validate fix. Next Steps: Await your ASIN list, Jules’ modifications, notes.txt.
+
+Date: June 1, 2025, 12:53 PM EDT
+
+Issue: Amazon - Current mismatch; New - Current correct.
+
+Details:
+
+Amazon - Current mapped to None in field_mappings.py, causing - in CSV (e.g., 1848638930, 8408295837), despite live prices (e.g., 8408295837: $60.52).
+New - Current matches Keepa’s Current & Average (e.g., 8408295837: $31.59), confirming new_current is correct.
+Jules’ “invalid path” error persists, blocking new files; editing existing files is viable.
+ASINs provided: 8408295837, 1507622465, 8412943066 with live Amazon - Current prices. Plan:
+Jules modifies amazon_current to parse Amazon’s price, updates field_mappings.py, tests with ASINs.
+Output notes.txt to validate fix.
+You’ll verify Keepa website prices. Next Steps: Await Jules’ modifications, notes.txt.
+
+Date: June 1, 2025, 2:03 PM EDT
+
+Issue: Amazon - Current mismatch; New - Current correct.
+
+Details:
+
+Amazon - Current mapped to None in field_mappings.py, causing - in CSV (e.g., 8408295837: - vs. $60.52).
+New - Current matches Keepa (e.g., 8408295837: $31.59).
+Jules confirmed files (stable_products.py, field_mappings.py) exist, main branch up-to-date, but can’t modify /app/temp/stable_products_temp.py due to “File does not exist” errors.
+Platform limitation prevents file modifications, despite successful copy and read access.
+ASINs: 8408295837, 1507622465, 8412943066. Plan:
+You’ll update field_mappings.py, stable_products.py locally, ensure relative paths.
+Jules analyzes API data, confirms stats.current[1], tests your updates.
+Output notes.txt. Next Steps: Your local edits, Jules’ API analysis, notes.txt.
