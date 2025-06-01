@@ -6,6 +6,8 @@ import json, csv, logging, sys, requests, urllib.parse, time, argparse
 from retrying import retry
 from stable_deals import validate_asin, fetch_deals_for_deals
 from field_mappings import FUNCTION_LIST
+import os
+CSV_PATH = os.path.join(os.path.dirname(__file__), "Keepa_Deals_Export.csv")
 
 # Logging for terminal and file output - starts
 import sys
@@ -104,7 +106,7 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
 # Chunk 3 starts
 def write_csv(rows, deals, diagnostic=False):
     try:
-        with open('Keepa_Deals_Export.csv', 'w', newline='', encoding='utf-8') as f:
+        with open(CSV_PATH, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(HEADERS)
             if diagnostic:
@@ -196,4 +198,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-#### END OF FILE ####
+#### END of Keepa_Deals.py ####

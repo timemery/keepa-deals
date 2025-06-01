@@ -135,4 +135,4 @@ def last_price_change(deal):
         return {'last price change': '-'}
 # Last price change ends
 
-#### END OF FILE ####
+#### END of stable_deals.py ####
