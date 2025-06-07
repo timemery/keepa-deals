@@ -1204,3 +1204,59 @@ ASINs: 8408295837, 1507622465, 8412943066. Plan:
 You’ll update field_mappings.py, stable_products.py locally, ensure relative paths.
 Jules analyzes API data, confirms stats.current[1], tests your updates.
 Output notes.txt. Next Steps: Your local edits, Jules’ API analysis, notes.txt.
+
+Date: June 1, 2025, 3:09 PM EDT
+
+Issue: Amazon - Current fix applied; backup to Bak_May failed due to path error; Jules’ file write issues persist.
+
+Details:
+
+Updated field_mappings.py: None to amazon_current for Amazon - Current.
+Updated Keepa_Deals.py: Added CSV_PATH relative path.
+Backup failed: Bak_May is in /home/timscripts/keepa_api/, not /home/timscripts/keepa_api/keepa-deals/.
+Recommitted all files: git add ., commit “Recommit all project files, Jun 1, 2025”.
+Jules’ “File does not exist” mirrors backup error, likely path/container issue.
+ASINs: 8408295837, 1507622465, 8412943066. Actions:
+Fixed backup path: cp ... /home/timscripts/keepa_api/Bak_May/.
+Test locally: python3 Keepa_Deals.py --no-cache.
+Jules pulls, tests CSV, checks file writes.
+Next: Diagnose Jules’ file issue (container, permissions, Git). Path: /home/timscripts/keepa_api/keepa-deals/
+
+Date: June 2, 2025, 6:35 PM EDT
+
+Issue: Jules’ file errors; Amazon - Current outputs -.
+
+Details:
+
+Jules’ tools fail due to /app/keepa-deals treated as a file, blocking operations.
+Likely containerized environment with permission/filesystem issue.
+Provided commands to delete as file/directory, write to /tmp/. Actions:
+Sent Jules diagnostic commands, admin fallback.
+Await /tmp/reset_notes.txt or environment details.
+Next: Clear /app/keepa-deals, resume plan.txt. Path: /home/timscripts/keepa_api/keepa-deals/
+
+Date: June 2, 2025, 6:47 PM EDT
+
+Issue: Jules’ file errors; Amazon - Current outputs -.
+
+Details:
+
+Jules’ tools fail with ValueError: ... "cat: /app/keepa-deals: Is a directory", blocking all operations.
+Deadlock requires admin intervention to clear /app/keepa-deals.
+Requested environment details for cleanup. Actions:
+Await Jules’ environment details.
+Arrange admin intervention, then resume plan.txt.
+Next: Jules debugs Amazon - Current. Path: /home/timscripts/keepa_api/keepa-deals/
+
+Date: June 2, 2025, 9:53 PM EDT
+
+Issue: Jules’ file errors; Amazon - Current outputs -.
+
+Details:
+
+Jules’ deadlock persists at /app/keepa-deals, tools fail with ValueError: ... "cat: /app/keepa-deals: Is a directory".
+/app/ suggests container, but no admin details provided.
+Proposed new account setup or further environment clues. Actions:
+Sent Jules request for environment details, new account query.
+Await response or admin details.
+Next: Clear /app/ or set up new account, resume plan.txt. Path: /home/timscripts/keepa_api/keepa-deals/
