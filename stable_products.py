@@ -412,7 +412,7 @@ from retrying import retry
 def amazon_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
-    price = stats.get('current', [None] * 23)[1]
+    price = stats.get('current', [None] * 23)[0] # <--- This index needs to change
     if price is None or price <= 0:
         logging.warning(f"No valid Amazon - Current price for ASIN {asin}")
         return {'Amazon - Current': '-'}

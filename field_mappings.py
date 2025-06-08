@@ -514,7 +514,7 @@ FUNCTION_LIST = [
     None,                           # Buy Box - Highest 365 days
     None,                           # Buy Box - 90 days OOS
     None,                           # Buy Box - Stock
-    None,                           # Amazon - Current
+    amazon_current,                 # Amazon - Current
     None,                           # Amazon - 30 days avg.
     None,                           # Amazon - 60 days avg.
     None,                           # Amazon - 90 days avg.
