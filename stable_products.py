@@ -377,9 +377,10 @@ def sales_rank_drops_last_365_days(product):
 # Buy Box - Current starts
 def buy_box_current(product):
     asin = product.get('asin', 'unknown')
+    logging.debug(f"Buy Box - Current - ASIN {asin} - Raw current array: {product.get('stats', {}).get('current', [-1] * 20)}")
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
-    value = current[0] if len(current) > 10 else -1
+    value = current[0] if len(current) > 0 else -1
     logging.debug(f"Buy Box - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
     if value <= 0 or value == -1:
         logging.warning(f"No valid Buy Box - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
