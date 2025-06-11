@@ -1,4 +1,5 @@
 # field_mappings.py 
+# (Last update: Version 2)
 
 # Chunk 1 starts
 from stable_products import (

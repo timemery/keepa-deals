@@ -1,4 +1,5 @@
 # stable_products.py
+# (Last update: Version 2)
 
 # Unchanged imports and globals
 import requests
@@ -380,7 +381,7 @@ def buy_box_current(product):
     logging.debug(f"Buy Box - Current - ASIN {asin} - Raw current array: {product.get('stats', {}).get('current', [-1] * 20)}")
     stats = product.get('stats', {})
     current = stats.get('current', [-1] * 20)
-    value = current[0] if len(current) > 0 else -1
+    value = current[10] if len(current) > 10 else -1
     logging.debug(f"Buy Box - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
     if value <= 0 or value == -1:
         logging.warning(f"No valid Buy Box - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
@@ -413,7 +414,7 @@ from retrying import retry
 def amazon_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
-    price = stats.get('current', [None] * 23)[0] # <--- This index needs to change
+    price = stats.get('current', [None] * 23)[1] # <--- Changed to 1
     if price is None or price <= 0:
         logging.warning(f"No valid Amazon - Current price for ASIN {asin}")
         return {'Amazon - Current': '-'}

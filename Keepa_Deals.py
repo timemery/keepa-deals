@@ -1,4 +1,5 @@
 # Keepa_Deals.py 
+# (Last update: Version 2)
 
 # Chunk 1 starts: 
 # Added argparse
@@ -92,7 +93,9 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
         offers = product.get('offers', []) if product.get('offers') is not None else []
-        logging.info(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, offers_count={len(offers)}, stats_raw={stats}")
+        logging.info(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, current_length={len(current)}, offers_count={len(offers)}, stats_raw={stats}")
+        if len(current) < 11:
+            logging.warning(f"Short current array for ASIN {asin}: {current}")
         if current[1] == -1:
             logging.warning(f"Invalid Amazon - Current price for ASIN {asin}: current[1]={current[1]}")
         time.sleep(2)  # Restore delay to avoid rate limits
@@ -175,7 +178,9 @@ def main():
                             # Pass deal for stable_deals functions, product for stable_products
                             input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
                             result = func(input_data)
+                            logging.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}")
                             row.update(result)
+                            logging.debug(f"Row after update for {header}: {row}")
                         except Exception as e:
                             logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
                             row[header] = '-'
