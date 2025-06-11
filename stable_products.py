@@ -1,5 +1,5 @@
 # stable_products.py
-# (Last update: Version 2)
+# (Last update: Version 3)
 
 # Unchanged imports and globals
 import requests

@@ -1,6 +1,6 @@
 # Keepa Deals API
 Jules collaboration on Keepa Deals.
-(Last update: Version 2)
+- (Last update: Version 3)
 
 ## Overview
 This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to fetch and process Keepa API data, outputting `Keepa_Deals_Export.csv`.
@@ -31,7 +31,9 @@ This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to
 6. Outputs: `Keepa_Deals_Export.csv`, `debug_log.txt`
 
 ### Dependencies
-See `requirements.txt` for exact versions. Key packages:
+See `requirements.txt` for the full list of dependencies. Key notes:
+- `keepa==1.3.5`: Included for compatibility with existing code. Do not use the Keepa Python client for API calls. Instead, use the `requests` library to make direct HTTP requests to `https://api.keepa.com` (e.g., `requests.get()` with the API key from `config.json`).
+- Other dependencies: `pandas`, `numpy`, `requests`, etc., are used for data processing and HTTP requests.
 - certifi==2025.4.26
 - charset-normalizer==3.4.2
 - idna==3.10
@@ -44,6 +46,8 @@ See `requirements.txt` for exact versions. Key packages:
 - six==1.16.0
 - tzdata==2025.2
 - urllib3==2.4.0
+- keepa==1.3.5
+
 
 ## Development Setup
 - **Editor**: Sublime Text for editing.

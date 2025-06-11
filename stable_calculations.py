@@ -1,5 +1,5 @@
 # stable_calculations.py
-# (Last update: Version 2)
+# (Last update: Version 3)
 
 # Empty for now 
 
