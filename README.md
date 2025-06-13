@@ -29,7 +29,7 @@ This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to
    python3 -m venv venv
    source venv/bin/activate
 2. Clone the repository:
-   git clone https://github.com/timemery/keepa-deals.git
+   git clone https://github.com/timemery/keepa-deals.git .
 3. WARNING: Do NOT install anything in /home/jules/.local/ for this project; use only the virtual environment (venv).
 4. Install dependencies in the virtual environment:
    pip install -r requirements.txt
