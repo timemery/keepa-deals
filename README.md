@@ -6,7 +6,7 @@ Jules collaboration on Keepa Deals.
 This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to fetch and process Keepa API data, outputting `Keepa_Deals_Export.csv`.
 
 ## Environment
-- Virtualenv: `/home/timscripts/keepa_venv/`
+- Virtualenv: `~/keepa_api/keepa-deals/venv` (or user-specific path)
 - Python: 3.10.17
 - Dependencies: See `requirements.txt`
 - Config: `config.json` (API key)
@@ -19,41 +19,32 @@ This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to
 
 ## Setup
 ### Python Version
-- Standard: Python 3.10.17 (used in `/home/timscripts/keepa_venv/` and Jules’ environment).
-- Note: Python 3.10.17 ensures consistency and compatibility with the Keepa API.
+- Standard: Python 3.10.17
+- Note: Python 3.10.17 ensures compatibility with the Keepa API and dependencies.
 
 ### Setup Instructions
-1. Clone: `git clone https://github.com/timemery/keepa-deals`
-2. Create venv: `/usr/local/bin/python3.10 -m venv /home/timscripts/keepa_venv`
-3. Activate: `source /home/timscripts/keepa_venv/bin/activate`
-4. Install: `pip install -r requirements.txt`
-5. Run: `python3 Keepa_Deals.py --no-cache`
-6. Outputs: `Keepa_Deals_Export.csv`, `debug_log.txt`
+1. Create a project directory and virtual environment:
+   mkdir -p ~/keepa_api/keepa-deals
+   cd ~/keepa_api/keepa-deals
+   python3 -m venv venv
+   source venv/bin/activate
+2. Clone the repository:
+   git clone https://github.com/timemery/keepa-deals.git .
+3. Install dependencies in the virtual environment:
+   pip install -r requirements.txt
+   deactivate
+# Expected outputs (when running): Keepa_Deals_Export.csv, debug_log.txt
 
 ### Dependencies
-See `requirements.txt` for the full list of dependencies. Key notes:
+See `requirements.txt` for the full list. Key notes:
 - `keepa==1.3.5`: Included for compatibility with existing code. Do not use the Keepa Python client for API calls. Instead, use the `requests` library to make direct HTTP requests to `https://api.keepa.com` (e.g., `requests.get()` with the API key from `config.json`).
-- Other dependencies: `pandas`, `numpy`, `requests`, etc., are used for data processing and HTTP requests.
-- certifi==2025.4.26
-- charset-normalizer==3.4.2
-- idna==3.10
-- numpy==2.2.6
-- pandas==2.2.3
-- python-dateutil==2.9.0.post0
-- pytz==2025.2
-- requests==2.32.3
-- retrying==1.3.4
-- six==1.16.0
-- tzdata==2025.2
-- urllib3==2.4.0
-- keepa==1.3.5
-
+- Other dependencies: `pandas`, `numpy`, `requests`, etc., for data processing and HTTP requests.
 
 ## Development Setup
 - **Editor**: Sublime Text for editing.
 - **Version Control**: GitHub Desktop for commits.
-- **Environment**: Python 3.10.17 in `/home/timscripts/keepa_venv/`. Project files: `/home/timscripts/keepa_api/keepa-deals/`.
-- **Execution**: `source /home/timscripts/keepa_venv/bin/activate; pip install -r requirements.txt; python3 Keepa_Deals.py --no-cache`
+- **Environment**: Python 3.10.17 in a virtual environment (e.g., `~/keepa_api/keepa-deals/venv`). Project files: `~/keepa_api/keepa-deals/`.
+- **Execution**: Activate virtual environment, install dependencies, run `python3 Keepa_Deals.py --no-cache`.
 
 ## Project Structure
 - `Keepa_Deals.py`: Main script for fetching deals and writing CSV.
@@ -68,9 +59,3 @@ See `requirements.txt` for the full list of dependencies. Key notes:
 - `Keepa_Deals_Export.csv`: Output file for deal data.
 - `debug_log.txt`: Debug logs (e.g., stats.current).
 - `API_Dev_Log_v4.txt`: Development log.
-
-## Backup Process
-- Backups in `/home/timscripts/keepa_api/Bak_May/` with descriptive names (e.g., `keepa_deals_may12_2025.py`).
-
-## Code Sharing
-- Prefer inline code blocks for snippets, logs, or fixes.
