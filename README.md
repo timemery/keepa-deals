@@ -1,6 +1,6 @@
 # Keepa Deals API
 Jules collaboration on Keepa Deals.
-- (Last update: Version 3)
+- (Last update: Version 4)
 
 ## Overview
 This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to fetch and process Keepa API data, outputting `Keepa_Deals_Export.csv`.
@@ -29,11 +29,13 @@ This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to
    python3 -m venv venv
    source venv/bin/activate
 2. Clone the repository:
-   git clone https://github.com/timemery/keepa-deals.git .
-3. Install dependencies in the virtual environment:
+   git clone https://github.com/timemery/keepa-deals.git
+3. WARNING: Do NOT install anything in /home/jules/.local/ for this project; use only the virtual environment (venv).
+4. Install dependencies in the virtual environment:
    pip install -r requirements.txt
    deactivate
-# Expected outputs (when running): Keepa_Deals_Export.csv, debug_log.txt
+
+# Expected outputs (when running Keepa_Deals.py): Keepa_Deals_Export.csv, debug_log.txt
 
 ### Dependencies
 See `requirements.txt` for the full list. Key notes:
