@@ -414,7 +414,8 @@ from retrying import retry
 def amazon_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
-    price = stats.get('current', [None] * 23)[1] # <--- Changed to 1
+    # stats.current[0] is typically Amazon's price, while current[1] is New overall.
+    price = stats.get('current', [None] * 23)[0] # <--- Changed to 1
     if price is None or price <= 0:
         logging.warning(f"No valid Amazon - Current price for ASIN {asin}")
         return {'Amazon - Current': '-'}
