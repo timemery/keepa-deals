@@ -489,19 +489,16 @@ def new_current(product):
 # New - Stock
 
 # New, 3rd Party FBA - Current starts
-# 2025-05-20: Impossible to verify New, 3rd Party FBA - Current, as CSV and Keepa showed all '-' for 5 ASINs (commit 7ef4629e). Update uses offers array for reliability.
-def new_3rd_party_fba_current(product):
-    asin = product.get('asin', 'unknown')
-    stats = product.get('stats', {})
-    offers = product.get('offers', [])
-    current_price = get_stat_value(stats, 'current', 11, divisor=100, is_price=True)
-    fba_prices = [o.get('price', -1) / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False)]
-    if not fba_prices or current_price == '-' or not any(abs(float(current_price[1:]) - p) < 0.01 for p in fba_prices):
-        logging.warning(f"No valid FBA price for ASIN {asin}: stats={current_price}, offers={fba_prices}")
-        return {'New, 3rd Party FBA - Current': '-'}
-    result = {'New, 3rd Party FBA - Current': current_price}
-    logging.debug(f"new_3rd_party_fba_current result for ASIN {asin}: {result}")
-    return result
+
+    # Finds the lowest priced New offer from a 3rd Party FBA seller by parsing the 'offers' array.
+    # Price is usually in offer_csv[1] for current offers, or in 'price' for historical snapshots
+    # Condition: 1 for "New". Some offers might use string "New".
+    # The 'condition' field in offers seems to be numeric from provided logs.
+    # Ensure seller_id exists before comparison
+    # Detailed log for each offer considered (can be very verbose, use with caution or sample)
+    # logging.debug(f"ASIN {asin} - Offer {i}: price_cents={offer_price_cents}, cond_code={offer_condition_code}, is_new={is_new_condition}, is_fba={is_fba_offer}, seller_id='{seller_id}', is_3p={is_third_party}")
+    # logging.debug(f"ASIN {asin} - Offer {i} MATCHED New/3P/FBA criteria: price={offer_price_cents/100}")
+
 # New, 3rd Party FBA - Current ends
 
 # New, 3rd Party FBA - 30 days avg.
@@ -509,7 +506,65 @@ def new_3rd_party_fba_current(product):
 # New, 3rd Party FBA - 90 days avg.
 # New, 3rd Party FBA - 180 days avg.
 # New, 3rd Party FBA - 365 days avg.
-# New, 3rd Party FBA - Lowest
+
+# New, 3rd Party FBA - Lowest starts
+# Finds the lowest priced New offer from a 3rd Party FBA seller by parsing the 'offers' array.
+def new_3rd_party_fba_lowest(product):
+    asin = product.get('asin', 'unknown')
+    price_str = '-' # Default to '-'
+    amazon_seller_id = 'ATVPDKIKX0DER'
+    
+    offers = product.get('offers', [])
+    third_party_fba_new_prices_cents = []
+
+    if not offers:
+        logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: No offers array found or it's empty.")
+        return {'New, 3rd Party FBA - Lowest': '-'}
+
+    logging.debug(f"ASIN {asin} - Processing {len(offers)} offers for New, 3rd Party FBA - Lowest.")
+    for i, offer in enumerate(offers):
+        try:
+            offer_price_cents = -1
+            # Price is usually in offer_csv[1] for current offers, or in 'price' for historical snapshots
+            offer_csv = offer.get('offerCSV', [])
+            if isinstance(offer_csv, list) and len(offer_csv) > 1:
+                offer_price_cents = offer_csv[1]
+            
+            if offer_price_cents == -1: # Fallback or if 'price' field is primary
+                offer_price_cents = offer.get('price', -1)
+
+            # Condition: 1 for "New". Some offers might use string "New".
+            # The 'condition' field in offers seems to be numeric from provided logs.
+            offer_condition_code = offer.get('condition', -1) 
+            is_new_condition = (offer_condition_code == 1)
+            
+            is_fba_offer = offer.get('isFBA', False)
+            seller_id = offer.get('sellerId')
+            
+            # Ensure seller_id exists before comparison
+            is_third_party = (seller_id is not None and seller_id != amazon_seller_id)
+
+            # Detailed log for each offer considered (can be very verbose, use with caution or sample)
+            # logging.debug(f"ASIN {asin} - Offer {i}: price_cents={offer_price_cents}, cond_code={offer_condition_code}, is_new={is_new_condition}, is_fba={is_fba_offer}, seller_id='{seller_id}', is_3p={is_third_party}")
+
+            if is_new_condition and is_fba_offer and is_third_party and offer_price_cents > 0:
+                third_party_fba_new_prices_cents.append(offer_price_cents)
+                # logging.debug(f"ASIN {asin} - Offer {i} MATCHED New/3P/FBA criteria: price={offer_price_cents/100}")
+                    
+        except Exception as e:
+            logging.error(f"Error parsing offer {i} for ASIN {asin} in new_3rd_party_fba_lowest: Offer data: {offer}. Error: {e}")
+            continue
+    
+    if third_party_fba_new_prices_cents:
+        min_price_cents = min(third_party_fba_new_prices_cents)
+        price_str = f"${min_price_cents / 100:.2f}"
+        logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: Found lowest from {len(third_party_fba_new_prices_cents)} matching offers: {price_str}")
+    else:
+        logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: No 3rd party New FBA offer found in offers list ({len(offers)} offers checked).")
+
+    return {'New, 3rd Party FBA - Lowest': price_str}
+# New, 3rd Party FBA - Lowest ends
+
 # New, 3rd Party FBA - Lowest 365 days
 # New, 3rd Party FBA - Highest
 # New, 3rd Party FBA - Highest 365 days
@@ -635,10 +690,12 @@ def used_current(product):
 # Used - Stock
 
 # Used, like new - Current starts
+# Retrieves the 'Used - Like New' price. Experimental: using stats.current[19]. Previously used stats.current[4].
+# Relies on get_stat_value to return '-' if data is unavailable at this index
 def used_like_new(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    current_price = get_stat_value(stats, 'current', 4, divisor=100, is_price=True)
+    current_price = get_stat_value(stats, 'current', 19, divisor=100, is_price=True) # <--- changed 'current', 4 to 'current', 19
     result = {'Used, like new - Current': current_price}
     logging.debug(f"used_like_new for ASIN {asin}: stats.current={stats.get('current', [])}, current_price={current_price}")
     return result
@@ -657,14 +714,18 @@ def used_like_new(product):
 # Used, like new - Stock,
 
 # Used, very good - Current starts
+# Retrieves the 'Used - Very Good' price. Experimental: using stats.current[20]. Previously stats.current[5].
 def used_very_good(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    result = {
-        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
-    return result
+#    result = {
+#        'Used, very good - Current': get_stat_value(stats, 'current', 5, divisor=100, is_price=True)
+#    }
+#    logging.debug(f"used_very_good result for ASIN {asin}: {result}")
+#    return result
+    price_str = get_stat_value(stats, 'current', 20, divisor=100, is_price=True)
+    logging.debug(f"Used, very good - Current for ASIN {asin}: Using stats.current[20], result: {price_str}")
+    return {'Used, very good - Current': price_str}
 # Used, very good - Current ends
 
 # Used, very good - 30 days avg.,
@@ -680,14 +741,18 @@ def used_very_good(product):
 # Used, very good - Stock,
 
 # Used, good - Current starts
+# Retrieves the 'Used - Good' price. Experimental: using stats.current[21]. Previously stats.current[6].
 def used_good(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
-    result = {
-        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
-    }
-    logging.debug(f"used_good result for ASIN {asin}: {result}")
-    return result
+#    result = {
+#        'Used, good - Current': get_stat_value(stats, 'current', 6, divisor=100, is_price=True)
+#    }
+#    logging.debug(f"used_good result for ASIN {asin}: {result}")
+#    return result
+    price_str = get_stat_value(stats, 'current', 21, divisor=100, is_price=True)
+    logging.debug(f"Used, good - Current for ASIN {asin}: Using stats.current[21], result: {price_str}")
+    return {'Used, good - Current': price_str}
 # Used, good - Current ends
 
 # Used, good - 30 days avg.,
@@ -728,12 +793,12 @@ def used_acceptable(product):
 # Used, acceptable - Stock,
 
 # List Price - Current starts
-# This one was not working - We're trying to solve this one now:
+# Retrieves List Price. Experimental: using stats.current[4]. Previously stats.current[8].
 def list_price(product):
     stats = product.get('stats', {})
     asin = product.get('asin', 'unknown')
     current = stats.get('current', [-1] * 20)
-    value = current[8] if len(current) > 8 else -1
+    value = current[4] if len(current) > 4 else -1 # < --- changed to 4 from 8
     logging.debug(f"List Price - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, stats_raw={stats} for ASIN {asin}")
     if value <= 0 or value == -1:
         logging.warning(f"No valid List Price - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
