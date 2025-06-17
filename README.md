@@ -2,6 +2,7 @@
 Jules collaboration on Keepa Deals.
 - (Last update: Version 4)
 
+
 ## Overview
 This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to fetch and process Keepa API data, outputting `Keepa_Deals_Export.csv`.
 

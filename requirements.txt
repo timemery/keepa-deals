@@ -1,6 +1,7 @@
 # requirements.txt
 
-# Keepa Deals dependencies
+# Keepa Deals dependencies - (Last update: Version 4)
+
 
 certifi==2025.4.26
 charset-normalizer==3.4.2
