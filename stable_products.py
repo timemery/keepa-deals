@@ -677,19 +677,43 @@ def new_3rd_party_fbm_current(product):
 def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
-    current = stats.get('current', [-1] * 20)
-    value = current[9] if len(current) > 9 else -1
-    logging.debug(f"Buy Box Used - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())}, offers_count={len(product.get('offers', []))} for ASIN {asin}")
-    if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box Used - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
-        return {'Buy Box Used - Current': '-'}
-    try:
-        formatted = f"${value / 100:.2f}"
-        logging.debug(f"Buy Box Used - Current result for ASIN {asin}: {formatted}")
-        return {'Buy Box Used - Current': formatted}
-    except Exception as e:
-        logging.error(f"buy_box_used_current failed for ASIN {asin}: {str(e)}")
-        return {'Buy Box Used - Current': '-'}
+    
+    logging.debug(f"Buy Box Used - Current for ASIN {asin}: Starting process. stats_keys available: {list(stats.keys())}")
+
+    # Primary method: Use the direct 'buyBoxUsedPrice' field if available
+    buy_box_used_price_raw = stats.get('buyBoxUsedPrice', -1)
+    
+    if buy_box_used_price_raw is not None and buy_box_used_price_raw > 0:
+        try:
+            formatted_price = f"${buy_box_used_price_raw / 100:.2f}"
+            logging.info(f"Buy Box Used - Current for ASIN {asin}: Using 'buyBoxUsedPrice' field. Raw: {buy_box_used_price_raw}, Formatted: {formatted_price}")
+            return {'Buy Box Used - Current': formatted_price}
+        except Exception as e:
+            logging.error(f"Buy Box Used - Current for ASIN {asin}: Error formatting 'buyBoxUsedPrice' ({buy_box_used_price_raw}): {str(e)}. Will attempt fallback.")
+    else:
+        logging.info(f"Buy Box Used - Current for ASIN {asin}: 'buyBoxUsedPrice' is missing, None, or invalid ({buy_box_used_price_raw}). Attempting fallback to stats.current[32].")
+
+    # Fallback method: Try stats.current[32] based on observed log for ASIN 0156001403
+    # This is less preferred due to reliance on index, but included as a fallback.
+    current = stats.get('current', [])
+    if len(current) > 32:
+        value_from_current_32 = current[32]
+        logging.debug(f"Buy Box Used - Current for ASIN {asin}: Fallback check of stats.current[32]. Value: {value_from_current_32}")
+        if value_from_current_32 is not None and value_from_current_32 > 0:
+            try:
+                formatted_price = f"${value_from_current_32 / 100:.2f}"
+                logging.info(f"Buy Box Used - Current for ASIN {asin}: Using fallback stats.current[32]. Raw: {value_from_current_32}, Formatted: {formatted_price}")
+                return {'Buy Box Used - Current': formatted_price}
+            except Exception as e:
+                logging.error(f"Buy Box Used - Current for ASIN {asin}: Error formatting stats.current[32] value ({value_from_current_32}): {str(e)}")
+        else:
+            logging.info(f"Buy Box Used - Current for ASIN {asin}: Fallback stats.current[32] is missing, None or invalid ({value_from_current_32}).")
+    else:
+        logging.info(f"Buy Box Used - Current for ASIN {asin}: Fallback stats.current array is too short (len: {len(current)}) to access index 32.")
+
+    # If both primary and fallback methods fail
+    logging.warning(f"Buy Box Used - Current for ASIN {asin}: No valid price found through 'buyBoxUsedPrice' or fallback stats.current[32]. Returning '-'. current array was: {current}")
+    return {'Buy Box Used - Current': '-'}
 # Buy Box Used - Current ends
 
 # Buy Box Used - 30 days avg.
