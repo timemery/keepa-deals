@@ -1260,3 +1260,143 @@ Proposed new account setup or further environment clues. Actions:
 Sent Jules request for environment details, new account query.
 Await response or admin details.
 Next: Clear /app/ or set up new account, resume plan.txt. Path: /home/timscripts/keepa_api/keepa-deals/
+
+Fix: Correct Buy Box price retrieval logic
+
+The `buy_box_current` function in `stable_products.py` was previously using
+`stats.current[10]` to determine the Buy Box price. This was found to be
+unreliable in cases where the Buy Box was held by a 'New' condition seller,
+as `current[10]` would sometimes reflect the 'New - Current' price instead
+of the actual Buy Box price.
+
+This commit modifies `buy_box_current` to prioritize the `buyBoxPrice`
+field directly available in the Keepa API's product stats. This field
+provides a more accurate representation of the Buy Box price.
+
+As per your request, if `buyBoxPrice` is missing, None, or invalid (<=0),
+the function will now return '-' and will not fall back to using
+`stats.current[10]`. Appropriate logging has been added for these cases.
+
+Additionally, a new test suite `test_keepa_deals.py` has been created with
+unit tests for the `buy_box_current` function. These tests cover scenarios
+with valid, missing, invalid, and zero values for `buyBoxPrice` to ensure
+the corrected logic works as expected and to prevent regressions.
+The `Keepa_Deals.py` script was also slightly modified to ensure `argparse`
+does not interfere with test discovery by moving `parser.parse_args()`
+into the `main()` function's `if __name__ == '__main__':` block.
+
+This script, test_keepa_deals.py, is a unit testing script. It's designed to run independently to test specific parts (units) of your main codebase, in this case, primarily the buy_box_current function within your stable_products.py file.
+
+Here's a breakdown of how it works and its role:
+
+Purpose:
+
+Its main job is to automatically verify that the buy_box_current function behaves as expected under different conditions.
+It helps catch errors (bugs) if future changes to buy_box_current or related code accidentally break the logic for determining the Buy Box price.
+It ensures the fix we implemented for ASIN 1531025773 (using buyBoxPrice instead of current[10]) works correctly and continues to work.
+How it Works (Key Features):
+
+import unittest: It uses Python's built-in unittest module, which is a standard framework for writing and running tests.
+from stable_products import buy_box_current: It imports the actual buy_box_current function from your existing stable_products.py file. This means it's testing the real code you use.
+Test Cases (Methods starting with test_):
+test_buy_box_current_correctly_uses_buyBoxPrice: This specific test creates a mock (simulated) version of the product data that the Keepa API might return for an ASIN like 1531025773. This mock data is set up with a known correct buyBoxPrice value (3762). It then calls your buy_box_current function with this mock data and checks if the function returns the expected formatted price ('$37.62').
+test_buy_box_current_handles_missing_buyBoxPrice: This test simulates a scenario where the buyBoxPrice field is missing from the API data. It then checks if your function correctly returns '-', as we discussed (no fallback).
+test_buy_box_current_handles_invalid_buyBoxPrice: Similar to the above, but it simulates the API returning an invalid buyBoxPrice (like -1). It checks if the function returns '-'.
+test_buy_box_current_handles_zero_buyBoxPrice: Simulates buyBoxPrice being 0 and checks for '-'.
+Assertions (self.assertEqual): These are the core of the tests. They compare the actual output of your function with the expected output. If they don't match, the test "fails," indicating a problem.
+Independence: This test script does not run when you normally execute Keepa_Deals.py to fetch deals. It's meant to be run separately by a developer (you, in this case) to check code correctness, usually before committing changes or after making significant modifications.
+How to Run It:
+
+You would typically run this script from your command line / terminal from the root directory of your project using a command like: python -m unittest test_keepa_deals.py
+The unittest module will discover the test cases within the file and run them, reporting how many tests passed or failed.
+What it doesn't do:
+
+It does not fetch live data from the Keepa API. Using mock data makes the tests fast, reliable (not dependent on API availability or actual data fluctuations), and free (doesn't consume your API quota).
+It does not generate a Keepa_Deals_Export.csv file. Its focus is solely on the logic of the buy_box_current function.
+In summary: test_keepa_deals.py is a safety net. It doesn't change how your main Keepa_Deals.py script runs or what it produces for your CSV. Instead, it provides a way for you to confirm that the critical piece of logic for determining the "Buy Box - Current" price is working as intended, especially after the recent fix and for any future modifications.
+
+The small change I mentioned making to Keepa_Deals.py (moving parser.parse_args()) was just to ensure that when the unittest framework tries to import your modules to find tests, it doesn't accidentally try to parse command-line arguments when none are being provided, which could cause an error during the test execution itself.
+
+Let me know if you'd like any part of that explained further!
+
+Today 18:55
+genius! can this be adapted to use it to test other columns as well?
+
+Yes, absolutely! That's the beauty of a testing framework like unittest. The test_keepa_deals.py script is very adaptable and can be easily extended to test other columns and their corresponding functions.
+
+Here's how you could adapt it:
+
+Identify the Function to Test: For each column in your CSV that you want to test, you first need to identify which function in your Python code is responsible for generating the data for that column. For example:
+
+"Title" column is generated by get_title(product) in stable_products.py.
+"New - Current" is generated by new_current(product) in stable_products.py.
+"Deal found" is generated by deal_found(deal) in stable_deals.py.
+Import the Function: In test_keepa_deals.py, you would import these additional functions. For example:
+
+from stable_products import get_title, new_current # Add other functions from stable_products
+from stable_deals import deal_found # Add functions from stable_deals
+Write New Test Cases (Methods): For each function/column, you'd add new test methods to the TestKeepaDeals class. Each method should follow the same pattern:
+
+Name it descriptively, starting with test_. For example, test_get_title_returns_correct_format or test_new_current_handles_missing_data.
+Set up mock data: Create a mock_product_data (or mock_deal_data if the function takes a deal object) dictionary that simulates the relevant parts of the Keepa API response needed for that specific function. You'll want to include different scenarios:
+Typical, valid data.
+Cases with missing data (e.g., if a product has no title).
+Cases with potentially problematic data (e.g., very long strings, special characters, different price formats if applicable).
+Call the function: Pass your mock data to the function you're testing.
+Assert the result: Use self.assertEqual() or other unittest assertion methods (self.assertTrue(), self.assertIn(), etc.) to check if the function's output is what you expect for that column.
+Example: Testing the get_title function
+
+You could add a method like this to test_keepa_deals.py:
+
+    def test_get_title_returns_correct_title(self):
+        mock_product_data = {
+            'asin': 'TESTASIN004',
+            'title': "The Adventures of a Test Book",
+            'stats': {} # stats might not be needed for get_title, but include if it is
+        }
+        result = get_title(mock_product_data)
+        expected_title = "The Adventures of a Test Book"
+        self.assertEqual(result.get('Title'), expected_title,
+                         f"Expected Title '{expected_title}', got '{result.get('Title')}'")
+
+    def test_get_title_handles_missing_title(self):
+        mock_product_data_no_title = {
+            'asin': 'TESTASIN005',
+            # 'title' field is missing
+            'stats': {}
+        }
+        result = get_title(mock_product_data_no_title)
+        # Assuming get_title returns '-' or a default value when title is missing
+        self.assertEqual(result.get('Title'), '-',
+                         f"Expected Title to be '-' when missing, got '{result.get('Title')}'")
+
+Key Considerations for Adapting:
+
+Input Data Structure: Pay close attention to what data structure each function expects (e.g., the product object structure, or the deal object structure). Your mock data needs to mimic this. The debug logs you have are invaluable for seeing the real structure.
+Focus of the Test: Each test should ideally focus on one specific aspect or scenario of the function.
+Edge Cases: Think about "edge cases" – unusual inputs or situations that might cause problems (e.g., empty strings, numbers where strings are expected, missing keys in the data).
+Readability: Keep your tests clear and easy to understand. Good test names and comments help.
+By adding more test methods in this way, you can build a robust test suite that covers many of your data processing functions, increasing your confidence that the script is working correctly and making it safer to introduce changes in the future.
+
+It's a great way to ensure the quality and reliability of your script!
+
+Enhance Buy Box price retrieval with fallback logic
+
+The `buy_box_current` function in `stable_products.py` has been updated
+to improve the reliability of fetching the 'Buy Box - Current' price.
+
+Previously, the function solely relied on `stats['buyBoxPrice']`. If this
+field was unavailable, '-' was returned.
+
+This change introduces a fallback mechanism:
+- If `stats['buyBoxPrice']` is missing or invalid, the function now
+  attempts to find the Buy Box offer by using `product['buyBoxSellerId']`
+  and `product['buyBoxCondition']` to search within `product['offers']`.
+- If a matching offer is found, its price is used.
+- If the primary field is missing and no matching offer is found via the
+  fallback, '-' is still returned.
+
+This enhancement aims to provide a 'Buy Box - Current' price more
+consistently, aligning with cases where Keepa might not populate
+`stats['buyBoxPrice']` but does indicate a Buy Box winner through
+other fields and offer data.

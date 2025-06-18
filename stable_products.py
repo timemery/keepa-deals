@@ -378,21 +378,55 @@ def sales_rank_drops_last_365_days(product):
 # Buy Box - Current starts
 def buy_box_current(product):
     asin = product.get('asin', 'unknown')
-    logging.debug(f"Buy Box - Current - ASIN {asin} - Raw current array: {product.get('stats', {}).get('current', [-1] * 20)}")
     stats = product.get('stats', {})
-    current = stats.get('current', [-1] * 20)
-    value = current[10] if len(current) > 10 else -1
-    logging.debug(f"Buy Box - Current - raw value={value}, current array={current}, stats_keys={list(stats.keys())} for ASIN {asin}")
-    if value <= 0 or value == -1:
-        logging.warning(f"No valid Buy Box - Current (value={value}, current_length={len(current)}) for ASIN {asin}")
-        return {'Buy Box - Current': '-'}
-    try:
-        formatted = f"${value / 100:.2f}"
-        logging.debug(f"Buy Box - Current result for ASIN {asin}: {formatted}")
-        return {'Buy Box - Current': formatted}
-    except Exception as e:
-        logging.error(f"buy_box_current failed for ASIN {asin}: {str(e)}")
-        return {'Buy Box - Current': '-'}
+    buy_box_price_raw = stats.get('buyBoxPrice', -1)
+    logging.debug(f"Buy Box - Current - ASIN {asin} - Attempting to use 'buyBoxPrice' field. Raw value: {buy_box_price_raw}")
+
+    if buy_box_price_raw is not None and buy_box_price_raw > 0:
+        try:
+            formatted_price = f"${buy_box_price_raw / 100:.2f}"
+            logging.info(f"Buy Box - Current for ASIN {asin}: Using 'buyBoxPrice', value: {formatted_price}")
+            return {'Buy Box - Current': formatted_price}
+        except Exception as e:
+            logging.error(f"Buy Box - Current - ASIN {asin} - Error formatting 'buyBoxPrice' ({buy_box_price_raw}): {str(e)}")
+            # Fall through to fallback if formatting fails, though it's unlikely for a number.
+    else:
+        logging.warning(f"Buy Box - Current - ASIN {asin} - 'buyBoxPrice' is missing, None, or invalid ({buy_box_price_raw}). Attempting fallback.")
+
+    # Fallback logic
+    buy_box_seller_id = product.get('buyBoxSellerId')
+    # Default to condition 1 (New) if not specified. Keepa API docs suggest 0-11 for condition.
+    buy_box_condition = product.get('buyBoxCondition', 1) 
+    logging.debug(f"Buy Box - Current - ASIN {asin} - Fallback: buyBoxSellerId='{buy_box_seller_id}', buyBoxCondition='{buy_box_condition}'")
+
+    if buy_box_seller_id:
+        offers = product.get('offers', [])
+        if not offers:
+            logging.warning(f"Buy Box - Current - ASIN {asin} - Fallback: No offers array found to search for sellerId {buy_box_seller_id}.")
+        for i, offer in enumerate(offers):
+            offer_seller_id = offer.get('sellerId')
+            offer_condition = offer.get('condition') # Assuming numeric, directly comparable
+            offer_price_cents = offer.get('price', -1) # Assuming price is in cents
+
+            logging.debug(f"Buy Box - Current - ASIN {asin} - Fallback: Checking offer {i}: sellerId='{offer_seller_id}', condition='{offer_condition}', price='{offer_price_cents}'")
+
+            if offer_seller_id == buy_box_seller_id and offer_condition == buy_box_condition:
+                if offer_price_cents > 0:
+                    try:
+                        formatted_price = f"${offer_price_cents / 100:.2f}"
+                        logging.info(f"Buy Box - Current for ASIN {asin}: Using Fallback Logic - Found matching offer for sellerId '{buy_box_seller_id}' and condition '{buy_box_condition}'. Price: {formatted_price}")
+                        return {'Buy Box - Current': formatted_price}
+                    except Exception as e:
+                        logging.error(f"Buy Box - Current - ASIN {asin} - Fallback: Error formatting offer price ({offer_price_cents}): {str(e)}")
+                        # If formatting this specific offer fails, continue, maybe another offer matches.
+                else:
+                    logging.warning(f"Buy Box - Current - ASIN {asin} - Fallback: Matching offer found for sellerId '{buy_box_seller_id}' but price is invalid ({offer_price_cents}).")
+        logging.warning(f"Buy Box - Current - ASIN {asin} - Fallback: No matching offer found for sellerId '{buy_box_seller_id}' and condition '{buy_box_condition}' with a positive price.")
+    else:
+        logging.warning(f"Buy Box - Current - ASIN {asin} - Fallback: 'buyBoxSellerId' is missing. Cannot perform fallback search.")
+
+    logging.warning(f"Buy Box - Current - ASIN {asin} - Final decision: No valid Buy Box price found through primary or fallback methods. Returning '-'.")
+    return {'Buy Box - Current': '-'}
 # Buy Box - Current ends
 
 # Buy Box - 30 days avg.

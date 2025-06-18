@@ -38,7 +38,7 @@ logging.getLogger().handlers[0].flush = sys.stdout.flush
 # Command-line arguments
 parser = argparse.ArgumentParser(description="Keepa Deals Script")
 parser.add_argument("--no-cache", action="store_true", help="Force fresh Keepa API calls")
-args = parser.parse_args()
+# args = parser.parse_args() # Moved to main()
 
 # Logging - removed this one since we have a new/better one above
 #logging.basicConfig(filename='debug_log.txt', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
@@ -106,6 +106,9 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         return {'stats': {'current': [-1] * 30}, 'asin': asin}
 # Chunk 2 ends
 
+# Global args variable, to be initialized in main
+args = None
+
 # Chunk 3 starts
 def write_csv(rows, deals, diagnostic=False):
     try:
@@ -139,12 +142,14 @@ def write_csv(rows, deals, diagnostic=False):
 
 # Chunk 4 starts
 def main():
+    global args
+    args = parser.parse_args() # Initialize global args
     try:
 # Logging stuff - starts
         logging.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
-        deals = fetch_deals_for_deals(0)
+        deals = fetch_deals_for_deals(0) # Consider passing args.no_cache if fetch_deals_for_deals needs it
         rows = []
         if not deals:
             logging.warning("No deals fetched, writing diagnostic CSV")
