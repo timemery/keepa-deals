@@ -1450,3 +1450,31 @@ This change ensures the "New, 3rd Party FBM - Current" column accurately
 represents the specific data point from Keepa, and avoids including prices
 from other offer types or fallback calculations in this designated column.
 
+Fix: Use stats.min[10][1] for New, 3rd Party FBA - Lowest
+
+This commit changes the `new_3rd_party_fba_lowest` function in
+`stable_products.py` to source its data directly from Keepa's
+aggregated statistics.
+
+Based on further analysis and your feedback, the "New, 3rd Party FBA - Lowest"
+price is now retrieved from `product.stats.min[10][1]`. This field
+represents the historical minimum for this price type within the stats
+period requested from the API. This approach is chosen because:
+- It directly matches the expected value for example ASINs (e.g., $22.95
+  for ASIN 8415292643 is found in `stats.min[10][1]`).
+- It simplifies the logic compared to iterating through current offers,
+  which may not contain the true historical lowest if it's not an active offer.
+
+The function now includes:
+- Safe access to `product.stats.min[10][1]`.
+- Validation that the retrieved price is a positive number.
+- Formatting of the price into a currency string.
+- Detailed logging for diagnostics.
+- Fallback to '-' if the data is not available or invalid.
+
+
+
+
+
+
+

@@ -572,72 +572,36 @@ def new_3rd_party_fba_current(product):
 # New, 3rd Party FBA - 365 days avg.
 
 # New, 3rd Party FBA - Lowest starts
-# Finds the lowest priced New offer from a 3rd Party FBA seller by parsing the 'offers' array.
 def new_3rd_party_fba_lowest(product):
     asin = product.get('asin', 'unknown')
     price_str = '-' # Default to '-'
-    amazon_seller_id = 'ATVPDKIKX0DER'
-    
-    offers = product.get('offers', [])
-    third_party_fba_new_prices_cents = []
 
-    if not offers:
-        logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: No offers array found or it's empty.")
-        return {'New, 3rd Party FBA - Lowest': '-'}
+    try:
+        stats = product.get('stats', {})
+        min_prices_array = stats.get('min', []) # This is an array of arrays
 
-    logging.debug(f"ASIN {asin} - Processing {len(offers)} offers for New, 3rd Party FBA - Lowest.")
-    for i, offer in enumerate(offers):
-        try:
-            offer_price_cents = -1 # Initialize with a sentinel value
+        logging.debug(f"ASIN {asin} - new_3rd_party_fba_lowest: stats.min raw: {min_prices_array}")
 
-            # Attempt to get price from offer.get('price') first
-            price_from_get_price = offer.get('price', -1)
-
-            if price_from_get_price is not None and price_from_get_price > 0:
-                offer_price_cents = price_from_get_price
+        # Index 10 corresponds to 'New, 3rd Party FBA'
+        # Each element in min_prices_array is typically [timestamp, price_in_cents]
+        if min_prices_array and len(min_prices_array) > 10:
+            fba_lowest_pair = min_prices_array[10]
+            logging.debug(f"ASIN {asin} - new_3rd_party_fba_lowest: stats.min[10] pair: {fba_lowest_pair}")
+            if isinstance(fba_lowest_pair, list) and len(fba_lowest_pair) > 1:
+                price_cents = fba_lowest_pair[1] # Get the price (second element)
+                if price_cents is not None and isinstance(price_cents, (int, float)) and price_cents > 0:
+                    price_str = f"${price_cents / 100:.2f}"
+                    logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: Found price {price_str} from stats.min[10][1]")
+                else:
+                    logging.warning(f"New, 3rd Party FBA - Lowest for ASIN {asin}: Invalid price value in stats.min[10][1] ({price_cents}).")
             else:
-                # Fallback to offerCSV[0] if offer.get('price') is not valid
-                offer_csv = offer.get('offerCSV', [])
-                if isinstance(offer_csv, list) and len(offer_csv) > 0:
-                    price_from_offer_csv = offer_csv[0]
-                    if price_from_offer_csv is not None and price_from_offer_csv > 0:
-                        offer_price_cents = price_from_offer_csv
-                    # else: offer_price_cents remains -1 if offer_csv[0] is also invalid
-                # else: offer_price_cents remains -1 if offer_csv is not usable
+                logging.warning(f"New, 3rd Party FBA - Lowest for ASIN {asin}: stats.min[10] is not a valid pair: {fba_lowest_pair}")
+        else:
+            logging.warning(f"New, 3rd Party FBA - Lowest for ASIN {asin}: stats.min array is too short or missing (length: {len(min_prices_array)}), cannot access index 10.")
 
-            # Condition: 1 for "New". Some offers might use string "New".
-            # The 'condition' field in offers seems to be numeric from provided logs.
-            offer_condition_code = offer.get('condition', -1) 
-            is_new_condition = (offer_condition_code == 1)
-            
-            is_fba_offer = offer.get('isFBA', False)
-            seller_id = offer.get('sellerId')
-            
-            # Ensure seller_id exists before comparison
-            is_third_party = (seller_id is not None and seller_id != amazon_seller_id)
-
-            # Detailed log for each offer considered (can be very verbose, use with caution or sample)
-            # logging.debug(f"ASIN {asin} - Offer {i}: price_cents={offer_price_cents}, cond_code={offer_condition_code}, is_new={is_new_condition}, is_fba={is_fba_offer}, seller_id='{seller_id}', is_3p={is_third_party}")
-
-            MAX_REALISTIC_PRICE_CENTS = 2000000  # $20,000 as an upper limit for a price in cents
-            if is_new_condition and is_fba_offer and is_third_party and \
-               offer_price_cents > 0 and offer_price_cents <= MAX_REALISTIC_PRICE_CENTS:
-                third_party_fba_new_prices_cents.append(offer_price_cents)
-                # logging.debug(f"ASIN {asin} - Offer {i} MATCHED New/3P/FBA criteria: price={offer_price_cents/100}")
-            elif is_new_condition and is_fba_offer and is_third_party and offer_price_cents > MAX_REALISTIC_PRICE_CENTS:
-                # Log discarded high values.
-                logging.warning(f"ASIN {asin} - Discarded potential price {offer_price_cents} cents as it exceeds MAX_REALISTIC_PRICE_CENTS ({MAX_REALISTIC_PRICE_CENTS} cents) for a New, 3rd Party FBA offer.")
-                    
-        except Exception as e:
-            logging.error(f"Error parsing offer {i} for ASIN {asin} in new_3rd_party_fba_lowest: Offer data: {offer}. Error: {e}")
-            continue
-    
-    if third_party_fba_new_prices_cents:
-        min_price_cents = min(third_party_fba_new_prices_cents)
-        price_str = f"${min_price_cents / 100:.2f}"
-        logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: Found lowest from {len(third_party_fba_new_prices_cents)} matching offers: {price_str}")
-    else:
-        logging.info(f"New, 3rd Party FBA - Lowest for ASIN {asin}: No 3rd party New FBA offer found in offers list ({len(offers)} offers checked).")
+    except Exception as e:
+        logging.error(f"Error processing new_3rd_party_fba_lowest for ASIN {asin}: {str(e)}")
+        price_str = '-' # Ensure it defaults to '-' on error
 
     return {'New, 3rd Party FBA - Lowest': price_str}
 # New, 3rd Party FBA - Lowest ends
