@@ -678,23 +678,40 @@ def buy_box_used_current(product):
     asin = product.get('asin', 'unknown')
     stats = product.get('stats', {})
     
-    logging.debug(f"Buy Box Used - Current for ASIN {asin}: Starting process. stats_keys available: {list(stats.keys())}")
+    logging.debug(f"Buy Box Used - Current for ASIN {asin}: Starting process. Relevant stats keys: buyBoxUsedIsFBA, buyBoxUsedPrice, buyBoxUsedShipping.")
 
-    # Primary method: Use the direct 'buyBoxUsedPrice' field if available
-    buy_box_used_price_raw = stats.get('buyBoxUsedPrice', -1)
+    final_price_cents = -1
+    price_source_info = "No valid price found"
+
+    buy_box_used_is_fba = stats.get('buyBoxUsedIsFBA') # Can be True, False, or None
+    item_price_cents = stats.get('buyBoxUsedPrice', -1)
+
+    if item_price_cents is not None and item_price_cents > 0:
+        if buy_box_used_is_fba is True:
+            final_price_cents = item_price_cents
+            price_source_info = f"FBA item price: {item_price_cents}"
+        else: # FBM or buyBoxUsedIsFBA is None (treat as FBM for safety)
+            shipping_price_cents = stats.get('buyBoxUsedShipping', -1)
+            price_source_info = f"FBM item price: {item_price_cents}"
+            if shipping_price_cents is not None and shipping_price_cents >= 0:
+                final_price_cents = item_price_cents + shipping_price_cents
+                price_source_info += f" + shipping: {shipping_price_cents} = {final_price_cents}"
+            else: # No valid shipping, use item price only for FBM
+                final_price_cents = item_price_cents
+                price_source_info += " (shipping not specified or invalid)"
     
-    if buy_box_used_price_raw is not None and buy_box_used_price_raw > 0:
+    if final_price_cents > 0:
         try:
-            formatted_price = f"${buy_box_used_price_raw / 100:.2f}"
-            logging.info(f"Buy Box Used - Current for ASIN {asin}: Using 'buyBoxUsedPrice' field. Raw: {buy_box_used_price_raw}, Formatted: {formatted_price}")
+            formatted_price = f"${final_price_cents / 100:.2f}"
+            logging.info(f"Buy Box Used - Current for ASIN {asin}: Price found via primary logic. {price_source_info}. Formatted: {formatted_price}")
             return {'Buy Box Used - Current': formatted_price}
         except Exception as e:
-            logging.error(f"Buy Box Used - Current for ASIN {asin}: Error formatting 'buyBoxUsedPrice' ({buy_box_used_price_raw}): {str(e)}. Will attempt fallback.")
+            logging.error(f"Buy Box Used - Current for ASIN {asin}: Error formatting price ({final_price_cents}) from primary logic: {str(e)}. Will attempt fallback.")
+            # Fall through to fallback if formatting fails
     else:
-        logging.info(f"Buy Box Used - Current for ASIN {asin}: 'buyBoxUsedPrice' is missing, None, or invalid ({buy_box_used_price_raw}). Attempting fallback to stats.current[32].")
+        logging.info(f"Buy Box Used - Current for ASIN {asin}: Primary FBA/FBM logic did not yield a valid price ({price_source_info}). Attempting fallback to stats.current[32].")
 
-    # Fallback method: Try stats.current[32] based on observed log for ASIN 0156001403
-    # This is less preferred due to reliance on index, but included as a fallback.
+    # Fallback method: Try stats.current[32]
     current = stats.get('current', [])
     if len(current) > 32:
         value_from_current_32 = current[32]
@@ -711,8 +728,7 @@ def buy_box_used_current(product):
     else:
         logging.info(f"Buy Box Used - Current for ASIN {asin}: Fallback stats.current array is too short (len: {len(current)}) to access index 32.")
 
-    # If both primary and fallback methods fail
-    logging.warning(f"Buy Box Used - Current for ASIN {asin}: No valid price found through 'buyBoxUsedPrice' or fallback stats.current[32]. Returning '-'. current array was: {current}")
+    logging.warning(f"Buy Box Used - Current for ASIN {asin}: No valid price found. Initial FBA/FBM price calc: {final_price_cents}. Fallback stats.current[32] also failed or not applicable. Returning '-'.")
     return {'Buy Box Used - Current': '-'}
 # Buy Box Used - Current ends
 
