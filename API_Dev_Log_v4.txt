@@ -1400,3 +1400,23 @@ This enhancement aims to provide a 'Buy Box - Current' price more
 consistently, aligning with cases where Keepa might not populate
 `stats['buyBoxPrice']` but does indicate a Buy Box winner through
 other fields and offer data.
+
+Fix: Use stats.current[10] for 'New, 3rd Party FBA - Current'
+
+The 'New, 3rd Party FBA - Current' column was previously not being
+populated correctly. After investigation and your feedback, it has been
+determined that the most reliable way to get this value, consistent
+with Keepa's data, is to use the price from index 10 of the
+`stats.current` array in the product data. This index typically
+represents the current FBA price.
+
+This commit updates the `new_3rd_party_fba_current` function in
+`stable_products.py` to:
+1. Retrieve the `product.stats.current` array.
+2. If the array has an element at index 10 and the price is valid ( > 0),
+   use this price.
+3. Otherwise, report '-' for the column.
+
+This approach has been tested by you and confirmed to produce
+the correct values, aligning with data observed in Keepa's interface.
+

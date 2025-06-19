@@ -510,6 +510,36 @@ def new_current(product):
         return {'New - Current': '-'}
 # New - Current ends
 
+def new_3rd_party_fba_current(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    current_array = stats.get('current', [])
+    price_str = '-'
+
+    logging.debug(f"New, 3rd Party FBA - Current for ASIN {asin}: Attempting to use stats.current[10]. current_array length: {len(current_array)}")
+
+    if len(current_array) > 10:
+        price_cents = current_array[10]
+        logging.debug(f"ASIN {asin}: Raw value at stats.current[10]: {price_cents}")
+        if price_cents is not None and price_cents > 0:
+            try:
+                price_str = f"${price_cents / 100:.2f}"
+                logging.info(f"New, 3rd Party FBA - Current for ASIN {asin}: Using stats.current[10], value: {price_str}")
+            except Exception as e:
+                logging.error(f"New, 3rd Party FBA - Current for ASIN {asin}: Error formatting price {price_cents}: {e}. Setting to '-'.")
+                price_str = '-'
+        else:
+            logging.warning(f"New, 3rd Party FBA - Current for ASIN {asin}: Invalid or missing price at stats.current[10] ({price_cents}). Setting to '-'")
+            price_str = '-'
+    else:
+        logging.warning(f"New, 3rd Party FBA - Current for ASIN {asin}: stats.current array is too short (len {len(current_array)}) to access index 10. Setting to '-'")
+        price_str = '-'
+        
+    return {'New, 3rd Party FBA - Current': price_str}
+
+# New, 3rd Party FBA - Current starts
+
+    # Finds the lowest priced New offer from a 3rd Party FBA seller by parsing the 'offers' array.
 # New - 30 days avg.
 # New - 60 days avg.
 # New - 90 days avg.
