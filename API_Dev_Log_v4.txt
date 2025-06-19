@@ -1420,3 +1420,33 @@ This commit updates the `new_3rd_party_fba_current` function in
 This approach has been tested by you and confirmed to produce
 the correct values, aligning with data observed in Keepa's interface.
 
+Fix: Strictly use stats.current[7] for New FBM Current price
+
+This commit refines the `new_3rd_party_fbm_current` function in
+`stable_products.py` to exclusively use `product['stats']['current'][7]`
+for populating the "New, 3rd Party FBM - Current" column.
+
+Based on extensive log analysis and your feedback, `stats.current[7]`
+has been identified as the most accurate field provided by the Keepa API
+for the "New, 3rd Party FBM - Current price, including shipping", aligning
+with Keepa's own displayed values for this specific metric.
+
+Changes:
+- The function now only attempts to retrieve the price from
+  `stats.current[7]`.
+- If `stats.current[7]` is valid (exists, is not None, and is > 0),
+  this price is formatted and returned.
+- If `stats.current[7]` is invalid (e.g., -1, None, or missing),
+  the function now returns '-' for this column, ensuring that the
+  CSV output strictly reflects the availability of this specific
+  Keepa aggregated value.
+- The previous fallback logic that involved parsing the `product['offers']`
+  array has been removed from this function to prevent populating the
+  column with FBM prices that might originate from different Keepa-defined
+  fields (e.g., "Buy Box - Lowest" or general lowest FBM offer).
+- Logging is updated to reflect this strict reliance on `stats.current[7]`.
+
+This change ensures the "New, 3rd Party FBM - Current" column accurately
+represents the specific data point from Keepa, and avoids including prices
+from other offer types or fallback calculations in this designated column.
+

@@ -588,14 +588,22 @@ def new_3rd_party_fba_lowest(product):
     logging.debug(f"ASIN {asin} - Processing {len(offers)} offers for New, 3rd Party FBA - Lowest.")
     for i, offer in enumerate(offers):
         try:
-            offer_price_cents = -1
-            # Price is usually in offer_csv[1] for current offers, or in 'price' for historical snapshots
-            offer_csv = offer.get('offerCSV', [])
-            if isinstance(offer_csv, list) and len(offer_csv) > 1:
-                offer_price_cents = offer_csv[1]
-            
-            if offer_price_cents == -1: # Fallback or if 'price' field is primary
-                offer_price_cents = offer.get('price', -1)
+            offer_price_cents = -1 # Initialize with a sentinel value
+
+            # Attempt to get price from offer.get('price') first
+            price_from_get_price = offer.get('price', -1)
+
+            if price_from_get_price is not None and price_from_get_price > 0:
+                offer_price_cents = price_from_get_price
+            else:
+                # Fallback to offerCSV[0] if offer.get('price') is not valid
+                offer_csv = offer.get('offerCSV', [])
+                if isinstance(offer_csv, list) and len(offer_csv) > 0:
+                    price_from_offer_csv = offer_csv[0]
+                    if price_from_offer_csv is not None and price_from_offer_csv > 0:
+                        offer_price_cents = price_from_offer_csv
+                    # else: offer_price_cents remains -1 if offer_csv[0] is also invalid
+                # else: offer_price_cents remains -1 if offer_csv is not usable
 
             # Condition: 1 for "New". Some offers might use string "New".
             # The 'condition' field in offers seems to be numeric from provided logs.
@@ -611,9 +619,14 @@ def new_3rd_party_fba_lowest(product):
             # Detailed log for each offer considered (can be very verbose, use with caution or sample)
             # logging.debug(f"ASIN {asin} - Offer {i}: price_cents={offer_price_cents}, cond_code={offer_condition_code}, is_new={is_new_condition}, is_fba={is_fba_offer}, seller_id='{seller_id}', is_3p={is_third_party}")
 
-            if is_new_condition and is_fba_offer and is_third_party and offer_price_cents > 0:
+            MAX_REALISTIC_PRICE_CENTS = 2000000  # $20,000 as an upper limit for a price in cents
+            if is_new_condition and is_fba_offer and is_third_party and \
+               offer_price_cents > 0 and offer_price_cents <= MAX_REALISTIC_PRICE_CENTS:
                 third_party_fba_new_prices_cents.append(offer_price_cents)
                 # logging.debug(f"ASIN {asin} - Offer {i} MATCHED New/3P/FBA criteria: price={offer_price_cents/100}")
+            elif is_new_condition and is_fba_offer and is_third_party and offer_price_cents > MAX_REALISTIC_PRICE_CENTS:
+                # Log discarded high values.
+                logging.warning(f"ASIN {asin} - Discarded potential price {offer_price_cents} cents as it exceeds MAX_REALISTIC_PRICE_CENTS ({MAX_REALISTIC_PRICE_CENTS} cents) for a New, 3rd Party FBA offer.")
                     
         except Exception as e:
             logging.error(f"Error parsing offer {i} for ASIN {asin} in new_3rd_party_fba_lowest: Offer data: {offer}. Error: {e}")
