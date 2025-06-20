@@ -251,21 +251,30 @@ def package_weight(product):
 # Package Height starts
 def package_height(product):
     height = product.get('packageHeight', -1)
-    result = {'Package Height': f"{height / 10:.1f} cm" if height != -1 else '-'}
+    if height == -1 or height == 0:
+        result = {'Package Height': "Missing"}
+    else:
+        result = {'Package Height': f"{height / 10:.1f} cm"}
     return result
 # Package Height ends
 
 # Package Length starts
 def package_length(product):
     length = product.get('packageLength', -1)
-    result = {'Package Length': f"{length / 10:.1f} cm" if length != -1 else '-'}
+    if length == -1 or length == 0:
+        result = {'Package Length': "Missing"}
+    else:
+        result = {'Package Length': f"{length / 10:.1f} cm"}
     return result
 # Package Length ends
 
 # Package Width starts
 def package_width(product):
     width = product.get('packageWidth', -1)
-    result = {'Package Width': f"{width / 10:.1f} cm" if width != -1 else '-'}
+    if width == -1 or width == 0:
+        result = {'Package Width': "Missing"}
+    else:
+        result = {'Package Width': f"{width / 10:.1f} cm"}
     return result
 # Package Width ends
 
