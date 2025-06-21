@@ -1472,7 +1472,48 @@ The function now includes:
 - Detailed logging for diagnostics.
 - Fallback to '-' if the data is not available or invalid.
 
+Fix: Correct 'Deal found' timestamp timezone conversion
 
+The 'Deal found' timestamp was incorrectly displayed as being in the
+future. This was due to misinterpreting the Keepa 'creationDate'
+(minutes since Keepa epoch 2011-01-01) as a naive timestamp
+already in your target timezone (EDT).
+
+The `deal_found` function in `stable_deals.py` used `TORONTO_TZ.localize(dt)`
+on a datetime object (`dt`) that should have been treated as UTC.
+This resulted in the timestamp effectively being shifted forward.
+
+The fix modifies the `deal_found` function to:
+1. Treat the naive datetime `dt` (calculated from `KEEPA_EPOCH + creationDate_minutes`) as UTC.
+2. Make `dt` timezone-aware by localizing it to UTC (`timezone('UTC').localize(dt)`).
+3. Convert this UTC datetime to the Toronto timezone (`astimezone(TORONTO_TZ)`).
+
+This ensures the 'Deal found' timestamp is accurately converted
+from its UTC representation to your local timezone (EDT),
+resolving the issue of it appearing in the future.
+
+Fix: Correct timezone conversion for last_update & last_price_change
+
+This commit extends the timezone localization fix previously applied
+to `deal_found` to the `last_update` and `last_price_change` functions
+in `stable_deals.py`.
+
+Problem:
+Similar to `deal_found`, these functions were using `TORONTO_TZ.localize(dt)`
+on naive datetime objects (`dt`) calculated from Keepa's epoch-based
+timestamps (minutes since 2011-01-01). If these base timestamps represent
+UTC, this method incorrectly treats the naive datetime as if it's already
+in Toronto time, potentially leading to timestamps appearing in the future.
+
+Solution:
+Both `last_update` and `last_price_change` have been modified to:
+1. Treat the naive datetime `dt` (calculated from `KEEPA_EPOCH + respective_timestamp_minutes`) as UTC.
+2. Make `dt` timezone-aware by localizing it to UTC (`timezone('UTC').localize(dt)`).
+3. Convert this UTC datetime to the Toronto timezone (`astimezone(TORONTO_TZ)`).
+
+This ensures that `last_update` and `last_price_change` timestamps are
+accurately converted from their UTC representation to your local
+timezone (EDT).
 
 
 

@@ -96,8 +96,17 @@ def fetch_deals_for_deals(page):
 def deal_found(deal):
     ts = deal.get('creationDate', 0)
     logging.debug(f"Deal found - raw ts={ts}")
-    dt = (KEEPA_EPOCH + timedelta(minutes=ts)) if ts > 100000 else None
-    return {'Deal found': TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S') if dt else '-'}
+    if ts <= 100000: # If timestamp is invalid or too old
+        dt = None
+    else:
+        dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC
+
+    if dt:
+        utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
+        toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
+        return {'Deal found': toronto_dt.strftime('%Y-%m-%d %H:%M:%S')}
+    else:
+        return {'Deal found': '-'}
 # Deal Found ends
 
 # Last update starts
@@ -109,8 +118,10 @@ def last_update(deal):
         logging.error(f"No valid lastUpdate for deal: {deal}")
         return {'last update': '-'}
     try:
-        dt = KEEPA_EPOCH + timedelta(minutes=ts)
-        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S')
+        dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC
+        utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
+        toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
+        formatted = toronto_dt.strftime('%Y-%m-%d %H:%M:%S')
         logging.debug(f"last update result: {formatted}")
         return {'last update': formatted}
     except Exception as e:
@@ -127,8 +138,10 @@ def last_price_change(deal):
         logging.error(f"No valid currentSince[11] for deal: {deal}")
         return {'last price change': '-'}
     try:
-        dt = KEEPA_EPOCH + timedelta(minutes=ts)
-        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d %H:%M:%S')
+        dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC
+        utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
+        toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
+        formatted = toronto_dt.strftime('%Y-%m-%d %H:%M:%S')
         logging.debug(f"last price change result: {formatted}")
         return {'last price change': formatted}
     except Exception as e:
