@@ -181,14 +181,20 @@ def main():
                 for header, func in zip(HEADERS, FUNCTION_LIST):
                     if func:
                         try:
-                            # Pass deal for stable_deals functions, product for stable_products
+                            # Determine input_data based on header
                             if header in ['Deal found', 'last update', 'last price change']:
                                 input_data = deal
-                                # Assuming 'config' is the global config dictionary loaded earlier
-                                # and 'logger' is the logger instance obtained in main
-                                result = func(input_data, config, logger) 
                             else:
                                 input_data = product
+
+                            # Call func with appropriate arguments
+                            if header == 'last update':
+                                # Assuming 'config' is the global config dictionary loaded earlier
+                                # and 'logger' is the logger instance obtained in main
+                                result = func(input_data, config, logger)
+                            elif header == 'Deal found' or header == 'last price change':
+                                result = func(input_data)
+                            else: # For all other functions, including those that take product
                                 result = func(input_data)
                                 
                             logger.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}") # Use logger instance

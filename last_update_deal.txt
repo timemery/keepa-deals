@@ -1,323 +1,323 @@
-2025-06-21 19:46:07,487 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1529027624'}, Row before: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1529027624'}
-2025-06-21 19:46:07,487 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624'}
-2025-06-21 19:46:07,487 DEBUG: get_title result for ASIN 1529027624: Ongoingness/ 300 Arguments
-2025-06-21 19:46:07,487 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Ongoingness/ 300 Arguments'}, Row before: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624'}
-2025-06-21 19:46:07,487 DEBUG: Row after update for Title: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624', 'Title': 'Ongoingness/ 300 Arguments'}
-2025-06-21 19:46:07,487 INFO: ASIN: 1529027624 - Raw lastUpdate from deal_object: 7611756
-2025-06-21 19:46:07,487 DEBUG: last update - raw ts=7611756
-2025-06-21 19:46:07,488 DEBUG: last update result: 2025-06-21 18:36:00
-2025-06-21 19:46:07,488 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:36:00'}, Row before: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624', 'Title': 'Ongoingness/ 300 Arguments'}
-2025-06-21 19:46:07,488 DEBUG: Row after update for last update: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624', 'Title': 'Ongoingness/ 300 Arguments', 'last update': '2025-06-21 18:36:00'}
-2025-06-21 19:46:17,509 ERROR: Function last_price_change failed for ASIN 1529027624: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:41:50,120 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0692351582'}, Row before: {'Percent Down 90': '79%', 'Deal found': '2025-06-20 08:40:00', 'AMZ link': 'https://www.amazon.com/dp/0692351582'}
+2025-06-22 09:41:50,120 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '79%', 'Deal found': '2025-06-20 08:40:00', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582'}
+2025-06-22 09:41:50,120 DEBUG: get_title result for ASIN 0692351582: Tending the Light: Essays on Montessori Education
+2025-06-22 09:41:50,120 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Tending the Light: Essays on Montessori Education'}, Row before: {'Percent Down 90': '79%', 'Deal found': '2025-06-20 08:40:00', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582'}
+2025-06-22 09:41:50,120 DEBUG: Row after update for Title: {'Percent Down 90': '79%', 'Deal found': '2025-06-20 08:40:00', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582', 'Title': 'Tending the Light: Essays on Montessori Education'}
+2025-06-22 09:41:50,120 INFO: ASIN: 0692351582 - Raw lastUpdate from deal_object: 7612604
+2025-06-22 09:41:50,120 DEBUG: last update - raw ts=7612604
+2025-06-22 09:41:50,121 DEBUG: last update result: 2025-06-22 08:44:00
+2025-06-22 09:41:50,121 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:44:00'}, Row before: {'Percent Down 90': '79%', 'Deal found': '2025-06-20 08:40:00', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582', 'Title': 'Tending the Light: Essays on Montessori Education'}
+2025-06-22 09:41:50,121 DEBUG: Row after update for last update: {'Percent Down 90': '79%', 'Deal found': '2025-06-20 08:40:00', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582', 'Title': 'Tending the Light: Essays on Montessori Education', 'last update': '2025-06-22 08:44:00'}
+2025-06-22 09:41:50,121 DEBUG: last price change - raw ts=7200962
 --
 --
-2025-06-21 19:46:27,636 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0692351582'}, Row before: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0692351582'}
-2025-06-21 19:46:27,636 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582'}
-2025-06-21 19:46:27,636 DEBUG: get_title result for ASIN 0692351582: Tending the Light: Essays on Montessori Education
-2025-06-21 19:46:27,636 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Tending the Light: Essays on Montessori Education'}, Row before: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582'}
-2025-06-21 19:46:27,636 DEBUG: Row after update for Title: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582', 'Title': 'Tending the Light: Essays on Montessori Education'}
-2025-06-21 19:46:27,636 INFO: ASIN: 0692351582 - Raw lastUpdate from deal_object: 7611756
-2025-06-21 19:46:27,637 DEBUG: last update - raw ts=7611756
-2025-06-21 19:46:27,637 DEBUG: last update result: 2025-06-21 18:36:00
-2025-06-21 19:46:27,637 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:36:00'}, Row before: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582', 'Title': 'Tending the Light: Essays on Montessori Education'}
-2025-06-21 19:46:27,637 DEBUG: Row after update for last update: {'Percent Down 90': '79%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0692351582', 'Keepa Link': 'https://keepa.com/#!product/1-0692351582', 'Title': 'Tending the Light: Essays on Montessori Education', 'last update': '2025-06-21 18:36:00'}
-2025-06-21 19:46:37,665 ERROR: Function last_price_change failed for ASIN 0692351582: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:41:58,408 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1529027624'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-22 02:04:00', 'AMZ link': 'https://www.amazon.com/dp/1529027624'}
+2025-06-22 09:41:58,408 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '78%', 'Deal found': '2025-06-22 02:04:00', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624'}
+2025-06-22 09:41:58,408 DEBUG: get_title result for ASIN 1529027624: Ongoingness/ 300 Arguments
+2025-06-22 09:41:58,408 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Ongoingness/ 300 Arguments'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-22 02:04:00', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624'}
+2025-06-22 09:41:58,408 DEBUG: Row after update for Title: {'Percent Down 90': '78%', 'Deal found': '2025-06-22 02:04:00', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624', 'Title': 'Ongoingness/ 300 Arguments'}
+2025-06-22 09:41:58,408 INFO: ASIN: 1529027624 - Raw lastUpdate from deal_object: 7612648
+2025-06-22 09:41:58,408 DEBUG: last update - raw ts=7612648
+2025-06-22 09:41:58,408 DEBUG: last update result: 2025-06-22 09:28:00
+2025-06-22 09:41:58,408 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 09:28:00'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-22 02:04:00', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624', 'Title': 'Ongoingness/ 300 Arguments'}
+2025-06-22 09:41:58,408 DEBUG: Row after update for last update: {'Percent Down 90': '78%', 'Deal found': '2025-06-22 02:04:00', 'AMZ link': 'https://www.amazon.com/dp/1529027624', 'Keepa Link': 'https://keepa.com/#!product/1-1529027624', 'Title': 'Ongoingness/ 300 Arguments', 'last update': '2025-06-22 09:28:00'}
+2025-06-22 09:41:58,408 DEBUG: last price change - raw ts=7258788
 --
 --
-2025-06-21 19:46:46,080 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0691072477'}, Row before: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0691072477'}
-2025-06-21 19:46:46,080 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477'}
-2025-06-21 19:46:46,080 DEBUG: get_title result for ASIN 0691072477: The Sickness Unto Death : Kierkegaard's Writings, 
-2025-06-21 19:46:46,080 DEBUG: Header: Title, Function: get_title, Result: {'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19"}, Row before: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477'}
-2025-06-21 19:46:46,080 DEBUG: Row after update for Title: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477', 'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19"}
-2025-06-21 19:46:46,080 INFO: ASIN: 0691072477 - Raw lastUpdate from deal_object: 7611756
-2025-06-21 19:46:46,080 DEBUG: last update - raw ts=7611756
-2025-06-21 19:46:46,081 DEBUG: last update result: 2025-06-21 18:36:00
-2025-06-21 19:46:46,081 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:36:00'}, Row before: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477', 'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19"}
-2025-06-21 19:46:46,081 DEBUG: Row after update for last update: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477', 'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19", 'last update': '2025-06-21 18:36:00'}
-2025-06-21 19:46:56,220 ERROR: Function last_price_change failed for ASIN 0691072477: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:42:02,175 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0691072477'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-20 06:24:00', 'AMZ link': 'https://www.amazon.com/dp/0691072477'}
+2025-06-22 09:42:02,176 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '78%', 'Deal found': '2025-06-20 06:24:00', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477'}
+2025-06-22 09:42:02,176 DEBUG: get_title result for ASIN 0691072477: The Sickness Unto Death : Kierkegaard's Writings, 
+2025-06-22 09:42:02,176 DEBUG: Header: Title, Function: get_title, Result: {'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19"}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-20 06:24:00', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477'}
+2025-06-22 09:42:02,176 DEBUG: Row after update for Title: {'Percent Down 90': '78%', 'Deal found': '2025-06-20 06:24:00', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477', 'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19"}
+2025-06-22 09:42:02,176 INFO: ASIN: 0691072477 - Raw lastUpdate from deal_object: 7612600
+2025-06-22 09:42:02,176 DEBUG: last update - raw ts=7612600
+2025-06-22 09:42:02,176 DEBUG: last update result: 2025-06-22 08:40:00
+2025-06-22 09:42:02,176 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:40:00'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-20 06:24:00', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477', 'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19"}
+2025-06-22 09:42:02,176 DEBUG: Row after update for last update: {'Percent Down 90': '78%', 'Deal found': '2025-06-20 06:24:00', 'AMZ link': 'https://www.amazon.com/dp/0691072477', 'Keepa Link': 'https://keepa.com/#!product/1-0691072477', 'Title': "The Sickness Unto Death : Kierkegaard's Writings, Vol 19", 'last update': '2025-06-22 08:40:00'}
+2025-06-22 09:42:02,176 DEBUG: last price change - raw ts=7546844
 --
 --
-2025-06-21 19:47:04,415 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0856675997'}, Row before: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0856675997'}
-2025-06-21 19:47:04,415 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997'}
-2025-06-21 19:47:04,415 DEBUG: get_title result for ASIN 0856675997: When Gold Blossoms: Indian Jewelry from the Susan 
-2025-06-21 19:47:04,415 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection'}, Row before: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997'}
-2025-06-21 19:47:04,415 DEBUG: Row after update for Title: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997', 'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection'}
-2025-06-21 19:47:04,415 INFO: ASIN: 0856675997 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:47:04,415 DEBUG: last update - raw ts=7611760
-2025-06-21 19:47:04,416 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:47:04,416 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997', 'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection'}
-2025-06-21 19:47:04,416 DEBUG: Row after update for last update: {'Percent Down 90': '78%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997', 'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:47:14,421 ERROR: Function last_price_change failed for ASIN 0856675997: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:42:11,075 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0856675997'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-21 16:04:00', 'AMZ link': 'https://www.amazon.com/dp/0856675997'}
+2025-06-22 09:42:11,075 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '78%', 'Deal found': '2025-06-21 16:04:00', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997'}
+2025-06-22 09:42:11,075 DEBUG: get_title result for ASIN 0856675997: When Gold Blossoms: Indian Jewelry from the Susan 
+2025-06-22 09:42:11,075 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-21 16:04:00', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997'}
+2025-06-22 09:42:11,075 DEBUG: Row after update for Title: {'Percent Down 90': '78%', 'Deal found': '2025-06-21 16:04:00', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997', 'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection'}
+2025-06-22 09:42:11,075 INFO: ASIN: 0856675997 - Raw lastUpdate from deal_object: 7612600
+2025-06-22 09:42:11,075 DEBUG: last update - raw ts=7612600
+2025-06-22 09:42:11,075 DEBUG: last update result: 2025-06-22 08:40:00
+2025-06-22 09:42:11,075 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:40:00'}, Row before: {'Percent Down 90': '78%', 'Deal found': '2025-06-21 16:04:00', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997', 'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection'}
+2025-06-22 09:42:11,075 DEBUG: Row after update for last update: {'Percent Down 90': '78%', 'Deal found': '2025-06-21 16:04:00', 'AMZ link': 'https://www.amazon.com/dp/0856675997', 'Keepa Link': 'https://keepa.com/#!product/1-0856675997', 'Title': 'When Gold Blossoms: Indian Jewelry from the Susan L. Beningson Collection', 'last update': '2025-06-22 08:40:00'}
+2025-06-22 09:42:11,075 DEBUG: last price change - raw ts=7583288
 --
 --
-2025-06-21 19:47:21,287 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-2764323247'}, Row before: {'Percent Down 90': '77%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/2764323247'}
-2025-06-21 19:47:21,287 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '77%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247'}
-2025-06-21 19:47:21,287 DEBUG: get_title result for ASIN 2764323247: Disney/Pixar Cars Bubble Magnet Book
-2025-06-21 19:47:21,287 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Disney/Pixar Cars Bubble Magnet Book'}, Row before: {'Percent Down 90': '77%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247'}
-2025-06-21 19:47:21,288 DEBUG: Row after update for Title: {'Percent Down 90': '77%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247', 'Title': 'Disney/Pixar Cars Bubble Magnet Book'}
-2025-06-21 19:47:21,288 INFO: ASIN: 2764323247 - Raw lastUpdate from deal_object: 7611756
-2025-06-21 19:47:21,288 DEBUG: last update - raw ts=7611756
-2025-06-21 19:47:21,288 DEBUG: last update result: 2025-06-21 18:36:00
-2025-06-21 19:47:21,288 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:36:00'}, Row before: {'Percent Down 90': '77%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247', 'Title': 'Disney/Pixar Cars Bubble Magnet Book'}
-2025-06-21 19:47:21,288 DEBUG: Row after update for last update: {'Percent Down 90': '77%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247', 'Title': 'Disney/Pixar Cars Bubble Magnet Book', 'last update': '2025-06-21 18:36:00'}
-2025-06-21 19:47:31,294 ERROR: Function last_price_change failed for ASIN 2764323247: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:42:19,365 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-2764323247'}, Row before: {'Percent Down 90': '76%', 'Deal found': '2025-06-18 11:36:00', 'AMZ link': 'https://www.amazon.com/dp/2764323247'}
+2025-06-22 09:42:19,365 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '76%', 'Deal found': '2025-06-18 11:36:00', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247'}
+2025-06-22 09:42:19,365 DEBUG: get_title result for ASIN 2764323247: Disney/Pixar Cars Bubble Magnet Book
+2025-06-22 09:42:19,365 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Disney/Pixar Cars Bubble Magnet Book'}, Row before: {'Percent Down 90': '76%', 'Deal found': '2025-06-18 11:36:00', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247'}
+2025-06-22 09:42:19,365 DEBUG: Row after update for Title: {'Percent Down 90': '76%', 'Deal found': '2025-06-18 11:36:00', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247', 'Title': 'Disney/Pixar Cars Bubble Magnet Book'}
+2025-06-22 09:42:19,365 INFO: ASIN: 2764323247 - Raw lastUpdate from deal_object: 7611828
+2025-06-22 09:42:19,365 DEBUG: last update - raw ts=7611828
+2025-06-22 09:42:19,365 DEBUG: last update result: 2025-06-21 19:48:00
+2025-06-22 09:42:19,365 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 19:48:00'}, Row before: {'Percent Down 90': '76%', 'Deal found': '2025-06-18 11:36:00', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247', 'Title': 'Disney/Pixar Cars Bubble Magnet Book'}
+2025-06-22 09:42:19,365 DEBUG: Row after update for last update: {'Percent Down 90': '76%', 'Deal found': '2025-06-18 11:36:00', 'AMZ link': 'https://www.amazon.com/dp/2764323247', 'Keepa Link': 'https://keepa.com/#!product/1-2764323247', 'Title': 'Disney/Pixar Cars Bubble Magnet Book', 'last update': '2025-06-21 19:48:00'}
+2025-06-22 09:42:19,365 DEBUG: last price change - raw ts=4964996
 --
 --
-2025-06-21 19:47:38,054 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO'}, Row before: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO'}
-2025-06-21 19:47:38,054 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO'}
-2025-06-21 19:47:38,054 DEBUG: get_title result for ASIN B004105VUO: Destination Highways Washington: A Motorcycle Enth
-2025-06-21 19:47:38,054 DEBUG: Header: Title, Function: get_title, Result: {'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)"}, Row before: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO'}
-2025-06-21 19:47:38,054 DEBUG: Row after update for Title: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO', 'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)"}
-2025-06-21 19:47:38,054 INFO: ASIN: B004105VUO - Raw lastUpdate from deal_object: 7611756
-2025-06-21 19:47:38,054 DEBUG: last update - raw ts=7611756
-2025-06-21 19:47:38,055 DEBUG: last update result: 2025-06-21 18:36:00
-2025-06-21 19:47:38,055 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:36:00'}, Row before: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO', 'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)"}
-2025-06-21 19:47:38,055 DEBUG: Row after update for last update: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO', 'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)", 'last update': '2025-06-21 18:36:00'}
-2025-06-21 19:47:48,058 ERROR: Function last_price_change failed for ASIN B004105VUO: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:42:29,035 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 00:00:00', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO'}
+2025-06-22 09:42:29,035 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 00:00:00', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO'}
+2025-06-22 09:42:29,035 DEBUG: get_title result for ASIN B004105VUO: Destination Highways Washington: A Motorcycle Enth
+2025-06-22 09:42:29,035 DEBUG: Header: Title, Function: get_title, Result: {'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)"}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 00:00:00', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO'}
+2025-06-22 09:42:29,035 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 00:00:00', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO', 'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)"}
+2025-06-22 09:42:29,035 INFO: ASIN: B004105VUO - Raw lastUpdate from deal_object: 7611828
+2025-06-22 09:42:29,035 DEBUG: last update - raw ts=7611828
+2025-06-22 09:42:29,035 DEBUG: last update result: 2025-06-21 19:48:00
+2025-06-22 09:42:29,035 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 19:48:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 00:00:00', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO', 'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)"}
+2025-06-22 09:42:29,035 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 00:00:00', 'AMZ link': 'https://www.amazon.com/dp/B004105VUO', 'Keepa Link': 'https://keepa.com/#!product/1-B004105VUO', 'Title': "Destination Highways Washington: A Motorcycle Enthusiast's Guide to the Best 347 Roads in Washington State (2ND EDITION 2010)", 'last update': '2025-06-21 19:48:00'}
+2025-06-22 09:42:29,036 DEBUG: last price change - raw ts=6707948
 --
 --
-2025-06-21 19:47:53,761 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-8415292643'}, Row before: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8415292643'}
-2025-06-21 19:47:53,761 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643'}
-2025-06-21 19:47:53,761 DEBUG: get_title result for ASIN 8415292643: Tarot Rider Waite: Guía definitiva
-2025-06-21 19:47:53,761 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Tarot Rider Waite: Guía definitiva'}, Row before: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643'}
-2025-06-21 19:47:53,761 DEBUG: Row after update for Title: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643', 'Title': 'Tarot Rider Waite: Guía definitiva'}
-2025-06-21 19:47:53,762 INFO: ASIN: 8415292643 - Raw lastUpdate from deal_object: 7611758
-2025-06-21 19:47:53,762 DEBUG: last update - raw ts=7611758
-2025-06-21 19:47:53,762 DEBUG: last update result: 2025-06-21 18:38:00
-2025-06-21 19:47:53,762 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:38:00'}, Row before: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643', 'Title': 'Tarot Rider Waite: Guía definitiva'}
-2025-06-21 19:47:53,762 DEBUG: Row after update for last update: {'Percent Down 90': '76%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643', 'Title': 'Tarot Rider Waite: Guía definitiva', 'last update': '2025-06-21 18:38:00'}
-2025-06-21 19:48:03,765 ERROR: Function last_price_change failed for ASIN 8415292643: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:42:42,757 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-8415292643'}, Row before: {'Percent Down 90': '76%', 'Deal found': '2025-06-22 05:28:00', 'AMZ link': 'https://www.amazon.com/dp/8415292643'}
+2025-06-22 09:42:42,757 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '76%', 'Deal found': '2025-06-22 05:28:00', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643'}
+2025-06-22 09:42:42,757 DEBUG: get_title result for ASIN 8415292643: Tarot Rider Waite: Guía definitiva
+2025-06-22 09:42:42,757 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Tarot Rider Waite: Guía definitiva'}, Row before: {'Percent Down 90': '76%', 'Deal found': '2025-06-22 05:28:00', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643'}
+2025-06-22 09:42:42,757 DEBUG: Row after update for Title: {'Percent Down 90': '76%', 'Deal found': '2025-06-22 05:28:00', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643', 'Title': 'Tarot Rider Waite: Guía definitiva'}
+2025-06-22 09:42:42,757 INFO: ASIN: 8415292643 - Raw lastUpdate from deal_object: 7612408
+2025-06-22 09:42:42,757 DEBUG: last update - raw ts=7612408
+2025-06-22 09:42:42,757 DEBUG: last update result: 2025-06-22 05:28:00
+2025-06-22 09:42:42,757 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 05:28:00'}, Row before: {'Percent Down 90': '76%', 'Deal found': '2025-06-22 05:28:00', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643', 'Title': 'Tarot Rider Waite: Guía definitiva'}
+2025-06-22 09:42:42,757 DEBUG: Row after update for last update: {'Percent Down 90': '76%', 'Deal found': '2025-06-22 05:28:00', 'AMZ link': 'https://www.amazon.com/dp/8415292643', 'Keepa Link': 'https://keepa.com/#!product/1-8415292643', 'Title': 'Tarot Rider Waite: Guía definitiva', 'last update': '2025-06-22 05:28:00'}
+2025-06-22 09:42:42,758 DEBUG: last price change - raw ts=7607210
 --
 --
-2025-06-21 19:48:15,672 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-8120820738'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8120820738'}
-2025-06-21 19:48:15,672 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738'}
-2025-06-21 19:48:15,672 DEBUG: get_title result for ASIN 8120820738: Buddhist Legends, Part I, II and III
-2025-06-21 19:48:15,673 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Buddhist Legends, Part I, II and III'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738'}
-2025-06-21 19:48:15,673 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738', 'Title': 'Buddhist Legends, Part I, II and III'}
-2025-06-21 19:48:15,673 INFO: ASIN: 8120820738 - Raw lastUpdate from deal_object: 7611758
-2025-06-21 19:48:15,673 DEBUG: last update - raw ts=7611758
-2025-06-21 19:48:15,673 DEBUG: last update result: 2025-06-21 18:38:00
-2025-06-21 19:48:15,673 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:38:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738', 'Title': 'Buddhist Legends, Part I, II and III'}
-2025-06-21 19:48:15,673 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738', 'Title': 'Buddhist Legends, Part I, II and III', 'last update': '2025-06-21 18:38:00'}
-2025-06-21 19:48:25,677 ERROR: Function last_price_change failed for ASIN 8120820738: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:42:51,980 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0897333535'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 05:48:00', 'AMZ link': 'https://www.amazon.com/dp/0897333535'}
+2025-06-22 09:42:51,980 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 05:48:00', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535'}
+2025-06-22 09:42:51,980 DEBUG: get_title result for ASIN 0897333535: The Compromise
+2025-06-22 09:42:51,980 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'The Compromise'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 05:48:00', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535'}
+2025-06-22 09:42:51,980 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 05:48:00', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535', 'Title': 'The Compromise'}
+2025-06-22 09:42:51,980 INFO: ASIN: 0897333535 - Raw lastUpdate from deal_object: 7612232
+2025-06-22 09:42:51,980 DEBUG: last update - raw ts=7612232
+2025-06-22 09:42:51,981 DEBUG: last update result: 2025-06-22 02:32:00
+2025-06-22 09:42:51,981 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 02:32:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 05:48:00', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535', 'Title': 'The Compromise'}
+2025-06-22 09:42:51,981 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '2025-06-17 05:48:00', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535', 'Title': 'The Compromise', 'last update': '2025-06-22 02:32:00'}
+2025-06-22 09:42:51,981 DEBUG: last price change - raw ts=7161920
 --
 --
-2025-06-21 19:48:33,910 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0897333535'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0897333535'}
-2025-06-21 19:48:33,910 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535'}
-2025-06-21 19:48:33,910 DEBUG: get_title result for ASIN 0897333535: The Compromise
-2025-06-21 19:48:33,910 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'The Compromise'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535'}
-2025-06-21 19:48:33,910 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535', 'Title': 'The Compromise'}
-2025-06-21 19:48:33,910 INFO: ASIN: 0897333535 - Raw lastUpdate from deal_object: 7611758
-2025-06-21 19:48:33,910 DEBUG: last update - raw ts=7611758
-2025-06-21 19:48:33,910 DEBUG: last update result: 2025-06-21 18:38:00
-2025-06-21 19:48:33,910 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:38:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535', 'Title': 'The Compromise'}
-2025-06-21 19:48:33,910 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0897333535', 'Keepa Link': 'https://keepa.com/#!product/1-0897333535', 'Title': 'The Compromise', 'last update': '2025-06-21 18:38:00'}
-2025-06-21 19:48:43,914 ERROR: Function last_price_change failed for ASIN 0897333535: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:00,401 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1931283028'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-19 02:32:00', 'AMZ link': 'https://www.amazon.com/dp/1931283028'}
+2025-06-22 09:43:00,401 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '2025-06-19 02:32:00', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028'}
+2025-06-22 09:43:00,401 DEBUG: get_title result for ASIN 1931283028: Sociology a Christian Approach for Changing the Wo
+2025-06-22 09:43:00,401 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Sociology a Christian Approach for Changing the World'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-19 02:32:00', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028'}
+2025-06-22 09:43:00,401 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '2025-06-19 02:32:00', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028', 'Title': 'Sociology a Christian Approach for Changing the World'}
+2025-06-22 09:43:00,401 INFO: ASIN: 1931283028 - Raw lastUpdate from deal_object: 7612546
+2025-06-22 09:43:00,402 DEBUG: last update - raw ts=7612546
+2025-06-22 09:43:00,402 DEBUG: last update result: 2025-06-22 07:46:00
+2025-06-22 09:43:00,402 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 07:46:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-19 02:32:00', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028', 'Title': 'Sociology a Christian Approach for Changing the World'}
+2025-06-22 09:43:00,402 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '2025-06-19 02:32:00', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028', 'Title': 'Sociology a Christian Approach for Changing the World', 'last update': '2025-06-22 07:46:00'}
+2025-06-22 09:43:00,402 DEBUG: last price change - raw ts=7136872
 --
 --
-2025-06-21 19:48:53,503 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1931283028'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1931283028'}
-2025-06-21 19:48:53,503 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028'}
-2025-06-21 19:48:53,503 DEBUG: get_title result for ASIN 1931283028: Sociology a Christian Approach for Changing the Wo
-2025-06-21 19:48:53,503 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Sociology a Christian Approach for Changing the World'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028'}
-2025-06-21 19:48:53,503 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028', 'Title': 'Sociology a Christian Approach for Changing the World'}
-2025-06-21 19:48:53,503 INFO: ASIN: 1931283028 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:48:53,503 DEBUG: last update - raw ts=7611760
-2025-06-21 19:48:53,503 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:48:53,504 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028', 'Title': 'Sociology a Christian Approach for Changing the World'}
-2025-06-21 19:48:53,504 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1931283028', 'Keepa Link': 'https://keepa.com/#!product/1-1931283028', 'Title': 'Sociology a Christian Approach for Changing the World', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:49:03,508 ERROR: Function last_price_change failed for ASIN 1931283028: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:09,256 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1476662932'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-22 07:08:00', 'AMZ link': 'https://www.amazon.com/dp/1476662932'}
+2025-06-22 09:43:09,256 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '2025-06-22 07:08:00', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932'}
+2025-06-22 09:43:09,256 DEBUG: get_title result for ASIN 1476662932: The Allied Defense of the Malay Barrier, 1941-1942
+2025-06-22 09:43:09,256 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'The Allied Defense of the Malay Barrier, 1941-1942'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-22 07:08:00', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932'}
+2025-06-22 09:43:09,256 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '2025-06-22 07:08:00', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932', 'Title': 'The Allied Defense of the Malay Barrier, 1941-1942'}
+2025-06-22 09:43:09,256 INFO: ASIN: 1476662932 - Raw lastUpdate from deal_object: 7612508
+2025-06-22 09:43:09,256 DEBUG: last update - raw ts=7612508
+2025-06-22 09:43:09,257 DEBUG: last update result: 2025-06-22 07:08:00
+2025-06-22 09:43:09,257 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 07:08:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-22 07:08:00', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932', 'Title': 'The Allied Defense of the Malay Barrier, 1941-1942'}
+2025-06-22 09:43:09,257 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '2025-06-22 07:08:00', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932', 'Title': 'The Allied Defense of the Malay Barrier, 1941-1942', 'last update': '2025-06-22 07:08:00'}
+2025-06-22 09:43:09,257 DEBUG: last price change - raw ts=7553062
 --
 --
-2025-06-21 19:49:11,201 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-8365282313'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8365282313'}
-2025-06-21 19:49:11,201 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8365282313', 'Keepa Link': 'https://keepa.com/#!product/1-8365282313'}
-2025-06-21 19:49:11,201 DEBUG: get_title result for ASIN 8365282313: Shantaram
-2025-06-21 19:49:11,201 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Shantaram'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8365282313', 'Keepa Link': 'https://keepa.com/#!product/1-8365282313'}
-2025-06-21 19:49:11,201 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8365282313', 'Keepa Link': 'https://keepa.com/#!product/1-8365282313', 'Title': 'Shantaram'}
-2025-06-21 19:49:11,201 INFO: ASIN: 8365282313 - Raw lastUpdate from deal_object: 7611740
-2025-06-21 19:49:11,201 DEBUG: last update - raw ts=7611740
-2025-06-21 19:49:11,202 DEBUG: last update result: 2025-06-21 18:20:00
-2025-06-21 19:49:11,202 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:20:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8365282313', 'Keepa Link': 'https://keepa.com/#!product/1-8365282313', 'Title': 'Shantaram'}
-2025-06-21 19:49:11,202 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/8365282313', 'Keepa Link': 'https://keepa.com/#!product/1-8365282313', 'Title': 'Shantaram', 'last update': '2025-06-21 18:20:00'}
-2025-06-21 19:49:21,205 ERROR: Function last_price_change failed for ASIN 8365282313: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:21,523 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-8120820738'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-15 14:54:00', 'AMZ link': 'https://www.amazon.com/dp/8120820738'}
+2025-06-22 09:43:21,523 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '2025-06-15 14:54:00', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738'}
+2025-06-22 09:43:21,523 DEBUG: get_title result for ASIN 8120820738: Buddhist Legends, Part I, II and III
+2025-06-22 09:43:21,523 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Buddhist Legends, Part I, II and III'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-15 14:54:00', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738'}
+2025-06-22 09:43:21,523 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '2025-06-15 14:54:00', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738', 'Title': 'Buddhist Legends, Part I, II and III'}
+2025-06-22 09:43:21,523 INFO: ASIN: 8120820738 - Raw lastUpdate from deal_object: 7612644
+2025-06-22 09:43:21,523 DEBUG: last update - raw ts=7612644
+2025-06-22 09:43:21,523 DEBUG: last update result: 2025-06-22 09:24:00
+2025-06-22 09:43:21,523 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 09:24:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-15 14:54:00', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738', 'Title': 'Buddhist Legends, Part I, II and III'}
+2025-06-22 09:43:21,523 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '2025-06-15 14:54:00', 'AMZ link': 'https://www.amazon.com/dp/8120820738', 'Keepa Link': 'https://keepa.com/#!product/1-8120820738', 'Title': 'Buddhist Legends, Part I, II and III', 'last update': '2025-06-22 09:24:00'}
+2025-06-22 09:43:21,524 DEBUG: last price change - raw ts=7609606
 --
 --
-2025-06-21 19:49:31,982 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0394499867'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0394499867'}
-2025-06-21 19:49:31,982 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867'}
-2025-06-21 19:49:31,982 DEBUG: get_title result for ASIN 0394499867: Woman on the Edge of Time
-2025-06-21 19:49:31,982 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Woman on the Edge of Time'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867'}
-2025-06-21 19:49:31,982 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867', 'Title': 'Woman on the Edge of Time'}
-2025-06-21 19:49:31,982 INFO: ASIN: 0394499867 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:49:31,982 DEBUG: last update - raw ts=7611760
-2025-06-21 19:49:31,982 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:49:31,982 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867', 'Title': 'Woman on the Edge of Time'}
-2025-06-21 19:49:31,982 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867', 'Title': 'Woman on the Edge of Time', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:49:41,988 ERROR: Function last_price_change failed for ASIN 0394499867: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:24,769 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0394499867'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-20 15:00:00', 'AMZ link': 'https://www.amazon.com/dp/0394499867'}
+2025-06-22 09:43:24,769 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '75%', 'Deal found': '2025-06-20 15:00:00', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867'}
+2025-06-22 09:43:24,769 DEBUG: get_title result for ASIN 0394499867: Woman on the Edge of Time
+2025-06-22 09:43:24,769 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Woman on the Edge of Time'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-20 15:00:00', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867'}
+2025-06-22 09:43:24,769 DEBUG: Row after update for Title: {'Percent Down 90': '75%', 'Deal found': '2025-06-20 15:00:00', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867', 'Title': 'Woman on the Edge of Time'}
+2025-06-22 09:43:24,769 INFO: ASIN: 0394499867 - Raw lastUpdate from deal_object: 7612604
+2025-06-22 09:43:24,769 DEBUG: last update - raw ts=7612604
+2025-06-22 09:43:24,769 DEBUG: last update result: 2025-06-22 08:44:00
+2025-06-22 09:43:24,769 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:44:00'}, Row before: {'Percent Down 90': '75%', 'Deal found': '2025-06-20 15:00:00', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867', 'Title': 'Woman on the Edge of Time'}
+2025-06-22 09:43:24,770 DEBUG: Row after update for last update: {'Percent Down 90': '75%', 'Deal found': '2025-06-20 15:00:00', 'AMZ link': 'https://www.amazon.com/dp/0394499867', 'Keepa Link': 'https://keepa.com/#!product/1-0394499867', 'Title': 'Woman on the Edge of Time', 'last update': '2025-06-22 08:44:00'}
+2025-06-22 09:43:24,770 DEBUG: last price change - raw ts=6788132
 --
 --
-2025-06-21 19:49:55,301 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1932786422'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1932786422'}
-2025-06-21 19:49:55,301 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422'}
-2025-06-21 19:49:55,301 DEBUG: get_title result for ASIN 1932786422: Map Trek The Complete Collection
-2025-06-21 19:49:55,301 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Map Trek The Complete Collection'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422'}
-2025-06-21 19:49:55,302 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422', 'Title': 'Map Trek The Complete Collection'}
-2025-06-21 19:49:55,302 INFO: ASIN: 1932786422 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:49:55,302 DEBUG: last update - raw ts=7611760
-2025-06-21 19:49:55,302 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:49:55,302 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422', 'Title': 'Map Trek The Complete Collection'}
-2025-06-21 19:49:55,302 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422', 'Title': 'Map Trek The Complete Collection', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:50:05,307 ERROR: Function last_price_change failed for ASIN 1932786422: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:28,970 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0763750751'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 06:44:00', 'AMZ link': 'https://www.amazon.com/dp/0763750751'}
+2025-06-22 09:43:28,970 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 06:44:00', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751'}
+2025-06-22 09:43:28,970 DEBUG: get_title result for ASIN 0763750751: Pocket Orthopaedics: Evidence-Based Survival Guide
+2025-06-22 09:43:28,970 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 06:44:00', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751'}
+2025-06-22 09:43:28,971 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 06:44:00', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751', 'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide'}
+2025-06-22 09:43:28,971 INFO: ASIN: 0763750751 - Raw lastUpdate from deal_object: 7612604
+2025-06-22 09:43:28,971 DEBUG: last update - raw ts=7612604
+2025-06-22 09:43:28,971 DEBUG: last update result: 2025-06-22 08:44:00
+2025-06-22 09:43:28,971 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:44:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 06:44:00', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751', 'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide'}
+2025-06-22 09:43:28,971 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 06:44:00', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751', 'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide', 'last update': '2025-06-22 08:44:00'}
+2025-06-22 09:43:28,971 DEBUG: last price change - raw ts=7000668
 --
 --
-2025-06-21 19:50:17,756 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1476662932'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1476662932'}
-2025-06-21 19:50:17,756 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932'}
-2025-06-21 19:50:17,756 DEBUG: get_title result for ASIN 1476662932: The Allied Defense of the Malay Barrier, 1941-1942
-2025-06-21 19:50:17,756 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'The Allied Defense of the Malay Barrier, 1941-1942'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932'}
-2025-06-21 19:50:17,756 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932', 'Title': 'The Allied Defense of the Malay Barrier, 1941-1942'}
-2025-06-21 19:50:17,756 INFO: ASIN: 1476662932 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:50:17,757 DEBUG: last update - raw ts=7611760
-2025-06-21 19:50:17,757 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:50:17,757 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932', 'Title': 'The Allied Defense of the Malay Barrier, 1941-1942'}
-2025-06-21 19:50:17,757 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1476662932', 'Keepa Link': 'https://keepa.com/#!product/1-1476662932', 'Title': 'The Allied Defense of the Malay Barrier, 1941-1942', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:50:27,762 ERROR: Function last_price_change failed for ASIN 1476662932: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:32,116 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1932786422'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 12:30:00', 'AMZ link': 'https://www.amazon.com/dp/1932786422'}
+2025-06-22 09:43:32,116 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 12:30:00', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422'}
+2025-06-22 09:43:32,116 DEBUG: get_title result for ASIN 1932786422: Map Trek The Complete Collection
+2025-06-22 09:43:32,116 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Map Trek The Complete Collection'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 12:30:00', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422'}
+2025-06-22 09:43:32,116 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 12:30:00', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422', 'Title': 'Map Trek The Complete Collection'}
+2025-06-22 09:43:32,116 INFO: ASIN: 1932786422 - Raw lastUpdate from deal_object: 7612648
+2025-06-22 09:43:32,116 DEBUG: last update - raw ts=7612648
+2025-06-22 09:43:32,116 DEBUG: last update result: 2025-06-22 09:28:00
+2025-06-22 09:43:32,116 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 09:28:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 12:30:00', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422', 'Title': 'Map Trek The Complete Collection'}
+2025-06-22 09:43:32,116 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 12:30:00', 'AMZ link': 'https://www.amazon.com/dp/1932786422', 'Keepa Link': 'https://keepa.com/#!product/1-1932786422', 'Title': 'Map Trek The Complete Collection', 'last update': '2025-06-22 09:28:00'}
+2025-06-22 09:43:32,116 DEBUG: last price change - raw ts=7479126
 --
 --
-2025-06-21 19:50:42,097 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0970429002'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0970429002'}
-2025-06-21 19:50:42,097 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002'}
-2025-06-21 19:50:42,097 DEBUG: get_title result for ASIN 0970429002: Cancer: Curing the Incurable Without Surgery, Chem
-2025-06-21 19:50:42,097 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002'}
-2025-06-21 19:50:42,097 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002', 'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation'}
-2025-06-21 19:50:42,097 INFO: ASIN: 0970429002 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:50:42,097 DEBUG: last update - raw ts=7611760
-2025-06-21 19:50:42,097 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:50:42,097 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002', 'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation'}
-2025-06-21 19:50:42,097 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002', 'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:50:52,101 ERROR: Function last_price_change failed for ASIN 0970429002: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:42,231 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0970429002'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/0970429002'}
+2025-06-22 09:43:42,231 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002'}
+2025-06-22 09:43:42,231 DEBUG: get_title result for ASIN 0970429002: Cancer: Curing the Incurable Without Surgery, Chem
+2025-06-22 09:43:42,231 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002'}
+2025-06-22 09:43:42,231 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002', 'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation'}
+2025-06-22 09:43:42,231 INFO: ASIN: 0970429002 - Raw lastUpdate from deal_object: 7612232
+2025-06-22 09:43:42,231 DEBUG: last update - raw ts=7612232
+2025-06-22 09:43:42,232 DEBUG: last update result: 2025-06-22 02:32:00
+2025-06-22 09:43:42,232 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 02:32:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002', 'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation'}
+2025-06-22 09:43:42,232 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/0970429002', 'Keepa Link': 'https://keepa.com/#!product/1-0970429002', 'Title': 'Cancer: Curing the Incurable Without Surgery, Chemotherapy, or Radiation', 'last update': '2025-06-22 02:32:00'}
+2025-06-22 09:43:42,232 DEBUG: last price change - raw ts=7219688
 --
 --
-2025-06-21 19:51:02,272 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1600513492'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1600513492'}
-2025-06-21 19:51:02,272 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492'}
-2025-06-21 19:51:02,272 DEBUG: get_title result for ASIN 1600513492: Song School Spanish Book 2 w/ CD (Student Edition)
-2025-06-21 19:51:02,272 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492'}
-2025-06-21 19:51:02,273 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492', 'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)'}
-2025-06-21 19:51:02,273 INFO: ASIN: 1600513492 - Raw lastUpdate from deal_object: 7611780
-2025-06-21 19:51:02,273 DEBUG: last update - raw ts=7611780
-2025-06-21 19:51:02,273 DEBUG: last update result: 2025-06-21 19:00:00
-2025-06-21 19:51:02,273 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 19:00:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492', 'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)'}
-2025-06-21 19:51:02,273 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492', 'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)', 'last update': '2025-06-21 19:00:00'}
-2025-06-21 19:51:12,278 ERROR: Function last_price_change failed for ASIN 1600513492: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:43:53,865 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1009400614'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 08:36:00', 'AMZ link': 'https://www.amazon.com/dp/1009400614'}
+2025-06-22 09:43:53,865 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 08:36:00', 'AMZ link': 'https://www.amazon.com/dp/1009400614', 'Keepa Link': 'https://keepa.com/#!product/1-1009400614'}
+2025-06-22 09:43:53,865 DEBUG: get_title result for ASIN 1009400614: Networked Bollywood: How Star Power Globalized Hin
+2025-06-22 09:43:53,865 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Networked Bollywood: How Star Power Globalized Hindi Cinema'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 08:36:00', 'AMZ link': 'https://www.amazon.com/dp/1009400614', 'Keepa Link': 'https://keepa.com/#!product/1-1009400614'}
+2025-06-22 09:43:53,865 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 08:36:00', 'AMZ link': 'https://www.amazon.com/dp/1009400614', 'Keepa Link': 'https://keepa.com/#!product/1-1009400614', 'Title': 'Networked Bollywood: How Star Power Globalized Hindi Cinema'}
+2025-06-22 09:43:53,865 INFO: ASIN: 1009400614 - Raw lastUpdate from deal_object: 7612660
+2025-06-22 09:43:53,865 DEBUG: last update - raw ts=7612660
+2025-06-22 09:43:53,865 DEBUG: last update result: 2025-06-22 09:40:00
+2025-06-22 09:43:53,865 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 09:40:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 08:36:00', 'AMZ link': 'https://www.amazon.com/dp/1009400614', 'Keepa Link': 'https://keepa.com/#!product/1-1009400614', 'Title': 'Networked Bollywood: How Star Power Globalized Hindi Cinema'}
+2025-06-22 09:43:53,865 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '2025-06-22 08:36:00', 'AMZ link': 'https://www.amazon.com/dp/1009400614', 'Keepa Link': 'https://keepa.com/#!product/1-1009400614', 'Title': 'Networked Bollywood: How Star Power Globalized Hindi Cinema', 'last update': '2025-06-22 09:40:00'}
+2025-06-22 09:43:53,865 DEBUG: last price change - raw ts=7605752
 --
 --
-2025-06-21 19:51:19,688 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0978903404'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0978903404'}
-2025-06-21 19:51:19,688 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404'}
-2025-06-21 19:51:19,689 DEBUG: get_title result for ASIN 0978903404: What Pocket Dragons Do When They Retire
-2025-06-21 19:51:19,689 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'What Pocket Dragons Do When They Retire'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404'}
-2025-06-21 19:51:19,689 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404', 'Title': 'What Pocket Dragons Do When They Retire'}
-2025-06-21 19:51:19,689 INFO: ASIN: 0978903404 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:51:19,689 DEBUG: last update - raw ts=7611760
-2025-06-21 19:51:19,689 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:51:19,689 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404', 'Title': 'What Pocket Dragons Do When They Retire'}
-2025-06-21 19:51:19,689 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404', 'Title': 'What Pocket Dragons Do When They Retire', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:51:29,700 ERROR: Function last_price_change failed for ASIN 0978903404: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:09,107 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1600513492'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/1600513492'}
+2025-06-22 09:44:09,107 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492'}
+2025-06-22 09:44:09,107 DEBUG: get_title result for ASIN 1600513492: Song School Spanish Book 2 w/ CD (Student Edition)
+2025-06-22 09:44:09,107 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492'}
+2025-06-22 09:44:09,107 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492', 'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)'}
+2025-06-22 09:44:09,107 INFO: ASIN: 1600513492 - Raw lastUpdate from deal_object: 7611830
+2025-06-22 09:44:09,107 DEBUG: last update - raw ts=7611830
+2025-06-22 09:44:09,107 DEBUG: last update result: 2025-06-21 19:50:00
+2025-06-22 09:44:09,107 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 19:50:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492', 'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)'}
+2025-06-22 09:44:09,107 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '2025-06-21 18:40:00', 'AMZ link': 'https://www.amazon.com/dp/1600513492', 'Keepa Link': 'https://keepa.com/#!product/1-1600513492', 'Title': 'Song School Spanish Book 2 w/ CD (Student Edition)', 'last update': '2025-06-21 19:50:00'}
+2025-06-22 09:44:09,107 DEBUG: last price change - raw ts=7189146
 --
 --
-2025-06-21 19:51:39,583 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0763750751'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0763750751'}
-2025-06-21 19:51:39,583 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751'}
-2025-06-21 19:51:39,583 DEBUG: get_title result for ASIN 0763750751: Pocket Orthopaedics: Evidence-Based Survival Guide
-2025-06-21 19:51:39,583 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751'}
-2025-06-21 19:51:39,583 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751', 'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide'}
-2025-06-21 19:51:39,583 INFO: ASIN: 0763750751 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:51:39,583 DEBUG: last update - raw ts=7611760
-2025-06-21 19:51:39,583 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:51:39,583 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751', 'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide'}
-2025-06-21 19:51:39,583 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0763750751', 'Keepa Link': 'https://keepa.com/#!product/1-0763750751', 'Title': 'Pocket Orthopaedics: Evidence-Based Survival Guide: Evidence-Based Survival Guide', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:51:49,594 ERROR: Function last_price_change failed for ASIN 0763750751: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:15,822 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0978903404'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-18 09:44:00', 'AMZ link': 'https://www.amazon.com/dp/0978903404'}
+2025-06-22 09:44:15,822 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '74%', 'Deal found': '2025-06-18 09:44:00', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404'}
+2025-06-22 09:44:15,822 DEBUG: get_title result for ASIN 0978903404: What Pocket Dragons Do When They Retire
+2025-06-22 09:44:15,822 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'What Pocket Dragons Do When They Retire'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-18 09:44:00', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404'}
+2025-06-22 09:44:15,822 DEBUG: Row after update for Title: {'Percent Down 90': '74%', 'Deal found': '2025-06-18 09:44:00', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404', 'Title': 'What Pocket Dragons Do When They Retire'}
+2025-06-22 09:44:15,822 INFO: ASIN: 0978903404 - Raw lastUpdate from deal_object: 7612198
+2025-06-22 09:44:15,822 DEBUG: last update - raw ts=7612198
+2025-06-22 09:44:15,822 DEBUG: last update result: 2025-06-22 01:58:00
+2025-06-22 09:44:15,822 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 01:58:00'}, Row before: {'Percent Down 90': '74%', 'Deal found': '2025-06-18 09:44:00', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404', 'Title': 'What Pocket Dragons Do When They Retire'}
+2025-06-22 09:44:15,822 DEBUG: Row after update for last update: {'Percent Down 90': '74%', 'Deal found': '2025-06-18 09:44:00', 'AMZ link': 'https://www.amazon.com/dp/0978903404', 'Keepa Link': 'https://keepa.com/#!product/1-0978903404', 'Title': 'What Pocket Dragons Do When They Retire', 'last update': '2025-06-22 01:58:00'}
+2025-06-22 09:44:15,822 DEBUG: last price change - raw ts=7357352
 --
 --
-2025-06-21 19:51:57,731 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0520268326'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0520268326'}
-2025-06-21 19:51:57,731 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326'}
-2025-06-21 19:51:57,731 DEBUG: get_title result for ASIN 0520268326: Playing the Farmer: Representations of Rural Life 
-2025-06-21 19:51:57,731 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326'}
-2025-06-21 19:51:57,731 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326', 'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics'}
-2025-06-21 19:51:57,731 INFO: ASIN: 0520268326 - Raw lastUpdate from deal_object: 7611762
-2025-06-21 19:51:57,731 DEBUG: last update - raw ts=7611762
-2025-06-21 19:51:57,731 DEBUG: last update result: 2025-06-21 18:42:00
-2025-06-21 19:51:57,731 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:42:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326', 'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics'}
-2025-06-21 19:51:57,731 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326', 'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics', 'last update': '2025-06-21 18:42:00'}
-2025-06-21 19:52:07,739 ERROR: Function last_price_change failed for ASIN 0520268326: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:18,624 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-151362024X'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 21:58:00', 'AMZ link': 'https://www.amazon.com/dp/151362024X'}
+2025-06-22 09:44:18,624 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 21:58:00', 'AMZ link': 'https://www.amazon.com/dp/151362024X', 'Keepa Link': 'https://keepa.com/#!product/1-151362024X'}
+2025-06-22 09:44:18,625 DEBUG: get_title result for ASIN 151362024X: Caticons
+2025-06-22 09:44:18,625 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Caticons'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 21:58:00', 'AMZ link': 'https://www.amazon.com/dp/151362024X', 'Keepa Link': 'https://keepa.com/#!product/1-151362024X'}
+2025-06-22 09:44:18,625 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 21:58:00', 'AMZ link': 'https://www.amazon.com/dp/151362024X', 'Keepa Link': 'https://keepa.com/#!product/1-151362024X', 'Title': 'Caticons'}
+2025-06-22 09:44:18,625 INFO: ASIN: 151362024X - Raw lastUpdate from deal_object: 7612642
+2025-06-22 09:44:18,625 DEBUG: last update - raw ts=7612642
+2025-06-22 09:44:18,625 DEBUG: last update result: 2025-06-22 09:22:00
+2025-06-22 09:44:18,625 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 09:22:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 21:58:00', 'AMZ link': 'https://www.amazon.com/dp/151362024X', 'Keepa Link': 'https://keepa.com/#!product/1-151362024X', 'Title': 'Caticons'}
+2025-06-22 09:44:18,625 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 21:58:00', 'AMZ link': 'https://www.amazon.com/dp/151362024X', 'Keepa Link': 'https://keepa.com/#!product/1-151362024X', 'Title': 'Caticons', 'last update': '2025-06-22 09:22:00'}
+2025-06-22 09:44:18,625 DEBUG: last price change - raw ts=7261856
 --
 --
-2025-06-21 19:52:15,287 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK'}
-2025-06-21 19:52:15,287 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK'}
-2025-06-21 19:52:15,287 DEBUG: get_title result for ASIN B008FM0DWK: Arithmetic 6 Work-text, Fourth Edition, A Beka Boo
-2025-06-21 19:52:15,287 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK'}
-2025-06-21 19:52:15,287 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK', 'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books'}
-2025-06-21 19:52:15,287 INFO: ASIN: B008FM0DWK - Raw lastUpdate from deal_object: 7611778
-2025-06-21 19:52:15,287 DEBUG: last update - raw ts=7611778
-2025-06-21 19:52:15,287 DEBUG: last update result: 2025-06-21 18:58:00
-2025-06-21 19:52:15,287 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:58:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK', 'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books'}
-2025-06-21 19:52:15,287 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK', 'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books', 'last update': '2025-06-21 18:58:00'}
-2025-06-21 19:52:25,302 ERROR: Function last_price_change failed for ASIN B008FM0DWK: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:26,826 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0520268326'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-13 14:40:00', 'AMZ link': 'https://www.amazon.com/dp/0520268326'}
+2025-06-22 09:44:26,826 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-06-13 14:40:00', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326'}
+2025-06-22 09:44:26,826 DEBUG: get_title result for ASIN 0520268326: Playing the Farmer: Representations of Rural Life 
+2025-06-22 09:44:26,826 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-13 14:40:00', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326'}
+2025-06-22 09:44:26,826 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-06-13 14:40:00', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326', 'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics'}
+2025-06-22 09:44:26,826 INFO: ASIN: 0520268326 - Raw lastUpdate from deal_object: 7611996
+2025-06-22 09:44:26,826 DEBUG: last update - raw ts=7611996
+2025-06-22 09:44:26,827 DEBUG: last update result: 2025-06-21 22:36:00
+2025-06-22 09:44:26,827 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 22:36:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-13 14:40:00', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326', 'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics'}
+2025-06-22 09:44:26,827 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-06-13 14:40:00', 'AMZ link': 'https://www.amazon.com/dp/0520268326', 'Keepa Link': 'https://keepa.com/#!product/1-0520268326', 'Title': 'Playing the Farmer: Representations of Rural Life in Vergil’s Georgics', 'last update': '2025-06-21 22:36:00'}
+2025-06-22 09:44:26,827 DEBUG: last price change - raw ts=7610452
 --
 --
-2025-06-21 19:52:34,153 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0732269075'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0732269075'}
-2025-06-21 19:52:34,153 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075'}
-2025-06-21 19:52:34,153 DEBUG: get_title result for ASIN 0732269075: Frank Lowy: Pushing the Limits: The inside Story o
-2025-06-21 19:52:34,153 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075'}
-2025-06-21 19:52:34,153 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075', 'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield'}
-2025-06-21 19:52:34,154 INFO: ASIN: 0732269075 - Raw lastUpdate from deal_object: 7611764
-2025-06-21 19:52:34,154 DEBUG: last update - raw ts=7611764
-2025-06-21 19:52:34,154 DEBUG: last update result: 2025-06-21 18:44:00
-2025-06-21 19:52:34,154 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:44:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075', 'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield'}
-2025-06-21 19:52:34,154 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075', 'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield', 'last update': '2025-06-21 18:44:00'}
-2025-06-21 19:52:44,166 ERROR: Function last_price_change failed for ASIN 0732269075: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:34,342 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-05-23 04:46:00', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK'}
+2025-06-22 09:44:34,342 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-05-23 04:46:00', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK'}
+2025-06-22 09:44:34,342 DEBUG: get_title result for ASIN B008FM0DWK: Arithmetic 6 Work-text, Fourth Edition, A Beka Boo
+2025-06-22 09:44:34,342 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-05-23 04:46:00', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK'}
+2025-06-22 09:44:34,342 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-05-23 04:46:00', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK', 'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books'}
+2025-06-22 09:44:34,342 INFO: ASIN: B008FM0DWK - Raw lastUpdate from deal_object: 7612442
+2025-06-22 09:44:34,342 DEBUG: last update - raw ts=7612442
+2025-06-22 09:44:34,342 DEBUG: last update result: 2025-06-22 06:02:00
+2025-06-22 09:44:34,342 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 06:02:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-05-23 04:46:00', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK', 'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books'}
+2025-06-22 09:44:34,343 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-05-23 04:46:00', 'AMZ link': 'https://www.amazon.com/dp/B008FM0DWK', 'Keepa Link': 'https://keepa.com/#!product/1-B008FM0DWK', 'Title': 'Arithmetic 6 Work-text, Fourth Edition, A Beka Books', 'last update': '2025-06-22 06:02:00'}
+2025-06-22 09:44:34,343 DEBUG: last price change - raw ts=7186044
 --
 --
-2025-06-21 19:52:52,136 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B0B1G39P12'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0B1G39P12'}
-2025-06-21 19:52:52,136 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0B1G39P12', 'Keepa Link': 'https://keepa.com/#!product/1-B0B1G39P12'}
-2025-06-21 19:52:52,136 DEBUG: get_title result for ASIN B0B1G39P12: NEW SET! Small Spaces Quartet Series 4 Books Set
-2025-06-21 19:52:52,136 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'NEW SET! Small Spaces Quartet Series 4 Books Set'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0B1G39P12', 'Keepa Link': 'https://keepa.com/#!product/1-B0B1G39P12'}
-2025-06-21 19:52:52,136 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0B1G39P12', 'Keepa Link': 'https://keepa.com/#!product/1-B0B1G39P12', 'Title': 'NEW SET! Small Spaces Quartet Series 4 Books Set'}
-2025-06-21 19:52:52,136 INFO: ASIN: B0B1G39P12 - Raw lastUpdate from deal_object: 7611750
-2025-06-21 19:52:52,136 DEBUG: last update - raw ts=7611750
-2025-06-21 19:52:52,136 DEBUG: last update result: 2025-06-21 18:30:00
-2025-06-21 19:52:52,136 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:30:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0B1G39P12', 'Keepa Link': 'https://keepa.com/#!product/1-B0B1G39P12', 'Title': 'NEW SET! Small Spaces Quartet Series 4 Books Set'}
-2025-06-21 19:52:52,136 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0B1G39P12', 'Keepa Link': 'https://keepa.com/#!product/1-B0B1G39P12', 'Title': 'NEW SET! Small Spaces Quartet Series 4 Books Set', 'last update': '2025-06-21 18:30:00'}
-2025-06-21 19:53:02,149 ERROR: Function last_price_change failed for ASIN B0B1G39P12: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:42,010 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0732269075'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-20 03:20:00', 'AMZ link': 'https://www.amazon.com/dp/0732269075'}
+2025-06-22 09:44:42,010 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-06-20 03:20:00', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075'}
+2025-06-22 09:44:42,010 DEBUG: get_title result for ASIN 0732269075: Frank Lowy: Pushing the Limits: The inside Story o
+2025-06-22 09:44:42,010 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-20 03:20:00', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075'}
+2025-06-22 09:44:42,010 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-06-20 03:20:00', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075', 'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield'}
+2025-06-22 09:44:42,010 INFO: ASIN: 0732269075 - Raw lastUpdate from deal_object: 7611832
+2025-06-22 09:44:42,010 DEBUG: last update - raw ts=7611832
+2025-06-22 09:44:42,010 DEBUG: last update result: 2025-06-21 19:52:00
+2025-06-22 09:44:42,010 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 19:52:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-20 03:20:00', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075', 'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield'}
+2025-06-22 09:44:42,010 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-06-20 03:20:00', 'AMZ link': 'https://www.amazon.com/dp/0732269075', 'Keepa Link': 'https://keepa.com/#!product/1-0732269075', 'Title': 'Frank Lowy: Pushing the Limits: The inside Story of the Man Who Powers Westfield', 'last update': '2025-06-21 19:52:00'}
+2025-06-22 09:44:42,011 DEBUG: last price change - raw ts=7549480
 --
 --
-2025-06-21 19:53:17,685 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176'}
-2025-06-21 19:53:17,685 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176'}
-2025-06-21 19:53:17,685 DEBUG: get_title result for ASIN B0045PC176: THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE 
-2025-06-21 19:53:17,685 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176'}
-2025-06-21 19:53:17,685 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176', 'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)'}
-2025-06-21 19:53:17,685 INFO: ASIN: B0045PC176 - Raw lastUpdate from deal_object: 7611744
-2025-06-21 19:53:17,685 DEBUG: last update - raw ts=7611744
-2025-06-21 19:53:17,686 DEBUG: last update result: 2025-06-21 18:24:00
-2025-06-21 19:53:17,686 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:24:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176', 'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)'}
-2025-06-21 19:53:17,686 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176', 'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)', 'last update': '2025-06-21 18:24:00'}
-2025-06-21 19:53:27,704 ERROR: Function last_price_change failed for ASIN B0045PC176: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:44:51,969 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-15 18:30:00', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176'}
+2025-06-22 09:44:51,969 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-06-15 18:30:00', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176'}
+2025-06-22 09:44:51,969 DEBUG: get_title result for ASIN B0045PC176: THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE 
+2025-06-22 09:44:51,969 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-15 18:30:00', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176'}
+2025-06-22 09:44:51,969 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-06-15 18:30:00', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176', 'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)'}
+2025-06-22 09:44:51,969 INFO: ASIN: B0045PC176 - Raw lastUpdate from deal_object: 7612424
+2025-06-22 09:44:51,969 DEBUG: last update - raw ts=7612424
+2025-06-22 09:44:51,969 DEBUG: last update result: 2025-06-22 05:44:00
+2025-06-22 09:44:51,969 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 05:44:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-15 18:30:00', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176', 'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)'}
+2025-06-22 09:44:51,969 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-06-15 18:30:00', 'AMZ link': 'https://www.amazon.com/dp/B0045PC176', 'Keepa Link': 'https://keepa.com/#!product/1-B0045PC176', 'Title': 'THE ARABIAN NIGHTS ENTERTAINMENT: THE BOOK OF THE THOUSAND NIGHTS AND A NIGHT - VOLS. I - VI - THE COMPLETE BURTON TRANSLATION WITH COMPLETE BURTON NOTES, THE TERMINAL ESSAY, A COMPLETE INDEX AND 1001 ILLUSTRATIONS BY VALENTI ANGELO (VOLUMES 1 - 6 IN THREE BOOKS.)', 'last update': '2025-06-22 05:44:00'}
+2025-06-22 09:44:51,969 DEBUG: last price change - raw ts=5546488
 --
 --
-2025-06-21 19:53:37,644 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0312944446'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0312944446'}
-2025-06-21 19:53:37,644 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446'}
-2025-06-21 19:53:37,644 DEBUG: get_title result for ASIN 0312944446: True Names
-2025-06-21 19:53:37,644 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'True Names'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446'}
-2025-06-21 19:53:37,645 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446', 'Title': 'True Names'}
-2025-06-21 19:53:37,645 INFO: ASIN: 0312944446 - Raw lastUpdate from deal_object: 7611760
-2025-06-21 19:53:37,645 DEBUG: last update - raw ts=7611760
-2025-06-21 19:53:37,645 DEBUG: last update result: 2025-06-21 18:40:00
-2025-06-21 19:53:37,645 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 18:40:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446', 'Title': 'True Names'}
-2025-06-21 19:53:37,645 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446', 'Title': 'True Names', 'last update': '2025-06-21 18:40:00'}
-2025-06-21 19:53:47,768 ERROR: Function last_price_change failed for ASIN 0312944446: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:45:02,624 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-0312944446'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 10:14:00', 'AMZ link': 'https://www.amazon.com/dp/0312944446'}
+2025-06-22 09:45:02,624 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 10:14:00', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446'}
+2025-06-22 09:45:02,624 DEBUG: get_title result for ASIN 0312944446: True Names
+2025-06-22 09:45:02,624 DEBUG: Header: Title, Function: get_title, Result: {'Title': 'True Names'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 10:14:00', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446'}
+2025-06-22 09:45:02,624 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 10:14:00', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446', 'Title': 'True Names'}
+2025-06-22 09:45:02,624 INFO: ASIN: 0312944446 - Raw lastUpdate from deal_object: 7612600
+2025-06-22 09:45:02,624 DEBUG: last update - raw ts=7612600
+2025-06-22 09:45:02,624 DEBUG: last update result: 2025-06-22 08:40:00
+2025-06-22 09:45:02,624 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:40:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 10:14:00', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446', 'Title': 'True Names'}
+2025-06-22 09:45:02,624 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-06-21 10:14:00', 'AMZ link': 'https://www.amazon.com/dp/0312944446', 'Keepa Link': 'https://keepa.com/#!product/1-0312944446', 'Title': 'True Names', 'last update': '2025-06-22 08:40:00'}
+2025-06-22 09:45:02,624 DEBUG: last price change - raw ts=6727308
 --
 --
-2025-06-21 19:53:50,407 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1939899354'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1939899354'}
-2025-06-21 19:53:50,407 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354'}
-2025-06-21 19:53:50,407 DEBUG: get_title result for ASIN 1939899354: This Is the End of Something but It's Not the End 
-2025-06-21 19:53:50,407 DEBUG: Header: Title, Function: get_title, Result: {'Title': "This Is the End of Something but It's Not the End of You"}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354'}
-2025-06-21 19:53:50,407 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354', 'Title': "This Is the End of Something but It's Not the End of You"}
-2025-06-21 19:53:50,407 INFO: ASIN: 1939899354 - Raw lastUpdate from deal_object: 7611812
-2025-06-21 19:53:50,407 DEBUG: last update - raw ts=7611812
-2025-06-21 19:53:50,408 DEBUG: last update result: 2025-06-21 19:32:00
-2025-06-21 19:53:50,408 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-21 19:32:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354', 'Title': "This Is the End of Something but It's Not the End of You"}
-2025-06-21 19:53:50,408 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '-', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354', 'Title': "This Is the End of Something but It's Not the End of You", 'last update': '2025-06-21 19:32:00'}
-2025-06-21 19:54:00,559 ERROR: Function last_price_change failed for ASIN 1939899354: last_price_change() takes 1 positional argument but 3 were given
+2025-06-22 09:45:13,111 DEBUG: Header: Keepa Link, Function: keepa_link, Result: {'Keepa Link': 'https://keepa.com/#!product/1-1939899354'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-22 08:50:00', 'AMZ link': 'https://www.amazon.com/dp/1939899354'}
+2025-06-22 09:45:13,111 DEBUG: Row after update for Keepa Link: {'Percent Down 90': '73%', 'Deal found': '2025-06-22 08:50:00', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354'}
+2025-06-22 09:45:13,111 DEBUG: get_title result for ASIN 1939899354: This Is the End of Something but It's Not the End 
+2025-06-22 09:45:13,111 DEBUG: Header: Title, Function: get_title, Result: {'Title': "This Is the End of Something but It's Not the End of You"}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-22 08:50:00', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354'}
+2025-06-22 09:45:13,111 DEBUG: Row after update for Title: {'Percent Down 90': '73%', 'Deal found': '2025-06-22 08:50:00', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354', 'Title': "This Is the End of Something but It's Not the End of You"}
+2025-06-22 09:45:13,111 INFO: ASIN: 1939899354 - Raw lastUpdate from deal_object: 7612610
+2025-06-22 09:45:13,111 DEBUG: last update - raw ts=7612610
+2025-06-22 09:45:13,111 DEBUG: last update result: 2025-06-22 08:50:00
+2025-06-22 09:45:13,111 DEBUG: Header: last update, Function: last_update, Result: {'last update': '2025-06-22 08:50:00'}, Row before: {'Percent Down 90': '73%', 'Deal found': '2025-06-22 08:50:00', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354', 'Title': "This Is the End of Something but It's Not the End of You"}
+2025-06-22 09:45:13,111 DEBUG: Row after update for last update: {'Percent Down 90': '73%', 'Deal found': '2025-06-22 08:50:00', 'AMZ link': 'https://www.amazon.com/dp/1939899354', 'Keepa Link': 'https://keepa.com/#!product/1-1939899354', 'Title': "This Is the End of Something but It's Not the End of You", 'last update': '2025-06-22 08:50:00'}
+2025-06-22 09:45:13,111 DEBUG: last price change - raw ts=7031598
