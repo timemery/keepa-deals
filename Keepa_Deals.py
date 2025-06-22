@@ -175,6 +175,29 @@ def main():
             if not product or 'stats' not in product:
                 logger.error(f"Incomplete product data for ASIN {asin}") # Use logger instance
                 continue
+
+            # Logging for Last Used price update from product_data
+            try:
+                if product and isinstance(product, dict) and \
+                   product.get('products') and isinstance(product['products'], list) and \
+                   len(product['products']) > 0 and isinstance(product['products'][0], dict) and \
+                   'csv' in product['products'][0] and isinstance(product['products'][0]['csv'], list) and \
+                   len(product['products'][0]['csv']) > 2 and \
+                   isinstance(product['products'][0]['csv'][2], list) and \
+                   len(product['products'][0]['csv'][2]) > 0:
+                    
+                    # Get the last entry from the "Used" price history (index 2 for USED)
+                    last_used_entry = product['products'][0]['csv'][2][-1]
+                    if isinstance(last_used_entry, list) and len(last_used_entry) > 0:
+                        last_used_price_ts_minutes = last_used_entry[0]
+                        logger.info(f"ASIN: {asin} - Last Used price update from product_data.csv[2]: {last_used_price_ts_minutes}")
+                    else:
+                        logger.warning(f"ASIN: {asin} - Last Used price entry in product_data.csv[2] is not a valid list or is empty.")
+                else:
+                    logger.warning(f"ASIN: {asin} - Could not retrieve valid product_data.csv[2] path for Used price history.")
+            except (KeyError, IndexError, TypeError) as e:
+                logger.warning(f"ASIN: {asin} - Could not retrieve last Used price update from product_data.csv[2]. Error: {type(e).__name__} - {e}")
+            
             row = {}
             try:
                 # Process all functions using FUNCTION_LIST
@@ -189,12 +212,12 @@ def main():
 
                             # Call func with appropriate arguments
                             if header == 'last update':
-                                # Assuming 'config' is the global config dictionary loaded earlier
-                                # and 'logger' is the logger instance obtained in main
-                                result = func(input_data, config, logger)
+                                # input_data is 'deal', 'product' is the fetched product data
+                                result = func(input_data, config, logger, product)
                             elif header == 'Deal found' or header == 'last price change':
-                                result = func(input_data)
-                            else: # For all other functions, including those that take product
+                                # input_data is 'deal'
+                                result = func(input_data, config, logger) 
+                            else: # For all other functions, input_data is 'product'
                                 result = func(input_data)
                                 
                             logger.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}") # Use logger instance

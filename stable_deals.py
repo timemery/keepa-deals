@@ -93,9 +93,13 @@ def fetch_deals_for_deals(page):
         return []
         
 # Deal Found starts
-def deal_found(deal):
-    ts = deal.get('creationDate', 0)
-    logging.debug(f"Deal found - raw ts={ts}")
+def deal_found(deal_object, config_data=None, logger=None):
+    if logger is None:
+        logger = logging.getLogger(__name__)
+    
+    asin = deal_object.get('asin', 'Unknown ASIN')
+    ts = deal_object.get('creationDate', 0)
+    logging.debug(f"Deal found - raw ts={ts}") # Keep original module-level debug log
     if ts <= 100000: # If timestamp is invalid or too old
         dt = None
     else:
@@ -104,6 +108,16 @@ def deal_found(deal):
     if dt:
         utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
         toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
+        
+        func_name = 'deal_found'
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - KEEPA_EPOCH.tzinfo: {KEEPA_EPOCH.tzinfo}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - dt (naive UTC from Keepa): {dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - utc_dt (aware UTC): {utc_dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - TORONTO_TZ object: {TORONTO_TZ}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt (converted to Toronto): {toronto_dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt.tzinfo: {toronto_dt.tzinfo}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt.utcoffset(): {toronto_dt.utcoffset()}")
+        
         return {'Deal found': toronto_dt.strftime('%Y-%m-%d %H:%M:%S')}
     else:
         return {'Deal found': '-'}
@@ -112,24 +126,58 @@ def deal_found(deal):
 # Last update starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def last_update(deal_object, config_data, logger, product_data=None):
-    asin = deal_object.get('asin')
-    raw_ts_value = deal_object.get('lastUpdate')
+    # Ensure logger is available, though it's expected to be passed by Keepa_Deals.py
+    if logger is None: 
+        logger = logging.getLogger(__name__)
 
-    if asin is None or raw_ts_value is None:
-        logger.info(f"ASIN or raw lastUpdate value missing in deal_object. ASIN: {asin}, Raw TS: {raw_ts_value}")
-    else:
-        logger.info(f"ASIN: {asin} - Raw lastUpdate from deal_object: {raw_ts_value}")
+    asin = deal_object.get('asin', 'Unknown ASIN') # Get ASIN for logging, with a default
+    raw_ts_value = None
+    source_used = None
 
-    # Existing logic starts here, using deal_object instead of deal
-    ts = deal_object.get('lastUpdate', 0) 
-    logging.debug(f"last update - raw ts={ts}") # Existing debug log
+    # Try to get lastUpdate from product_data first
+    if product_data and isinstance(product_data, dict) and \
+       'products' in product_data and isinstance(product_data['products'], list) and \
+       len(product_data['products']) > 0 and isinstance(product_data['products'][0], dict) and \
+       'lastUpdate' in product_data['products'][0]:
+        raw_ts_value = product_data['products'][0]['lastUpdate']
+        if raw_ts_value is not None: # Ensure it's not None before logging and setting source
+            logger.info(f"ASIN: {asin} - Using lastUpdate from product_data: {raw_ts_value}")
+            source_used = 'product_data'
+        else: # If product_data['products'][0]['lastUpdate'] is None
+            logger.info(f"ASIN: {asin} - lastUpdate is None in product_data. Will attempt fallback.")
+            raw_ts_value = None # Explicitly set to None to trigger fallback
+
+    # Fallback to deal_object if not found or invalid in product_data
+    if source_used != 'product_data':
+        original_deal_ts = deal_object.get('lastUpdate')
+        if asin is None or original_deal_ts is None: # asin from deal_object might be None
+            logger.info(f"ASIN or raw lastUpdate value missing in deal_object for fallback. ASIN: {asin}, Raw TS from deal: {original_deal_ts}")
+        else:
+            logger.info(f"ASIN: {asin} - Using lastUpdate from deal_object (fallback): {original_deal_ts}")
+        raw_ts_value = original_deal_ts # This might be None
+        source_used = 'deal_object'
+
+    ts = raw_ts_value if raw_ts_value is not None else 0
+    
+    # Existing debug log, now reflects the chosen ts
+    logging.debug(f"last update - raw ts={ts} (source: {source_used})")
+    
     if ts <= 100000:
-        logging.error(f"No valid lastUpdate for deal: {deal_object}") # Changed deal to deal_object
+        logging.error(f"No valid lastUpdate for deal_object ASIN {asin} (ts={ts}, source={source_used})")
         return {'last update': '-'}
     try:
         dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC
         utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
         toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
+        
+        logger.debug(f"ASIN: {asin} - Timezone Debug - KEEPA_EPOCH.tzinfo: {KEEPA_EPOCH.tzinfo}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug - dt (naive UTC from Keepa): {dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug - utc_dt (aware UTC): {utc_dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug - TORONTO_TZ object: {TORONTO_TZ}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug - toronto_dt (converted to Toronto): {toronto_dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug - toronto_dt.tzinfo: {toronto_dt.tzinfo}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug - toronto_dt.utcoffset(): {toronto_dt.utcoffset()}")
+        
         formatted = toronto_dt.strftime('%Y-%m-%d %H:%M:%S')
         logging.debug(f"last update result: {formatted}")
         return {'last update': formatted}
@@ -140,16 +188,46 @@ def last_update(deal_object, config_data, logger, product_data=None):
 
 # Last price change starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def last_price_change(deal):
-    ts = deal.get('currentSince', [-1] * 20)[11]
-    logging.debug(f"last price change - raw ts={ts}")
+def last_price_change(deal_object, config_data=None, logger=None):
+    if logger is None:
+        logger = logging.getLogger(__name__)
+
+    asin = deal_object.get('asin', 'Unknown ASIN')
+    
+    # Log the value of 'lastPriceChange' from the deal_object
+    raw_ts_from_lastPriceChange_key = deal_object.get('lastPriceChange')
+    logger.info(f"ASIN: {asin} - Raw value from deal_object.get('lastPriceChange'): {raw_ts_from_lastPriceChange_key}")
+
+    # Set ts based *only* on deal_object.get('lastPriceChange')
+    raw_ts_value = raw_ts_from_lastPriceChange_key # Use the value we just logged
+    ts = raw_ts_value if raw_ts_value is not None else 0
+    
+    # Updated debug log to reflect the source
+    logging.debug(f"last price change - raw ts={ts} (source: deal_object.lastPriceChange)")
+    
     if ts <= 100000:
-        logging.error(f"No valid currentSince[11] for deal: {deal}")
+        # Use logger instance for consistency if available, otherwise global logging
+        log_message = f"ASIN: {asin} - No valid lastPriceChange value (ts={ts}, source=deal_object.lastPriceChange)"
+        if logger:
+            logger.error(log_message)
+        else:
+            logging.error(log_message)
         return {'last price change': '-'}
+    
     try:
         dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC
         utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
         toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
+
+        func_name = 'last_price_change'
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - KEEPA_EPOCH.tzinfo: {KEEPA_EPOCH.tzinfo}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - dt (naive UTC from Keepa): {dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - utc_dt (aware UTC): {utc_dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - TORONTO_TZ object: {TORONTO_TZ}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt (converted to Toronto): {toronto_dt.isoformat()}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt.tzinfo: {toronto_dt.tzinfo}")
+        logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt.utcoffset(): {toronto_dt.utcoffset()}")
+
         formatted = toronto_dt.strftime('%Y-%m-%d %H:%M:%S')
         logging.debug(f"last price change result: {formatted}")
         return {'last price change': formatted}
