@@ -1,5 +1,5 @@
 # stable_deals.py 
-# (Last update: Version 4)
+# (Last update: Version 5)
 
 import logging
 import requests
