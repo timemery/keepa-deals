@@ -111,11 +111,20 @@ def deal_found(deal):
 
 # Last update starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def last_update(deal):
-    ts = deal.get('lastUpdate', 0)
-    logging.debug(f"last update - raw ts={ts}")
+def last_update(deal_object, config_data, logger, product_data=None):
+    asin = deal_object.get('asin')
+    raw_ts_value = deal_object.get('lastUpdate')
+
+    if asin is None or raw_ts_value is None:
+        logger.info(f"ASIN or raw lastUpdate value missing in deal_object. ASIN: {asin}, Raw TS: {raw_ts_value}")
+    else:
+        logger.info(f"ASIN: {asin} - Raw lastUpdate from deal_object: {raw_ts_value}")
+
+    # Existing logic starts here, using deal_object instead of deal
+    ts = deal_object.get('lastUpdate', 0) 
+    logging.debug(f"last update - raw ts={ts}") # Existing debug log
     if ts <= 100000:
-        logging.error(f"No valid lastUpdate for deal: {deal}")
+        logging.error(f"No valid lastUpdate for deal: {deal_object}") # Changed deal to deal_object
         return {'last update': '-'}
     try:
         dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC

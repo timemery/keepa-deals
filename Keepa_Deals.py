@@ -144,35 +144,36 @@ def write_csv(rows, deals, diagnostic=False):
 def main():
     global args
     args = parser.parse_args() # Initialize global args
+    logger = logging.getLogger('KeepaDeals') # Obtain logger instance
     try:
 # Logging stuff - starts
-        logging.info("Starting Keepa_Deals...")
+        logger.info("Starting Keepa_Deals...") # Use logger instance
         print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
         deals = fetch_deals_for_deals(0) # Consider passing args.no_cache if fetch_deals_for_deals needs it
         rows = []
         if not deals:
-            logging.warning("No deals fetched, writing diagnostic CSV")
+            logger.warning("No deals fetched, writing diagnostic CSV") # Use logger instance
             print("No deals fetched, writing diagnostic CSV", flush=True)
             write_csv([], [], diagnostic=True)
             return
-        logging.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}")
+        logger.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}") # Use logger instance
         print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}", flush=True)
-        logging.info(f"Starting ASIN processing, found {len(deals)} deals")
+        logger.info(f"Starting ASIN processing, found {len(deals)} deals") # Use logger instance
         print(f"Starting ASIN processing, found {len(deals)} deals", flush=True)
 # Logging stuff - ends
         for deal in deals:
             asin = deal.get('asin', '-')
             if not validate_asin(asin):
-                logging.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}")
+                logger.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}") # Use logger instance
                 continue
-            logging.info(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            logger.info(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})") # Use logger instance
             print(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
-            logging.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})")
+            logger.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})") # Use logger instance
             print(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
             product = fetch_product(asin)
             if not product or 'stats' not in product:
-                logging.error(f"Incomplete product data for ASIN {asin}")
+                logger.error(f"Incomplete product data for ASIN {asin}") # Use logger instance
                 continue
             row = {}
             try:
@@ -181,26 +182,33 @@ def main():
                     if func:
                         try:
                             # Pass deal for stable_deals functions, product for stable_products
-                            input_data = deal if header in ['Deal found', 'last update', 'last price change'] else product
-                            result = func(input_data)
-                            logging.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}")
+                            if header in ['Deal found', 'last update', 'last price change']:
+                                input_data = deal
+                                # Assuming 'config' is the global config dictionary loaded earlier
+                                # and 'logger' is the logger instance obtained in main
+                                result = func(input_data, config, logger) 
+                            else:
+                                input_data = product
+                                result = func(input_data)
+                                
+                            logger.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}") # Use logger instance
                             row.update(result)
-                            logging.debug(f"Row after update for {header}: {row}")
+                            logger.debug(f"Row after update for {header}: {row}") # Use logger instance
                         except Exception as e:
-                            logging.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}")
+                            logger.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}") # Use logger instance
                             row[header] = '-'
                 rows.append(row)
             except Exception as e:
-                logging.error(f"Error processing ASIN {asin}: {str(e)}")
+                logger.error(f"Error processing ASIN {asin}: {str(e)}") # Use logger instance
                 continue
         write_csv(rows, deals)
-        logging.info("Writing CSV...")
+        logger.info("Writing CSV...") # Use logger instance
         print("Writing CSV...")
-        logging.info("Script completed!")
+        logger.info("Script completed!") # Use logger instance
         print("Script completed!")
         print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}")
     except Exception as e:
-        logging.error(f"Main failed: {str(e)}")
+        logger.error(f"Main failed: {str(e)}") # Use logger instance
         print(f"Main failed: {str(e)}")
         sys.exit(1)
 # Chunk 4 ends
