@@ -1,6 +1,6 @@
 # Keepa Deals API
 Jules collaboration on Keepa Deals.
-- (Last update: Version 4)
+- (Last update: Version 5)
 
 
 ## Overview
