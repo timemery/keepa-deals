@@ -188,31 +188,80 @@ def last_update(deal_object, config_data, logger, product_data=None):
 
 # Last price change starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
-def last_price_change(deal_object, config_data=None, logger=None):
+def last_price_change(deal_object, config_data=None, logger=None, product_data=None): # Added product_data
     if logger is None:
         logger = logging.getLogger(__name__)
 
-    asin = deal_object.get('asin', 'Unknown ASIN')
+    asin = deal_object.get('asin', product_data.get('asin', 'Unknown ASIN') if product_data else 'Unknown ASIN')
     
-    current_since_array = deal_object.get('currentSince', [])
-    ts = current_since_array[0] if current_since_array and len(current_since_array) > 0 else -1
-    logging.debug(f"last price change - currentSince array: {current_since_array}, selected ts (from index 0 or default -1): {ts}")
-    
-    if ts <= 100000:
-        # Use logger instance for consistency if available, otherwise global logging
-        log_message = f"ASIN: {asin} - No valid currentSince[0] (or empty currentSince array) for deal (ts={ts})"
-        if logger:
-            logger.error(log_message)
+    latest_ts = -1
+    source_description = "No valid timestamp found"
+
+    # Prioritize product_data and its 'csv' field
+    if product_data and isinstance(product_data, dict) and \
+       product_data.get('products') and isinstance(product_data['products'], list) and \
+       len(product_data['products']) > 0 and isinstance(product_data['products'][0], dict) and \
+       'csv' in product_data['products'][0] and isinstance(product_data['products'][0]['csv'], list):
+        
+        product_csv_data = product_data['products'][0]['csv']
+        # Indices for AMAZON (0), NEW (1), USED (2), NEW_FBA (10), NEW_FBM (11)
+        # Refer to Keepa API documentation for full list of CSV indices.
+        # We will also check common ones like:
+        # LIGHTNING_DEALS (3), WAREHOUSE (4), NEW_SUPER_FAST_SHIPPING (5), USED_LIKE_NEW (6),
+        # USED_VERY_GOOD (7), USED_GOOD (8), USED_ACCEPTABLE (9), LISTPRICE (15), BUY_BOX (17)
+        # The more indices we check, the more comprehensive, but also slightly more processing.
+        # Sticking to the main ones for now as per plan, can be expanded if needed.
+        relevant_csv_indices = [0, 1, 2, 10, 11, 3, 4, 5, 6, 7, 8, 9, 15, 17] 
+        
+        timestamps_from_csv = []
+        for index in relevant_csv_indices:
+            if index < len(product_csv_data) and isinstance(product_csv_data[index], list) and product_csv_data[index]:
+                # The history is a list of [timestamp, price, ...] entries.
+                # Last entry is the most recent.
+                last_entry = product_csv_data[index][-1]
+                if isinstance(last_entry, list) and len(last_entry) > 0:
+                    ts_val = last_entry[0]
+                    if isinstance(ts_val, (int, float)) and ts_val > 100000: # Basic validity check
+                        timestamps_from_csv.append(ts_val)
+                        logger.debug(f"ASIN: {asin} - Found CSV timestamp for index {index}: {ts_val}")
+        
+        if timestamps_from_csv:
+            latest_ts = max(timestamps_from_csv)
+            source_description = f"product_data.csv (max of {len(timestamps_from_csv)} timestamps)"
+            logger.info(f"ASIN: {asin} - Using product_data.csv. Max timestamp: {latest_ts}. All found: {timestamps_from_csv}")
+
+    # Fallback to deal_object.currentSince if no valid ts from product_data.csv
+    if latest_ts <= 100000:
+        logger.info(f"ASIN: {asin} - No valid timestamp from product_data.csv (latest_ts={latest_ts}). Falling back to deal_object.currentSince.")
+        current_since_array = deal_object.get('currentSince', [])
+        valid_current_since_ts = []
+        if current_since_array and isinstance(current_since_array, list):
+            for i, ts_val in enumerate(current_since_array):
+                if isinstance(ts_val, (int, float)) and ts_val > 100000: # Basic validity check
+                    valid_current_since_ts.append(ts_val)
+                    logger.debug(f"ASIN: {asin} - Found deal_object.currentSince timestamp at index {i}: {ts_val}")
+        
+        if valid_current_since_ts:
+            latest_ts = max(valid_current_since_ts)
+            source_description = f"deal_object.currentSince (max of {len(valid_current_since_ts)} timestamps)"
+            logger.info(f"ASIN: {asin} - Using deal_object.currentSince. Max timestamp: {latest_ts}. All found: {valid_current_since_ts}")
         else:
-            logging.error(log_message)
+            logger.warning(f"ASIN: {asin} - No valid timestamps in deal_object.currentSince either. Array was: {current_since_array}")
+
+
+    logging.debug(f"ASIN: {asin} - last price change - selected raw ts={latest_ts} from {source_description}")
+    
+    if latest_ts <= 100000: # Check if a valid timestamp was found from any source
+        log_message = f"ASIN: {asin} - No valid last price change timestamp found from any source (final ts={latest_ts})"
+        logger.error(log_message)
         return {'last price change': '-'}
     
     try:
-        dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC
+        dt = KEEPA_EPOCH + timedelta(minutes=latest_ts) # This is a naive datetime, assumed to be UTC
         utc_dt = timezone('UTC').localize(dt) # Make it timezone-aware UTC
         toronto_dt = utc_dt.astimezone(TORONTO_TZ) # Convert to Toronto time
 
-        func_name = 'last_price_change'
+        func_name = 'last_price_change' # For debug clarity
         logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - KEEPA_EPOCH.tzinfo: {KEEPA_EPOCH.tzinfo}")
         logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - dt (naive UTC from Keepa): {dt.isoformat()}")
         logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - utc_dt (aware UTC): {utc_dt.isoformat()}")
@@ -222,10 +271,10 @@ def last_price_change(deal_object, config_data=None, logger=None):
         logger.debug(f"ASIN: {asin} - Timezone Debug ({func_name}) - toronto_dt.utcoffset(): {toronto_dt.utcoffset()}")
 
         formatted = toronto_dt.strftime('%Y-%m-%d %H:%M:%S')
-        logging.debug(f"last price change result: {formatted}")
+        logger.info(f"ASIN: {asin} - last price change result: {formatted} (from ts {latest_ts} via {source_description})")
         return {'last price change': formatted}
     except Exception as e:
-        logging.error(f"last_price_change failed: {str(e)}")
+        logger.error(f"ASIN: {asin} - last_price_change failed during date conversion/formatting for ts {latest_ts}: {str(e)}")
         return {'last price change': '-'}
 # Last price change ends
 

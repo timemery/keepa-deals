@@ -1537,5 +1537,58 @@ the script will now output "Missing" for that dimension. This prevents
 both TypeErrors and the display of "0.0 cm" when a package dimension
 is effectively not provided or is negligibly small.
 
+Fix: Improve accuracy of 'last price change' timestamp
 
+The 'last price change' field was often inaccurate because it previously
+only considered `deal_object.currentSince[0]`.
+
+This commit refactors the `last_price_change` function in
+`stable_deals.py` to:
+1.  Accept `product_data` (from the `/product` API endpoint) as an
+    argument.
+2.  Prioritize `product_data`: Iterate through historical price data
+    (`product_data['products'][0]['csv']`) for a comprehensive list of
+    price types (Amazon, New, Used, FBA, FBM, and others). The latest
+    timestamp from these histories is selected.
+3.  Improve Fallback: If a valid timestamp isn't found in `product_data`,
+    the function now iterates through *all* timestamps in
+    `deal_object.currentSince` (from the `/deal` API endpoint) and
+    selects the most recent one. This is more robust than only checking
+    the first element.
+4.  The call site in `Keepa_Deals.py` has been updated to pass the
+    `product` object to `last_price_change`.
+
+This approach ensures a more accurate determination of the last actual
+price modification by checking more comprehensive data sources.
+
+Thank you for the detailed feedback and the results comparison! This is very helpful.
+
+You're right, if the primary focus of the deals being searched for is "Used - Current" price, then the "last price change" should ideally reflect the last change specifically for used items (any condition except possibly 'Acceptable', as you noted).
+
+My previous change made it more general by looking at a broader set of price types (Amazon, New, FBA, FBM, various Used conditions, etc.) to find the absolute latest price change across any of them. This was based on a general interpretation of "last price change".
+
+New Approach based on your feedback:
+
+To align with your requirement that "last price change" should specifically track changes related to used prices, I can refine the logic further:
+
+Prioritize Used Price Timestamps from product_data.csv: Instead of looking at all relevant_csv_indices, I will narrow down the list of indices in product_data['products'][0]['csv'] to those specifically representing used conditions. According to Keepa's API documentation and common usage:
+
+csv[2]: USED (general used price)
+csv[6]: USED_LIKE_NEW
+csv[7]: USED_VERY_GOOD
+csv[8]: USED_GOOD
+csv[9]: USED_ACCEPTABLE (I will exclude this as per your feedback: "with the exception of Used - Acceptable").
+Refine Fallback to deal_object.currentSince: Similarly, for the fallback using deal_object.currentSince, I will focus on the indices that correspond to these used conditions (excluding Acceptable). Based on stable_products.py and Keepa conventions:
+
+currentSince[2] (corresponds to stats.current[2] - Used)
+currentSince[19] (corresponds to stats.current[19] - Used, Like New)
+currentSince[20] (corresponds to stats.current[20] - Used, Very Good)
+currentSince[21] (corresponds to stats.current[21] - Used, Good)
+Implementation Details:
+
+The last_price_change function will be modified to:
+
+Primary Source (product_data.csv): Look for the latest timestamp among csv[2], csv[6], csv[7], and csv[8].
+Fallback Source (deal_object.currentSince): If no suitable timestamp is found above, look for the latest timestamp among currentSince[2], currentSince[19], currentSince[20], and currentSince[21]. (These indices are based on the stats.current array structure where index 2 is 'Used', 19 is 'Used, like new', 20 is 'Used, very good', and 21 is 'Used, good').
+This targeted approach should provide a "last price change" value that is much more closely tied to changes in used item prices (excluding 'Acceptable'), aligning with your use case for finding used books.
 

@@ -211,12 +211,13 @@ def main():
                                 input_data = product
 
                             # Call func with appropriate arguments
-                            if header == 'last update':
+                            if header == 'last update' or header == 'last price change': # Modified condition
                                 # input_data is 'deal', 'product' is the fetched product data
+                                # Both 'last update' and 'last price change' now expect product_data
                                 result = func(input_data, config, logger, product)
-                            elif header == 'Deal found' or header == 'last price change':
+                            elif header == 'Deal found':
                                 # input_data is 'deal'
-                                result = func(input_data, config, logger) 
+                                result = func(input_data, config, logger)
                             else: # For all other functions, input_data is 'product'
                                 result = func(input_data)
                                 
