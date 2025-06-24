@@ -1515,7 +1515,27 @@ This ensures that `last_update` and `last_price_change` timestamps are
 accurately converted from their UTC representation to your local
 timezone (EDT).
 
+Fix: Handle missing package dimensions correctly
 
+Updated the package_height, package_length, and package_width
+functions in stable_products.py to improve the handling of
+missing or very small package dimensions.
+
+Previously, if a package dimension was present but very small (e.g.,
+a few millimeters, potentially representing item dimensions erroneously
+placed in package dimension fields), it could be formatted to "0.0 cm".
+Additionally, if the API returned null for a dimension, it could lead
+to a TypeError.
+
+The changes ensure that if a dimension value obtained from the API is:
+- Not present (key missing, product.get() defaults to -1)
+- Explicitly null (product.get() returns None)
+- Zero
+- A positive value less than 0.5 (representing < 0.5mm)
+
+the script will now output "Missing" for that dimension. This prevents
+both TypeErrors and the display of "0.0 cm" when a package dimension
+is effectively not provided or is negligibly small.
 
 
 

@@ -194,20 +194,13 @@ def last_price_change(deal_object, config_data=None, logger=None):
 
     asin = deal_object.get('asin', 'Unknown ASIN')
     
-    # Log the value of 'lastPriceChange' from the deal_object
-    raw_ts_from_lastPriceChange_key = deal_object.get('lastPriceChange')
-    logger.info(f"ASIN: {asin} - Raw value from deal_object.get('lastPriceChange'): {raw_ts_from_lastPriceChange_key}")
-
-    # Set ts based *only* on deal_object.get('lastPriceChange')
-    raw_ts_value = raw_ts_from_lastPriceChange_key # Use the value we just logged
-    ts = raw_ts_value if raw_ts_value is not None else 0
-    
-    # Updated debug log to reflect the source
-    logging.debug(f"last price change - raw ts={ts} (source: deal_object.lastPriceChange)")
+    current_since_array = deal_object.get('currentSince', [])
+    ts = current_since_array[0] if current_since_array and len(current_since_array) > 0 else -1
+    logging.debug(f"last price change - currentSince array: {current_since_array}, selected ts (from index 0 or default -1): {ts}")
     
     if ts <= 100000:
         # Use logger instance for consistency if available, otherwise global logging
-        log_message = f"ASIN: {asin} - No valid lastPriceChange value (ts={ts}, source=deal_object.lastPriceChange)"
+        log_message = f"ASIN: {asin} - No valid currentSince[0] (or empty currentSince array) for deal (ts={ts})"
         if logger:
             logger.error(log_message)
         else:
