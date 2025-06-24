@@ -1592,3 +1592,22 @@ Primary Source (product_data.csv): Look for the latest timestamp among csv[2], c
 Fallback Source (deal_object.currentSince): If no suitable timestamp is found above, look for the latest timestamp among currentSince[2], currentSince[19], currentSince[20], and currentSince[21]. (These indices are based on the stats.current array structure where index 2 is 'Used', 19 is 'Used, like new', 20 is 'Used, very good', and 21 is 'Used, good').
 This targeted approach should provide a "last price change" value that is much more closely tied to changes in used item prices (excluding 'Acceptable'), aligning with your use case for finding used books.
 
+Refine: Focus 'last price change' on specific used conditions
+
+This commit refines the `last_price_change` function in
+`stable_deals.py` to more accurately reflect changes in used item
+prices, as per user feedback.
+
+Modifications:
+- The primary data source (`product_data.csv`) now only considers
+  timestamps from CSV indices corresponding to USED (general),
+  USED_LIKE_NEW, USED_VERY_GOOD, and USED_GOOD (indices 2, 6, 7, 8).
+  'Used - Acceptable' and non-used price types are excluded.
+- The fallback mechanism using `deal_object.currentSince` has also
+  been updated to only consider timestamps from `currentSince` indices
+  that map to the same specified used conditions (indices 2, 19, 20, 21).
+- Logging messages were updated to reflect this increased specificity.
+
+This change aims to provide a 'last price change' value that is more
+relevant for scripts focused on deals for used items, by excluding
+price changes from new items or other non-target conditions.
