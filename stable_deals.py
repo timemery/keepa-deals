@@ -126,44 +126,58 @@ def deal_found(deal_object, config_data=None, logger=None):
 # Last update starts
 @retry(stop_max_attempt_number=3, wait_fixed=5000)
 def last_update(deal_object, config_data, logger, product_data=None):
-    # Ensure logger is available, though it's expected to be passed by Keepa_Deals.py
     if logger is None: 
         logger = logging.getLogger(__name__)
 
-    asin = deal_object.get('asin', 'Unknown ASIN') # Get ASIN for logging, with a default
-    raw_ts_value = None
-    source_used = None
+    asin = deal_object.get('asin', product_data.get('asin', 'Unknown ASIN') if product_data else 'Unknown ASIN')
+    
+    possible_timestamps = []
+    sources_checked = []
 
-    # Try to get lastUpdate from product_data first
+    # 1. product_data['products'][0]['lastUpdate']
     if product_data and isinstance(product_data, dict) and \
-       'products' in product_data and isinstance(product_data['products'], list) and \
+       product_data.get('products') and isinstance(product_data['products'], list) and \
        len(product_data['products']) > 0 and isinstance(product_data['products'][0], dict) and \
        'lastUpdate' in product_data['products'][0]:
-        raw_ts_value = product_data['products'][0]['lastUpdate']
-        if raw_ts_value is not None: # Ensure it's not None before logging and setting source
-            logger.info(f"ASIN: {asin} - Using lastUpdate from product_data: {raw_ts_value}")
-            source_used = 'product_data'
-        else: # If product_data['products'][0]['lastUpdate'] is None
-            logger.info(f"ASIN: {asin} - lastUpdate is None in product_data. Will attempt fallback.")
-            raw_ts_value = None # Explicitly set to None to trigger fallback
-
-    # Fallback to deal_object if not found or invalid in product_data
-    if source_used != 'product_data':
-        original_deal_ts = deal_object.get('lastUpdate')
-        if asin is None or original_deal_ts is None: # asin from deal_object might be None
-            logger.info(f"ASIN or raw lastUpdate value missing in deal_object for fallback. ASIN: {asin}, Raw TS from deal: {original_deal_ts}")
+        ts_product_general = product_data['products'][0]['lastUpdate']
+        if isinstance(ts_product_general, (int, float)) and ts_product_general > 100000:
+            possible_timestamps.append(ts_product_general)
+            sources_checked.append(f"product_data.products[0].lastUpdate ({ts_product_general})")
+            logger.debug(f"ASIN: {asin} - Found ts_product_general: {ts_product_general}")
         else:
-            logger.info(f"ASIN: {asin} - Using lastUpdate from deal_object (fallback): {original_deal_ts}")
-        raw_ts_value = original_deal_ts # This might be None
-        source_used = 'deal_object'
+            logger.debug(f"ASIN: {asin} - ts_product_general ({ts_product_general}) is invalid or None.")
 
-    ts = raw_ts_value if raw_ts_value is not None else 0
+    # 2. deal_object.get('lastUpdate')
+    ts_deal_general = deal_object.get('lastUpdate')
+    if isinstance(ts_deal_general, (int, float)) and ts_deal_general > 100000:
+        possible_timestamps.append(ts_deal_general)
+        sources_checked.append(f"deal_object.lastUpdate ({ts_deal_general})")
+        logger.debug(f"ASIN: {asin} - Found ts_deal_general: {ts_deal_general}")
+    else:
+        logger.debug(f"ASIN: {asin} - ts_deal_general ({ts_deal_general}) is invalid or None.")
+
+    # 3. product_data.get('stats', {}).get('lastOffersUpdate')
+    if product_data and isinstance(product_data, dict) and product_data.get('stats'):
+        ts_offers_update = product_data['stats'].get('lastOffersUpdate')
+        if isinstance(ts_offers_update, (int, float)) and ts_offers_update > 100000: # This is also a Keepa minute timestamp
+            possible_timestamps.append(ts_offers_update)
+            sources_checked.append(f"product_data.stats.lastOffersUpdate ({ts_offers_update})")
+            logger.debug(f"ASIN: {asin} - Found ts_offers_update: {ts_offers_update}")
+        else:
+            logger.debug(f"ASIN: {asin} - ts_offers_update ({ts_offers_update}) from product_data.stats is invalid or None.")
+
+    if not possible_timestamps:
+        logger.error(f"ASIN: {asin} - No valid timestamps found for last_update from any source. Sources checked: {sources_checked if sources_checked else 'None'}.")
+        return {'last update': '-'}
+
+    latest_ts = max(possible_timestamps)
+    logger.info(f"ASIN: {asin} - last_update: Selected latest_ts={latest_ts} from candidates {possible_timestamps}. Sources considered: {sources_checked}")
     
-    # Existing debug log, now reflects the chosen ts
-    logging.debug(f"last update - raw ts={ts} (source: {source_used})")
+    # Ensure ts is used for the rest of the function, not latest_ts directly before this check
+    ts = latest_ts # This is the chosen final timestamp in Keepa minutes.
     
-    if ts <= 100000:
-        logging.error(f"No valid lastUpdate for deal_object ASIN {asin} (ts={ts}, source={source_used})")
+    if ts <= 100000: # Should be redundant if checks above are > 100000, but good failsafe
+        logging.error(f"ASIN: {asin} - No valid lastUpdate after considering all sources (final ts={ts})")
         return {'last update': '-'}
     try:
         dt = KEEPA_EPOCH + timedelta(minutes=ts) # This is a naive datetime, assumed to be UTC

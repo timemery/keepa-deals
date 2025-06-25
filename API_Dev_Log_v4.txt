@@ -1676,3 +1676,20 @@ The restored logic is as follows:
 
 This approach aims to capture the latest relevant price change across key
 used categories, including the Used Buy Box when applicable.
+
+
+Refine: Enhance last_update to include lastOffersUpdate
+
+Modifies the `last_update` function in `stable_deals.py` to provide a
+more comprehensive and potentially more recent timestamp.
+
+The function now considers the following three sources and selects the
+maximum valid (recent) timestamp among them:
+1. `product_data['products'][0]['lastUpdate']` (general product update time)
+2. `deal_object.get('lastUpdate')` (general deal update time)
+3. `product_data.get('stats', {}).get('lastOffersUpdate')` (when offers
+   for the product were last updated)
+
+This change aims to make the 'last update' field more accurately reflect
+the latest relevant activity recorded by Keepa for a product or deal,
+especially by including the often very pertinent `lastOffersUpdate` time.
