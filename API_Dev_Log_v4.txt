@@ -1611,3 +1611,68 @@ Modifications:
 This change aims to provide a 'last price change' value that is more
 relevant for scripts focused on deals for used items, by excluding
 price changes from new items or other non-target conditions.
+
+Refine: Include Used Buy Box in last_price_change fallback
+
+Further refines the `last_price_change` function in `stable_deals.py`
+to improve accuracy for used items, based on log analysis.
+
+When the primary source (`product_data.csv`) does not yield a recent
+timestamp for targeted used conditions (USED, LIKE_NEW, VERY_GOOD, GOOD),
+the fallback logic using `deal_object.currentSince` is now enhanced:
+
+- It continues to check `currentSince` indices for the standard used
+  conditions (2, 19, 20, 21).
+- Additionally, if `deal_object.current[14]` (which maps to `buyBoxIsUsed`)
+  indicates that the Buy Box is held by a used item, the timestamp from
+  `deal_object.currentSince[32]` (mapping to `buyBoxUsedPrice` update time)
+  is now also considered and added to the pool of potential timestamps.
+
+The most recent timestamp from this expanded pool (standard used conditions
+plus Used Buy Box, if applicable) is then selected.
+
+This addresses cases where the Used Buy Box price was the most recently
+updated relevant 'used' price but was previously overlooked by the
+fallback logic.
+
+Feat: Focus last_price_change strictly on USED index 2
+
+Refines the `last_price_change` function in `stable_deals.py` to
+exclusively use the timestamp associated with the 'USED' price type
+(index 2 in CSV and currentSince arrays).
+
+Changes:
+- Primary source (`product_data.csv`): Now only considers `csv[2]`.
+- Fallback (`deal_object.currentSince`): Now only considers `currentSince[2]`.
+- Removed logic for other used conditions (Like New, Very Good, Good) and
+  Used Buy Box from this calculation.
+- Updated logging to reflect this strict focus.
+
+This change is intended to align the 'last price change' column directly
+with the update timestamp of the data point that typically populates the
+'Used - Current' column in the output, as per user request for maximum
+consistency with that specific metric.
+
+This resulted in all "-" for every row... 
+
+
+Revert: Restore balanced used timestamp logic for last_price_change
+
+Reverts the `last_price_change` function in `stable_deals.py` to a
+previously more effective logic that considers a broader range of used
+price condition timestamps. This addresses the issue where a too-strict
+focus on only 'USED' index 2 resulted in no timestamps being found.
+
+The restored logic is as follows:
+- Primary Source (`product_data.csv`): Checks CSV indices [2, 6, 7, 8]
+  (USED, USED_LIKE_NEW, USED_VERY_GOOD, USED_GOOD) and selects the most
+  recent valid timestamp.
+- Fallback (`deal_object.currentSince`): If no recent timestamp is found
+  from CSV, it checks `currentSince` indices [2, 19, 20, 21].
+  Additionally, if `deal_object.current[14]` indicates the Buy Box is
+  held by a used item, the timestamp from `currentSince[32]` (Used Buy
+  Box price update) is also included in the pool of candidates.
+  The most recent valid timestamp from this combined fallback pool is selected.
+
+This approach aims to capture the latest relevant price change across key
+used categories, including the Used Buy Box when applicable.

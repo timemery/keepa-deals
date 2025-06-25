@@ -208,8 +208,7 @@ def last_price_change(deal_object, config_data=None, logger=None, product_data=N
         # Refer to Keepa API documentation for full list of CSV indices.
         # We will also check common ones like:
         # LIGHTNING_DEALS (3), WAREHOUSE (4), NEW_SUPER_FAST_SHIPPING (5), USED_LIKE_NEW (6),
-        # USED_VERY_GOOD (7), USED_GOOD (8). Excluding USED_ACCEPTABLE (9).
-        # These correspond to: product_data.csv[2] (Used), csv[6] (Like New), csv[7] (Very Good), csv[8] (Good)
+        # Check 'USED' (2), 'USED_LIKE_NEW' (6), 'USED_VERY_GOOD' (7), 'USED_GOOD' (8).
         relevant_used_csv_indices = [2, 6, 7, 8]
         
         timestamps_from_csv = []
@@ -235,10 +234,10 @@ def last_price_change(deal_object, config_data=None, logger=None, product_data=N
         # Indices in currentSince for Used conditions (excluding Acceptable):
         # 2 (Used), 19 (Used-Like New), 20 (Used-Very Good), 21 (Used-Good)
         # These correspond to stats.current indices.
-        relevant_current_since_indices = [2, 19, 20, 21]
+        relevant_current_since_indices = [2, 19, 20, 21] # Used, Used-LikeNew, Used-VeryGood, Used-Good
         valid_current_since_ts = []
 
-        logger.debug(f"ASIN: {asin} - Checking deal_object.currentSince for used item timestamps using indices: {relevant_current_since_indices}")
+        logger.debug(f"ASIN: {asin} - Checking deal_object.currentSince for used item timestamps using base indices: {relevant_current_since_indices}")
         if current_since_array and isinstance(current_since_array, list):
             for i in relevant_current_since_indices:
                 if i < len(current_since_array):
@@ -248,13 +247,40 @@ def last_price_change(deal_object, config_data=None, logger=None, product_data=N
                         logger.debug(f"ASIN: {asin} - Found deal_object.currentSince timestamp for used index {i}: {ts_val}")
                 else:
                     logger.debug(f"ASIN: {asin} - deal_object.currentSince index {i} out of bounds (len: {len(current_since_array)}).")
+            
+            # Check for Used Buy Box timestamp
+            # deal_object.current[14] corresponds to product.stats.current[14] -> buyBoxIsUsed (1 if true)
+            # deal_object.currentSince[32] corresponds to product.stats.current[32] -> buyBoxUsedPrice timestamp
+            current_stats_array = deal_object.get('current', []) # This comes from the /deal endpoint's deal_object
+            # Ensure 'current' itself is a list and has enough elements.
+            # The 'product_data' (from /product endpoint) has product.stats.current, but here we use deal_object.current.
+            # The structure of deal_object.current is: [AMAZON, NEW, USED, ... , buyBoxIsUsed at index 14, ... buyBoxUsedPrice at index 32]
+            # This mapping needs to be precise. Assuming deal_object.current has a similar structure to product.stats.current for these specific indices.
+            
+            buy_box_is_used_index = 14 # Index for buyBoxIsUsed in the 'current' array of a deal object or product stats
+            buy_box_used_price_ts_index = 32 # Index for buyBoxUsedPrice timestamp in 'currentSince'
+            
+            if len(current_stats_array) > buy_box_is_used_index and current_stats_array[buy_box_is_used_index] == 1: # buyBoxIsUsed is true
+                logger.debug(f"ASIN: {asin} - Buy Box is Used (deal_object.current[{buy_box_is_used_index}]==1). Checking currentSince[{buy_box_used_price_ts_index}] for Used Buy Box timestamp.")
+                if len(current_since_array) > buy_box_used_price_ts_index:
+                    ts_val_buy_box_used = current_since_array[buy_box_used_price_ts_index]
+                    if isinstance(ts_val_buy_box_used, (int, float)) and ts_val_buy_box_used > 100000:
+                        valid_current_since_ts.append(ts_val_buy_box_used)
+                        logger.debug(f"ASIN: {asin} - Found deal_object.currentSince timestamp for Used Buy Box (index {buy_box_used_price_ts_index}): {ts_val_buy_box_used}")
+                    else:
+                        logger.debug(f"ASIN: {asin} - Used Buy Box timestamp (currentSince[{buy_box_used_price_ts_index}]) is invalid or not recent: {ts_val_buy_box_used}")
+                else:
+                    logger.debug(f"ASIN: {asin} - currentSince array too short (len: {len(current_since_array)}) to check index {buy_box_used_price_ts_index} for Used Buy Box.")
+            else:
+                buy_box_is_used_val = current_stats_array[buy_box_is_used_index] if len(current_stats_array) > buy_box_is_used_index else 'N/A'
+                logger.debug(f"ASIN: {asin} - Buy Box is not Used (deal_object.current[{buy_box_is_used_index}]={buy_box_is_used_val}) or current array too short. Skipping Used Buy Box timestamp check.")
 
         if valid_current_since_ts:
             latest_ts = max(valid_current_since_ts)
-            source_description = f"deal_object.currentSince (max of {len(valid_current_since_ts)} used item timestamps from indices {relevant_current_since_indices})"
-            logger.info(f"ASIN: {asin} - Using deal_object.currentSince for last used price change. Max timestamp: {latest_ts}. All found: {valid_current_since_ts}")
+            source_description = f"deal_object.currentSince (max of {len(valid_current_since_ts)} used item timestamps including potential Used Buy Box)"
+            logger.info(f"ASIN: {asin} - Using deal_object.currentSince for last used price change. Max timestamp: {latest_ts}. All considered: {valid_current_since_ts}")
         else:
-            logger.warning(f"ASIN: {asin} - No valid used item timestamps in deal_object.currentSince from specified indices. Array was: {current_since_array}")
+            logger.warning(f"ASIN: {asin} - No valid used item timestamps in deal_object.currentSince from specified indices (incl. Used Buy Box if applicable). Array was: {current_since_array}")
 
     logging.debug(f"ASIN: {asin} - last used price change - selected raw ts={latest_ts} from {source_description}")
     
