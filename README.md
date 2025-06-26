@@ -63,4 +63,4 @@ See `requirements.txt` for the full list. Key notes:
 - `README.md`: Project documentation.
 - `Keepa_Deals_Export.csv`: Output file for deal data.
 - `debug_log.txt`: Debug logs (e.g., stats.current).
-- `API_Dev_Log_v4.txt`: Development log.
+- `API_Dev_Log.txt`: Development log.

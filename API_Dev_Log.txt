@@ -1,0 +1,105 @@
+# Keepa Deals - API Development Log
+
+**Note:** This log tracks the development of the Keepa Deals data extraction script. It has been revised for clarity, conciseness, and to accurately reflect the codebase as of early June 2025.
+
+## 2025-06-07 (Assumed Date of Last Log Entry - Review Point)
+
+*   **Timestamp Logic (`last_price_change`):** Reverted `last_price_change` in `stable_deals.py` to a balanced approach considering multiple used condition timestamps (CSV indices [2,6,7,8] and `currentSince` indices [2,19,20,21], plus Used Buy Box if applicable). This addressed issues where a too-strict focus on only 'USED' index 2 resulted in no timestamps.
+    *   _Code Verified: `stable_deals.py` reflects this multi-source logic for `last_price_change`._
+*   **Timestamp Logic (`last_update`):** Enhanced `last_update` in `stable_deals.py` to consider `product_data['products'][0]['lastUpdate']`, `deal_object.get('lastUpdate')`, and `product_data.get('stats', {}).get('lastOffersUpdate')`, selecting the maximum.
+    *   _Code Verified: `stable_deals.py` reflects this._
+*   **Package Dimensions:** Corrected `package_height`, `package_length`, `package_width` in `stable_products.py` to return "Missing" if dimensions are missing, null, or zero, preventing "0.0 cm" or TypeErrors.
+    *   _Code Verified: `stable_products.py` reflects this logic for zero or missing (None/-1) values._
+*   **Timezone Conversions:** Addressed issues in `stable_deals.py` for `deal_found`, `last_update`, and `last_price_change` to correctly localize naive Keepa epoch-based datetimes to UTC before converting to Toronto time.
+    *   _Code Verified: Timestamp functions in `stable_deals.py` use `timezone('UTC').localize(dt).astimezone(TORONTO_TZ)`._
+
+## 2025-06-0X (Assumed Date Range - FBM/FBA Lowest/Current Fixes)
+
+*   **`New, 3rd Party FBM - Current`:**
+    *   Guidance in `AGENTS.md` suggests this should strictly use `stats.current[7]`.
+    *   **Discrepancy Noted:** The current `new_3rd_party_fbm_current` function in `stable_products.py` implements logic to parse the `product['offers']` array to find the lowest FBM offer. It does *not* currently use `stats.current[7]`. This log reflects the implemented offer parsing logic.
+    *   _Code Verified: `new_3rd_party_fbm_current` in `stable_products.py` parses `offers`._
+*   **`New, 3rd Party FBA - Lowest`:** Updated `new_3rd_party_fba_lowest` in `stable_products.py` to correctly use `product.stats.min[10][1]` for the historical minimum FBA price, as per `AGENTS.md` learnings.
+    *   _Code Verified: `stable_products.py` reflects this._
+*   **`New, 3rd Party FBA - Current`:** Updated `new_3rd_party_fba_current` in `stable_products.py` to use `stats.current[10]`, aligning with investigation and successful testing.
+    *   _Code Verified: `stable_products.py` reflects this._
+
+## 2025-06-03
+
+*   **Buy Box Price (`buy_box_current` Logic & Testing):**
+    *   Modified `buy_box_current` in `stable_products.py` to prioritize the `stats['buyBoxPrice']` field.
+    *   If `buyBoxPrice` is missing or invalid (None, <=0), the function falls back to searching `product['offers']` using `product['buyBoxSellerId']` and `product['buyBoxCondition']`. If no matching offer is found, it returns "-".
+    *   Introduced `test_keepa_deals.py` with unit tests for `buy_box_current`. These initial tests cover scenarios for `buyBoxPrice` (valid, missing, invalid, zero). The offer parsing fallback logic is not yet explicitly covered by these tests.
+    *   Adjusted `Keepa_Deals.py` argparse handling (`parser.parse_args()` moved into `main()`) to prevent interference with unittest discovery.
+    *   _Code Verified: `stable_products.py` (function logic) and `test_keepa_deals.py` (test content) reflect these changes. Test coverage for `buy_box_current` is partial, focusing on the primary field._
+
+## Collaborator (Jules) Environment Issues (Late May - Early June 2025)
+
+*   **Summary:** Documented persistent file system and permission errors encountered in the AI collaborator's (Jules) environment (`/app/keepa-deals/`). These included `git clone` failures, `venv` creation problems, and tools treating directories as files (e.g., `cat /app/keepa-deals: Is a directory`), blocking most operations.
+*   **Impact & Resolution Efforts:** These platform-specific issues significantly hindered collaborative debugging and testing. Resolution attempts involved diagnostic commands and exploring alternative file/environment setup methods (e.g., `wget`, `virtualenv -p`). The issues pointed towards needing admin intervention or a fresh environment for the collaborator.
+
+## 2025-05-27
+
+*   **`Used, acceptable - Current` Fix Verification:** Investigated the "Used, acceptable - Current" column. Confirmed that the function `used_acceptable` in `stable_products.py` was already correctly implemented to use `stats.current[22]` directly, without complex fallbacks. This aligned with lessons documented in `AGENTS.md`. The previously reported issue of incorrect prices due to fallbacks was related to historical code that had since been corrected.
+    *   _Code & AGENTS.md Verified: No code change was needed for this specific issue as the fix was pre-existing._
+
+## 2025-05-25 - Environment and Dependency Management
+
+*   **Python Environment Standardization:** Addressed confusion between Python 3.11 and 3.10. Standardized on Python 3.10.17 within the `keepa_venv` virtual environment, as it was observed to provide more consistent data capture for certain fields compared to 3.11 experiments.
+*   **Virtual Environment Cleanup:** Discovered and removed numerous unexpected Python packages (e.g., `keepa`, `tqdm`, `aiohttp`) from `keepa_venv`. These were likely installed during ad-hoc testing and were not part of the declared `requirements.txt`. The environment was cleaned to include only essential dependencies (`pandas`, `pytz`, `requests`, `retrying`), resolving issues like unexpected `tqdm` progress bars.
+*   **Backup Procedures:** Reviewed and corrected backup path issues to ensure reliable project backups to `/home/timscripts/keepa_api/Bak_May/`.
+
+## 2025-05-22 - Field Debugging and API Client Strategy
+
+*   **FBM/FBA Field Issues:** Investigated `New, 3rd Party FBM - Current`, `Buy Box Used - Current`, and `New, 3rd Party FBA - Current` showing `'-'` or missing data.
+*   **API Client Experimentation:** Briefly experimented with switching `fetch_product` in `Keepa_Deals.py` to use the `keepa.query` (Python client). This was found to be unsuitable for ASINs originating from the `/deal` endpoint, as it omitted critical data like `offers` and specific `stats.current` indices (e.g., `current[9]`), and also broke `Sales Rank - Current`. Reverted to direct HTTP requests via the `requests` library.
+*   **Strategy Confirmation:** Reinforced the project's strategy of using direct HTTP API calls for data fetching, finding it more reliable for accessing the full data spectrum needed, especially `offers` and complete `stats` arrays.
+*   **`List Price - Current`:** Logged as non-functional (`stats.current[8]` returning '-'). Marked for future restoration and testing. _(Current `stable_products.py` uses `stats.current[4]` for `list_price`.)_
+
+## 2025-05-20 - `Title` and `Amazon - Current` Column Fixes
+
+*   **`Title` Column Population:** Resolved the issue of the `Title` column being empty. Modified `get_title` in `stable_products.py` to extract the title directly from the `product` object (sourced from `fetch_product`'s response: `product.get('title', '-')`) instead of making a redundant API call. This change integrated smoothly with the existing `FUNCTION_LIST` processing loop in `Keepa_Deals.py`.
+*   **`Amazon - Current` Column Population:**
+    *   **Initial Problem:** `Amazon - Current` was consistently `'-'` for some ASINs, even with live Amazon offers visible on Keepa.com (e.g., ASIN 150137012X showed `'-'` instead of $6.26). Debugging indicated `stats.current[10]` was -1.
+    *   **Root Cause Analysis:** Identified that the `&buybox=1` parameter in the `fetch_product` URL (present since commit `7a98f95c`) could cause `stats.current[10]` (typically Amazon's price) to return -1 if Amazon was not the current Buy Box holder, even if an Amazon offer existed.
+    *   **Initial Incorrect Fix Attempt (Logged Previously):** A prior log entry incorrectly stated the fix was removing `&buybox=1`. This was not the final implemented solution.
+    *   **Actual Implemented Fix:** The `amazon_current` function in `stable_products.py` was modified to use `stats.get('current', [None] * 23)[0]` as the source for Amazon's current price. The `fetch_product` URL in `Keepa_Deals.py` *continues* to include the `&buybox=1` parameter.
+    *   _Code Verified: `stable_products.py` uses `stats.current[0]` for `amazon_current`. `Keepa_Deals.py` fetch_product URL includes `buybox=1`._
+
+## AI Assistant ("Grok") Interaction Challenges (Mid-May 2025)
+
+*   **Summary of Issues:** Encountered significant and persistent difficulties with the AI assistant (Grok) correctly recognizing and reproducing filenames (e.g., repeatedly substituting "Keepa_api.py" for "Keepa_Deals.py").
+*   **Impact:** These recognition failures led to considerable frustration, communication overhead, and delays in collaborative tasks that required precise file referencing.
+*   **Relevance:** Documented as a notable tooling challenge within the development workflow, impacting efficiency. The issue was reportedly escalated to xAI by the assistant.
+
+## Centralized Field Mappings with `field_mappings.py` (Mid-May 2025)
+
+*   **Milestone:** Successfully implemented the `field_mappings.py` design around May 17, 2025. This centralized the mapping of CSV headers to their respective data extraction functions from `stable_products.py` and `stable_deals.py` via `FUNCTION_LIST`.
+*   **Benefits:** Streamlined data processing in `Keepa_Deals.py`, eliminated redundant function calls, ensured correct header order, and resolved previous conflicts that led to missing or overwritten data in the CSV.
+*   **Processing Logic:** `Keepa_Deals.py` iterates through `FUNCTION_LIST`, dynamically passing the `deal` object or `product` object as required by each function.
+
+## Foundational Data Extraction & Debugging (Approx. April - Mid-May 2025 - Summarized)
+
+*   **Core Focus:** Intensive efforts to populate `Keepa_Deals_Export.csv` by correctly mapping Keepa API responses.
+*   **`stats.current[X]` Mapping:** Extensive trial-and-error to identify correct indices within `stats.current` for various price fields (Buy Box Used, general Used, condition-specific Used prices) and Sales Rank fields. Many initial mappings were incorrect (e.g., pulling sales rank instead of price).
+*   **Timestamp Functions:** Initial development of `tracking_since`, `publication_date`, `listed_since`. Early challenges included distinguishing Keepa's epoch (minutes from 2011-01-01) from Unix epoch and implementing correct timezone conversions to 'America/Toronto'. `publication_date` development was particularly tricky due to API returning `0` or varied formats, eventually leading to its exclusion from active processing for a period.
+*   **Product Attributes:** Implemented functions for `Manufacturer`, `Author`, `Binding`, `Categories`, and package dimensions. Package dimension functions were refined to handle missing/zero values gracefully.
+*   **API Call Stability:** Addressed `fetch_product` timeouts (leading to retry mechanisms and timeout adjustments) and `NameError` issues.
+*   **`/deal` Endpoint Issues:** Resolved `400 - Invalid selection parameter` errors from the `/deal` endpoint by refining URL encoding of the JSON query (`json.dumps` with `separators` and `quote_plus`).
+*   **`get_stat_value` Utility:** Developed and refined this core helper in `stable_products.py` to handle price/number formatting and safe extraction from API statistics arrays, including those returning `[price, timestamp]` pairs.
+*   **Initial Stable Columns:** Achieved stability for a foundational set of columns including `ASIN`, `Title`, `Sales Rank - Current`, and an early version of `Buy Box Used - Current` (later refined).
+*   **API Client Choice:** Early experiments may have involved the `keepa` Python library, but the direction shifted to direct HTTP `requests` for more control and to access all necessary data fields, a decision reinforced by `README.md` and `AGENTS.md`.
+
+## Early Development & API Exploration (Approx. Late March - April 2025 - Summarized)
+
+*   **"Price Now" Source:** Initial investigations into the source for "Price Now", exploring `stats.current[3]` (Buy Box) and then various other used price indices from `stats.current` and the `offers` array.
+*   **API Query Refinements:** Removed `to_csv` parameter from `api.query` as it was unsupported by the Keepa client/HTTP endpoint being used.
+*   **`fetch_deals` Implementation:** Focused on correctly using the `/deal` endpoint with a structured JSON query to get initial ASINs based on specific criteria (e.g., used books, discount percentage).
+
+## General Notes on SOW vs. Implemented Reality
+
+*   **Project Focus:** The development to date primarily addresses Phase 1 (Data Extraction) of the "Agent Arbitrage" project outlined in `SOW.txt`.
+*   **Script Name:** The main operational script is `Keepa_Deals.py`, not `Process500_Deals_v2.py` as mentioned in the SOW.
+*   **CSV Columns:** The number of columns in `Keepa_Deals_Export.csv` is determined by `headers.json`, which currently defines 216 columns, differing from the 229 columns specified in the SOW.
+*   **Python Version:** The project has standardized on Python 3.10.17, whereas the SOW initially mentioned Python 3.11.
+
