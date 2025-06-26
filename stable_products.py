@@ -767,6 +767,14 @@ def used_current(product):
     return result
 # Used - Current ends
 
+# Used - 365 days avg starts
+def used_365_days_avg(product):
+    stats = product.get('stats', {})
+    result = {'Used - 365 days avg.': get_stat_value(stats, 'avg365', 2, divisor=100, is_price=True)}
+    logging.debug(f"used_365_days_avg result for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Used - 365 days avg ends
+
 # Used - 30 days avg.
 # Used - 60 days avg.
 # Used - 90 days avg.

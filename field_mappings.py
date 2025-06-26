@@ -141,7 +141,7 @@ from stable_products import (
     # Used - 60 days avg.,
     # Used - 90 days avg.,
     # Used - 180 days avg.,
-    # Used - 365 days avg.,
+    used_365_days_avg,              # Used - 365 days avg.
     # Used - Lowest,
     # Used - Lowest 365 days,
     # Used - Highest,
@@ -580,7 +580,7 @@ FUNCTION_LIST = [
     None,                           # Used - 60 days avg.
     None,                           # Used - 90 days avg.
     None,                           # Used - 180 days avg.
-    None,                           # Used - 365 days avg.
+    used_365_days_avg,              # Used - 365 days avg.
     None,                           # Used - Lowest
     None,                           # Used - Lowest 365 days
     None,                           # Used - Highest
