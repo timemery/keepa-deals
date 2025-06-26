@@ -50,6 +50,7 @@ See `requirements.txt` for the full list. Key notes:
 - **Execution**: Activate virtual environment, install dependencies, run `python3 Keepa_Deals.py --no-cache`.
 
 ## Project Structure
+- `AGENTS.md`: Reference to provide persistent instructions for consultation throughout the project 
 - `Keepa_Deals.py`: Main script for fetching deals and writing CSV.
 - `stable_products.py`: Defines product conditions (e.g., used_good, used_like_new).
 - `stable_deals.py`: Handles deal logic (e.g., Percent Down 90).
