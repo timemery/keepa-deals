@@ -103,3 +103,52 @@
 *   **CSV Columns:** The number of columns in `Keepa_Deals_Export.csv` is determined by `headers.json`, which currently defines 216 columns, differing from the 229 columns specified in the SOW.
 *   **Python Version:** The project has standardized on Python 3.10.17, whereas the SOW initially mentioned Python 3.11.
 
+## 2025-06-27: Fix for "Used - 365 days avg." Column
+
+**Issue:** The "Used - 365 days avg." column in `Keepa_Deals_Export.csv` was not populating with data.
+
+**Root Cause:**
+*   No function was implemented in `stable_products.py` to calculate this specific average.
+*   The corresponding entry in `field_mappings.py` for this header was set to `None`.
+
+**Fix Implemented:**
+1.  **Created `used_365_days_avg(product)` function in `stable_products.py`:**
+    *   This function utilizes `get_stat_value(stats, 'avg365', 2, divisor=100, is_price=True)`.
+    *   The key `'avg365'` fetches the 365-day average data, and index `2` corresponds to the general 'Used' price within Keepa's `stats` object.
+2.  **Updated `field_mappings.py`:**
+    *   Imported `used_365_days_avg` from `stable_products.py`.
+    *   Mapped the "Used - 365 days avg." header in `FUNCTION_LIST` to the new `used_365_days_avg` function.
+
+**Verification:**
+*   Ran `Keepa_Deals.py` script successfully.
+*   Confirmed that the "Used - 365 days avg." column in the output CSV is now populated with the correct 365-day average used prices.
+
+**Note:** This confirms that `product.stats.avg365[2]` is the correct data point for the 365-day average of general used prices from the Keepa API product data.
+
+**Date:** YYYY-MM-DD
+**File(s) Touched:** `stable_calculations.py`
+**Feature/Bug:** Percent Down 365 Column Symbol Rendering
+
+**Issue:**
+Initial implementation of the "Percent Down 365" column used Unicode arrow symbols (⇩ and ⇧) to indicate if the current price was below or above the 365-day average, respectively. 
+During local testing by the user, these symbols did not render correctly and appeared as garbled characters (e.g., ‚á©80%).
+
+**Solution:**
+Modified `stable_calculations.py -> percent_down_365()`:
+- Replaced the Unicode symbol "⇩" (U+21E9) with "-" (minus sign) when the current used price is less than the 365-day average.
+- Replaced the Unicode symbol "⇧" (U+21E7) with "+" (plus sign) when the current used price is greater than the 365-day average.
+- If the current price is equal to the average (0% difference), no symbol is prepended to the percentage.
+
+**Examples of new output format:**
+- Current < Average: "-15%"
+- Current > Average: "+10%"
+- Current == Average: "0%"
+
+The calculation logic for the percentage itself remains unchanged.
+
+**Reasoning:**
+Standard ASCII characters like "+" and "-" have much broader compatibility across different terminals, file viewers, and operating systems, preventing rendering issues.
+
+**Commit:** `feat: Update Percent Down 365 symbols for better compatibility` (Branch: `feat/percent-down-365`)
+**Outcome:** Symbols now render correctly as per user feedback.
+

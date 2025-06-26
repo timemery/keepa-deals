@@ -131,6 +131,19 @@ When a new column is required, or an existing one is incorrect:
 *   If not, or if the goal is to find the "absolute lowest of all available offers" of a type, then careful parsing of `product['offers']` is needed, paying attention to `condition`, `isFBA`, `sellerId`, and robustly extracting price + shipping (likely from `offerCSV`'s latest entry or direct `price`/`shippingCost` fields).
 *   Always verify against Keepa.com, and use detailed logging to trace the script's logic.
 
+## Character Encoding and Symbol Compatibility (Task: Percent Down 365, YYYY-MM-DD)
+
+**Learning:** When implementing features that involve special characters or symbols (e.g., arrows like ⇧⇩ for indicating price changes), always consider cross-platform compatibility and potential rendering issues in different environments (terminals, CSV viewers, etc.).
+
+**Problem:** Initial implementation of "Percent Down 365" used Unicode arrows (U+21E7 ⇧, U+21E9 ⇩). These did not render correctly in the user's local testing environment, appearing as garbled characters (e.g., ‚á©).
+
+**Solution & Principle:**
+*   Switched to universally compatible ASCII symbols: "+" for an increase (price above average) and "-" for a decrease (price below average). No symbol is used for a 0% difference.
+*   **Principle:** Prioritize widely supported character sets (like ASCII or well-tested UTF-8 subsets) for textual indicators unless specific rich text rendering is guaranteed and tested across all target environments. If special symbols are desired, ensure they are tested for compatibility or provide simpler fallbacks.
+
+
+
+
 
 
 

@@ -6,7 +6,7 @@ from stable_products import (
     get_stat_value,                 # Utility function, not a header
     percent_down_90,                # Percent Down 90
     # Avg. Price 90,
-    # Percent Down 365,
+    # Percent Down 365, # Will be imported from stable_calculations
     # Avg. Price 365,
     # Price Now,
     # Price Now Source,
@@ -220,6 +220,9 @@ from stable_products import (
     # Used Offer Count - 90 days avg.,
     # Used Offer Count - 180 days avg.,
     # Used Offer Count - 365 days avg.
+)
+from stable_calculations import (
+    percent_down_365,               # Percent Down 365
 )
 from stable_deals import (
     # Percent Down 90,
@@ -445,7 +448,7 @@ from stable_deals import (
 FUNCTION_LIST = [
     percent_down_90,                # Percent Down 90
     None,                           # Avg. Price 90
-    None,                           # Percent Down 365
+    percent_down_365,               # Percent Down 365
     None,                           # Avg. Price 365
     None,                           # Price Now
     None,                           # Price Now Source
