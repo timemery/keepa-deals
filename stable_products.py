@@ -30,8 +30,25 @@ import json
 # Fetch Product for Retry - ends
 
 # Constants
-KEEPA_EPOCH = datetime(2011, 1, 1)
+KEEPA_EPOCH_DATETIME = datetime(2000, 1, 1) # Keepa epoch is Jan 1, 2000
+KEEPA_EPOCH_LEGACY = datetime(2011, 1, 1) # Older epoch used in some functions
 TORONTO_TZ = timezone('America/Toronto')
+
+# Helper function to convert Keepa Time Minutes (KTM) to a formatted string
+# KTM is minutes since January 1, 2000, 00:00:00 UTC
+def keepa_minutes_to_datetime_str(keepa_minutes, date_format='%Y-%m-%d'):
+    """Converts Keepa time minutes to a datetime string."""
+    if keepa_minutes is None or not isinstance(keepa_minutes, int) or keepa_minutes <= 0:
+        return '-'
+    try:
+        # Keepa time is minutes past January 1, 2000 UTC
+        dt_utc = KEEPA_EPOCH_DATETIME + timedelta(minutes=keepa_minutes)
+        # Convert to Toronto time as per other date fields in this file
+        dt_toronto = dt_utc.replace(tzinfo=timezone('UTC')).astimezone(TORONTO_TZ)
+        return dt_toronto.strftime(date_format)
+    except Exception as e:
+        logging.error(f"Error converting Keepa minutes ({keepa_minutes}) to datetime: {e}")
+        return '-'
 
 # Shared globals
 API_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
@@ -131,12 +148,18 @@ def get_title(product):
 def tracking_since(product):
     ts = product.get('trackingSince', 0)
     logging.debug(f"Tracking since - raw ts={ts}")
-    if ts <= 100000:
+    if ts <= 100000: # This threshold might be specific to the 2011 epoch interpretation
         logging.error(f"No valid trackingSince for ASIN {product.get('asin', 'unknown')}")
         return {'Tracking since': '-'}
     try:
-        dt = KEEPA_EPOCH + timedelta(minutes=ts)
-        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
+        # This function seems to use the older 2011 epoch based on its original implementation
+        dt = KEEPA_EPOCH_LEGACY + timedelta(minutes=ts)
+        # Assuming ts is minutes from 2011-01-01 and needs localization if it's naive
+        if dt.tzinfo is None:
+            dt_toronto = TORONTO_TZ.localize(dt)
+        else:
+            dt_toronto = dt.astimezone(TORONTO_TZ)
+        formatted = dt_toronto.strftime('%Y-%m-%d')
         logging.debug(f"Tracking since result for ASIN {product.get('asin', 'unknown')}: {formatted}")
         return {'Tracking since': formatted}
     except Exception as e:
@@ -212,7 +235,85 @@ def binding(product):
 
 # Number of Items
 # Number of Pages
-# Publication Date
+# Publication Date starts
+def get_publication_date(product_data):
+    """
+    Retrieves and formats the publication date of the product.
+    Handles Keepa Time Minutes (KTM) and pre-formatted date strings (YYYY-MM-DD or YYYY-MM).
+    """
+    asin = product_data.get('asin', 'unknown')
+    logging.debug(f"Attempting to get publication date for ASIN {asin}")
+
+    date_value = None
+    source_field = None
+
+    # 1. Try 'publicationDate'
+    raw_pub_date = product_data.get('publicationDate')
+    if raw_pub_date is not None:
+        date_value = raw_pub_date
+        source_field = 'publicationDate'
+        logging.debug(f"ASIN {asin}: Found raw 'publicationDate': {raw_pub_date} (type: {type(raw_pub_date)})")
+    
+    # 2. Fallback: Check if 'publicationDate' is nested under 'data'
+    if date_value is None and 'data' in product_data and isinstance(product_data['data'], dict):
+        raw_pub_date_nested = product_data['data'].get('publicationDate')
+        if raw_pub_date_nested is not None:
+            date_value = raw_pub_date_nested
+            source_field = "data['publicationDate']"
+            logging.debug(f"ASIN {asin}: Found raw nested 'publicationDate': {raw_pub_date_nested} (type: {type(raw_pub_date_nested)})")
+
+    # 3. Fallback: Try 'releaseDate' if 'publicationDate' was not found
+    if date_value is None:
+        raw_release_date = product_data.get('releaseDate')
+        if raw_release_date is not None:
+            date_value = raw_release_date
+            source_field = 'releaseDate'
+            logging.info(f"ASIN {asin}: 'publicationDate' not found or was None. Using 'releaseDate': {raw_release_date} (type: {type(raw_release_date)})")
+        else: # Neither publicationDate nor releaseDate found
+            logging.warning(f"ASIN {asin}: Neither 'publicationDate' (direct or nested) nor 'releaseDate' found in product data.")
+            return {'Publication Date': '-'}
+            
+    if date_value is None: # Should be caught by above, but as a safeguard
+        logging.warning(f"ASIN {asin}: date_value is None after checking all sources.")
+        return {'Publication Date': '-'}
+
+    # Process the date_value
+    formatted_date = '-'
+    if isinstance(date_value, int):
+        if date_value > 0:
+            formatted_date = keepa_minutes_to_datetime_str(date_value)
+            logging.info(f"ASIN {asin}: Converted KTM {date_value} from field '{source_field}' to {formatted_date}")
+        else:
+            logging.warning(f"ASIN {asin}: Invalid KTM value {date_value} from field '{source_field}'.")
+    elif isinstance(date_value, str):
+        # Try to parse YYYY-MM-DD and YYYY-MM
+        try:
+            if len(date_value) == 10 and date_value[4] == '-' and date_value[7] == '-': # YYYY-MM-DD
+                datetime.strptime(date_value, '%Y-%m-%d') # Validate format
+                formatted_date = date_value
+                logging.info(f"ASIN {asin}: Used string date '{date_value}' from field '{source_field}' directly (YYYY-MM-DD).")
+            elif len(date_value) == 7 and date_value[4] == '-': # YYYY-MM
+                datetime.strptime(date_value, '%Y-%m') # Validate format
+                formatted_date = date_value
+                logging.info(f"ASIN {asin}: Used string date '{date_value}' from field '{source_field}' directly (YYYY-MM).")
+            else:
+                # Attempt to convert if it's a string representation of an integer (e.g. "1234567")
+                try:
+                    ktm_from_str = int(date_value)
+                    if ktm_from_str > 0:
+                        formatted_date = keepa_minutes_to_datetime_str(ktm_from_str)
+                        logging.info(f"ASIN {asin}: Converted string KTM '{date_value}' from field '{source_field}' to {formatted_date}")
+                    else:
+                        logging.warning(f"ASIN {asin}: Invalid string KTM value '{date_value}' (<=0) from field '{source_field}'.")
+                except ValueError:
+                    logging.warning(f"ASIN {asin}: Unrecognized string date format or non-integer string '{date_value}' from field '{source_field}'.")
+        except ValueError as ve: # Handles strptime validation errors
+            logging.warning(f"ASIN {asin}: String date '{date_value}' from field '{source_field}' is not a valid YYYY-MM-DD or YYYY-MM format. Error: {ve}")
+    else:
+        logging.warning(f"ASIN {asin}: Unexpected data type for date_value: {type(date_value)} ({date_value}) from field '{source_field}'.")
+
+    return {'Publication Date': formatted_date}
+# Publication Date ends
 # Languages
 
 # Package - Quantity starts
@@ -283,12 +384,17 @@ def listed_since(product):
     ts = product.get('listedSince', 0)
     asin = product.get('asin', 'unknown')
     logging.debug(f"Listed since - raw ts={ts} for ASIN {asin}")
-    if ts <= 0:
+    if ts <= 0: # This field likely uses the 2011 epoch as well, or is a direct timestamp
         logging.info(f"No valid listedSince (ts={ts}) for ASIN {asin}")
         return {'Listed since': '-'}
     try:
-        dt = KEEPA_EPOCH + timedelta(minutes=ts)
-        formatted = TORONTO_TZ.localize(dt).strftime('%Y-%m-%d')
+        # This function also seems to use the older 2011 epoch
+        dt = KEEPA_EPOCH_LEGACY + timedelta(minutes=ts)
+        if dt.tzinfo is None:
+            dt_toronto = TORONTO_TZ.localize(dt)
+        else:
+            dt_toronto = dt.astimezone(TORONTO_TZ)
+        formatted = dt_toronto.strftime('%Y-%m-%d')
         logging.debug(f"Listed since result for ASIN {asin}: {formatted}")
         return {'Listed since': formatted}
     except Exception as e:
