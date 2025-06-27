@@ -38,7 +38,7 @@ from stable_products import (
     binding,                        # Binding
     # Number of Items,
     # Number of Pages,
-    # Publication Date,
+    get_publication_date,           # Publication Date
     # Languages,
     # Package - Quantity
     package_weight,                 # Package Weight
@@ -480,7 +480,7 @@ FUNCTION_LIST = [
     binding,                        # Binding
     None,                           # Number of Items
     None,                           # Number of Pages
-    None,                           # Publication Date
+    get_publication_date,           # Publication Date
     None,                           # Languages
     None,                           # Package - Quantity
     package_weight,                 # Package Weight
