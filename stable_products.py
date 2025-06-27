@@ -239,10 +239,12 @@ def binding(product):
 def get_publication_date(product_data):
     """
     Retrieves and formats the publication date of the product.
-    Handles Keepa Time Minutes (KTM) and pre-formatted date strings (YYYY-MM-DD or YYYY-MM).
+    Handles Keepa Time Minutes (KTM), YYYYMMDD/YYYYMM/YYYY integers,
+    and common date string formats ('YYYY-MM-DD', 'YYYY-MM', 'MMM-YY', 'YYYY').
+    Outputs 'YYYY-MM-DD', 'YYYY-MM', or 'YYYY'.
     """
     asin = product_data.get('asin', 'unknown')
-    logging.debug(f"Attempting to get publication date for ASIN {asin}")
+    logging.debug(f"ASIN {asin}: Attempting to get publication date.")
 
     date_value = None
     source_field = None
@@ -252,15 +254,15 @@ def get_publication_date(product_data):
     if raw_pub_date is not None:
         date_value = raw_pub_date
         source_field = 'publicationDate'
-        logging.debug(f"ASIN {asin}: Found raw 'publicationDate': {raw_pub_date} (type: {type(raw_pub_date)})")
+        logging.debug(f"ASIN {asin}: Found raw 'publicationDate': {raw_pub_date} (type: {type(raw_pub_date)}) from product_data.")
     
-    # 2. Fallback: Check if 'publicationDate' is nested under 'data'
+    # 2. Fallback: Check if 'publicationDate' is nested under 'data' (less common for direct product API)
     if date_value is None and 'data' in product_data and isinstance(product_data['data'], dict):
         raw_pub_date_nested = product_data['data'].get('publicationDate')
         if raw_pub_date_nested is not None:
             date_value = raw_pub_date_nested
             source_field = "data['publicationDate']"
-            logging.debug(f"ASIN {asin}: Found raw nested 'publicationDate': {raw_pub_date_nested} (type: {type(raw_pub_date_nested)})")
+            logging.debug(f"ASIN {asin}: Found raw nested 'publicationDate': {raw_pub_date_nested} (type: {type(raw_pub_date_nested)}) from product_data['data'].")
 
     # 3. Fallback: Try 'releaseDate' if 'publicationDate' was not found
     if date_value is None:
@@ -268,50 +270,183 @@ def get_publication_date(product_data):
         if raw_release_date is not None:
             date_value = raw_release_date
             source_field = 'releaseDate'
-            logging.info(f"ASIN {asin}: 'publicationDate' not found or was None. Using 'releaseDate': {raw_release_date} (type: {type(raw_release_date)})")
+            logging.info(f"ASIN {asin}: No 'publicationDate' found. Using 'releaseDate': {raw_release_date} (type: {type(raw_release_date)}) from product_data.")
         else: # Neither publicationDate nor releaseDate found
-            logging.warning(f"ASIN {asin}: Neither 'publicationDate' (direct or nested) nor 'releaseDate' found in product data.")
+            logging.warning(f"ASIN {asin}: Neither 'publicationDate' (direct/nested) nor 'releaseDate' found. Outputting '-'.")
             return {'Publication Date': '-'}
             
     if date_value is None: # Should be caught by above, but as a safeguard
-        logging.warning(f"ASIN {asin}: date_value is None after checking all sources.")
+        logging.warning(f"ASIN {asin}: date_value is None after checking all sources. Outputting '-'.")
         return {'Publication Date': '-'}
 
-    # Process the date_value
     formatted_date = '-'
+    
+    # --- INTEGER PROCESSING ---
     if isinstance(date_value, int):
-        if date_value > 0:
-            formatted_date = keepa_minutes_to_datetime_str(date_value)
-            logging.info(f"ASIN {asin}: Converted KTM {date_value} from field '{source_field}' to {formatted_date}")
-        else:
-            logging.warning(f"ASIN {asin}: Invalid KTM value {date_value} from field '{source_field}'.")
-    elif isinstance(date_value, str):
-        # Try to parse YYYY-MM-DD and YYYY-MM
-        try:
-            if len(date_value) == 10 and date_value[4] == '-' and date_value[7] == '-': # YYYY-MM-DD
-                datetime.strptime(date_value, '%Y-%m-%d') # Validate format
-                formatted_date = date_value
-                logging.info(f"ASIN {asin}: Used string date '{date_value}' from field '{source_field}' directly (YYYY-MM-DD).")
-            elif len(date_value) == 7 and date_value[4] == '-': # YYYY-MM
-                datetime.strptime(date_value, '%Y-%m') # Validate format
-                formatted_date = date_value
-                logging.info(f"ASIN {asin}: Used string date '{date_value}' from field '{source_field}' directly (YYYY-MM).")
-            else:
-                # Attempt to convert if it's a string representation of an integer (e.g. "1234567")
-                try:
-                    ktm_from_str = int(date_value)
-                    if ktm_from_str > 0:
-                        formatted_date = keepa_minutes_to_datetime_str(ktm_from_str)
-                        logging.info(f"ASIN {asin}: Converted string KTM '{date_value}' from field '{source_field}' to {formatted_date}")
-                    else:
-                        logging.warning(f"ASIN {asin}: Invalid string KTM value '{date_value}' (<=0) from field '{source_field}'.")
-                except ValueError:
-                    logging.warning(f"ASIN {asin}: Unrecognized string date format or non-integer string '{date_value}' from field '{source_field}'.")
-        except ValueError as ve: # Handles strptime validation errors
-            logging.warning(f"ASIN {asin}: String date '{date_value}' from field '{source_field}' is not a valid YYYY-MM-DD or YYYY-MM format. Error: {ve}")
-    else:
-        logging.warning(f"ASIN {asin}: Unexpected data type for date_value: {type(date_value)} ({date_value}) from field '{source_field}'.")
+        logging.debug(f"ASIN {asin}: Integer Input Path: Value '{date_value}' from '{source_field}'.")
+        date_str = str(date_value)
+        parsed_as_specific_int = False
 
+        # Try YYYYMMDD (e.g., 20170801)
+        if not parsed_as_specific_int and len(date_str) == 8 and 19000101 <= date_value <= 20991231:
+            logging.debug(f"ASIN {asin}: Integer Path - Attempting YYYYMMDD for {date_value}.")
+            try:
+                year, month, day = int(date_str[0:4]), int(date_str[4:6]), int(date_str[6:8])
+                dt_object = datetime(year, month, day)
+                formatted_date = dt_object.strftime('%Y-%m-%d')
+                logging.info(f"ASIN {asin}: Parsed integer {date_value} as YYYYMMDD -> {formatted_date}.")
+                parsed_as_specific_int = True
+            except ValueError:
+                logging.warning(f"ASIN {asin}: Integer {date_value} resembled YYYYMMDD but failed validation.")
+        
+        # Try YYYYMM (e.g., 198506)
+        if not parsed_as_specific_int and len(date_str) == 6 and 190001 <= date_value <= 209912:
+            logging.debug(f"ASIN {asin}: Integer Path - Attempting YYYYMM for {date_value}.")
+            try:
+                year, month = int(date_str[0:4]), int(date_str[4:6])
+                dt_object = datetime(year, month, 1)
+                formatted_date = dt_object.strftime('%Y-%m')
+                logging.info(f"ASIN {asin}: Parsed integer {date_value} as YYYYMM -> {formatted_date}.")
+                parsed_as_specific_int = True
+            except ValueError:
+                logging.warning(f"ASIN {asin}: Integer {date_value} resembled YYYYMM but failed validation.")
+
+        # Try YYYY (e.g., 1994)
+        if not parsed_as_specific_int and len(date_str) == 4 and 1900 <= date_value <= 2099:
+            logging.debug(f"ASIN {asin}: Integer Path - Attempting YYYY for {date_value}.")
+            try:
+                datetime(date_value, 1, 1) # Validate year
+                formatted_date = date_str
+                logging.info(f"ASIN {asin}: Parsed integer {date_value} as YYYY -> {formatted_date}.")
+                parsed_as_specific_int = True
+            except ValueError:
+                logging.warning(f"ASIN {asin}: Integer {date_value} resembled YYYY but failed validation.")
+        
+        # Fallback to KTM for positive integers not matching specific date formats
+        if not parsed_as_specific_int:
+            if date_value > 0:
+                logging.debug(f"ASIN {asin}: Integer {date_value} did not match YYYYMMDD/YYYYMM/YYYY. Treating as KTM.")
+                formatted_date = keepa_minutes_to_datetime_str(date_value)
+                logging.info(f"ASIN {asin}: Processed integer {date_value} as KTM -> {formatted_date}.")
+            else: # Handles negative or zero if not parsed above
+                 logging.warning(f"ASIN {asin}: Non-positive/unhandled integer date_value {date_value}. Outputting '-'.")
+
+
+    # --- STRING PROCESSING ---
+    elif isinstance(date_value, str):
+        logging.debug(f"ASIN {asin}: String Input Path: Value '{date_value}' from '{source_field}'.")
+        original_string_value = date_value 
+        parsed_string_directly = False # Flag to track if a direct string format was successfully parsed
+
+        # Try 'YYYY-MM-DD'
+        if len(date_value) == 10 and date_value[4] == '-' and date_value[7] == '-':
+            logging.debug(f"ASIN {asin}: String Path - Attempting 'YYYY-MM-DD' for '{date_value}'.")
+            try:
+                datetime.strptime(date_value, '%Y-%m-%d')
+                formatted_date = date_value
+                logging.info(f"ASIN {asin}: Parsed string '{date_value}' as YYYY-MM-DD.")
+                parsed_string_directly = True
+            except ValueError:
+                logging.debug(f"ASIN {asin}: String '{date_value}' resembled YYYY-MM-DD but failed validation.")
+        
+        # Try 'YYYY-MM' if not already parsed
+        if not parsed_string_directly and len(date_value) == 7 and date_value[4] == '-':
+            logging.debug(f"ASIN {asin}: String Path - Attempting 'YYYY-MM' for '{date_value}'.")
+            try:
+                datetime.strptime(date_value, '%Y-%m')
+                formatted_date = date_value
+                logging.info(f"ASIN {asin}: Parsed string '{date_value}' as YYYY-MM.")
+                parsed_string_directly = True
+            except ValueError:
+                logging.debug(f"ASIN {asin}: String '{date_value}' resembled YYYY-MM but failed validation.")
+
+        # Try 'MMM-YY' (e.g., "Jun-85") if not already parsed
+        if not parsed_string_directly and len(date_value) == 6 and date_value[3] == '-':
+            logging.debug(f"ASIN {asin}: String Path - Attempting 'MMM-YY' for '{date_value}'.")
+            try:
+                dt_object = datetime.strptime(date_value, '%b-%y')
+                reformatted_value = dt_object.strftime('%Y-%m') # Standardize to YYYY-MM
+                logging.info(f"ASIN {asin}: Parsed string '{date_value}' as MMM-YY, successfully reformatted to '{reformatted_value}'.")
+                formatted_date = reformatted_value
+                parsed_string_directly = True
+            except ValueError as e_strptime:
+                logging.warning(f"ASIN {asin}: String '{date_value}' resembled MMM-YY but failed strptime('%b-%y'): {e_strptime}.")
+
+        # Try 'YYYY' (4-digit string) if not already parsed
+        if not parsed_string_directly and len(date_value) == 4 and date_value.isdigit():
+            logging.debug(f"ASIN {asin}: String Path - Attempting 'YYYY' for '{date_value}'.")
+            try:
+                year_val = int(date_value)
+                if 1900 <= year_val <= 2099:
+                    datetime(year_val, 1, 1) # Validate year
+                    formatted_date = date_value
+                    logging.info(f"ASIN {asin}: Parsed string '{date_value}' as YYYY.")
+                    parsed_string_directly = True
+                else:
+                    logging.debug(f"ASIN {asin}: String '{date_value}' is 4-digit but not in year range 1900-2099.")
+            except ValueError: 
+                logging.debug(f"ASIN {asin}: String '{date_value}' failed YYYY validation unexpectedly.")
+        
+        # Fallback: Try converting string to integer and re-applying integer logic ONLY if no direct string parse worked
+        if not parsed_string_directly:
+            logging.debug(f"ASIN {asin}: String '{original_string_value}' did not match direct formats. Attempting integer conversion.")
+            try:
+                int_from_str = int(original_string_value)
+                logging.debug(f"ASIN {asin}: Converted string '{original_string_value}' to int {int_from_str}. Re-processing as integer.")
+                
+                # --- Nested Integer Processing for Strings ---
+                date_str_from_int = str(int_from_str)
+                parsed_int_str_as_specific = False
+
+                if len(date_str_from_int) == 8 and 19000101 <= int_from_str <= 20991231: # YYYYMMDD from string
+                    logging.debug(f"ASIN {asin}: String-Int Path - Attempting YYYYMMDD for {int_from_str}.")
+                    try:
+                        year, month, day = int(date_str_from_int[0:4]), int(date_str_from_int[4:6]), int(date_str_from_int[6:8])
+                        dt_object = datetime(year, month, day)
+                        formatted_date = dt_object.strftime('%Y-%m-%d')
+                        logging.info(f"ASIN {asin}: Parsed string-int {int_from_str} as YYYYMMDD -> {formatted_date}")
+                        parsed_int_str_as_specific = True
+                    except ValueError:
+                        logging.warning(f"ASIN {asin}: String-int {int_from_str} resembled YYYYMMDD but failed validation.")
+                
+                if not parsed_int_str_as_specific and len(date_str_from_int) == 6 and 190001 <= int_from_str <= 209912: # YYYYMM from string
+                    logging.debug(f"ASIN {asin}: String-Int Path - Attempting YYYYMM for {int_from_str}.")
+                    try:
+                        year, month = int(date_str_from_int[0:4]), int(date_str_from_int[4:6])
+                        dt_object = datetime(year, month, 1)
+                        formatted_date = dt_object.strftime('%Y-%m')
+                        logging.info(f"ASIN {asin}: Parsed string-int {int_from_str} as YYYYMM -> {formatted_date}")
+                        parsed_int_str_as_specific = True
+                    except ValueError:
+                        logging.warning(f"ASIN {asin}: String-int {int_from_str} resembled YYYYMM but failed validation.")
+
+                if not parsed_int_str_as_specific and len(date_str_from_int) == 4 and 1900 <= int_from_str <= 2099: # YYYY from string
+                    logging.debug(f"ASIN {asin}: String-Int Path - Attempting YYYY for {int_from_str}.")
+                    try:
+                        datetime(int_from_str, 1, 1) # Validate year
+                        formatted_date = date_str_from_int
+                        logging.info(f"ASIN {asin}: Parsed string-int {int_from_str} as YYYY -> {formatted_date}")
+                        parsed_int_str_as_specific = True # Corrected this flag
+                    except ValueError:
+                        logging.warning(f"ASIN {asin}: String-int {int_from_str} resembled YYYY but failed validation.")
+
+                if not parsed_int_str_as_specific: # Fallback to KTM for string-ints
+                    if int_from_str > 0: 
+                        logging.debug(f"ASIN {asin}: String-int {int_from_str} did not match specific formats. Treating as KTM.")
+                        formatted_date = keepa_minutes_to_datetime_str(int_from_str)
+                        logging.info(f"ASIN {asin}: Processed string-int {int_from_str} as KTM -> {formatted_date}")
+                    else:
+                         logging.warning(f"ASIN {asin}: Non-positive string-int {int_from_str}. Outputting '-'.")
+                # --- End of Nested Integer Processing ---
+            except ValueError: # Failed to convert original_string_value to int
+                logging.warning(f"ASIN {asin}: String '{original_string_value}' is not a recognized date string and not a valid integer. Outputting '-'.")
+    
+    else: # Not an int or str
+        logging.warning(f"ASIN {asin}: Unexpected data type for date_value: {type(date_value)} ('{date_value}'). Outputting '-'.")
+
+    if formatted_date == '-' and date_value is not None: 
+        logging.warning(f"ASIN {asin}: Date value '{date_value}' (type: {type(date_value)}) from field '{source_field}' could not be parsed by any rule. Outputting '-'.")
+        
     return {'Publication Date': formatted_date}
 # Publication Date ends
 # Languages
@@ -881,17 +1016,17 @@ def used_365_days_avg(product):
     return result
 # Used - 365 days avg ends
 
-# Used - 30 days avg.
-# Used - 60 days avg.
-# Used - 90 days avg.
-# Used - 180 days avg.
-# Used - 365 days avg.
-# Used - Lowest
-# Used - Lowest 365 days
-# Used - Highest
-# Used - Highest 365 days
-# Used - 90 days OOS
-# Used - Stock
+# Used - 30 days avg.,
+# Used - 60 days avg.,
+# Used - 90 days avg.,
+# Used - 180 days avg.,
+# Used - 365 days avg.,
+# Used - Lowest,
+# Used - Lowest 365 days,
+# Used - Highest,
+# Used - Highest 365 days,
+# Used - 90 days OOS,
+# Used - Stock,
 
 # Used, like new - Current starts
 # Retrieves the 'Used - Like New' price. Experimental: using stats.current[19]. Previously used stats.current[4].
