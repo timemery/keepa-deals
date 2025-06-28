@@ -1182,6 +1182,32 @@ def list_price(product):
         return {'List Price - Current': '-'}
 # List Price - Current ends
 
+# New - 365 days avg. starts
+def new_365_days_avg(product):
+    """
+    Retrieves the 365-day average 'New' price from product stats.
+    Formats the price to two decimal places. Returns '-' if data is unavailable.
+    """
+    asin = product.get('asin', 'unknown')
+    try:
+        # The stats object contains arrays for different metrics (current, avg30, avg90, avg365, etc.)
+        # Index 1 in these arrays typically corresponds to 'NEW' price.
+        # Prices are usually in cents.
+        avg365_prices = product.get('stats', {}).get('avg365', [])
+        
+        if avg365_prices and len(avg365_prices) > 1 and avg365_prices[1] is not None and avg365_prices[1] > 0:
+            price_in_cents = avg365_prices[1]
+            price_formatted = f"{price_in_cents / 100.0:.2f}"
+            # logging.info(f"ASIN {asin}: New - 365 days avg. price found: {price_formatted}")
+            return {'New - 365 days avg.': price_formatted}
+        else:
+            # logging.debug(f"ASIN {asin}: New - 365 days avg. price data not available or invalid. avg365_prices[1]: {avg365_prices[1] if len(avg365_prices) > 1 else 'N/A'}")
+            return {'New - 365 days avg.': '-'}
+    except (IndexError, TypeError, AttributeError) as e:
+        # logging.warning(f"ASIN {asin}: Exception while fetching New - 365 days avg. price: {str(e)}")
+        return {'New - 365 days avg.': '-'}
+# New - 365 days avg. ends
+
 # List Price - 30 days avg.,
 # List Price - 60 days avg.,
 # List Price - 90 days avg.,

@@ -233,3 +233,32 @@ Learnings:
     *   Mapped `amazon_365_days_avg` to the "Amazon - 365 days avg." header in `FUNCTION_LIST`.
 **Result:** The "Amazon - 365 days avg." column should now correctly populate with data. Awaiting user testing and confirmation.
 **Files Modified:** `stable_products.py`, `field_mappings.py`.
+
+Date: 2024-06-28
+Version: 5.2 (Hypothetical next version)
+User: Jules (AI Agent)
+Branch: jules-fix-new-365-avg (example branch name)
+
+Issue:
+- The "New - 365 days avg." column in Keepa_Deals_Export.csv was consistently showing "-" (no data).
+
+Investigation:
+- Reviewed `headers.json` to confirm the header name.
+- Examined `field_mappings.py` and found that the `FUNCTION_LIST` had a `None` entry for the "New - 365 days avg." header. This meant no function was being called to populate this data.
+- Confirmed that the Keepa API, when called with `stats=365` (as it is in `Keepa_Deals.py`), should return 365-day average data in the `product['stats']['avg365']` array.
+- Deduced that index 1 of the `avg365` array corresponds to the "New" price (similar to how index 0 is Amazon, index 2 is Used in `stats.current` and other `avg` arrays).
+
+Resolution:
+1.  **`stable_products.py`**:
+    *   Added a new function `new_365_days_avg(product)`.
+    *   This function retrieves `product['stats']['avg365'][1]`.
+    *   It formats the price (dividing by 100) and handles cases where data is missing or invalid, returning '-' in such scenarios.
+    *   Ensured standard field-order comments (`# New - 365 days avg. starts/ends`) were included.
+
+2.  **`field_mappings.py`**:
+    *   Imported `new_365_days_avg` from `stable_products.py` at the appropriate location within the import block, maintaining the commented-out structure for unimplemented fields.
+    *   Updated the `FUNCTION_LIST` by replacing `None` with `new_365_days_avg` at the index corresponding to the "New - 365 days avg." header (index 87).
+
+Testing:
+- Code changes prepared for local testing by the user to verify the "New - 365 days avg." column populates correctly.
+

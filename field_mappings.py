@@ -93,7 +93,7 @@ from stable_products import (
     # New - 60 days avg.,
     # New - 90 days avg.,
     # New - 180 days avg.,
-    # New - 365 days avg.,
+    new_365_days_avg,               # New - 365 days avg.,
     # New - Lowest,
     # New - Lowest 365 days,
     # New - Highest,
@@ -536,7 +536,7 @@ FUNCTION_LIST = [
     None,                           # New - 60 days avg.
     None,                           # New - 90 days avg.
     None,                           # New - 180 days avg.
-    None,                           # New - 365 days avg.
+    new_365_days_avg,               # New - 365 days avg.
     None,                           # New - Lowest
     None,                           # New - Lowest 365 days
     None,                           # New - Highest
