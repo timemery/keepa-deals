@@ -129,7 +129,7 @@ from stable_products import (
     # Buy Box Used - 60 days avg.,
     # Buy Box Used - 90 days avg.,
     # Buy Box Used - 180 days avg.,
-    # Buy Box Used - 365 days avg.,
+    buy_box_used_365_days_avg,      # Buy Box Used - 365 days avg.,
     # Buy Box Used - Lowest,
     # Buy Box Used - Lowest 365 days,
     # Buy Box Used - Highest,
@@ -573,7 +573,7 @@ FUNCTION_LIST = [
     None,                           # Buy Box Used - 60 days avg.
     None,                           # Buy Box Used - 90 days avg.
     None,                           # Buy Box Used - 180 days avg.
-    None,                           # Buy Box Used - 365 days avg.
+    buy_box_used_365_days_avg,      # Buy Box Used - 365 days avg.
     None,                           # Buy Box Used - Lowest
     None,                           # Buy Box Used - Lowest 365 days
     None,                           # Buy Box Used - Highest

@@ -1374,4 +1374,49 @@ def new_3rd_party_fba_365_days_avg(product_data):
         return {"New, 3rd Party FBA - 365 days avg.": "-"}
 # New, 3rd Party FBA - 365 days avg. ends
 
+# Buy Box Used - 365 days avg. starts
+def buy_box_used_365_days_avg(product_data):
+    """
+    Retrieves the 365-day average "Buy Box Used" price from product stats.
+    Assumes index 32 in stats.avg365 corresponds to this value.
+    Prices are in cents, converted to dollars. Returns '-' if data is unavailable or invalid.
+    """
+    asin = product_data.get('asin', 'unknown')
+    price_str = '-'
+    source_index = 32 # Hypothetical index for 'Buy Box Used - 365 days avg.'
+
+    try:
+        stats = product_data.get('stats', {})
+        if not stats:
+            logging.warning(f"ASIN {asin}: 'stats' object missing for buy_box_used_365_days_avg.")
+            return {"Buy Box Used - 365 days avg.": "-"}
+
+        avg365_array = stats.get('avg365', [])
+        logging.debug(f"ASIN {asin} - buy_box_used_365_days_avg: stats.avg365 raw: {avg365_array}")
+
+        if len(avg365_array) > source_index:
+            price_cents = avg365_array[source_index]
+            logging.debug(f"ASIN {asin}: Raw value at stats.avg365[{source_index}]: {price_cents}")
+            
+            if price_cents is not None and isinstance(price_cents, (int, float)) and price_cents > 0:
+                try:
+                    price_str = f"${price_cents / 100:.2f}"
+                    logging.info(f"Buy Box Used - 365 days avg. for ASIN {asin}: Using stats.avg365[{source_index}], value: {price_str}")
+                except Exception as e:
+                    logging.error(f"Buy Box Used - 365 days avg. for ASIN {asin}: Error formatting price {price_cents}: {e}. Setting to '-'.")
+                    price_str = '-'
+            else:
+                logging.warning(f"Buy Box Used - 365 days avg. for ASIN {asin}: Invalid or non-positive price at stats.avg365[{source_index}] ({price_cents}). Setting to '-'")
+                price_str = '-'
+        else:
+            logging.warning(f"Buy Box Used - 365 days avg. for ASIN {asin}: stats.avg365 array is too short (len {len(avg365_array)}) to access index {source_index}. Setting to '-'")
+            price_str = '-'
+            
+    except Exception as e:
+        logging.error(f"ASIN {asin}: Unexpected error in buy_box_used_365_days_avg: {str(e)}")
+        price_str = "-"
+    
+    return {"Buy Box Used - 365 days avg.": price_str}
+# Buy Box Used - 365 days avg. ends
+
 #### END of stable_products.py ####
