@@ -189,8 +189,13 @@ When working with aggregated statistical arrays from the Keepa API `/product` en
     3.  Cross-reference with field names provided in the `csv` field of the product data, as these often map directly to indices.
     4.  Confirm with local testing, especially when an index is hypothesized.
 
+---
+## General Notes for Agents:
 
-
-
-
-
+- **Function Placement & Imports:**
+    - Be mindful of the distinction between `stable_products.py`, `stable_deals.py`, and `stable_calculations.py`.
+    - Product-specific data getters (e.g., current price, average price of a specific condition, product attributes) generally reside in `stable_products.py`.
+    - Deal-specific logic (e.g., `deal_found`, `last_update` related to a deal event) generally resides in `stable_deals.py`.
+    - Complex calculations derived from product/deal data often go into `stable_calculations.py`.
+    - When adding or modifying function mappings in `field_mappings.py`, double-check that functions are imported from their correct source file to avoid `ImportError` issues. An `ImportError` traceback pointing to an import from `stable_deals` for a function actually in `stable_products` (or vice-versa) has been a recurring theme.
+---
