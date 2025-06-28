@@ -153,7 +153,7 @@ from stable_products import (
     # Used, like new - 60 days avg.,
     # Used, like new - 90 days avg.,
     # Used, like new - 180 days avg.,
-    used_like_new_365_days_avg,     # Used, like new - 365 days avg.
+    # used_like_new_365_days_avg,     # Used, like new - 365 days avg. # This will be imported from stable_products
     # Used, like new - Lowest,
     # Used, like new - Lowest 365 days,
     # Used, like new - Highest,
@@ -377,7 +377,7 @@ from stable_deals import (
     # Used, like new - 60 days avg.,
     # Used, like new - 90 days avg.,
     # Used, like new - 180 days avg.,
-    used_like_new_365_days_avg,     # Used, like new - 365 days avg.
+    # used_like_new_365_days_avg,     # Used, like new - 365 days avg. # Explicitly commented out
     # Used, like new - Lowest,
     # Used, like new - Lowest 365 days,
     # Used, like new - Highest,
@@ -598,7 +598,7 @@ FUNCTION_LIST = [
     None,                           # Used, like new - 60 days avg.
     None,                           # Used, like new - 90 days avg.
     None,                           # Used, like new - 180 days avg.
-    None,                           # Used, like new - 365 days avg.
+    used_like_new_365_days_avg,     # Used, like new - 365 days avg.
     None,                           # Used, like new - Lowest
     None,                           # Used, like new - Lowest 365 days
     None,                           # Used, like new - Highest

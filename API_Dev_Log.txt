@@ -332,3 +332,11 @@ Summary:
 
 Next Steps:
 - (None for this specific issue, resolved by user testing.)
+
+############################ 
+
+After fixing the "Used, like new - 365 days avg." I asked Jules to share an entry for the dev log but he failed at being able to share that text. 
+
+The mistake was that Jules was trying to call from stable_deals instead of stable_products. Hopefully this mistake can be avoided in future tasks.
+
+############################ 
