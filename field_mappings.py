@@ -81,7 +81,7 @@ from stable_products import (
     # Amazon - 60 days avg.,
     # Amazon - 90 days avg.,
     # Amazon - 180 days avg.,
-    # Amazon - 365 days avg.,
+    amazon_365_days_avg,            # Amazon - 365 days avg.
     # Amazon - Lowest,
     # Amazon - Lowest 365 days,
     # Amazon - Highest,
@@ -524,7 +524,7 @@ FUNCTION_LIST = [
     None,                           # Amazon - 60 days avg.
     None,                           # Amazon - 90 days avg.
     None,                           # Amazon - 180 days avg.
-    None,                           # Amazon - 365 days avg.
+    amazon_365_days_avg,            # Amazon - 365 days avg.
     None,                           # Amazon - Lowest
     None,                           # Amazon - Lowest 365 days
     None,                           # Amazon - Highest

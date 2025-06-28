@@ -219,3 +219,17 @@ Learnings:
 **Outcome:**
 *   User confirmed the fix after the second round of testing. The "Buy Box - 365 days avg." column now populates with the correct data.
 
+## Date: YYYY-MM-DD
+**Task:** Implement "Amazon - 365 days avg." column.
+**Issue:** Column was showing "-" for all entries.
+**Solution:**
+1.  **Created `amazon_365_days_avg(product)` function in `stable_products.py`:**
+    *   Retrieves data from `product['stats']['avg365'][0]`.
+    *   Formats the price as a currency string (e.g., "$12.34").
+    *   Returns "-" if data is invalid or missing.
+    *   Includes logging for value retrieval and formatting steps.
+2.  **Updated `field_mappings.py`:**
+    *   Imported `amazon_365_days_avg` from `stable_products.py`.
+    *   Mapped `amazon_365_days_avg` to the "Amazon - 365 days avg." header in `FUNCTION_LIST`.
+**Result:** The "Amazon - 365 days avg." column should now correctly populate with data. Awaiting user testing and confirmation.
+**Files Modified:** `stable_products.py`, `field_mappings.py`.

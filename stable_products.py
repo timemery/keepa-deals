@@ -733,7 +733,38 @@ def amazon_current(product):
 # Amazon - 60 days avg.
 # Amazon - 90 days avg.
 # Amazon - 180 days avg.
-# Amazon - 365 days avg.
+
+# Amazon - 365 days avg. starts
+def amazon_365_days_avg(product):
+    asin = product.get('asin', 'unknown')
+    stats = product.get('stats', {})
+    price_str = '-'
+
+    logging.debug(f"Amazon - 365 days avg. for ASIN {asin}: Attempting to use stats.avg365[0].")
+
+    avg365_array = stats.get('avg365', [])
+    logging.debug(f"ASIN {asin}: stats.avg365 raw: {avg365_array}")
+
+    if avg365_array and len(avg365_array) > 0:
+        price_cents = avg365_array[0]
+        logging.debug(f"ASIN {asin}: Raw value at stats.avg365[0]: {price_cents}")
+        if price_cents is not None and isinstance(price_cents, (int, float)) and price_cents > 0:
+            try:
+                price_str = f"${price_cents / 100:.2f}"
+                logging.info(f"Amazon - 365 days avg. for ASIN {asin}: Using stats.avg365[0], value: {price_str}")
+            except Exception as e:
+                logging.error(f"Amazon - 365 days avg. for ASIN {asin}: Error formatting price {price_cents}: {e}. Setting to '-'.")
+                price_str = '-'
+        else:
+            logging.warning(f"Amazon - 365 days avg. for ASIN {asin}: Invalid or missing price at stats.avg365[0] ({price_cents}). Setting to '-'")
+            price_str = '-'
+    else:
+        logging.warning(f"Amazon - 365 days avg. for ASIN {asin}: stats.avg365 array is empty or missing. Setting to '-'")
+        price_str = '-'
+        
+    return {'Amazon - 365 days avg.': price_str}
+# Amazon - 365 days avg. ends
+
 # Amazon - Lowest
 # Amazon - Lowest 365 days
 # Amazon - Highest
