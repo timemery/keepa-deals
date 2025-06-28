@@ -168,6 +168,27 @@ When working with aggregated statistical arrays from the Keepa API `/product` en
 `[-1, 9021 (Amazon), 2742 (Used), ..., 9257 (New FBM), ..., 11460 (New FBA), ..., 6916 (Buy Box Shipping), ...]`
 *(Note: This is a simplified representation; always refer to the full array for accurate indexing.)*
 
+## Keepa API `stats` Object Insights (Specifically `avg...` arrays)
+
+When working with aggregated statistical arrays from the Keepa API `/product` endpoint (e.g., `stats.current`, `stats.avg30`, `stats.avg90`, `stats.avg365`), the indices for different price types can be specific and sometimes require empirical verification if not explicitly documented for every array type.
+
+**Learnings from Investigations (YYYY-MM-DD for Buy Box Used Avg):**
+
+*   **Buy Box (Overall) Averages:**
+    *   For `avg...` arrays (like `avg365`), **index 18** was confirmed to provide the "Buy Box (including shipping) Average" for the respective period.
+*   **Buy Box Used - Current:**
+    *   `stats.current[32]` is used for the "Buy Box Used - Current" price.
+*   **Buy Box Used - 365 days avg. (Confirmed <YYYY-MM-DD>):**
+    *   **Index 32** in `stats.avg365` is confirmed to correspond to "Buy Box Used - 365 days avg.". This was verified through local testing after hypothesizing based on the index for the current value.
+
+**Key Takeaway for `avg...` arrays:**
+*   While there are common patterns for indices (e.g., 0 for AMAZON, 1 for NEW, 2 for USED), specific types like "Buy Box Shipping" or nuanced FBA/FBM averages, and particularly *used* buy box averages, can have distinct indices (e.g., `stats.avg365[32]` for Buy Box Used average).
+*   Always verify assumptions about indices by:
+    1.  Consulting any available explicit Keepa documentation for that specific array.
+    2.  If unclear, inspect the raw JSON response from the API (specifically the `stats` object and its arrays) for a known ASIN where the desired data point is visible on Keepa.com.
+    3.  Cross-reference with field names provided in the `csv` field of the product data, as these often map directly to indices.
+    4.  Confirm with local testing, especially when an index is hypothesized.
+
 
 
 

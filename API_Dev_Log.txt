@@ -318,3 +318,17 @@ Testing:
 **Reasoning:**
 The change ensures that the "New, 3rd Party FBM - Current" column strictly reflects the specific data point identified by Keepa for this metric (`stats.current[7]`). If this data point is unavailable from the API for a given product, the column will display "-", accurately representing the absence of this specific Keepa-aggregated value, rather than attempting to derive a potentially different value from general offers. This aligns with the established conventions for maintaining data integrity for columns that map to specific Keepa-provided fields. The user's report of the column being empty ("-") is consistent with `stats.current[7]` being unavailable for the ASINs they were testing, assuming a previous version of the code *was* correctly using `stats.current[7]`. This change brings the current code into compliance with documented best practices for this column.
 
+Date: <YYYY-MM-DD>
+Task: Implement 'Buy Box Used - 365 days avg.' column.
+Developer: Jules
+Branch: <branch_name_placeholder>
+
+Summary:
+- Added new function `buy_box_used_365_days_avg` to `stable_products.py`.
+- The function targets `product_data.stats.avg365[32]`. This index was hypothesized based on `stats.current[32]` being used for 'Buy Box Used - Current' and was **confirmed by user's local testing** to provide correct data.
+- The function converts price from cents to a formatted dollar string and includes error handling and logging.
+- Updated `field_mappings.py` to import and use the new function in `FUNCTION_LIST`.
+- User performed local testing, which confirmed the functionality and the correctness of index 32.
+
+Next Steps:
+- (None for this specific issue, resolved by user testing.)
