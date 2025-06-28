@@ -141,6 +141,32 @@ When a new column is required, or an existing one is incorrect:
 *   Switched to universally compatible ASCII symbols: "+" for an increase (price above average) and "-" for a decrease (price below average). No symbol is used for a 0% difference.
 *   **Principle:** Prioritize widely supported character sets (like ASCII or well-tested UTF-8 subsets) for textual indicators unless specific rich text rendering is guaranteed and tested across all target environments. If special symbols are desired, ensure they are tested for compatibility or provide simpler fallbacks.
 
+## CSV Data Interpretation Notes
+
+*   **Date Formatting in Viewing Software:** Be aware that spreadsheet programs (like Microsoft Excel, Google Sheets, etc.) often automatically interpret columns containing date-like strings (e.g., "YYYY-MM-DD", "YYYY-MM") as dates. Their default display formatting for these dates might differ from the raw string in the CSV file (e.g., "1985-06" in the CSV might be displayed as "Jun-85" in Excel). Always verify the raw CSV content in a text editor if precise string formatting is critical and appears different in a spreadsheet.
+
+## Keepa API `stats` Object Insights (Specifically `avg...` arrays)
+
+When working with aggregated statistical arrays from the Keepa API `/product` endpoint (e.g., `stats.current`, `stats.avg30`, `stats.avg90`, `stats.avg365`), the indices for different price types can be specific and sometimes require empirical verification if not explicitly documented for every array type.
+
+**Learnings from "Buy Box - 365 days avg." Investigation (YYYY-MM-DD):**
+
+*   **Initial Assumption:** Index `10` in `stats.avg365` was initially thought to be for "Buy Box - 365 days avg."
+*   **Verification:** User feedback and direct log analysis of the `stats_raw.avg365` array for ASIN `0262611317` revealed:
+    *   `avg365[10]` corresponded to "New, 3rd Party FBA - 365 days avg." (value: `11460` or $114.60).
+    *   `avg365[18]` corresponded to "Buy Box - 365 days avg." (value: `6916` or $69.16). This matched user observations on Keepa.com.
+
+**Key Takeaway:**
+*   While there are common patterns for indices (e.g., 0 for AMAZON, 1 for NEW, 2 for USED), specific types like "Buy Box Shipping" or nuanced FBA/FBM averages can have distinct indices.
+*   For `avg...` arrays (like `avg365`), **index 18** was confirmed to provide the "Buy Box (including shipping) Average" for the respective period.
+*   Always verify assumptions about indices by:
+    1.  Consulting any available explicit Keepa documentation for that specific array.
+    2.  If unclear, inspect the raw JSON response from the API (specifically the `stats` object and its arrays like `current`, `avg30`, `avg90`, `avg365`) for a known ASIN where the desired data point is visible on Keepa.com. This allows mapping the observed value to its position in the array.
+    3.  Cross-reference with field names provided in the `csv` field of the product data, as these often map directly to indices (e.g., `csv[18]` might be Buy Box price history).
+
+**Example `avg365` array structure snippet for ASIN `0262611317`:**
+`[-1, 9021 (Amazon), 2742 (Used), ..., 9257 (New FBM), ..., 11460 (New FBA), ..., 6916 (Buy Box Shipping), ...]`
+*(Note: This is a simplified representation; always refer to the full array for accurate indexing.)*
 
 
 

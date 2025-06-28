@@ -69,7 +69,7 @@ from stable_products import (
     # Buy Box - 60 days avg.,
     # Buy Box - 90 days avg.,
     # Buy Box - 180 days avg.,
-    # Buy Box - 365 days avg.,
+    buy_box_365_days_avg,           # Buy Box - 365 days avg.
     # Buy Box - Lowest,
     # Buy Box - Lowest 365 days,
     # Buy Box - Highest,
@@ -220,6 +220,7 @@ from stable_products import (
     # Used Offer Count - 90 days avg.,
     # Used Offer Count - 180 days avg.,
     # Used Offer Count - 365 days avg.
+    buy_box_365_days_avg,      # Buy Box - 365 days avg.
 )
 from stable_calculations import (
     percent_down_365,               # Percent Down 365
@@ -511,7 +512,7 @@ FUNCTION_LIST = [
     None,                           # Buy Box - 60 days avg.
     None,                           # Buy Box - 90 days avg.
     None,                           # Buy Box - 180 days avg.
-    None,                           # Buy Box - 365 days avg.
+    buy_box_365_days_avg,           # Buy Box - 365 days avg.
     None,                           # Buy Box - Lowest
     None,                           # Buy Box - Lowest 365 days
     None,                           # Buy Box - Highest

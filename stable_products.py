@@ -1163,4 +1163,42 @@ def list_price(product):
 # List Price - 90 days OOS,
 # List Price - Stock,
 
+# Buy Box - 365 days avg. starts
+def buy_box_365_days_avg(product):
+    """
+    Retrieves the 365-day average Buy Box price.
+    The Buy Box price usually includes shipping.
+    """
+    asin = product.get('asin', 'unknown')
+    try:
+        stats = product.get('stats', {})
+        if not stats:
+            # logging.warning(f"ASIN {asin}: 'stats' object missing for buy_box_365_days_avg.")
+            return {'Buy Box - 365 days avg.': '-'}
+
+        avg365 = stats.get('avg365', [])
+        
+        # Index 18 is BUY_BOX_SHIPPING in Keepa stats arrays based on log analysis
+        buy_box_avg_index = 18
+
+        if len(avg365) > buy_box_avg_index and avg365[buy_box_avg_index] is not None and avg365[buy_box_avg_index] > 0:
+            price_in_cents = avg365[buy_box_avg_index]
+            price_in_dollars = price_in_cents / 100.0
+            # logging.info(f"ASIN {asin}: Buy Box - 365 days avg. found: ${price_in_dollars:.2f}")
+            return {'Buy Box - 365 days avg.': f"{price_in_dollars:.2f}"}
+        else:
+            # logging.info(f"ASIN {asin}: Buy Box - 365 days avg. not available or invalid (avg365[{buy_box_avg_index}]). avg365 array: {avg365}")
+            return {'Buy Box - 365 days avg.': '-'}
+
+    except IndexError:
+        # logging.warning(f"ASIN {asin}: IndexError accessing avg365 for Buy Box - 365 days avg. avg365 array: {stats.get('avg365', [])}")
+        return {'Buy Box - 365 days avg.': '-'}
+    except TypeError:
+        # logging.warning(f"ASIN {asin}: TypeError accessing avg365 for Buy Box - 365 days avg. avg365 array: {stats.get('avg365', [])}")
+        return {'Buy Box - 365 days avg.': '-'}
+    except Exception as e:
+        # logging.error(f"ASIN {asin}: Unexpected error in buy_box_365_days_avg: {str(e)}")
+        return {'Buy Box - 365 days avg.': '-'}
+# Buy Box - 365 days avg. ends
+
 #### END of stable_products.py ####

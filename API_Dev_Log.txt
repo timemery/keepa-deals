@@ -152,3 +152,70 @@ Standard ASCII characters like "+" and "-" have much broader compatibility acros
 **Commit:** `feat: Update Percent Down 365 symbols for better compatibility` (Branch: `feat/percent-down-365`)
 **Outcome:** Symbols now render correctly as per user feedback.
 
+## Jules - 2025-06-28
+**Task:** Investigate "Publication Date" column formatting. API providing "YYYY-MM" (e.g., "1985-06") was reportedly appearing as "Mon-YY" (e.g., "Jun-85") in the CSV.
+**Investigation:**
+- Reviewed `get_publication_date` function in `stable_products.py`.
+- Confirmed that the existing string processing logic correctly identifies "YYYY-MM" string inputs and preserves this format for the CSV output.
+- The main script `Keepa_Deals.py` uses `csv.writer`, which writes string data as-is.
+**Conclusion:**
+- The script correctly outputs "YYYY-MM" strings to the CSV when the API provides them in that format.
+- The observed "Mon-YY" format is an artifact of how spreadsheet software (e.g., Microsoft Excel) interprets and displays date-like strings from CSV files. Excel may auto-convert "1985-06" to a date object (e.g., 1985-06-01) and then apply a default display format like "Jun-85".
+**Action:**
+- No code changes were made as the script's output is correct.
+- Confirmed with the user that the raw CSV content (viewed in a text editor) shows the correct "YYYY-MM" format.
+**Status:** Task completed.
+
+Date: YYYY-MM-DD
+Author: Jules
+Task: Implement "Release Date" column functionality.
+
+Issue:
+- The "Release Date" column in `Keepa_Deals_Export.csv` was consistently showing "-" as no function was assigned to populate it.
+
+Solution:
+1.  **Created `get_release_date` function in `stable_products.py`:**
+    *   Adapted logic from the existing `get_publication_date` function.
+    *   Specifically targets `product_data.get('releaseDate')` as the primary source.
+    *   Parses various date formats: Keepa Time Minutes (KTM), YYYYMMDD, YYYYMM, YYYY integers, and common date strings ('YYYY-MM-DD', 'YYYY-MM', 'MMM-YY', 'YYYY').
+    *   Converts valid dates to 'YYYY-MM-DD', 'YYYY-MM', or 'YYYY' format.
+    *   Returns '-' for invalid or missing dates.
+    *   Includes comprehensive logging for traceability.
+2.  **Updated `field_mappings.py`:**
+    *   Imported `get_release_date` from `stable_products.py`.
+    *   Assigned `get_release_date` to the "Release Date" field in the `FUNCTION_LIST`.
+
+Outcome:
+- The "Release Date" column should now populate with data when available and correctly parsed from the Keepa API.
+- User will test locally to confirm.
+
+Learnings:
+- Reconfirmed the utility of adapting existing robust functions (like `get_publication_date`) for similar data types, saving development time and ensuring consistent parsing logic.
+- The `releaseDate` field in Keepa product data can come in various formats (KTM, integer, string), requiring flexible parsing, similar to `publicationDate`.
+
+## Dev Log Entry - YYYY-MM-DD
+
+**Task:** Fix "Buy Box - 365 days avg." column showing all "-".
+
+**Initial Approach:**
+*   Identified that "Buy Box - 365 days avg." was mapped to `None` in `field_mappings.py`.
+*   Created `buy_box_365_days_avg(product)` function in `stable_products.py`.
+*   Initially assumed `stats.avg365[10]` was the correct data point for Buy Box 365-day average. Index 10 is often associated with Buy Box related data or New FBA.
+
+**User Feedback (Round 1):**
+*   User tested and reported that `stats.avg365[10]` was actually pulling "New, 3rd Party FBA - 365 days avg."
+
+**Troubleshooting & Log Analysis:**
+*   User provided debug logs including the raw `stats_raw` object from the Keepa API response for an ASIN (e.g., 0262611317).
+*   The `stats_raw['avg365']` array was: `[-1, 9021, 2742, 1435763, 4999, -1, -1, 9257, -1, -1, 11460, 1, 9, -1, -1, -1, 40, 12, 6916, 9646, 3946, 3206, 1857, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3683, -1]`
+*   Analysis of this array against known Keepa data patterns and user-observed values on Keepa.com:
+    *   `avg365[10]` (value 11460 or $114.60) matched "New, 3rd Party FBA - 365 days avg."
+    *   `avg365[18]` (value 6916 or $69.16) was identified as the correct data point for "Buy Box - 365 days avg.", closely matching the user's observation of $68.31 on Keepa.com for the test ASIN.
+
+**Revised Approach & Solution:**
+*   Updated `buy_box_365_days_avg` function in `stable_products.py` to use `buy_box_avg_index = 18`.
+*   The function now correctly targets `product.get('stats', {}).get('avg365', [])[18]`.
+
+**Outcome:**
+*   User confirmed the fix after the second round of testing. The "Buy Box - 365 days avg." column now populates with the correct data.
+
