@@ -153,7 +153,7 @@ from stable_products import (
     # Used, like new - 60 days avg.,
     # Used, like new - 90 days avg.,
     # Used, like new - 180 days avg.,
-    # Used, like new - 365 days avg.,
+    used_like_new_365_days_avg,     # Used, like new - 365 days avg.
     # Used, like new - Lowest,
     # Used, like new - Lowest 365 days,
     # Used, like new - Highest,
@@ -222,6 +222,7 @@ from stable_products import (
     # Used Offer Count - 365 days avg.
     buy_box_365_days_avg,      # Buy Box - 365 days avg.
     new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
+    used_like_new_365_days_avg # Added import
 )
 from stable_calculations import (
     percent_down_365,               # Percent Down 365
@@ -376,7 +377,7 @@ from stable_deals import (
     # Used, like new - 60 days avg.,
     # Used, like new - 90 days avg.,
     # Used, like new - 180 days avg.,
-    # Used, like new - 365 days avg.,
+    used_like_new_365_days_avg,     # Used, like new - 365 days avg.
     # Used, like new - Lowest,
     # Used, like new - Lowest 365 days,
     # Used, like new - Highest,

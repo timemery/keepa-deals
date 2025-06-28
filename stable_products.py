@@ -1151,6 +1151,60 @@ def used_like_new(product):
 # Used, like new - Lowest 365 days,
 # Used, like new - Highest,
 # Used, like new - Highest 365 days,
+# Used, like new - 30 days avg.,
+# Used, like new - 60 days avg.,
+# Used, like new - 90 days avg.,
+# Used, like new - 180 days avg.,
+
+# Used, like new - 365 days avg. starts
+def used_like_new_365_days_avg(product):
+    """
+    Retrieves the 365-day average 'Used - Like New' price from product stats.
+    Corresponds to stats.avg365[19].
+    Prices are in cents, converted to dollars. Returns '-' if data is unavailable or invalid.
+    """
+    asin = product.get('asin', 'unknown')
+    price_str = '-'
+    source_index = 19 
+
+    try:
+        stats = product.get('stats', {})
+        if not stats:
+            logging.warning(f"ASIN {asin}: 'stats' object missing for used_like_new_365_days_avg.")
+            return {"Used, like new - 365 days avg.": "-"}
+
+        avg365_array = stats.get('avg365', [])
+        logging.debug(f"ASIN {asin} - used_like_new_365_days_avg: stats.avg365 raw: {avg365_array}")
+
+        if len(avg365_array) > source_index:
+            price_cents = avg365_array[source_index]
+            logging.debug(f"ASIN {asin}: Raw value at stats.avg365[{source_index}] for Used, like new: {price_cents}")
+            
+            if price_cents is not None and isinstance(price_cents, (int, float)) and price_cents > 0:
+                try:
+                    price_str = f"${price_cents / 100:.2f}"
+                    logging.info(f"Used, like new - 365 days avg. for ASIN {asin}: Using stats.avg365[{source_index}], value: {price_str}")
+                except Exception as e:
+                    logging.error(f"Used, like new - 365 days avg. for ASIN {asin}: Error formatting price {price_cents}: {e}. Setting to '-'.")
+                    price_str = '-'
+            else:
+                logging.warning(f"Used, like new - 365 days avg. for ASIN {asin}: Invalid or non-positive price at stats.avg365[{source_index}] ({price_cents}). Setting to '-'")
+                price_str = '-'
+        else:
+            logging.warning(f"Used, like new - 365 days avg. for ASIN {asin}: stats.avg365 array is too short (len {len(avg365_array)}) to access index {source_index}. Setting to '-'")
+            price_str = '-'
+            
+    except Exception as e:
+        logging.error(f"ASIN {asin}: Unexpected error in used_like_new_365_days_avg: {str(e)}")
+        price_str = "-"
+    
+    return {"Used, like new - 365 days avg.": price_str}
+# Used, like new - 365 days avg. ends
+
+# Used, like new - Lowest,
+# Used, like new - Lowest 365 days,
+# Used, like new - Highest,
+# Used, like new - Highest 365 days,
 # Used, like new - 90 days OOS,
 # Used, like new - Stock,
 
