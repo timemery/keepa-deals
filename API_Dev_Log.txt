@@ -277,3 +277,23 @@ Testing:
     2.  Imported `new_3rd_party_fba_365_days_avg` into `field_mappings.py` within "Chunk 1 starts".
     3.  Replaced the `None` placeholder in `FUNCTION_LIST` (in `field_mappings.py`, "Chunk 2 starts") with the `new_3rd_party_fba_365_days_avg` function, ensuring the correct order was maintained.
 *   **Outcome**: The column should now populate with the 365-day average price for New, 3rd Party FBA offers. Code provided to user for local testing with API tokens.
+
+### Date: YYYY-MM-DD
+**Issue**: The "New, 3rd Party FBM - 365 days avg." column in `Keepa_Deals_Export.csv` was consistently showing "-" (no data).
+**Investigation**:
+- Verified the target data point in Keepa API: `product.stats.avg365[7]` was identified as the 365-day average for New FBM offers (price in cents). This aligns with `stats.current[7]` used for "New, 3rd Party FBM - Current".
+- Ensured `AGENTS.md` guidance on `stats` array indexing was considered.
+**Solution**:
+1.  Created a new function `new_3rd_party_fbm_365_days_avg(product_data)` in `stable_products.py`.
+    - This function safely accesses `product_data.get('stats', {}).get('avg365', [])`.
+    - It retrieves the value at index 7.
+    - If valid, converts from cents to dollars, formats to "$XX.YY", and returns `{'New, 3rd Party FBM - 365 days avg.': formatted_price}`.
+    - Returns `'-'` for invalid/missing data.
+    - Includes standard logging.
+2.  Updated `field_mappings.py`:
+    - Imported `new_3rd_party_fbm_365_days_avg` from `stable_products.py`.
+    - Mapped this function to the "New, 3rd Party FBM - 365 days avg." header in `FUNCTION_LIST`.
+**Debugging Notes**:
+- Encountered an `ImportError` during initial testing (`ImportError: cannot import name 'new_3rd_party_fbm_365_days_avg' from 'stable_deals'`).
+- **Resolution**: Corrected `field_mappings.py` to ensure the new function was imported from `stable_products.py` and removed any erroneous import attempts from `stable_deals.py`. This involved carefully checking both the `stable_products` import block and ensuring no lingering references in the `stable_deals` import block for this specific function.
+**Outcome**: The "New, 3rd Party FBM - 365 days avg." column should now populate correctly. User confirmed the fix.

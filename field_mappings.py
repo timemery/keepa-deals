@@ -117,7 +117,7 @@ from stable_products import (
     # New, 3rd Party FBM - 60 days avg.,
     # New, 3rd Party FBM - 90 days avg.,
     # New, 3rd Party FBM - 180 days avg.,
-    # New, 3rd Party FBM - 365 days avg.,
+    new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
     # New, 3rd Party FBM - Lowest,
     # New, 3rd Party FBM - Lowest 365 days,
     # New, 3rd Party FBM - Highest,
@@ -221,6 +221,7 @@ from stable_products import (
     # Used Offer Count - 180 days avg.,
     # Used Offer Count - 365 days avg.
     buy_box_365_days_avg,      # Buy Box - 365 days avg.
+    new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
 )
 from stable_calculations import (
     percent_down_365,               # Percent Down 365
@@ -339,7 +340,7 @@ from stable_deals import (
     # New, 3rd Party FBM - 60 days avg.,
     # New, 3rd Party FBM - 90 days avg.,
     # New, 3rd Party FBM - 180 days avg.,
-    # New, 3rd Party FBM - 365 days avg.,
+    # new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg. # THIS WAS THE LINGERING ONE
     # New, 3rd Party FBM - Lowest,
     # New, 3rd Party FBM - Lowest 365 days,
     # New, 3rd Party FBM - Highest,
@@ -560,7 +561,7 @@ FUNCTION_LIST = [
     None,                           # New, 3rd Party FBM - 60 days avg.
     None,                           # New, 3rd Party FBM - 90 days avg.
     None,                           # New, 3rd Party FBM - 180 days avg.
-    None,                           # New, 3rd Party FBM - 365 days avg.
+    new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
     None,                           # New, 3rd Party FBM - Lowest
     None,                           # New, 3rd Party FBM - Lowest 365 days
     None,                           # New, 3rd Party FBM - Highest

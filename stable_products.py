@@ -943,6 +943,54 @@ def new_3rd_party_fbm_current(product):
 # New, 3rd Party FBM - 180 days avg. -- ABOVE - but doesn't work ... 
 # New, 3rd Party FBM - 365 days avg. -- ABOVE - but doesn't work ... 
 
+# New, 3rd Party FBM - 365 days avg. starts
+def new_3rd_party_fbm_365_days_avg(product_data):
+    """
+    Retrieves the 365-day average price for new items from 3rd party FBM sellers.
+    Corresponds to stats.avg365[7].
+    Prices are in cents, converted to dollars. Returns '-' if data is unavailable or invalid.
+    """
+    asin = product_data.get('asin', 'unknown')
+    price_str = '-'
+    try:
+        stats = product_data.get('stats', {})
+        if not stats:
+            logging.warning(f"ASIN {asin}: 'stats' object missing for new_3rd_party_fbm_365_days_avg.")
+            return {"New, 3rd Party FBM - 365 days avg.": "-"}
+
+        avg365_array = stats.get('avg365', [])
+        logging.debug(f"ASIN {asin} - new_3rd_party_fbm_365_days_avg: stats.avg365 raw: {avg365_array}")
+
+        # Index 7 is for "New, 3rd Party FBM" (NEW_FBM) average price
+        fbm_avg_index = 7
+
+        if len(avg365_array) > fbm_avg_index and \
+           avg365_array[fbm_avg_index] is not None and \
+           isinstance(avg365_array[fbm_avg_index], (int, float)) and \
+           avg365_array[fbm_avg_index] > 0:
+            
+            price_in_cents = avg365_array[fbm_avg_index]
+            price_in_dollars = price_in_cents / 100.0
+            formatted_price = f"${price_in_dollars:.2f}" # Format to ensure two decimal places
+            logging.info(f"ASIN {asin}: New, 3rd Party FBM - 365 days avg. found: {formatted_price} from stats.avg365[{fbm_avg_index}]")
+            price_str = formatted_price
+        else:
+            logging.info(f"ASIN {asin}: New, 3rd Party FBM - 365 days avg. not available or invalid at stats.avg365[{fbm_avg_index}]. Value: {avg365_array[fbm_avg_index] if len(avg365_array) > fbm_avg_index else 'N/A'}. avg365 array: {avg365_array}")
+            price_str = "-"
+
+    except IndexError:
+        logging.warning(f"ASIN {asin}: IndexError accessing stats.avg365[{fbm_avg_index}] for New, 3rd Party FBM - 365 days avg. avg365 array: {product_data.get('stats', {}).get('avg365', [])}")
+        price_str = "-"
+    except TypeError:
+        logging.warning(f"ASIN {asin}: TypeError accessing stats.avg365[{fbm_avg_index}] for New, 3rd Party FBM - 365 days avg. avg365 array: {product_data.get('stats', {}).get('avg365', [])}")
+        price_str = "-"
+    except Exception as e:
+        logging.error(f"ASIN {asin}: Unexpected error in new_3rd_party_fbm_365_days_avg: {str(e)}")
+        price_str = "-"
+    
+    return {"New, 3rd Party FBM - 365 days avg.": price_str}
+# New, 3rd Party FBM - 365 days avg. ends
+
 # New, 3rd Party FBM - Lowest
 # New, 3rd Party FBM - Lowest 365 days
 # New, 3rd Party FBM - Highest
