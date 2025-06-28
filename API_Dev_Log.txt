@@ -297,3 +297,24 @@ Testing:
 - Encountered an `ImportError` during initial testing (`ImportError: cannot import name 'new_3rd_party_fbm_365_days_avg' from 'stable_deals'`).
 - **Resolution**: Corrected `field_mappings.py` to ensure the new function was imported from `stable_products.py` and removed any erroneous import attempts from `stable_deals.py`. This involved carefully checking both the `stable_products` import block and ensuring no lingering references in the `stable_deals` import block for this specific function.
 **Outcome**: The "New, 3rd Party FBM - 365 days avg." column should now populate correctly. User confirmed the fix.
+
+## Dev Log Entry - YYYY-MM-DD
+
+**Task:** Investigate and fix the "New, 3rd Party FBM - Current" column, which was reportedly empty ("-").
+
+**Investigation:**
+*   Reviewed the `new_3rd_party_fbm_current` function in `stable_products.py`. It was found to be parsing `product['offers']` to determine the price.
+*   Consulted `AGENTS.md`, which has a specific entry: "Task: Fix "New, 3rd Party FBM - Current" Column (June 2025)". This entry states that `product['stats']['current'][7]` is the direct source for "New, 3rd Party FBM - Current price, including shipping".
+*   `AGENTS.md` also emphasizes a "Strict Data Sourcing" convention: if the direct `stats` field is invalid, the column should output "-" and *not* fall back to parsing general offers for this specific, named column.
+
+**Action Taken:**
+*   Modified the `new_3rd_party_fbm_current` function in `stable_products.py` to align with the `AGENTS.md` guidance.
+*   The function now first attempts to retrieve the price from `product['stats']['current'][7]`.
+*   If `stats.current[7]` is valid (exists, is positive), it's used, and the price is formatted.
+*   If `stats.current[7]` is invalid (missing, None, not positive, or index out of bounds), the function now correctly returns "-" for the column.
+*   The previous logic of falling back to parsing `product['offers']` for this specific column was removed to adhere to the strict sourcing rule.
+*   Enhanced logging within the function to show which data source is being used or why it's resulting in "-".
+
+**Reasoning:**
+The change ensures that the "New, 3rd Party FBM - Current" column strictly reflects the specific data point identified by Keepa for this metric (`stats.current[7]`). If this data point is unavailable from the API for a given product, the column will display "-", accurately representing the absence of this specific Keepa-aggregated value, rather than attempting to derive a potentially different value from general offers. This aligns with the established conventions for maintaining data integrity for columns that map to specific Keepa-provided fields. The user's report of the column being empty ("-") is consistent with `stats.current[7]` being unavailable for the ASINs they were testing, assuming a previous version of the code *was* correctly using `stats.current[7]`. This change brings the current code into compliance with documented best practices for this column.
+

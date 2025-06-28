@@ -902,16 +902,39 @@ def new_3rd_party_fba_lowest(product):
 # 2025-05-22: Removed Python client, use HTTP fetch_product offers=100.
 def new_3rd_party_fbm_current(product):
     asin = product.get('asin', 'unknown')
-    offers = product.get('offers', [])
-    logging.debug(f"HTTP FBM offers for ASIN {asin}: count={len(offers)}, offers={offers}")
-    fbm_prices = [o.get('price') / 100 for o in offers if o.get('condition') == 'New' and o.get('isFBA', False) is False and o.get('price', -1) > 0]
-    if not fbm_prices:
-        logging.warning(f"No valid HTTP FBM offers for ASIN {asin}: fbm_prices={fbm_prices}, raw_offers={offers}")
-        return {'New, 3rd Party FBM - Current': '-'}
-    lowest_fbm = min(fbm_prices)
-    formatted = f"${lowest_fbm:.2f}"
-    logging.debug(f"New, 3rd Party FBM - Current - lowest_fbm={lowest_fbm}, result={formatted} for ASIN {asin}")
-    return {'New, 3rd Party FBM - Current': formatted}
+    stats = product.get('stats', {})
+    current_array = stats.get('current', [])
+    price_str = '-'
+    source = "None"
+
+    logging.debug(f"New, 3rd Party FBM - Current for ASIN {asin}: Attempting to use stats.current[7]. current_array: {current_array}")
+
+    if len(current_array) > 7:
+        price_cents = current_array[7]
+        logging.debug(f"ASIN {asin}: Raw value at stats.current[7]: {price_cents}")
+        if price_cents is not None and isinstance(price_cents, (int, float)) and price_cents > 0:
+            try:
+                price_str = f"${price_cents / 100:.2f}"
+                source = "stats.current[7]"
+                logging.info(f"New, 3rd Party FBM - Current for ASIN {asin}: Using {source}, value: {price_str}")
+            except Exception as e:
+                logging.error(f"New, 3rd Party FBM - Current for ASIN {asin}: Error formatting price {price_cents} from stats.current[7]: {e}. Setting to '-'.")
+                price_str = '-'
+                source = "stats.current[7] (formatting error)"
+        else:
+            logging.warning(f"New, 3rd Party FBM - Current for ASIN {asin}: Invalid or non-positive price at stats.current[7] ({price_cents}). Setting to '-'")
+            price_str = '-'
+            source = "stats.current[7] (invalid value)"
+    else:
+        logging.warning(f"New, 3rd Party FBM - Current for ASIN {asin}: stats.current array is too short (len {len(current_array)}) to access index 7. Setting to '-'")
+        price_str = '-'
+        source = "stats.current (too short)"
+    
+    # As per AGENTS.md: "If this direct source is invalid... the column should output "-" rather than falling back to parsing general offers."
+    # The offer parsing logic previously here has been removed to adhere to this.
+
+    logging.info(f"New, 3rd Party FBM - Current for ASIN {asin}: Final result: {price_str}, Source: {source}")
+    return {'New, 3rd Party FBM - Current': price_str}
 # New, 3rd Party FBM - Current ends
 
 
