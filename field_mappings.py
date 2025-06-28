@@ -105,7 +105,7 @@ from stable_products import (
     # New, 3rd Party FBA - 60 days avg.,
     # New, 3rd Party FBA - 90 days avg.,
     # New, 3rd Party FBA - 180 days avg.,
-    # New, 3rd Party FBA - 365 days avg.,
+    new_3rd_party_fba_365_days_avg, # New, 3rd Party FBA - 365 days avg.,
     new_3rd_party_fba_lowest,        # New, 3rd Party FBA - Lowest,
     # New, 3rd Party FBA - Lowest 365 days,
     # New, 3rd Party FBA - Highest,
@@ -548,7 +548,7 @@ FUNCTION_LIST = [
     None,                           # New, 3rd Party FBA - 60 days avg.
     None,                           # New, 3rd Party FBA - 90 days avg.
     None,                           # New, 3rd Party FBA - 180 days avg.
-    None,                           # New, 3rd Party FBA - 365 days avg.
+    new_3rd_party_fba_365_days_avg, # New, 3rd Party FBA - 365 days avg.
     new_3rd_party_fba_lowest,       # New, 3rd Party FBA - Lowest
     None,                           # New, 3rd Party FBA - Lowest 365 days
     None,                           # New, 3rd Party FBA - Highest

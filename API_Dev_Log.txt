@@ -262,3 +262,18 @@ Resolution:
 Testing:
 - Code changes prepared for local testing by the user to verify the "New - 365 days avg." column populates correctly.
 
+## Jules - 2024-07-30
+*   **Issue**: The "New, 3rd Party FBA - 365 days avg." column in `Keepa_Deals_Export.csv` was showing all "-" (empty values).
+*   **Investigation**:
+    *   Confirmed the column was correctly defined in `headers.json`.
+    *   Found that `field_mappings.py` had a `None` entry in `FUNCTION_LIST` for this column, meaning no data processing function was assigned.
+    *   Cross-referenced `AGENTS.md` and `API_Dev_Log.txt`, which indicated that `stats.avg365[10]` from the Keepa product data object is the source for "New, 3rd Party FBA - 365 days avg.".
+    *   The `Keepa_Documentation-official.md` was for the Python SDK, not direct API calls, so it didn't explicitly map `stats.avg365` indices. Relied on project-specific notes.
+*   **Fix**:
+    1.  Created a new function `new_3rd_party_fba_365_days_avg(product_data)` in `stable_products.py`.
+        *   This function accesses `product_data['stats']['avg365'][10]`.
+        *   It handles potential `KeyError`, `IndexError`, or `TypeError` if the data is missing or malformed, returning "-" in such cases.
+        *   It converts the price from cents to a string formatted to two decimal places (e.g., "123.45"). If the value is -1 (Keepa's way of indicating no data), it returns "-".
+    2.  Imported `new_3rd_party_fba_365_days_avg` into `field_mappings.py` within "Chunk 1 starts".
+    3.  Replaced the `None` placeholder in `FUNCTION_LIST` (in `field_mappings.py`, "Chunk 2 starts") with the `new_3rd_party_fba_365_days_avg` function, ensuring the correct order was maintained.
+*   **Outcome**: The column should now populate with the 365-day average price for New, 3rd Party FBA offers. Code provided to user for local testing with API tokens.

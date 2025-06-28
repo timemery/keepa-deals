@@ -1258,4 +1258,49 @@ def buy_box_365_days_avg(product):
         return {'Buy Box - 365 days avg.': '-'}
 # Buy Box - 365 days avg. ends
 
+# New, 3rd Party FBA - 365 days avg. starts
+def new_3rd_party_fba_365_days_avg(product_data):
+    """
+    Retrieves the average price of new 3rd party FBA offers over the last 365 days.
+    Corresponds to stats.avg365[10].
+    Prices are in cents, converted to dollars. Returns '-' if data is unavailable or invalid.
+    """
+    asin = product_data.get('asin', 'unknown')
+    try:
+        stats = product_data.get('stats', {})
+        if not stats:
+            logging.warning(f"ASIN {asin}: 'stats' object missing for new_3rd_party_fba_365_days_avg.")
+            return {"New, 3rd Party FBA - 365 days avg.": "-"}
+
+        avg365_array = stats.get('avg365', [])
+        logging.debug(f"ASIN {asin} - new_3rd_party_fba_365_days_avg: stats.avg365 raw: {avg365_array}")
+
+        # Index 10 is assumed for "New, 3rd Party FBA" average price
+        fba_avg_index = 10
+
+        if len(avg365_array) > fba_avg_index and \
+           avg365_array[fba_avg_index] is not None and \
+           isinstance(avg365_array[fba_avg_index], (int, float)) and \
+           avg365_array[fba_avg_index] > 0:
+            
+            price_in_cents = avg365_array[fba_avg_index]
+            price_in_dollars = price_in_cents / 100.0
+            formatted_price = f"{price_in_dollars:.2f}" # Format to ensure two decimal places
+            logging.info(f"ASIN {asin}: New, 3rd Party FBA - 365 days avg. found: ${formatted_price}")
+            return {"New, 3rd Party FBA - 365 days avg.": formatted_price}
+        else:
+            logging.info(f"ASIN {asin}: New, 3rd Party FBA - 365 days avg. not available or invalid (avg365[{fba_avg_index}]). avg365 array: {avg365_array}")
+            return {"New, 3rd Party FBA - 365 days avg.": "-"}
+
+    except IndexError:
+        logging.warning(f"ASIN {asin}: IndexError accessing avg365 for New, 3rd Party FBA - 365 days avg. avg365 array: {product_data.get('stats', {}).get('avg365', [])}")
+        return {"New, 3rd Party FBA - 365 days avg.": "-"}
+    except TypeError:
+        logging.warning(f"ASIN {asin}: TypeError accessing avg365 for New, 3rd Party FBA - 365 days avg. avg365 array: {product_data.get('stats', {}).get('avg365', [])}")
+        return {"New, 3rd Party FBA - 365 days avg.": "-"}
+    except Exception as e:
+        logging.error(f"ASIN {asin}: Unexpected error in new_3rd_party_fba_365_days_avg: {str(e)}")
+        return {"New, 3rd Party FBA - 365 days avg.": "-"}
+# New, 3rd Party FBA - 365 days avg. ends
+
 #### END of stable_products.py ####
