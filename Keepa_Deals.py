@@ -173,10 +173,14 @@ def main():
             print(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
             product = fetch_product(asin)
 
-            # Jules: Added for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
-            TEST_ASIN_FOR_RAW_LOG = 'B07YF2MV7N' # Replace with a known FBA ASIN if available
+            # Jules: Modified for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
+            TEST_ASIN_FOR_RAW_LOG = '1562243179' # Target ASIN for raw data logging
             if asin == TEST_ASIN_FOR_RAW_LOG:
-                logger.info(f"RAW_PRODUCT_DATA for {asin}: {json.dumps(product)}")
+                # Ensure product is not None and is a dictionary before trying to dump it
+                if product and isinstance(product, dict):
+                    logger.info(f"RAW_PRODUCT_DATA_{asin}: {json.dumps(product)}")
+                else:
+                    logger.info(f"RAW_PRODUCT_DATA_{asin}: Product data is not in the expected format or is None. Data: {product}")
 
             if not product or 'stats' not in product:
                 logger.error(f"Incomplete product data for ASIN {asin}") # Use logger instance

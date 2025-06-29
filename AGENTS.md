@@ -257,3 +257,12 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   **New Offer Count - 365 days avg.**: Found at `product['stats']['avg365'][11]`. This index corresponds to the historical data type `COUNT_NEW` (new offer count history, often seen as `csv[11]` in `product.csv`).
     *   **Used Offer Count - 365 days avg.**: Found at `product['stats']['avg365'][12]`. This index corresponds to the historical data type `COUNT_USED` (used offer count history, often seen as `csv[12]` in `product.csv`).
     *   *Note:* The indices `stats.current[5]`, `stats.current[6]`, `stats.avg365[5]`, and `stats.avg365[6]` were found to be incorrect for these specific offer counts and likely represent other data.
+
+    ## Keepa API Product Data Structure Notes
+
+*   **FBA Pick & Pack Fee:** To retrieve the FBA Pick & Pack Fee for a product, access the `product_data` object (JSON response from the `/product` endpoint) as follows:
+    *   The fee is stored within a dictionary named `fbaFees`.
+    *   Inside the `fbaFees` dictionary, the specific fee is under the key `pickAndPackFee`.
+    *   The value is provided in **cents**.
+    *   Example path: `product_data.get('fbaFees', {}).get('pickAndPackFee')`
+    *   Ensure to handle cases where `fbaFees` or `pickAndPackFee` might be missing or `None`.

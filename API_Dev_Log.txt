@@ -445,3 +445,16 @@ Learnings:
 *   Directly named fields in `product['stats']` (e.g., `offerCountFBA`, `totalOfferCount`) are reliable for current data points when available.
 *   Indices in `stats.current` and `stats.avg...` arrays for aggregated counts (like average new/used offer counts) can often be inferred from the `product.csv` historical data array definitions (e.g., `csv[11]` for `COUNT_NEW` history mapping to `avg365[11]` for its average).
 *   Initial assumptions about `stats` array indices based on simple ordering can be incorrect; detailed `stats_raw` review is crucial for complex or less common fields.
+
+
+Implement FBA Pick & Pack Fee Collection
+
+This commit updates the Keepa deals script to accurately collect and display the "FBA Pick & Pack Fee".
+
+Key changes:
+- Modified `Keepa_Deals.py` to log raw product data for a specific ASIN (1562243179) to help identify the correct data field.
+- Analyzed the logged data, confirming the FBA Pick & Pack fee is located at `product_data['fbaFees']['pickAndPackFee']` and is provided in cents.
+- Updated the `get_fba_pick_pack_fee` function in `stable_products.py` to correctly access this nested field and convert the value from cents to a dollar string.
+
+The user has confirmed locally that this change correctly populates the "FBA Pick&Pack Fee" column in the `Keepa_Deals_Export.csv` output file.
+

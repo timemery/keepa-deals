@@ -1701,11 +1701,17 @@ def get_fba_pick_pack_fee(product_data):
     Returns '-' if the fee is not available or invalid.
     """
     asin = product_data.get('asin', 'unknown')
-    fee_cents = product_data.get('fbaFees', -1)
-    logging.debug(f"ASIN {asin}: Attempting to get FBA Pick&Pack Fee. Raw 'fbaFees' value: {fee_cents}")
+    fba_fees_data = product_data.get('fbaFees') # This should be a dictionary
+    logging.debug(f"ASIN {asin}: Attempting to get FBA Pick&Pack Fee. Raw 'fbaFees' dict: {fba_fees_data}")
+
+    if not isinstance(fba_fees_data, dict):
+        logging.warning(f"ASIN {asin}: 'fbaFees' is not a dictionary or is missing. Value: {fba_fees_data}. Returning '-'.")
+        return {'FBA Pick&Pack Fee': '-'}
+
+    fee_cents = fba_fees_data.get('pickAndPackFee')
 
     if fee_cents is None or not isinstance(fee_cents, (int, float)) or fee_cents < 0: # Allow 0 as a valid fee
-        logging.warning(f"ASIN {asin}: 'fbaFees' is missing, None, or invalid ({fee_cents}). Returning '-'.")
+        logging.warning(f"ASIN {asin}: 'pickAndPackFee' is missing from fbaFees, None, or invalid ({fee_cents}). Returning '-'.")
         return {'FBA Pick&Pack Fee': '-'}
     
     try:
