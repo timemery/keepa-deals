@@ -352,3 +352,33 @@ Next Steps:
     - The issue required multiple attempts to ensure the changes were correctly applied and reflected, particularly ensuring the erroneous import line was truly commented out. This highlighted the importance of careful verification of file state after modifications, especially when dealing with persistent import errors.
 
 **Outcome:** `ImportError` resolved. Script proceeds past the previous error point.
+
+## Dev Log Entry - YYYY-MM-DD
+
+**Task:** Implement "Used, very good - 365 days avg." column.
+
+**Issue:**
+*   The "Used, very good - 365 days avg." column in `Keepa_Deals_Export.csv` was showing all "-" as no function was assigned to populate it.
+*   Encountered an `ImportError: cannot import name 'FUNCTION_LIST' from 'field_mappings'` during development.
+
+**Solution:**
+1.  **Created `used_very_good_365_days_avg(product)` function in `stable_products.py`:**
+    *   This function targets `product.stats.avg365[20]`. Index 20 corresponds to "Used - Very Good" average prices in Keepa's `stats.avg...` arrays (similar to how `stats.current[20]` is used for "Used, very good - Current").
+    *   The function converts the price from cents to a formatted dollar string (e.g., "$XX.YY").
+    *   Includes error handling for missing/invalid data (returns "-") and standard logging.
+2.  **Updated `field_mappings.py`:**
+    *   Imported `used_very_good_365_days_avg` from `stable_products.py`.
+    *   Correctly mapped this function to the "Used, very good - 365 days avg." header in the `FUNCTION_LIST`.
+
+**Debugging the `ImportError`:**
+*   The `ImportError` for `FUNCTION_LIST` was transient.
+*   Initial troubleshooting involved verifying the new function's syntax in `stable_products.py` and its import/usage in `field_mappings.py`.
+*   A temporary reversion of the new code was performed as a diagnostic step.
+*   The error resolved once the correct code was in place and the script was re-run, suggesting the issue might have been an intermittent environment state or a subtle syntax issue that was fixed during the iterative process of applying and checking the code. The core logic for the new field was sound.
+
+**Outcome:**
+*   The "Used, very good - 365 days avg." column now populates correctly with data. User confirmed with local testing.
+
+**Files Modified:**
+*   `stable_products.py`
+*   `field_mappings.py`

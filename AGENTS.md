@@ -199,3 +199,20 @@ When working with aggregated statistical arrays from the Keepa API `/product` en
     - Complex calculations derived from product/deal data often go into `stable_calculations.py`.
     - When adding or modifying function mappings in `field_mappings.py`, double-check that functions are imported from their correct source file to avoid `ImportError` issues. An `ImportError` traceback pointing to an import from `stable_deals` for a function actually in `stable_products` (or vice-versa) has been a recurring theme.
 ---
+
+## AGENTS.md - Troubleshooting `ImportError: cannot import name 'FUNCTION_LIST' from 'field_mappings'`
+
+When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_mappings'`, consider the following common causes, especially after adding new functions/fields:
+
+1.  **Syntax Error in `field_mappings.py` itself:** Even a small syntax error can prevent the file from being parsed, meaning `FUNCTION_LIST` is never defined.
+2.  **Syntax Error in an Imported Module:** An error in `stable_products.py`, `stable_deals.py`, or `stable_calculations.py` can prevent `field_mappings.py` from successfully importing a function from it, which can sometimes cascade into `FUNCTION_LIST` not being properly defined or exported.
+3.  **Incorrect Import Source:** Ensure the new function (e.g., `my_new_function`) is imported from the correct source file within `field_mappings.py`. For example:
+    *   `from stable_products import my_new_function` (if it's in `stable_products.py`)
+    *   NOT `from stable_deals import my_new_function` (if it's actually in `stable_products.py`). This has been a recurring issue.
+4.  **Circular Dependencies:** While less common with the current structure, a circular import (e.g., `stable_products` trying to import something from `field_mappings` which imports from `stable_products`) can cause this.
+5.  **File Path/Environment Issues:** Ensure Python can find all the .py files correctly. (Usually less of an issue with all files in the same directory).
+
+**Diagnostic Steps:**
+*   Carefully review the recently modified files (`field_mappings.py` and the file where the new function was added) for syntax errors.
+*   Temporarily comment out the new function import and its usage in `FUNCTION_LIST` within `field_mappings.py`. If the `ImportError` disappears, the issue is related to the new function.
+*   If necessary, temporarily comment out the new function definition in its source file (e.g., `stable_products.py`) as well, to isolate whether the definition itself or its usage in `field_mappings.py` is the problem.
