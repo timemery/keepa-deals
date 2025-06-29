@@ -1693,4 +1693,30 @@ def buy_box_used_365_days_avg(product_data):
     return {"Buy Box Used - 365 days avg.": price_str}
 # Buy Box Used - 365 days avg. ends
 
+# FBA Pick&Pack Fee starts
+def get_fba_pick_pack_fee(product_data):
+    """
+    Retrieves the FBA Pick & Pack fee from product data.
+    The fee is expected to be in cents and is converted to a dollar string.
+    Returns '-' if the fee is not available or invalid.
+    """
+    asin = product_data.get('asin', 'unknown')
+    fee_cents = product_data.get('fbaFees', -1)
+    logging.debug(f"ASIN {asin}: Attempting to get FBA Pick&Pack Fee. Raw 'fbaFees' value: {fee_cents}")
+
+    if fee_cents is None or not isinstance(fee_cents, (int, float)) or fee_cents < 0: # Allow 0 as a valid fee
+        logging.warning(f"ASIN {asin}: 'fbaFees' is missing, None, or invalid ({fee_cents}). Returning '-'.")
+        return {'FBA Pick&Pack Fee': '-'}
+    
+    try:
+        # Assuming the fee is in cents, convert to dollars
+        fee_dollars = fee_cents / 100.0
+        formatted_fee = f"${fee_dollars:.2f}"
+        logging.info(f"ASIN {asin}: FBA Pick&Pack Fee found: {formatted_fee} (from raw {fee_cents})")
+        return {'FBA Pick&Pack Fee': formatted_fee}
+    except Exception as e:
+        logging.error(f"ASIN {asin}: Error formatting FBA Pick&Pack Fee ({fee_cents}): {str(e)}. Returning '-'.")
+        return {'FBA Pick&Pack Fee': '-'}
+# FBA Pick&Pack Fee ends
+
 #### END of stable_products.py ####

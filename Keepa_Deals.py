@@ -172,6 +172,12 @@ def main():
             logger.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})") # Use logger instance
             print(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
             product = fetch_product(asin)
+
+            # Jules: Added for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
+            TEST_ASIN_FOR_RAW_LOG = 'B07YF2MV7N' # Replace with a known FBA ASIN if available
+            if asin == TEST_ASIN_FOR_RAW_LOG:
+                logger.info(f"RAW_PRODUCT_DATA for {asin}: {json.dumps(product)}")
+
             if not product or 'stats' not in product:
                 logger.error(f"Incomplete product data for ASIN {asin}") # Use logger instance
                 continue
