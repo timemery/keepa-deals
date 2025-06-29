@@ -458,3 +458,13 @@ Key changes:
 
 The user has confirmed locally that this change correctly populates the "FBA Pick&Pack Fee" column in the `Keepa_Deals_Export.csv` output file.
 
+YYYY-MM-DD (Jules): Referral Fee % Implementation & Precision Fix
+- Task: Investigate "Referral Fee %" column showing all "-" and ensure accurate data collection.
+- Initial Implementation: Added `get_referral_fee_percent` function in `stable_products.py` with speculative checks for `referralFeePercent` and `fbaFees.referralFeePercent` or `fbaFees.referralFee.percent` based on common API patterns, as the field was not explicitly in Keepa_Documentation-official.md.
+- First User Feedback: Data was being pulled (mostly as 15%) but was not precise (e.g., Keepa showed 14.99%, CSV showed 15.00% after initial `.2f` formatting).
+- Investigation: User provided RAW_PRODUCT_DATA for an ASIN (1562243179). Analysis of the JSON revealed two relevant keys at the root of the product object:
+    - `"referralFeePercent": 15` (integer)
+    - `"referralFeePercentage": 14.99` (decimal, more precise)
+- Solution: Modified `get_referral_fee_percent` to prioritize `product_data.get('referralFeePercentage')` for extraction. If unavailable, it falls back to `product_data.get('referralFeePercent')`, and then to previously checked nested fbaFee locations. Ensured the final value is explicitly cast to float before formatting with `:.2f%`.
+- Outcome: User confirmed a perfect match with Keepa.com data after the update.
+- Learning: For fee percentages, the Keepa API might provide both a rounded integer (`referralFeePercent`) and a more precise decimal (`referralFeePercentage`). Always prioritize the field with greater precision if available. The precise field name might not always be obvious from general documentation and can require inspection of raw API responses.

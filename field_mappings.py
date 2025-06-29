@@ -21,7 +21,7 @@ from stable_products import (
     # Reviews - Review Count,
     # get_fba_pick_pack_fee,          # FBA Pick&Pack Fee # Still need to import this # Corrected: This should be uncommented
     get_fba_pick_pack_fee,          # FBA Pick&Pack Fee
-    # Referral Fee %,
+    get_referral_fee_percent,       # Referral Fee %
     tracking_since,                 # Tracking since
     categories_root,                # Categories - Root
     categories_sub,                 # Categories - Sub
@@ -228,7 +228,8 @@ from stable_products import (
     buy_box_365_days_avg,      # Buy Box - 365 days avg.
     new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
     used_like_new_365_days_avg, # Added import
-    get_fba_pick_pack_fee # Added import for FBA Pick&Pack Fee
+    get_fba_pick_pack_fee, # Added import for FBA Pick&Pack Fee
+    get_referral_fee_percent # Added import for Referral Fee %
 )
 from stable_calculations import (
     percent_down_365,               # Percent Down 365
@@ -471,7 +472,7 @@ FUNCTION_LIST = [
     None,                           # Reviews - Rating
     None,                           # Reviews - Review Count
     get_fba_pick_pack_fee,          # FBA Pick&Pack Fee
-    None,                           # Referral Fee %
+    get_referral_fee_percent,       # Referral Fee %
     tracking_since,                 # Tracking since
     categories_root,                # Categories - Root
     categories_sub,                 # Categories - Sub

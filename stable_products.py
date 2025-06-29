@@ -1725,4 +1725,65 @@ def get_fba_pick_pack_fee(product_data):
         return {'FBA Pick&Pack Fee': '-'}
 # FBA Pick&Pack Fee ends
 
+# Referral Fee % starts
+def get_referral_fee_percent(product_data):
+    """
+    Retrieves the Referral Fee Percentage from product data.
+    This is speculative as the exact field is not confirmed in documentation.
+    It might be in product_data.referralFeePercent or product_data.fbaFees.referralFeePercent.
+    Returns '-' if not found or invalid.
+    """
+    asin = product_data.get('asin', 'unknown')
+    logging.debug(f"ASIN {asin}: Attempting to get Referral Fee Percentage.")
+
+    referral_fee_value = None
+    source = "Not found"
+
+    # Priority 1: Direct field 'referralFeePercentage' (more precise)
+    if 'referralFeePercentage' in product_data:
+        referral_fee_value = product_data.get('referralFeePercentage')
+        source = "product_data.referralFeePercentage"
+        logging.debug(f"ASIN {asin}: Found precise referralFeePercentage directly: {referral_fee_value}")
+
+    # Priority 2: Direct field 'referralFeePercent' (fallback, possibly integer)
+    elif 'referralFeePercent' in product_data:
+        referral_fee_value = product_data.get('referralFeePercent')
+        source = "product_data.referralFeePercent"
+        logging.debug(f"ASIN {asin}: Found potential referralFeePercent directly: {referral_fee_value}")
+    
+    # Priority 3 & 4: Nested under fbaFees (more precise then less precise)
+    elif 'fbaFees' in product_data and isinstance(product_data['fbaFees'], dict):
+        fba_fees_dict = product_data['fbaFees']
+        if 'referralFeePercentage' in fba_fees_dict:
+            referral_fee_value = fba_fees_dict.get('referralFeePercentage')
+            source = "product_data.fbaFees.referralFeePercentage"
+            logging.debug(f"ASIN {asin}: Found precise referralFeePercentage under fbaFees: {referral_fee_value}")
+        elif 'referralFeePercent' in fba_fees_dict:
+            referral_fee_value = fba_fees_dict.get('referralFeePercent')
+            source = "product_data.fbaFees.referralFeePercent"
+            logging.debug(f"ASIN {asin}: Found potential referralFeePercent under fbaFees: {referral_fee_value}")
+        # Priority 5: Deeply nested percentage
+        elif 'referralFee' in fba_fees_dict and isinstance(fba_fees_dict['referralFee'], dict):
+             if 'percent' in fba_fees_dict['referralFee']:
+                referral_fee_value = fba_fees_dict['referralFee'].get('percent')
+                source = "product_data.fbaFees.referralFee.percent"
+                logging.debug(f"ASIN {asin}: Found potential referralFeePercent under fbaFees.referralFee.percent: {referral_fee_value}")
+
+    if referral_fee_value is not None and isinstance(referral_fee_value, (int, float)) and referral_fee_value >= 0:
+        try:
+            # Format to two decimal places
+            formatted_fee = f"{float(referral_fee_value):.2f}%" # Ensure it's treated as float for formatting
+            logging.info(f"ASIN {asin}: Referral Fee Percentage found ({source}): {formatted_fee} (from raw {referral_fee_value})")
+            return {'Referral Fee %': formatted_fee}
+        except Exception as e:
+            logging.error(f"ASIN {asin}: Error formatting Referral Fee Percentage ({referral_fee_value}) from {source}: {str(e)}. Returning '-'.")
+            return {'Referral Fee %': '-'}
+    else:
+        if referral_fee_value is None:
+            logging.warning(f"ASIN {asin}: Referral Fee Percentage not found with any known keys. Returning '-'.")
+        else:
+            logging.warning(f"ASIN {asin}: Referral Fee Percentage found ({source}) but value is invalid ({referral_fee_value}). Returning '-'.")
+        return {'Referral Fee %': '-'}
+# Referral Fee % ends
+
 #### END of stable_products.py ####

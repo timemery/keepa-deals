@@ -266,3 +266,20 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   The value is provided in **cents**.
     *   Example path: `product_data.get('fbaFees', {}).get('pickAndPackFee')`
     *   Ensure to handle cases where `fbaFees` or `pickAndPackFee` might be missing or `None`.
+
+## Keepa API Product Data Structure Notes
+
+*   **FBA Pick & Pack Fee:** To retrieve the FBA Pick & Pack Fee for a product, access the `product_data` object (JSON response from the `/product` endpoint) as follows:
+    *   The fee is stored within a dictionary named `fbaFees`.
+    *   Inside the `fbaFees` dictionary, the specific fee is under the key `pickAndPackFee`.
+    *   The value is provided in **cents**.
+    *   Example path: `product_data.get('fbaFees', {}).get('pickAndPackFee')`
+    *   Ensure to handle cases where `fbaFees` or `pickAndPackFee` might be missing or `None`.
+
+*   **Referral Fee Percentage (Added YYYY-MM-DD):**
+    *   The Keepa API `/product` endpoint response may contain referral fee percentage information at the root of the `product_data` object.
+    *   Prioritize the field `product_data.get('referralFeePercentage')` as it typically provides a precise decimal value (e.g., 14.99).
+    *   A less precise, potentially rounded integer version might be available at `product_data.get('referralFeePercent')` (e.g., 15).
+    *   If these direct fields are not present, referral fee information might also be speculatively found nested under an `fbaFees` object, similar to other fees (e.g., `product_data.get('fbaFees', {}).get('referralFeePercentage')` or `product_data.get('fbaFees', {}).get('referralFee', {}).get('percent')`).
+    *   When implementing, check for the more precise `referralFeePercentage` first, then fall back to other known or speculative locations. The value is a direct percentage (e.g., 14.99 for 14.99%).
+
