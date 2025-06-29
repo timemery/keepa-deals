@@ -223,3 +223,25 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   `stats.avg365[20]` is for "Used, very good - 365 days avg.".
     *   `stats.avg365[21]` is confirmed for "Used, good - 365 days avg." (YYYY-MM-DD).
     *   (Index for "Used, acceptable - 365 days avg." would likely be `stats.avg365[22]` if needed, following the pattern from `stats.current[22]`.)
+
+### Keepa API Data Structure Notes
+
+*   **Accessing Price/Rank Statistics:** Product statistics (current prices, average prices over various periods like 30, 90, 365 days, min/max prices) are generally found within the `product['stats']` object.
+    *   Current values are typically in `product['stats']['current'][index]`.
+    *   Average values for a period `D` (e.g., 30, 90, 365) are in `product['stats']['avgD'][index]`.
+    *   The `index` within these arrays corresponds to a specific price type or rank. For example:
+        *   `[0]`: Amazon price
+        *   `[1]`: New overall price
+        *   `[2]`: Used overall price
+        *   `[3]`: Sales Rank
+        *   `[4]`: List Price (current - may vary for averages)
+        *   `[7]`: New, 3rd Party FBM (current & averages)
+        *   `[10]`: New, 3rd Party FBA (current & averages)
+        *   `[18]`: Buy Box Shipping (current & averages)
+        *   `[19]`: Used, Like New (current & averages)
+        *   `[20]`: Used, Very Good (current & averages)
+        *   `[21]`: Used, Good (current & averages)
+        *   `[22]`: Used, Acceptable (current & averages)
+        *   `[32]`: Buy Box Used (current & averages - verify specific index for averages if needed)
+    *   Always verify the exact index for less common fields or if a direct field like `product['stats']['buyBoxPrice']` is not sufficient or available for averages. The `Keepa_Documentation-official.md` might list some, but others are found through empirical testing and observing API responses (see `debug_log.txt` for `stats_raw` entries).
+*   **Field Naming Consistency:** When adding new functions for fields like "Condition - X days avg.", ensure the function name in `stable_products.py` (e.g., `used_acceptable_365_days_avg`) and its import/usage in `field_mappings.py` are consistent.

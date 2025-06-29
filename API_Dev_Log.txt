@@ -408,3 +408,12 @@ Next Steps:
 **Files Modified:**
 *   `stable_products.py`
 *   `field_mappings.py`
+
+2025-0X-XX:
+- Investigated and fixed "Used, acceptable - 365 days avg." column showing all "-".
+- Problem: No function was assigned in `field_mappings.py` and the function `used_acceptable_365_days_avg` was missing in `stable_products.py`.
+- Solution:
+    - Created `used_acceptable_365_days_avg` in `stable_products.py` to fetch data from `stats.avg365[22]`.
+    - Updated `field_mappings.py` to import and use this new function.
+- Result: Column now populates correctly. Confirmed via user testing.
+- Note: Identified `stats.avg365[22]` as the source for this average, consistent with `stats.current[22]` for the current price of the same condition. This pattern (index consistency between `current` and `avgX` arrays for specific conditions) seems to be a reliable heuristic for Keepa data.
