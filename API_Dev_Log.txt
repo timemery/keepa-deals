@@ -382,3 +382,29 @@ Next Steps:
 **Files Modified:**
 *   `stable_products.py`
 *   `field_mappings.py`
+
+## Dev Log Entry - YYYY-MM-DD
+
+**Task:** Implement "Used, good - 365 days avg." column.
+
+**Issue:**
+*   The "Used, good - 365 days avg." column in `Keepa_Deals_Export.csv` was showing all "-" as no function was assigned to populate it.
+
+**Solution:**
+1.  **Created `used_good_365_days_avg(product_data)` function in `stable_products.py`:**
+    *   This function targets `product_data['stats']['avg365'][21]`. Index 21 was determined based on the existing pattern where "Used, good - Current" uses `stats.current[21]`, and other condition-specific 365-day averages (like "Used, like new - 365 days avg." using `stats.avg365[19]` and "Used, very good - 365 days avg." using `stats.avg365[20]`) use the corresponding index in the `stats.avg365` array.
+    *   The function converts the price from cents to a formatted dollar string (e.g., "$XX.YY").
+    *   Includes error handling for missing/invalid data (returns "-") and standard logging.
+2.  **Updated `field_mappings.py`:**
+    *   Imported `used_good_365_days_avg` from `stable_products.py`.
+    *   Correctly mapped this function to the "Used, good - 365 days avg." header in the `FUNCTION_LIST`.
+
+**Outcome:**
+*   The "Used, good - 365 days avg." column now populates correctly with data. User confirmed with local testing, and results were a perfect match.
+
+**Learnings:**
+*   Reinforced the pattern that `stats.avg365[X]` often corresponds to `stats.current[X]` for similar price types. In this case, `stats.current[21]` (Used, good - Current) successfully predicted that `stats.avg365[21]` would be "Used, good - 365 days avg.".
+
+**Files Modified:**
+*   `stable_products.py`
+*   `field_mappings.py`

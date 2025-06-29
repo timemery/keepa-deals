@@ -216,3 +216,10 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
 *   Carefully review the recently modified files (`field_mappings.py` and the file where the new function was added) for syntax errors.
 *   Temporarily comment out the new function import and its usage in `FUNCTION_LIST` within `field_mappings.py`. If the `ImportError` disappears, the issue is related to the new function.
 *   If necessary, temporarily comment out the new function definition in its source file (e.g., `stable_products.py`) as well, to isolate whether the definition itself or its usage in `field_mappings.py` is the problem.
+
+*   **Used Condition Averages (`avg...` arrays):**
+    *   `stats.avg365[2]` is for "Used - 365 days avg." (overall used).
+    *   `stats.avg365[19]` is for "Used, like new - 365 days avg.".
+    *   `stats.avg365[20]` is for "Used, very good - 365 days avg.".
+    *   `stats.avg365[21]` is confirmed for "Used, good - 365 days avg." (YYYY-MM-DD).
+    *   (Index for "Used, acceptable - 365 days avg." would likely be `stats.avg365[22]` if needed, following the pattern from `stats.current[22]`.)
