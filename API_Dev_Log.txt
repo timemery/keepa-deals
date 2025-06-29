@@ -417,3 +417,31 @@ Next Steps:
     - Updated `field_mappings.py` to import and use this new function.
 - Result: Column now populates correctly. Confirmed via user testing.
 - Note: Identified `stats.avg365[22]` as the source for this average, consistent with `stats.current[22]` for the current price of the same condition. This pattern (index consistency between `current` and `avgX` arrays for specific conditions) seems to be a reliable heuristic for Keepa data.
+
+Date: 2025-06-29
+Task: Fix "New Offer Count - Current", "New Offer Count - 365 days avg.", "Used Offer Count - Current", and "Used Offer Count - 365 days avg." columns showing "-" or incorrect large numbers.
+Jules Version: [Your Current Jules Version, e.g., Jules vX.Y]
+
+Problem: Initial implementation used incorrect indices (stats.current[5] & [6], stats.avg365[5] & [6]) for offer counts, leading to wildly inaccurate data or hyphens.
+
+Solution:
+1.  Analyzed `stats_raw` object from `debug_log.txt` for ASIN 0804840385.
+2.  Determined correct sources for offer counts:
+    *   **New Offer Count - Current**: Sum of `product['stats'].get('offerCountFBA', 0)` and `product['stats'].get('offerCountFBM', 0)`.
+    *   **Used Offer Count - Current**: Calculated as `product['stats'].get('totalOfferCount', 0) - (sum of new FBA & FBM counts)`. Includes checks for missing `totalOfferCount` and ensures the result is not negative.
+    *   **New Offer Count - 365 days avg.**: `product['stats']['avg365'][11]`. This index aligns with `product.csv[11]` which is documented as `COUNT_NEW` history.
+    *   **Used Offer Count - 365 days avg.**: `product['stats']['avg365'][12]`. This index aligns with `product.csv[12]` which is documented as `COUNT_USED` history.
+3.  Updated functions in `stable_products.py`:
+    *   `new_offer_count_current`
+    *   `used_offer_count_current`
+    *   `new_offer_count_365_days_avg`
+    *   `used_offer_count_365_days_avg`
+4.  Updated `field_mappings.py` to use the corrected functions.
+5.  Updated `AGENTS.md` with these new data source details.
+
+Result: User tested locally, and results are now an almost perfect match with Keepa.com data. Issue resolved.
+
+Learnings:
+*   Directly named fields in `product['stats']` (e.g., `offerCountFBA`, `totalOfferCount`) are reliable for current data points when available.
+*   Indices in `stats.current` and `stats.avg...` arrays for aggregated counts (like average new/used offer counts) can often be inferred from the `product.csv` historical data array definitions (e.g., `csv[11]` for `COUNT_NEW` history mapping to `avg365[11]` for its average).
+*   Initial assumptions about `stats` array indices based on simple ordering can be incorrect; detailed `stats_raw` review is crucial for complex or less common fields.

@@ -223,6 +223,10 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   `stats.avg365[20]` is for "Used, very good - 365 days avg.".
     *   `stats.avg365[21]` is confirmed for "Used, good - 365 days avg." (YYYY-MM-DD).
     *   (Index for "Used, acceptable - 365 days avg." would likely be `stats.avg365[22]` if needed, following the pattern from `stats.current[22]`.)
+    *   "New Offer Count - Current": Sum of `product['stats'].get('offerCountFBA', 0)` and `product['stats'].get('offerCountFBM', 0)`.
+    *   "Used Offer Count - Current": Calculated as `product['stats'].get('totalOfferCount', 0) - (sum of new FBA & FBM counts)`.
+    *   "New Offer Count - 365 days avg.": `product['stats']['avg365'][11]` (corresponds to historical `csv[11]` for `COUNT_NEW`).
+    *   "Used Offer Count - 365 days avg.": `product['stats']['avg365'][12]` (corresponds to historical `csv[12]` for `COUNT_USED`).
 
 ### Keepa API Data Structure Notes
 
@@ -245,3 +249,11 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
         *   `[32]`: Buy Box Used (current & averages - verify specific index for averages if needed)
     *   Always verify the exact index for less common fields or if a direct field like `product['stats']['buyBoxPrice']` is not sufficient or available for averages. The `Keepa_Documentation-official.md` might list some, but others are found through empirical testing and observing API responses (see `debug_log.txt` for `stats_raw` entries).
 *   **Field Naming Consistency:** When adding new functions for fields like "Condition - X days avg.", ensure the function name in `stable_products.py` (e.g., `used_acceptable_365_days_avg`) and its import/usage in `field_mappings.py` are consistent.
+
+
+*   **Offer Counts (Current & Average):**
+    *   **New Offer Count - Current**: Derived by summing `product['stats'].get('offerCountFBA', 0)` and `product['stats'].get('offerCountFBM', 0)`. These are direct keys in the `stats` object.
+    *   **Used Offer Count - Current**: Calculated as `product['stats'].get('totalOfferCount', 0) - ( new_offer_count_fba + new_offer_count_fbm )`. Requires careful handling if `totalOfferCount` is missing or less than the sum of new offers.
+    *   **New Offer Count - 365 days avg.**: Found at `product['stats']['avg365'][11]`. This index corresponds to the historical data type `COUNT_NEW` (new offer count history, often seen as `csv[11]` in `product.csv`).
+    *   **Used Offer Count - 365 days avg.**: Found at `product['stats']['avg365'][12]`. This index corresponds to the historical data type `COUNT_USED` (used offer count history, often seen as `csv[12]` in `product.csv`).
+    *   *Note:* The indices `stats.current[5]`, `stats.current[6]`, `stats.avg365[5]`, and `stats.avg365[6]` were found to be incorrect for these specific offer counts and likely represent other data.

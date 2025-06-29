@@ -1480,6 +1480,91 @@ def new_365_days_avg(product):
 # List Price - 90 days OOS,
 # List Price - Stock,
 
+# New Offer Count - Current starts
+def new_offer_count_current(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    logging.debug(f"ASIN {asin}: Calculating New Offer Count - Current.")
+
+    offer_count_fba = stats.get('offerCountFBA')
+    offer_count_fbm = stats.get('offerCountFBM')
+
+    logging.debug(f"ASIN {asin}: offerCountFBA = {offer_count_fba}, offerCountFBM = {offer_count_fbm}")
+
+    if offer_count_fba is None and offer_count_fbm is None:
+        logging.warning(f"ASIN {asin}: Both offerCountFBA and offerCountFBM are missing. Returning '-' for New Offer Count - Current.")
+        return {'New Offer Count - Current': '-'}
+
+    # Treat None as 0 for summation if one is present and the other is not
+    val_fba = offer_count_fba if isinstance(offer_count_fba, int) and offer_count_fba >= 0 else 0
+    val_fbm = offer_count_fbm if isinstance(offer_count_fbm, int) and offer_count_fbm >= 0 else 0
+    
+    total_new_offers = val_fba + val_fbm
+    
+    # If both original values were None (which is caught above), or if both are present but negative (unlikely for counts),
+    # this logic correctly produces a sum. The main concern is missing keys.
+    # If keys are present and counts are genuinely 0, sum is 0, which is correct.
+    
+    logging.info(f"ASIN {asin}: New Offer Count - Current calculated as {total_new_offers} (FBA: {val_fba}, FBM: {val_fbm}).")
+    return {'New Offer Count - Current': str(total_new_offers)}
+# New Offer Count - Current ends
+
+# New Offer Count - 365 days avg. starts
+def new_offer_count_365_days_avg(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    # Index 11 for average COUNT_NEW in stats.avg365 array, based on product.csv[11] mapping
+    count = get_stat_value(stats, 'avg365', 11, is_price=False)
+    logging.info(f"ASIN {asin}: New Offer Count - 365 days avg. from stats.avg365[11]: {count}")
+    return {'New Offer Count - 365 days avg.': count}
+# New Offer Count - 365 days avg. ends
+
+# Used Offer Count - Current starts
+def used_offer_count_current(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    logging.debug(f"ASIN {asin}: Calculating Used Offer Count - Current.")
+
+    offer_count_fba_new = stats.get('offerCountFBA')
+    offer_count_fbm_new = stats.get('offerCountFBM')
+    total_offer_count = stats.get('totalOfferCount')
+
+    logging.debug(f"ASIN {asin}: totalOfferCount = {total_offer_count}, offerCountFBA_new = {offer_count_fba_new}, offerCountFBM_new = {offer_count_fbm_new}")
+
+    # If totalOfferCount is missing, we cannot reliably calculate used offers this way.
+    if total_offer_count is None or not isinstance(total_offer_count, int) or total_offer_count < 0:
+        logging.warning(f"ASIN {asin}: totalOfferCount is missing or invalid ({total_offer_count}). Returning '-' for Used Offer Count - Current.")
+        return {'Used Offer Count - Current': '-'}
+
+    # Treat None as 0 for new offer counts if one is present and the other is not, or if they are invalid
+    val_fba_new = offer_count_fba_new if isinstance(offer_count_fba_new, int) and offer_count_fba_new >= 0 else 0
+    val_fbm_new = offer_count_fbm_new if isinstance(offer_count_fbm_new, int) and offer_count_fbm_new >= 0 else 0
+    
+    current_new_total = val_fba_new + val_fbm_new
+    
+    # Ensure total_offer_count is not less than the sum of new offers
+    if total_offer_count < current_new_total:
+        logging.warning(f"ASIN {asin}: totalOfferCount ({total_offer_count}) is less than calculated new offers ({current_new_total}). This might indicate inconsistent data. Returning '-' for Used Offer Count - Current.")
+        # Depending on strictness, could also return str(total_offer_count) if it's implied all are used, or 0.
+        # For now, returning '-' as it implies an issue.
+        return {'Used Offer Count - Current': '-'}
+        
+    calculated_used_offers = total_offer_count - current_new_total
+    
+    logging.info(f"ASIN {asin}: Used Offer Count - Current calculated as {calculated_used_offers} (Total: {total_offer_count}, New FBA: {val_fba_new}, New FBM: {val_fbm_new}).")
+    return {'Used Offer Count - Current': str(calculated_used_offers)}
+# Used Offer Count - Current ends
+
+# Used Offer Count - 365 days avg. starts
+def used_offer_count_365_days_avg(product):
+    stats = product.get('stats', {})
+    asin = product.get('asin', 'unknown')
+    # Index 12 for average COUNT_USED in stats.avg365 array, based on product.csv[12] mapping
+    count = get_stat_value(stats, 'avg365', 12, is_price=False)
+    logging.info(f"ASIN {asin}: Used Offer Count - 365 days avg. from stats.avg365[12]: {count}")
+    return {'Used Offer Count - 365 days avg.': count}
+# Used Offer Count - 365 days avg. ends
+
 # Buy Box - 365 days avg. starts
 def buy_box_365_days_avg(product):
     """

@@ -220,6 +220,10 @@ from stable_products import (
     # Used Offer Count - 90 days avg.,
     # Used Offer Count - 180 days avg.,
     # Used Offer Count - 365 days avg.
+    new_offer_count_current,        # New Offer Count - Current
+    new_offer_count_365_days_avg,   # New Offer Count - 365 days avg.
+    used_offer_count_current,       # Used Offer Count - Current
+    used_offer_count_365_days_avg,  # Used Offer Count - 365 days avg.
     buy_box_365_days_avg,      # Buy Box - 365 days avg.
     new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
     used_like_new_365_days_avg # Added import
@@ -653,18 +657,18 @@ FUNCTION_LIST = [
     None,                           # List Price - Highest 365 days
     None,                           # List Price - 90 days OOS
     None,                           # List Price - Stock
-    None,                           # New Offer Count - Current
+    new_offer_count_current,        # New Offer Count - Current
     None,                           # New Offer Count - 30 days avg.
     None,                           # New Offer Count - 60 days avg.
     None,                           # New Offer Count - 90 days avg.
     None,                           # New Offer Count - 180 days avg.
-    None,                           # New Offer Count - 365 days avg.
-    None,                           # Used Offer Count - Current
+    new_offer_count_365_days_avg,   # New Offer Count - 365 days avg.
+    used_offer_count_current,       # Used Offer Count - Current
     None,                           # Used Offer Count - 30 days avg.
     None,                           # Used Offer Count - 60 days avg.
     None,                           # Used Offer Count - 90 days avg.
     None,                           # Used Offer Count - 180 days avg.
-    None                            # Used Offer Count - 365 days avg.
+    used_offer_count_365_days_avg   # Used Offer Count - 365 days avg.
 ]
 # Chunk 2 ends
 
