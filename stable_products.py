@@ -210,7 +210,14 @@ def manufacturer(product):
     return result
 # Manufacturer ends
 
-# Brand
+# Brand starts
+def get_brand(product):
+    brand_value = product.get('brand', '-')
+    result = {'Brand': brand_value}
+    logging.debug(f"get_brand result for ASIN {product.get('asin', 'unknown')}: {result}")
+    return result
+# Brand ends
+
 # Product Group
 # Variation Attributes
 # Item Type

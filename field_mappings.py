@@ -30,7 +30,7 @@ from stable_products import (
     # Freq. Bought Together,
     # Type,
     manufacturer,                   # Manufacturer
-    # Brand,
+    get_brand,                      # Brand
     # Product Group,
     # Variation Attributes,
     # Item Type,
@@ -481,7 +481,7 @@ FUNCTION_LIST = [
     None,                           # Freq. Bought Together
     None,                           # Type
     manufacturer,                   # Manufacturer
-    None,                           # Brand
+    get_brand,                      # Brand
     None,                           # Product Group
     None,                           # Variation Attributes
     None,                           # Item Type
