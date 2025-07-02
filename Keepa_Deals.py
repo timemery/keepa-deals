@@ -3,7 +3,7 @@
 
 # Chunk 1 starts: 
 # Added argparse
-import json, csv, logging, sys, requests, urllib.parse, time, argparse
+import json, csv, logging, sys, requests, urllib.parse, time, argparse, math
 from retrying import retry
 from stable_deals import validate_asin, fetch_deals_for_deals
 from field_mappings import FUNCTION_LIST
@@ -12,6 +12,21 @@ CSV_PATH = os.path.join(os.path.dirname(__file__), "Keepa_Deals_Export.csv")
 
 # Get the main script logger instance
 logger = logging.getLogger('KeepaDeals') # Use the same logger as in main()
+
+# --- Jules: Local Quota Management Constants & State ---
+MAX_QUOTA_TOKENS = 300
+HOURLY_REFILL_PERCENTAGE = 0.05
+TOKEN_COST_PER_ASIN = 1
+MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 10
+QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour
+DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes
+
+# Initialize global state variables for quota management
+# These will be modified by functions and within the main loop.
+# Consider refactoring to a class if state management becomes too complex.
+current_available_tokens = MAX_QUOTA_TOKENS
+last_refill_calculation_time = time.time() # Initialize to script start time
+# --- End Local Quota Management ---
 
 # Logging for terminal and file output - starts
 # import sys # sys is already imported globally
@@ -83,6 +98,7 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
         response = requests.get(url, headers=headers, timeout=60)
+        
         logging.debug(f"Response status: {response.status_code}, url={url}")
         response.raise_for_status() # Will raise HTTPError for 4xx/5xx, which is a RequestException
 
@@ -139,19 +155,60 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         # For other exceptions, we might not have response headers
         rate_limit_info = {'limit': None, 'remaining': None, 'reset': None, 'error_status_code': None}
         return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': None}, rate_limit_info
+
+# --- Jules: Quota Management Function ---
+def update_and_check_quota(logger_instance):
+    """
+    Updates the available token count based on hourly refill and pauses if tokens are low.
+    Uses and modifies global variables: current_available_tokens, last_refill_calculation_time.
+    """
+    global current_available_tokens
+    global last_refill_calculation_time
+
+    current_time = time.time()
+    time_elapsed_seconds = current_time - last_refill_calculation_time
+    
+    if time_elapsed_seconds >= QUOTA_REFILL_INTERVAL_SECONDS:
+        intervals_passed = int(time_elapsed_seconds // QUOTA_REFILL_INTERVAL_SECONDS)
+        
+        if intervals_passed > 0:
+            refill_amount_per_interval = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
+            total_refilled = intervals_passed * refill_amount_per_interval
+            
+            current_available_tokens += total_refilled
+            if current_available_tokens > MAX_QUOTA_TOKENS:
+                current_available_tokens = MAX_QUOTA_TOKENS
+            
+            # Advance last_refill_calculation_time by the exact number of intervals processed
+            last_refill_calculation_time += intervals_passed * QUOTA_REFILL_INTERVAL_SECONDS
+            
+            logger_instance.info(f"Quota Refill: Added {total_refilled:.2f} tokens over {intervals_passed} hour(s). New available tokens: {current_available_tokens:.2f}")
+    
+    logger_instance.info(f"Quota Check: Current available tokens: {current_available_tokens:.2f}")
+
+    # Proactive Pause Logic (Step 4, integrated here)
+    if current_available_tokens < MIN_QUOTA_THRESHOLD_BEFORE_PAUSE:
+        logger_instance.warning(
+            f"Low quota: {current_available_tokens:.2f} tokens remaining, which is below threshold {MIN_QUOTA_THRESHOLD_BEFORE_PAUSE}. "
+            f"Pausing for {DEFAULT_LOW_QUOTA_PAUSE_SECONDS / 60:.1f} minutes."
+        )
+        time.sleep(DEFAULT_LOW_QUOTA_PAUSE_SECONDS)
+        
+        # After pausing, recursively call to re-calculate refills and re-check quota.
+        # This ensures that any tokens refilled during the pause are accounted for.
+        # Add a recursion depth limit or alternative if this is a concern, but for typical pauses it should be fine.
+        logger_instance.info("Re-checking quota after pause...")
+        update_and_check_quota(logger_instance) # Recursive call
+    
+    # This function doesn't return anything; it modifies globals and may pause.
+# --- End Quota Management Function ---
+
 # Chunk 2 ends
 
 # Global args variable, to be initialized in main
 args = None
-# Global variable to store the last known rate limit information
-current_rate_limit_info = {
-    'limit': None,
-    'remaining': None, # Initialize with a reasonable default or fetch once at startup if possible
-    'reset': None,
-    'last_checked': 0 # Timestamp of when this was last updated
-}
-RATE_LIMIT_REMAINING_THRESHOLD = 20 # Pause if remaining tokens are below this
-MIN_TIME_BETWEEN_HEADER_CHECKS_SECONDS = 5 # To avoid excessive logging if calls are very fast
+# The old current_rate_limit_info global and its constants (RATE_LIMIT_REMAINING_THRESHOLD, MIN_TIME_BETWEEN_HEADER_CHECKS_SECONDS)
+# are no longer needed with the new local quota system. They are removed.
 
 # Chunk 3 starts
 def write_csv(rows, deals, diagnostic=False):
@@ -236,8 +293,8 @@ def main():
 
         deals = all_deals # Use all_deals for processing
         
-        # TEMPORARY: Limit to 200 deals for faster testing
-        MAX_DEALS_TO_PROCESS_FOR_TESTING = 200
+        # TEMPORARY: Limit to 100 deals for faster testing
+        MAX_DEALS_TO_PROCESS_FOR_TESTING = 100
         if len(deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
             logger.warning(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
             print(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)
@@ -271,66 +328,42 @@ def main():
             logger.info(f"Processing ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})") # Use logger instance
             print(f"Processing ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
             
-            # Dynamic Throttling Logic
-            global current_rate_limit_info
-            now = time.time()
-            if current_rate_limit_info.get('remaining') is not None:
-                try:
-                    remaining_tokens = int(current_rate_limit_info['remaining'])
-                    if remaining_tokens < RATE_LIMIT_REMAINING_THRESHOLD:
-                        reset_time_seconds = int(current_rate_limit_info.get('reset', 60)) # Default to 60s if reset not available
-                        # Ensure pause is at least a minimum sensible value, e.g. 10s, even if reset time is shorter.
-                        # And not excessively long if reset time is huge (though API usually gives seconds until next minute).
-                        pause_duration = max(10, min(reset_time_seconds + 5, 300)) # Pause for reset time + 5s buffer, capped at 5 mins
-                        logger.warning(f"Low tokens ({remaining_tokens} remaining). Pausing for {pause_duration} seconds. Reset ETA: {reset_time_seconds}s.")
-                        print(f"Low tokens ({remaining_tokens} remaining). Pausing for {pause_duration} seconds...", flush=True)
-                        time.sleep(pause_duration)
-                        current_rate_limit_info['remaining'] = None # Force re-check after pause
-                except (ValueError, TypeError) as e:
-                    logger.warning(f"Could not parse rate limit info ({current_rate_limit_info}), proceeding with caution: {e}")
+            # --- Jules: New Local Quota Management ---
+            # The logger instance is already available as 'logger' in this scope (main)
+            update_and_check_quota(logger) 
+            # --- End Local Quota Management ---
 
+            # The old dynamic throttling logic based on current_rate_limit_info is now removed / superseded by update_and_check_quota
 
-            logger.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})") # Use logger instance
-            print(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
-            product, rate_info = fetch_product(asin)
+            logger.info(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})") # Use logger instance, ensure correct index and list
+            print(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
+            product, rate_info = fetch_product(asin) # rate_info is legacy, no longer used for primary throttling
 
-            # Update global rate limit info
-            if rate_info:
-                if rate_info.get('remaining'):
-                    current_rate_limit_info['remaining'] = rate_info['remaining']
-                if rate_info.get('limit'):
-                    current_rate_limit_info['limit'] = rate_info['limit']
-                # Only update reset if it's more recent or available
-                if rate_info.get('reset') is not None : #and (current_rate_limit_info.get('last_checked', 0) < (now - MIN_TIME_BETWEEN_HEADER_CHECKS_SECONDS)) :
-                    current_rate_limit_info['reset'] = rate_info['reset']
-                    current_rate_limit_info['last_checked'] = now
-                if rate_info.get('error_status_code'): # Store status code if error occurred
-                    current_rate_limit_info['error_status_code'] = rate_info['error_status_code']
-                else: # Clear previous error status if current call was successful
-                    current_rate_limit_info.pop('error_status_code', None)
+            # --- Jules: Decrement token after fetch attempt ---
+            global current_available_tokens # Ensure we're using the global
+            current_available_tokens -= TOKEN_COST_PER_ASIN
+            logger.info(f"Token consumed for ASIN {asin}. Tokens remaining: {current_available_tokens:.2f}")
+            # --- End Decrement ---
             
             # Handle 429 error specifically after fetch_product attempt
             if product.get('error') and product.get('status_code') == 429:
-                logger.error(f"Received 429 (Too Many Requests) for ASIN {asin}. Initiating a longer pause of 5 minutes.")
-                print(f"Rate limit hit hard for ASIN {asin}. Pausing for 5 minutes to allow token replenishment...", flush=True)
-                time.sleep(300) # Pause for 5 minutes
-                current_rate_limit_info['remaining'] = None # Force re-check after pause
-                # Optionally, you might want to retry the current ASIN or just skip it and let the loop continue to the next one
-                # For now, it will effectively skip processing for this ASIN in this iteration and try the next one after the pause.
-                # If retry is desired, a continue or a more complex retry mechanism here would be needed.
-                # However, the @retry in fetch_product handles immediate retries for network glitches, 
-                # this is for systemic token exhaustion.
+                logger.error(f"Received 429 (Too Many Requests) for ASIN {asin}. Initiating a longer pause of 1 hour.")
+                print(f"Rate limit hit hard for ASIN {asin}. Pausing for 1 hour to allow token replenishment...", flush=True)
+                time.sleep(QUOTA_REFILL_INTERVAL_SECONDS) # Pause for 1 hour (3600 seconds)
+                
+                # After the long pause, call update_and_check_quota to recalculate available tokens
+                # This will account for the tokens refilled during the 1-hour pause.
+                logger.info("Attempting to update quota information after 429 pause.")
+                update_and_check_quota(logger) # Ensure logger is in scope or passed
+
                 logger.warning(f"Skipping data processing for ASIN {asin} for this cycle due to 429 error and subsequent pause.")
                 # Add a placeholder row for skipped ASINs to maintain CSV integrity
                 placeholder_row = {'ASIN': asin}
                 for header_key in HEADERS: # Assuming HEADERS is accessible
                     if header_key not in placeholder_row:
                         placeholder_row[header_key] = '-'
-                # Special handling for fields that might come from the 'deal' object if available
-                # For a pure skip, these might also be '-' but if some deal data was vital, it could be added.
-                # For now, a simple placeholder with ASIN and '-' for others.
                 rows.append(placeholder_row)
-                continue # Skip to the next deal in the list after the long pause
+                continue # Skip to the next deal in the list after the long pause and quota update
 
 
             # Jules: Modified for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
