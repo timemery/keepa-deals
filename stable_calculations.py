@@ -40,34 +40,19 @@ def percent_down_365(product):
         # Formula: ((avg - current) / avg) * 100 gives % down from average
         # If current > avg, this will be negative, meaning it's % *up* from average.
         
+        # Calculate percentage difference.
+        # If current_used < avg_365 (price is down), percentage_diff will be positive.
+        # If current_used > avg_365 (price is up), percentage_diff will be negative.
+        # If current_used == avg_365, percentage_diff will be zero.
         percentage_diff = ((avg_365 - current_used) / avg_365) * 100
         
-        symbol = ""
-        # Note: The problem description asks for "-" if below average, and "+" if above.
-        # The current `percentage_diff` calculation: ((avg - current) / avg) * 100
-        # - If current < avg (e.g. current=80, avg=100), diff = ((100-80)/100)*100 = 20%. We want "-20%".
-        # - If current > avg (e.g. current=120, avg=100), diff = ((100-120)/100)*100 = -20%. We want "+20%".
-        # - If current == avg, diff = 0. We want "0%".
+        # Format to zero decimal places. The f-string formatting handles the sign.
+        # If percentage_diff is 0, it will be "0%".
+        # If positive (price is down), e.g., "20%".
+        # If negative (price is up), e.g., "-15%".
+        result_str = f"{percentage_diff:.0f}%"
 
-        if current_used < avg_365: # Current is below average, show as negative percentage
-            symbol = "-" 
-            # percentage_diff is already positive (e.g., 20.0 for 20% down)
-        elif current_used > avg_365: # Current is above average, show as positive percentage
-            symbol = "+"
-            percentage_diff = abs(percentage_diff) # Make it positive (e.g. abs(-20.0) = 20.0 for 20% up)
-        # If current_used == avg_365, percentage_diff will be 0. Symbol remains "".
-
-        # Format to zero decimal places
-        formatted_percentage = f"{percentage_diff:.0f}%"
-        
-        # Prepend symbol only if it's explicitly set (for + or -)
-        # If symbol is "", it means it's 0%, so no sign needed.
-        if symbol:
-            result_str = f"{symbol}{formatted_percentage}"
-        else: # This case is for 0%
-            result_str = formatted_percentage 
-
-        logging.info(f"ASIN {asin}: Percent Down 365 calculated. Current: {current_used/100:.2f}, Avg365: {avg_365/100:.2f}, Result: {result_str}")
+        logging.info(f"ASIN {asin}: Percent Down 365 calculated. Current: {current_used/100:.2f}, Avg365: {avg_365/100:.2f}, Diff: {percentage_diff:.2f}%, Result: {result_str}")
         return {'Percent Down 365': result_str}
 
     except ZeroDivisionError:

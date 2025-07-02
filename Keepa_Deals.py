@@ -10,8 +10,11 @@ from field_mappings import FUNCTION_LIST
 import os
 CSV_PATH = os.path.join(os.path.dirname(__file__), "Keepa_Deals_Export.csv")
 
+# Get the main script logger instance
+logger = logging.getLogger('KeepaDeals') # Use the same logger as in main()
+
 # Logging for terminal and file output - starts
-import sys
+# import sys # sys is already imported globally
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(message)s',
@@ -71,7 +74,9 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     if not validate_asin(asin):
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
-        return {'stats': {'current': [-1] * 30}, 'asin': asin}
+        # Consistent return for validation failure
+        rate_limit_info_on_error = {'limit': None, 'remaining': None, 'reset': None, 'error_status_code': 'VALIDATION_ERROR'}
+        return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': 'VALIDATION_ERROR', 'message': 'Invalid ASIN format'}, rate_limit_info_on_error
     logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}, no_cache={args.no_cache}")
     print(f"Fetching ASIN {asin}...")
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&history={history}&stock=1&buybox=1"
@@ -79,16 +84,23 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     try:
         response = requests.get(url, headers=headers, timeout=60)
         logging.debug(f"Response status: {response.status_code}, url={url}")
-        if response.status_code != 200:
-            logging.error(f"Request failed: {response.status_code}, {response.text}")
-            print(f"Request failed: {response.status_code}")
-            return {'stats': {'current': [-1] * 30}, 'asin': asin}
+        response.raise_for_status() # Will raise HTTPError for 4xx/5xx, which is a RequestException
+
+        # If raise_for_status() doesn't raise, then status_code is 200 or similar non-error
         data = response.json()
         products = data.get('products', [])
         if not products:
-            logging.error(f"No product data for ASIN {asin}")
-            print(f"No product data for ASIN {asin}")
-            return {'stats': {'current': [-1] * 30}, 'asin': asin}
+            logging.error(f"No product data for ASIN {asin} despite 2xx status.")
+            print(f"No product data for ASIN {asin} despite 2xx status.")
+            # Construct consistent error return
+            rate_limit_info_on_error = {
+                'limit': response.headers.get('x-rate-limit-limit'),
+                'remaining': response.headers.get('x-rate-limit-remaining'),
+                'reset': response.headers.get('x-rate-limit-reset'),
+                'error_status_code': response.status_code # or a custom one for "no product data"
+            }
+            return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': response.status_code, 'message': 'No product data found in response'}, rate_limit_info_on_error
+        
         product = products[0]
         stats = product.get('stats', {})
         current = stats.get('current', [-1] * 30)
@@ -98,45 +110,100 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
             logging.warning(f"Short current array for ASIN {asin}: {current}")
         if current[1] == -1:
             logging.warning(f"Invalid Amazon - Current price for ASIN {asin}: current[1]={current[1]}")
+        
+        # Extract rate limit headers
+        rate_limit_info = {
+            'limit': response.headers.get('x-rate-limit-limit'),
+            'remaining': response.headers.get('x-rate-limit-remaining'),
+            'reset': response.headers.get('x-rate-limit-reset')
+        }
+        logging.info(f"ASIN {asin} - Rate limit info: {rate_limit_info}")
+        
         time.sleep(2)  # Restore delay to avoid rate limits
-        return product
-    except Exception as e:
+        return product, rate_limit_info
+    except requests.exceptions.RequestException as e:
         logging.error(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
         print(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
-        return {'stats': {'current': [-1] * 30}, 'asin': asin}
+        # Check if it's a 429 error specifically
+        status_code = e.response.status_code if e.response is not None else None
+        rate_limit_info = { # Attempt to get headers even on error, though they might be None
+            'limit': e.response.headers.get('x-rate-limit-limit') if e.response is not None else None,
+            'remaining': e.response.headers.get('x-rate-limit-remaining') if e.response is not None else None,
+            'reset': e.response.headers.get('x-rate-limit-reset') if e.response is not None else None,
+            'error_status_code': status_code
+        }
+        return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': status_code}, rate_limit_info
+    except Exception as e:
+        logging.error(f"Generic Fetch failed for ASIN {asin}: {str(e)}")
+        print(f"Generic Fetch failed for ASIN {asin}: {str(e)}")
+        # For other exceptions, we might not have response headers
+        rate_limit_info = {'limit': None, 'remaining': None, 'reset': None, 'error_status_code': None}
+        return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': None}, rate_limit_info
 # Chunk 2 ends
 
 # Global args variable, to be initialized in main
 args = None
+# Global variable to store the last known rate limit information
+current_rate_limit_info = {
+    'limit': None,
+    'remaining': None, # Initialize with a reasonable default or fetch once at startup if possible
+    'reset': None,
+    'last_checked': 0 # Timestamp of when this was last updated
+}
+RATE_LIMIT_REMAINING_THRESHOLD = 20 # Pause if remaining tokens are below this
+MIN_TIME_BETWEEN_HEADER_CHECKS_SECONDS = 5 # To avoid excessive logging if calls are very fast
 
 # Chunk 3 starts
 def write_csv(rows, deals, diagnostic=False):
+    logger.info(f"Entering write_csv. Number of deals to process: {len(deals)}. Number of rows generated: {len(rows)}.")
+    if len(deals) != len(rows) and not diagnostic:
+        logger.warning(f"Mismatch in write_csv: len(deals) is {len(deals)} but len(rows) is {len(rows)}. CSV might be incomplete or misaligned.")
+
     try:
         with open(CSV_PATH, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(HEADERS)
+            writer.writerow(HEADERS) # HEADERS is global
             if diagnostic:
                 writer.writerow(['No deals fetched'] + ['-'] * (len(HEADERS) - 1))
-                logging.info(f"Diagnostic CSV written: Keepa_Deals_Export.csv")
+                logger.info(f"Diagnostic CSV written: Keepa_Deals_Export.csv")
                 print(f"Diagnostic CSV written: Keepa_Deals_Export.csv")
             else:
-                for deal, row in zip(deals[:len(rows)], rows):
+                # Ensure we only try to zip up to the shorter of the two lists if there's a mismatch,
+                # though ideally they should be the same length due to placeholder logic.
+                num_to_write = min(len(deals), len(rows))
+                if len(deals) != len(rows): # Log if we are truncating due to mismatch
+                     logger.warning(f"write_csv: Writing {num_to_write} rows due to length mismatch between deals ({len(deals)}) and rows ({len(rows)}).")
+
+                for i in range(num_to_write):
+                    deal_obj = deals[i]
+                    row_content = rows[i]
+                    asin_from_deal = deal_obj.get('asin', 'UNKNOWN_DEAL_ASIN')
+                    asin_from_row = row_content.get('ASIN', 'UNKNOWN_ROW_ASIN')
+
+                    # Log a summary of the row being written
+                    non_hyphen_row_items = {k: v for k, v in row_content.items() if v != '-'}
+                    logger.info(f"Writing CSV row for ASIN (from deal obj): {asin_from_deal}, ASIN (from row obj): {asin_from_row}. Non-hyphen count: {len(non_hyphen_row_items)}. Keys: {list(non_hyphen_row_items.keys())}")
+                    if asin_from_deal != asin_from_row and asin_from_row not in asin_from_deal : # Check if row ASIN is a placeholder like INVALID_ASIN_SKIPPED_...
+                        logger.warning(f"ASIN mismatch when writing CSV: Deal ASIN is '{asin_from_deal}', Row ASIN is '{asin_from_row}'.")
+
                     try:
-                        row_data = row.copy()
-                        missing_headers = [h for h in HEADERS if h not in row_data]
-                        if missing_headers:
-                            logging.warning(f"Missing headers for ASIN {deal.get('asin', '-')}: {missing_headers[:5]}")
-                        logging.debug(f"row_data for ASIN {deal.get('asin', '-')}: {list(row_data.keys())[:10]}")
-                        print(f"Writing row for ASIN {deal.get('asin', '-')}...")
-                        writer.writerow([row_data.get(header, '-') for header in HEADERS])
-                        logging.debug(f"Wrote row for ASIN {deal.get('asin', '-')}")
+                        # row_data = row_content.copy() # No need to copy if we're just reading
+                        # missing_headers = [h for h in HEADERS if h not in row_data] # Not strictly necessary if row_data.get is used
+                        # if missing_headers:
+                        #     logger.warning(f"Missing headers in row_content for ASIN {asin_from_row}: {missing_headers[:5]}")
+                        
+                        # print(f"Writing row for ASIN {asin_from_row}...") # Console print might be too verbose now
+                        writer.writerow([row_content.get(header, '-') for header in HEADERS])
+                        # logger.debug(f"Wrote row to CSV for ASIN {asin_from_row}") # Can be very verbose
                     except Exception as e:
-                        logging.error(f"Failed to write row for ASIN {deal.get('asin', '-')}: {str(e)}")
-                        print(f"Failed to write row for ASIN {deal.get('asin', '-')}: {str(e)}")
-        logging.info(f"CSV written: Keepa_Deals_Export.csv")
+                        logger.error(f"Failed to write row to CSV for ASIN {asin_from_row} (from deal: {asin_from_deal}): {str(e)}")
+                        # Optionally, write a row of hyphens for this failed write
+                        # writer.writerow([asin_from_row_or_deal] + ['ERROR_WRITING_ROW'] * (len(HEADERS)-1) )
+        
+        logger.info(f"CSV written: Keepa_Deals_Export.csv with {num_to_write if not diagnostic else 0} data rows.")
         print(f"CSV written: Keepa_Deals_Export.csv")
     except Exception as e:
-        logging.error(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
+        logger.error(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
         print(f"Failed to write CSV Keepa_Deals_Export.csv: {str(e)}")
 # Chunk 3 ends
 
@@ -150,40 +217,139 @@ def main():
         logger.info("Starting Keepa_Deals...") # Use logger instance
         print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
-        deals = fetch_deals_for_deals(0) # Consider passing args.no_cache if fetch_deals_for_deals needs it
+        
+        all_deals = []
+        page = 0
+        while True:
+            logger.info(f"Fetching deals page {page}...")
+            print(f"Fetching deals page {page}...", flush=True)
+            deals_page = fetch_deals_for_deals(page) # Consider passing args.no_cache if fetch_deals_for_deals needs it
+            if not deals_page:
+                logger.info(f"No more deals found on page {page}.")
+                print(f"No more deals found on page {page}.", flush=True)
+                break
+            all_deals.extend(deals_page)
+            logger.info(f"Fetched {len(deals_page)} deals from page {page}. Total deals so far: {len(all_deals)}")
+            print(f"Fetched {len(deals_page)} deals from page {page}. Total deals so far: {len(all_deals)}", flush=True)
+            page += 1
+            time.sleep(1) # Add a small delay between page fetches if needed
+
+        deals = all_deals # Use all_deals for processing
+        
+        # TEMPORARY: Limit to 200 deals for faster testing
+        MAX_DEALS_TO_PROCESS_FOR_TESTING = 200
+        if len(deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
+            logger.warning(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
+            print(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)
+            deals_to_process = deals[:MAX_DEALS_TO_PROCESS_FOR_TESTING]
+        else:
+            deals_to_process = deals
+        # END TEMPORARY LIMIT
+
         rows = []
-        if not deals:
-            logger.warning("No deals fetched, writing diagnostic CSV") # Use logger instance
+        if not deals_to_process: # Check deals_to_process instead of deals
+            logger.warning("No deals fetched or all filtered out by temporary limit, writing diagnostic CSV") # Use logger instance
             print("No deals fetched, writing diagnostic CSV", flush=True)
             write_csv([], [], diagnostic=True)
             return
-        logger.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}") # Use logger instance
-        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals[:5]]}", flush=True)
-        logger.info(f"Starting ASIN processing, found {len(deals)} deals") # Use logger instance
-        print(f"Starting ASIN processing, found {len(deals)} deals", flush=True)
+        logger.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals_to_process[:5]]}") # Use logger instance, refer to deals_to_process
+        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals_to_process[:5]]}", flush=True)
+        logger.info(f"Starting ASIN processing, found {len(deals_to_process)} deals (after potential temporary limit)") # Use logger instance
+        print(f"Starting ASIN processing, found {len(deals_to_process)} deals (after potential temporary limit)", flush=True)
 # Logging stuff - ends
-        for deal in deals:
+        for deal_idx, deal in enumerate(deals_to_process): # Iterate over deals_to_process
             asin = deal.get('asin', '-')
             if not validate_asin(asin):
-                logger.warning(f"Skipping invalid ASIN for deal {deals.index(deal)+1}") # Use logger instance
+                logger.warning(f"Skipping invalid ASIN for deal {deal_idx+1}/{len(deals_to_process)}") # Use logger instance
+                # Add placeholder for invalid ASIN if we want to keep row counts consistent with deals_to_process
+                placeholder_row = {'ASIN': f"INVALID_ASIN_SKIPPED_{asin[:10]}"} # Truncate potentially long invalid ASIN
+                for header_key in HEADERS:
+                    if header_key not in placeholder_row:
+                        placeholder_row[header_key] = '-'
+                rows.append(placeholder_row)
                 continue
-            logger.info(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})") # Use logger instance
-            print(f"Processing ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
+            logger.info(f"Processing ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})") # Use logger instance
+            print(f"Processing ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
+            
+            # Dynamic Throttling Logic
+            global current_rate_limit_info
+            now = time.time()
+            if current_rate_limit_info.get('remaining') is not None:
+                try:
+                    remaining_tokens = int(current_rate_limit_info['remaining'])
+                    if remaining_tokens < RATE_LIMIT_REMAINING_THRESHOLD:
+                        reset_time_seconds = int(current_rate_limit_info.get('reset', 60)) # Default to 60s if reset not available
+                        # Ensure pause is at least a minimum sensible value, e.g. 10s, even if reset time is shorter.
+                        # And not excessively long if reset time is huge (though API usually gives seconds until next minute).
+                        pause_duration = max(10, min(reset_time_seconds + 5, 300)) # Pause for reset time + 5s buffer, capped at 5 mins
+                        logger.warning(f"Low tokens ({remaining_tokens} remaining). Pausing for {pause_duration} seconds. Reset ETA: {reset_time_seconds}s.")
+                        print(f"Low tokens ({remaining_tokens} remaining). Pausing for {pause_duration} seconds...", flush=True)
+                        time.sleep(pause_duration)
+                        current_rate_limit_info['remaining'] = None # Force re-check after pause
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Could not parse rate limit info ({current_rate_limit_info}), proceeding with caution: {e}")
+
+
             logger.info(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})") # Use logger instance
             print(f"Fetching ASIN {asin} ({deals.index(deal)+1}/{len(deals)})", flush=True)
-            product = fetch_product(asin)
+            product, rate_info = fetch_product(asin)
+
+            # Update global rate limit info
+            if rate_info:
+                if rate_info.get('remaining'):
+                    current_rate_limit_info['remaining'] = rate_info['remaining']
+                if rate_info.get('limit'):
+                    current_rate_limit_info['limit'] = rate_info['limit']
+                # Only update reset if it's more recent or available
+                if rate_info.get('reset') is not None : #and (current_rate_limit_info.get('last_checked', 0) < (now - MIN_TIME_BETWEEN_HEADER_CHECKS_SECONDS)) :
+                    current_rate_limit_info['reset'] = rate_info['reset']
+                    current_rate_limit_info['last_checked'] = now
+                if rate_info.get('error_status_code'): # Store status code if error occurred
+                    current_rate_limit_info['error_status_code'] = rate_info['error_status_code']
+                else: # Clear previous error status if current call was successful
+                    current_rate_limit_info.pop('error_status_code', None)
+            
+            # Handle 429 error specifically after fetch_product attempt
+            if product.get('error') and product.get('status_code') == 429:
+                logger.error(f"Received 429 (Too Many Requests) for ASIN {asin}. Initiating a longer pause of 5 minutes.")
+                print(f"Rate limit hit hard for ASIN {asin}. Pausing for 5 minutes to allow token replenishment...", flush=True)
+                time.sleep(300) # Pause for 5 minutes
+                current_rate_limit_info['remaining'] = None # Force re-check after pause
+                # Optionally, you might want to retry the current ASIN or just skip it and let the loop continue to the next one
+                # For now, it will effectively skip processing for this ASIN in this iteration and try the next one after the pause.
+                # If retry is desired, a continue or a more complex retry mechanism here would be needed.
+                # However, the @retry in fetch_product handles immediate retries for network glitches, 
+                # this is for systemic token exhaustion.
+                logger.warning(f"Skipping data processing for ASIN {asin} for this cycle due to 429 error and subsequent pause.")
+                # Add a placeholder row for skipped ASINs to maintain CSV integrity
+                placeholder_row = {'ASIN': asin}
+                for header_key in HEADERS: # Assuming HEADERS is accessible
+                    if header_key not in placeholder_row:
+                        placeholder_row[header_key] = '-'
+                # Special handling for fields that might come from the 'deal' object if available
+                # For a pure skip, these might also be '-' but if some deal data was vital, it could be added.
+                # For now, a simple placeholder with ASIN and '-' for others.
+                rows.append(placeholder_row)
+                continue # Skip to the next deal in the list after the long pause
+
 
             # Jules: Modified for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
             TEST_ASIN_FOR_RAW_LOG = '1562243179' # Target ASIN for raw data logging
             if asin == TEST_ASIN_FOR_RAW_LOG:
                 # Ensure product is not None and is a dictionary before trying to dump it
-                if product and isinstance(product, dict):
+                if product and isinstance(product, dict) and not product.get('error'): # Check not error before logging
                     logger.info(f"RAW_PRODUCT_DATA_{asin}: {json.dumps(product)}")
                 else:
-                    logger.info(f"RAW_PRODUCT_DATA_{asin}: Product data is not in the expected format or is None. Data: {product}")
+                    logger.info(f"RAW_PRODUCT_DATA_{asin}: Product data is not in the expected format, is None, or fetch error occurred. Data: {product}")
 
-            if not product or 'stats' not in product:
-                logger.error(f"Incomplete product data for ASIN {asin}") # Use logger instance
+            if product.get('error') or 'stats' not in product: # Check for error flag from fetch_product
+                logger.error(f"Incomplete or error in product data for ASIN {asin}. Product: {product}") # Use logger instance
+                # Add a placeholder row for ASINs with incomplete/error data after fetch attempt
+                placeholder_row = {'ASIN': asin}
+                for header_key in HEADERS:
+                    if header_key not in placeholder_row:
+                        placeholder_row[header_key] = '-'
+                rows.append(placeholder_row)
                 continue
 
             # Logging for Last Used price update from product_data
@@ -235,13 +401,29 @@ def main():
                             row.update(result)
                             logger.debug(f"Row after update for {header}: {row}") # Use logger instance
                         except Exception as e:
-                            logger.error(f"Function {func.__name__} failed for ASIN {asin}: {str(e)}") # Use logger instance
+                            logger.error(f"Function {func.__name__} failed for ASIN {asin} processing header '{header}': {str(e)}") # Use logger instance
                             row[header] = '-'
+                
+                # Detailed logging before appending the main data row
+                non_hyphen_items = {k: v for k, v in row.items() if v != '-'}
+                logger.info(f"ASIN {asin}: PRE-APPEND main row. Non-hyphen count: {len(non_hyphen_items)}. Keys: {list(non_hyphen_items.keys())}")
+                if not non_hyphen_items and asin == product.get('asin'): # If row is all hyphens but product was supposed to be valid
+                    logger.warning(f"ASIN {asin}: Row for a seemingly valid product is all hyphens before append. Product error flag: {product.get('error')}, Product status: {product.get('status_code')}")
+
                 rows.append(row)
+                logger.info(f"ASIN {asin}: POST-APPEND main row. `rows` list length: {len(rows)}")
+
             except Exception as e:
-                logger.error(f"Error processing ASIN {asin}: {str(e)}") # Use logger instance
+                logger.error(f"Error processing ASIN {asin} (outer loop): {str(e)}") # Use logger instance
+                # Ensure a placeholder is added if this generic error occurs for an ASIN
+                # so row count matches deal count for deals_to_process
+                placeholder_row = {'ASIN': asin}
+                for header_key in HEADERS:
+                    if header_key not in placeholder_row:
+                        placeholder_row[header_key] = '-'
+                rows.append(placeholder_row)
                 continue
-        write_csv(rows, deals)
+        write_csv(rows, deals_to_process) # Use deals_to_process here
         logger.info("Writing CSV...") # Use logger instance
         print("Writing CSV...")
         logger.info("Script completed!") # Use logger instance
