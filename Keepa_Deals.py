@@ -376,9 +376,9 @@ def main():
             print(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
             product, rate_info = fetch_product(asin) # rate_info is legacy, no longer used for primary throttling
 
-            # --- Jules: Increase inter-request delay to 5 seconds to further mitigate burst limits ---
-            logger.debug(f"Pausing for 5 seconds after ASIN {asin} fetch attempt...")
-            time.sleep(5)
+            # --- Jules: Increase inter-request delay to 20 seconds to further mitigate burst limits (EXPERIMENTAL) ---
+            logger.debug(f"Pausing for 20 seconds after ASIN {asin} fetch attempt (EXPERIMENTAL THROTTLING)...")
+            time.sleep(20)
             # --- End Inter-Request Delay ---
 
             # --- Jules: Decrement token only if fetch was successful ---
