@@ -16,10 +16,10 @@ logger = logging.getLogger('KeepaDeals') # Use the same logger as in main()
 # --- Jules: Local Quota Management Constants & State ---
 MAX_QUOTA_TOKENS = 300
 HOURLY_REFILL_PERCENTAGE = 0.05
-TOKEN_COST_PER_ASIN = 1
-MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 10
+TOKEN_COST_PER_ASIN = 2 # Corrected based on research: using 'offers' or 'buybox' param costs 2 tokens. We use both.
+MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # Increased from 10 to 25 for a larger buffer
 QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour
-DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes
+DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes (remains the same for now)
 
 # Initialize global state variables for quota management
 # These will be modified by functions and within the main loop.
@@ -165,6 +165,9 @@ def update_and_check_quota(logger_instance):
     global current_available_tokens
     global last_refill_calculation_time
 
+    # Log entry state immediately
+    logger_instance.info(f"Quota Check (entry): Current available tokens: {current_available_tokens:.2f}, Last refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}")
+
     current_time = time.time()
     time_elapsed_seconds = current_time - last_refill_calculation_time
     
@@ -175,18 +178,25 @@ def update_and_check_quota(logger_instance):
             refill_amount_per_interval = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
             total_refilled = intervals_passed * refill_amount_per_interval
             
+            # Store tokens before refill for logging
+            tokens_before_refill = current_available_tokens
             current_available_tokens += total_refilled
             if current_available_tokens > MAX_QUOTA_TOKENS:
                 current_available_tokens = MAX_QUOTA_TOKENS
             
             # Advance last_refill_calculation_time by the exact number of intervals processed
+            original_last_refill_time = last_refill_calculation_time
             last_refill_calculation_time += intervals_passed * QUOTA_REFILL_INTERVAL_SECONDS
             
-            logger_instance.info(f"Quota Refill: Added {total_refilled:.2f} tokens over {intervals_passed} hour(s). New available tokens: {current_available_tokens:.2f}")
+            logger_instance.info(
+                f"Quota Refill: Passed {intervals_passed} hour(s) since last calc (from {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(original_last_refill_time))}). "
+                f"Tokens before: {tokens_before_refill:.2f}. Added {total_refilled:.2f}. Tokens after: {current_available_tokens:.2f}. "
+                f"New last refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}"
+            )
     
-    logger_instance.info(f"Quota Check: Current available tokens: {current_available_tokens:.2f}")
+    logger_instance.info(f"Quota Check (after refill calc): Current available tokens: {current_available_tokens:.2f}")
 
-    # Proactive Pause Logic (Step 4, integrated here)
+    # Proactive Pause Logic
     if current_available_tokens < MIN_QUOTA_THRESHOLD_BEFORE_PAUSE:
         logger_instance.warning(
             f"Low quota: {current_available_tokens:.2f} tokens remaining, which is below threshold {MIN_QUOTA_THRESHOLD_BEFORE_PAUSE}. "
@@ -194,11 +204,8 @@ def update_and_check_quota(logger_instance):
         )
         time.sleep(DEFAULT_LOW_QUOTA_PAUSE_SECONDS)
         
-        # After pausing, recursively call to re-calculate refills and re-check quota.
-        # This ensures that any tokens refilled during the pause are accounted for.
-        # Add a recursion depth limit or alternative if this is a concern, but for typical pauses it should be fine.
-        logger_instance.info("Re-checking quota after pause...")
-        update_and_check_quota(logger_instance) # Recursive call
+        logger_instance.info(f"Quota: Pause complete. Attempting to re-check quota and potential refills...")
+        update_and_check_quota(logger_instance) # Recursive call to re-evaluate after pause
     
     # This function doesn't return anything; it modifies globals and may pause.
 # --- End Quota Management Function ---
@@ -339,11 +346,18 @@ def main():
             print(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
             product, rate_info = fetch_product(asin) # rate_info is legacy, no longer used for primary throttling
 
-            # --- Jules: Decrement token after fetch attempt ---
+            # --- Jules: Introduce 1-second delay after each fetch attempt to mitigate burst limits ---
+            time.sleep(1)
+            # --- End Inter-Request Delay ---
+
+            # --- Jules: Decrement token only if fetch was successful ---
             global current_available_tokens # Ensure we're using the global
-            current_available_tokens -= TOKEN_COST_PER_ASIN
-            logger.info(f"Token consumed for ASIN {asin}. Tokens remaining: {current_available_tokens:.2f}")
-            # --- End Decrement ---
+            if not product.get('error'):
+                current_available_tokens -= TOKEN_COST_PER_ASIN
+                logger.info(f"Token consumed for successful fetch of ASIN {asin}. Tokens remaining: {current_available_tokens:.2f}")
+            else:
+                logger.info(f"Token NOT consumed for ASIN {asin} due to fetch error (status: {product.get('status_code')}). Tokens remaining: {current_available_tokens:.2f}")
+            # --- End Decrement Logic ---
             
             # Handle 429 error specifically after fetch_product attempt
             if product.get('error') and product.get('status_code') == 429:
@@ -353,10 +367,10 @@ def main():
                 
                 # After the long pause, call update_and_check_quota to recalculate available tokens
                 # This will account for the tokens refilled during the 1-hour pause.
-                logger.info("Attempting to update quota information after 429 pause.")
-                update_and_check_quota(logger) # Ensure logger is in scope or passed
+                logger.info(f"429 Recovery: Pause complete for ASIN {asin}. Attempting to update quota information.")
+                update_and_check_quota(logger) # logger is in scope in main()
 
-                logger.warning(f"Skipping data processing for ASIN {asin} for this cycle due to 429 error and subsequent pause.")
+                logger.warning(f"Skipping data processing for ASIN {asin} for this cycle due to 429 error and post-error pause/quota update.")
                 # Add a placeholder row for skipped ASINs to maintain CSV integrity
                 placeholder_row = {'ASIN': asin}
                 for header_key in HEADERS: # Assuming HEADERS is accessible
