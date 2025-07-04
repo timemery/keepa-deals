@@ -26,6 +26,9 @@ DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes (remains the same for now)
 # Consider refactoring to a class if state management becomes too complex.
 current_available_tokens = MAX_QUOTA_TOKENS
 last_refill_calculation_time = time.time() # Initialize to script start time
+
+# Global dictionary to track attempts for fetch_product retries
+fetch_product_attempts = {}
 # --- End Local Quota Management ---
 
 # Logging for terminal and file output - starts
@@ -84,25 +87,52 @@ except Exception as e:
 # 2025-05-22: Reverted to HTTP, offers=100, added Python client fallback (commit e1f6f52e).
 # 2025-05-22: Increased timeout=60, wait_fixed=10000, sleep=2 to fix timeouts for ASINs 1848638930, B0CS6RL7D6, B0C1VSRNNH.
 # 2025-05-26: Added --no-cache flag to force fresh API calls.
+# It's hard to inject attempt numbers directly when using the @retry decorator from the 'retrying' library
+# without access to its internal state or a more complex setup.
+# However, we can log entry and exit/exceptions to see if it's being called multiple times for an ASIN.
+
+# Let's add a global or a class member to track attempts per ASIN if we want to be more explicit,
+# but for now, just more detailed logging within the function might reveal multiple calls.
+
+# We will add a specific log at the very start of the function call.
+# If the @retry decorator calls this function multiple times for the same ASIN,
+# we will see this log message repeated for that ASIN.
+
 @retry(stop_max_attempt_number=3, wait_fixed=10000)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
+    # Increment and log attempt number for this ASIN
+    # This requires a way to store attempt counts across calls triggered by @retry for the same ASIN.
+    # A simple global dictionary can serve this purpose for now.
+    global fetch_product_attempts
+    if asin not in fetch_product_attempts:
+        fetch_product_attempts[asin] = 0
+    fetch_product_attempts[asin] += 1
+    attempt_num = fetch_product_attempts[asin]
+
+    logger.info(f"fetch_product: Attempt #{attempt_num} for ASIN {asin} (days={days}, offers={offers}, rating={rating}, history={history}, no_cache={args.no_cache})")
+
     if not validate_asin(asin):
+        # Reset attempt count for this ASIN if it fails validation before any actual attempt
+        fetch_product_attempts[asin] = 0 # Or handle as needed - this error is pre-API call
         logging.error(f"Invalid ASIN format: {asin}")
         print(f"Invalid ASIN format: {asin}")
         # Consistent return for validation failure
         rate_limit_info_on_error = {'limit': None, 'remaining': None, 'reset': None, 'error_status_code': 'VALIDATION_ERROR'}
         return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': 'VALIDATION_ERROR', 'message': 'Invalid ASIN format'}, rate_limit_info_on_error
-    logging.debug(f"Fetching ASIN {asin} for {days} days, history={history}, offers={offers}, no_cache={args.no_cache}")
-    print(f"Fetching ASIN {asin}...")
+    
+    # print(f"Fetching ASIN {asin}...") # Replaced by logger above
     url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&history={history}&stock=1&buybox=1"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
     try:
+        logger.debug(f"fetch_product (Attempt #{attempt_num}): Making HTTP GET request for ASIN {asin} to {url}")
         response = requests.get(url, headers=headers, timeout=60)
         
-        logging.debug(f"Response status: {response.status_code}, url={url}")
+        logger.debug(f"fetch_product (Attempt #{attempt_num}): Response status {response.status_code} for ASIN {asin}")
         response.raise_for_status() # Will raise HTTPError for 4xx/5xx, which is a RequestException
 
         # If raise_for_status() doesn't raise, then status_code is 200 or similar non-error
+        # Successful attempt, reset attempt count for this ASIN for future distinct processing runs of this ASIN (if any)
+        fetch_product_attempts[asin] = 0 # Reset on success of this attempt sequence
         data = response.json()
         products = data.get('products', [])
         if not products:
@@ -346,8 +376,9 @@ def main():
             print(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
             product, rate_info = fetch_product(asin) # rate_info is legacy, no longer used for primary throttling
 
-            # --- Jules: Introduce 1-second delay after each fetch attempt to mitigate burst limits ---
-            time.sleep(1)
+            # --- Jules: Increase inter-request delay to 5 seconds to further mitigate burst limits ---
+            logger.debug(f"Pausing for 5 seconds after ASIN {asin} fetch attempt...")
+            time.sleep(5)
             # --- End Inter-Request Delay ---
 
             # --- Jules: Decrement token only if fetch was successful ---
