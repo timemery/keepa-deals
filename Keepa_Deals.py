@@ -31,7 +31,7 @@ last_refill_calculation_time = time.time() # Initialize to script start time
 fetch_product_attempts = {}
 
 # --- Jules: Additional Throttling & Logging Constants ---
-MIN_TIME_SINCE_LAST_CALL_SECONDS = 20 # Minimum quiet time before a new API call
+MIN_TIME_SINCE_LAST_CALL_SECONDS = 30 # Minimum quiet time before a new API call (Increased from 20 to 30 as per Phase 3)
 POST_FETCH_SUCCESS_DELAY_SECONDS = 5  # Delay after a successful fetch (can be same as MIN_TIME_SINCE_LAST_CALL_SECONDS or different)
 POST_FETCH_ERROR_DELAY_SECONDS = 20 # Delay after a fetch that resulted in an error (e.g., 429, but also others)
 # Initialize global state for pre-emptive delay
@@ -108,6 +108,7 @@ except Exception as e:
 
 @retry(stop_max_attempt_number=3, wait_fixed=10000)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
+    global current_available_tokens # Moved to top of function for all reads/writes
     # Increment and log attempt number for this ASIN
     # This requires a way to store attempt counts across calls triggered by @retry for the same ASIN.
     # A simple global dictionary can serve this purpose for now.
@@ -171,20 +172,112 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
             'remaining': response.headers.get('x-rate-limit-remaining'),
             'reset': response.headers.get('x-rate-limit-reset')
         }
-        # --- Jules: Log Keepa's reported remaining tokens vs script's view ---
+        # --- Jules: Enhanced Logging for Keepa's x-rate-limit-remaining (Phase 1) ---
+        # This logging occurs for every successful call, before the old discrepancy check.
+        # The old discrepancy check is more of an alert, this is for data gathering.
+        if rate_limit_info and rate_limit_info.get('remaining') is not None:
+            try:
+                keepa_header_remaining_raw = int(rate_limit_info['remaining'])
+                # Accessing global current_available_tokens for its state *before* this call's consumption
+                # and other relevant global quota details for context.
+                # Note: current_available_tokens is *before* deducting TOKEN_COST_PER_ASIN for the current successful call.
+                logger.info(
+                    f"ASIN {asin} successful fetch. Keepa raw tokens remaining (header): {keepa_header_remaining_raw}. "
+                    f"Script tokens before this call's consumption: {current_available_tokens:.2f}. "
+                    f"Script token_cost_per_asin: {TOKEN_COST_PER_ASIN}. "
+                    # The following are less directly comparable but provide context on refill state
+                    # f"Script refill_rate_per_second: {HOURLY_REFILL_PERCENTAGE * MAX_QUOTA_TOKENS / 3600.0:.4f}. " # Derived
+                    # f"Script tokens_refilled_in_current_hour: N/A directly, see Quota Check logs." 
+                    # Simplified for now, as refill details are in update_and_check_quota logs.
+                )
+            except ValueError:
+                logger.warning(f"ASIN {asin} - Could not parse Keepa's x-rate-limit-remaining header value: {rate_limit_info['remaining']} into an integer.")
+            except Exception as ex_enhanced_log:
+                 logger.error(f"ASIN {asin} - Error during enhanced token logging: {ex_enhanced_log}")
+        else:
+            logger.warning(f"ASIN {asin} - Keepa's x-rate-limit-remaining header not found or rate_limit_info is None for successful call.")
+        # --- End Jules: Enhanced Logging ---
+
+        # --- Jules: Original Log Keepa's reported remaining tokens vs script's view (Discrepancy Check) ---
+        # This original block is kept for its specific discrepancy warning.
+        # The new logging above provides more general data for every call.
         try:
-            keepa_remaining_tokens = int(rate_limit_info['remaining'])
-            # Accessing global current_available_tokens for comparison
-            script_tokens = current_available_tokens 
-            token_discrepancy = script_tokens - keepa_remaining_tokens
-            logger.info(f"ASIN {asin} - Token Check: Keepa reports {keepa_remaining_tokens} remaining. Script calculated {script_tokens:.2f}. Discrepancy: {token_discrepancy:.2f}")
-            if abs(token_discrepancy) > MIN_QUOTA_THRESHOLD_BEFORE_PAUSE: # Using existing threshold for "significant"
-                 logger.warning(f"ASIN {asin} - SIGNIFICANT TOKEN DISCREPANCY: Keepa: {keepa_remaining_tokens}, Script: {script_tokens:.2f}, Diff: {token_discrepancy:.2f}")
-        except (ValueError, TypeError) as ve:
-            logger.warning(f"ASIN {asin} - Could not parse Keepa's remaining tokens: {rate_limit_info.get('remaining')}. Error: {ve}")
-        except Exception as ex_token_log:
-            logger.error(f"ASIN {asin} - Error during token discrepancy logging: {ex_token_log}")
-        # --- End Jules: Token Discrepancy Logging ---
+            # Ensure rate_limit_info and 'remaining' are valid before proceeding
+            if rate_limit_info and rate_limit_info.get('remaining') is not None:
+                keepa_remaining_tokens_raw = int(rate_limit_info['remaining']) # Raw value from header
+                
+                # Script's perspective of tokens *after* this current call is accounted for
+                # Note: current_available_tokens is read here, so 'global' must precede this.
+                script_tokens_after_this_call = current_available_tokens - TOKEN_COST_PER_ASIN
+                
+                # Keepa's perspective of tokens (in script units) *after* this current call
+                # This assumes Keepa's header value is "raw API calls" and needs to be converted to our "script units"
+                keepa_tokens_in_script_units_after_this_call = keepa_remaining_tokens_raw // TOKEN_COST_PER_ASIN
+
+                token_discrepancy_script_units = script_tokens_after_this_call - keepa_tokens_in_script_units_after_this_call
+                
+                # Log the comparison details, regardless of discrepancy size for now (can be DEBUG later)
+                logger.info(
+                    f"ASIN {asin} - Token Discrepancy Check: "
+                    f"Keepa header (raw): {keepa_remaining_tokens_raw}, "
+                    f"Keepa (script units, post-call): {keepa_tokens_in_script_units_after_this_call}. "
+                    f"Script estimate (post-call): {script_tokens_after_this_call:.2f}. "
+                    f"Discrepancy (script units): {token_discrepancy_script_units:.2f}"
+                )
+
+                # Existing threshold for "significant" discrepancy warning
+                # This threshold might need review. Is it 1 raw token or 1 script unit? Assuming script unit.
+                DISCREPANCY_WARNING_THRESHOLD = 1 # tokens in script units
+                if abs(token_discrepancy_script_units) > DISCREPANCY_WARNING_THRESHOLD:
+                    logger.warning(
+                        f"ASIN {asin} - SIGNIFICANT TOKEN DISCREPANCY DETECTED (Pre-Adjustment): "
+                        f"Keepa (script units, post-call): {keepa_tokens_in_script_units_after_this_call}, "
+                        f"Script estimate (post-call): {script_tokens_after_this_call:.2f}, "
+                        f"Difference (script units): {token_discrepancy_script_units:.2f}"
+                    )
+                
+                # --- Jules: Phase 2 - Dynamic Token Adjustment ---
+                # Based on hypothetical analysis from Phase 1 logs.
+                ADJUSTMENT_THRESHOLD_SCRIPT_UNITS = 5 # Adjust if Keepa has >5 fewer script tokens than script estimates.
+                
+                # We adjust if Keepa's reported tokens (after its processing of our call)
+                # is significantly less than what our script *would have* after its own accounting for the call.
+                if keepa_tokens_in_script_units_after_this_call < script_tokens_after_this_call and \
+                   (script_tokens_after_this_call - keepa_tokens_in_script_units_after_this_call) > ADJUSTMENT_THRESHOLD_SCRIPT_UNITS:
+                    
+                    tokens_before_adjustment = current_available_tokens # For logging
+                    
+                    # The goal is to make the script's token count (after its own decrement for the current call)
+                    # match Keepa's reported tokens (which are already post-call from Keepa's side).
+                    # So, if script_tokens_after_this_call = current_available_tokens - TOKEN_COST_PER_ASIN,
+                    # and we want this to become keepa_tokens_in_script_units_after_this_call,
+                    # then the new current_available_tokens (before decrement) should be:
+                    # new_current_available_tokens = keepa_tokens_in_script_units_after_this_call + TOKEN_COST_PER_ASIN
+                    
+                    adjusted_current_available_tokens_before_decrement = keepa_tokens_in_script_units_after_this_call + TOKEN_COST_PER_ASIN
+                    
+                    logger.warning(
+                        f"ASIN {asin} - DYNAMIC TOKEN ADJUSTMENT: "
+                        f"Keepa's reported tokens (script units, post-call): {keepa_tokens_in_script_units_after_this_call}. "
+                        f"Script's original estimate (script units, post-call): {script_tokens_after_this_call:.2f}. "
+                        f"Discrepancy exceeds threshold of {ADJUSTMENT_THRESHOLD_SCRIPT_UNITS}. "
+                        f"Adjusting script's 'current_available_tokens' from {tokens_before_adjustment:.2f} to {adjusted_current_available_tokens_before_decrement:.2f} (before this call's decrement)."
+                    )
+                    # This global variable will be used by the main loop when it decrements tokens.
+                    # No, this needs to be done by modifying self.current_available_tokens if this were a class method.
+                    # Since it's a global, we modify it directly.
+                    # global current_available_tokens # REMOVED - This was causing SyntaxError, global is at function top.
+                    current_available_tokens = adjusted_current_available_tokens_before_decrement
+                    # The standard TOKEN_COST_PER_ASIN will be subtracted from this new value later in the main loop.
+            # else:
+                # This case is covered by the enhanced logging warning if header is missing.
+                # logger.debug(f"ASIN {asin} - x-rate-limit-remaining header not available for discrepancy check.")
+
+        except (ValueError, TypeError) as ve: # Catch issues with int conversion if header value is bad
+            logger.warning(f"ASIN {asin} - Could not parse Keepa's remaining tokens for discrepancy check/adjustment: {rate_limit_info.get('remaining') if rate_limit_info else 'N/A'}. Error: {ve}")
+        except Exception as ex_token_log: # Catch any other unexpected errors during this logging
+            logger.error(f"ASIN {asin} - Error during token discrepancy check/adjustment logging: {ex_token_log}")
+        # --- End Jules: Original Token Discrepancy Logging & Phase 2 Adjustment ---
         
         # time.sleep(2) # This specific sleep is superseded by the global post-fetch delay in main()
         return product, rate_limit_info
@@ -199,6 +292,21 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
             'reset': e.response.headers.get('x-rate-limit-reset') if e.response is not None else None,
             'error_status_code': status_code
         }
+        # --- Jules: Log Keepa's reported remaining tokens on 429 error ---
+        if status_code == 429 and rate_limit_info.get('remaining') is not None:
+            try:
+                keepa_header_remaining_raw_on_429 = int(rate_limit_info['remaining'])
+                logger.error(
+                    f"ASIN {asin} - 429 ERROR - Keepa raw tokens remaining (header on 429): {keepa_header_remaining_raw_on_429}. "
+                    f"Script tokens at time of call: {current_available_tokens:.2f}."
+                )
+            except ValueError:
+                logger.error(f"ASIN {asin} - 429 ERROR - Could not parse Keepa's x-rate-limit-remaining header value on 429: {rate_limit_info['remaining']}.")
+            except Exception as ex_429_log:
+                logger.error(f"ASIN {asin} - 429 ERROR - Error during 429 token logging: {ex_429_log}")
+        elif status_code == 429:
+             logger.error(f"ASIN {asin} - 429 ERROR - Keepa's x-rate-limit-remaining header not found on 429 response. Script tokens at call: {current_available_tokens:.2f}.")
+        # --- End Jules: Log Keepa's reported remaining tokens on 429 error ---
         return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': status_code}, rate_limit_info
     except Exception as e:
         logging.error(f"Generic Fetch failed for ASIN {asin}: {str(e)}")
