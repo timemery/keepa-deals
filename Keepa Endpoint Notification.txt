@@ -1,5 +1,7 @@
 Keepa Endpoint Notification.txt
 
+THIS IS JUST EXPLORATORY NOTES - NOT DIRECTION FOR NOW... 
+
 How to Use Keepa Webhook Endpoint
 Keepa’s webhook endpoint allows real-time notifications for events like token refills or low token thresholds, sent as JSON via HTTP POST to a user-specified HTTPS URL. This is more reliable than parsing headers in Keepa_Deals.py for token management, as it avoids rate-limiting issues (e.g., 429 errors) by proactively notifying your server.
 

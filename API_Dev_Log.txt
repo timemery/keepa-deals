@@ -469,7 +469,7 @@ YYYY-MM-DD (Jules): Referral Fee % Implementation & Precision Fix
 - Outcome: User confirmed a perfect match with Keepa.com data after the update.
 - Learning: For fee percentages, the Keepa API might provide both a rounded integer (`referralFeePercent`) and a more precise decimal (`referralFeePercentage`). Always prioritize the field with greater precision if available. The precise field name might not always be obvious from general documentation and can require inspection of raw API responses.
 
-Date: <YYYY-MM-DD>
+Date: <2025 july 5>
 User: Tim Emery
 Jules: Yes
 Task: Fix "Brand" field showing all "-" in Keepa_Deals_Export.csv.
@@ -479,3 +479,81 @@ Details:
 - Updated `FUNCTION_LIST` in `field_mappings.py` to use `get_brand` for the "Brand" column.
 - User confirmed the fix locally; "Brand" column now populates correctly.
 Outcome: Success.
+
+# Development Log - Keepa API Rate Limit Investigation (Session v3.1 - Continued)
+
+**Date:** [Current Date]
+**Developer:** Jules (AI Assistant)
+**Task Focus:** Analyzing and mitigating Keepa API 429 "Too Many Requests" errors in `Keepa_Deals.py`.
+
+## Key Learnings & Decisions:
+
+1.  **Confirmation of No Rate Limit Headers:** A critical piece of information was re-confirmed: the Keepa API **does not** provide standard rate limit headers (e.g., `x-rate-limit-limit`, `x-rate-limit-remaining`, `x-rate-limit-reset`). This was reportedly discovered in a previous session but was overlooked at the start of the current analysis.
+    *   **Impact:** This means any client-side logic attempting to dynamically adjust request rates based on these specific headers is inherently flawed and will not function as intended. The script's `rate_limit_info` dictionary would always reflect null/None for these values.
+
+2.  **Ineffectiveness of Previous Header Logging Attempts:** Efforts in the current session to add detailed logging for *all* response headers to identify these rate limit headers were, therefore, based on a misunderstanding. The logs provided for analysis did not contain these new header log lines, initially suggesting an issue with the logging modification itself. However, the root cause is the absence of the headers from Keepa's responses.
+
+3.  **Strategy Pivot to Fixed Delays:** Given that dynamic adjustment based on server-sent headers is not an option, the strategy has pivoted entirely to a more conservative **fixed delay mechanism**.
+
+## Actions Taken in This Session:
+
+1.  **Initial Analysis (Based on Misunderstanding):**
+    *   Reviewed logs which showed persistent 429 errors and `rate_limit_info` as consistently `None`.
+    *   Attempted to enhance header logging in `Keepa_Deals.py` to capture raw headers, believing they might be present but differently named.
+
+2.  **Revised Strategy (Post-Clarification on Headers):**
+    *   **Modified `Keepa_Deals.py`:**
+        *   Increased `MIN_TIME_SINCE_LAST_CALL_SECONDS` from 30 to **60 seconds** to significantly reduce request frequency.
+        *   **Removed all logic** related to parsing `x-rate-limit-*` headers from API responses.
+        *   **Removed dynamic token adjustment logic** that relied on these non-existent headers.
+        *   Cleaned up associated logging to prevent misleading messages about missing headers or token discrepancies with server values.
+        *   The script's local token quota system remains for client-side estimation but no longer attempts to reconcile with (non-existent) server-side header values.
+    *   **Documentation:**
+        *   Proposed an update for `AGENTS.md` to permanently record the finding that Keepa does not provide these rate limit headers, to prevent future redundant analysis.
+
+## Next Steps:
+
+1.  **User Testing:** Awaiting results from a user test run of the modified `Keepa_Deals.py` (with `MIN_TIME_SINCE_LAST_CALL_SECONDS = 60`). The primary goal is to observe if 429 errors are eliminated or significantly reduced.
+2.  **Further Adjustments (If Necessary):** If 429 errors persist, `MIN_TIME_SINCE_LAST_CALL_SECONDS` may need to be further increased.
+3.  **Finalization:** Once a stable configuration is achieved, revert `MAX_DEALS_TO_PROCESS_FOR_TESTING` to a production value and submit the changes.
+
+## Reflections:
+
+*   The re-emergence of the fact that Keepa doesn't send rate limit headers was crucial. Ensuring such key environmental/API constraints are well-documented and easily accessible (e.g., in `AGENTS.md`) is vital for efficient development and avoiding repeated troubleshooting cycles.
+
+## Keepa API - Batch Product Query Details (Follow-up Research)
+
+**Date of Research:** July 5, 2025 (via Grok, second query)
+**Source:** Primarily Keepa API documentation and community forums, focusing on direct HTTP implications and Python library behavior.
+
+**Key Verifications & New Details for Batch Queries:**
+
+1.  **Token Cost Breakdown:**
+    *   The base cost for an ASIN in a batch is **1 token**.
+    *   **Crucially, additional parameters like `offers` (2 extra tokens/ASIN) or `buybox` still apply their costs *per ASIN within the batch*.** There's no reduction in token cost per ASIN for the *same data parameters* when batching versus individual calls. The primary benefit is reduced HTTP overhead and potentially different call rate treatment.
+    *   Example: A request for 100 ASINs with parameters that cost X tokens per ASIN individually will still cost `100 * X` tokens in a batch (if X is the sum of base + parameter costs).
+
+2.  **Response Structure (Confirmed):**
+    *   The JSON response for a batch query includes a top-level `products` array. Each element in the array is a dictionary for an ASIN, containing details like `asin`, `title`, `data`, etc.
+    *   The response may also contain top-level keys like `tokensLeft` and `refillIn` (milliseconds), which could provide direct feedback on token status if present in direct HTTP calls.
+    *   Invalid ASINs in a batch return no data for that ASIN but still consume their token share.
+
+3.  **Rate Limiting Behavior & Safe Frequency:**
+    *   A batch request (e.g., for 100 ASINs) is treated as a **single HTTP request** by Keepa.
+    *   The primary rate limit is the overall token quota and its refill rate (typically 5% of max tokens per hour).
+    *   Explicit per-second/minute call limits are not documented, but 429 errors (`NOT_ENOUGH_TOKEN`) occur if the token bucket is empty.
+    *   A **safe frequency** suggested for batch calls (especially when using the Python library's `wait=True` parameter, which handles some throttling) is around **1 to 2 batch requests per minute**. This implies a delay of 30-60 seconds *between batch calls* could be a good starting point.
+    *   Standard advice is to use exponential backoff if 429s are encountered.
+
+**Implications for `Keepa_Deals.py` Strategy:**
+*   The major speed benefit of batching comes from processing up to 100 ASINs with the overhead of a single HTTP call, and potentially allowing a faster *effective* ASIN processing rate (e.g., 100 ASINs every 30-60 seconds vs. 1 ASIN every 60 seconds).
+*   The total number of tokens consumed for the same dataset and parameters will likely remain similar to individual calls.
+*   If direct HTTP batch calls also return `tokensLeft` and `refillIn`, this could allow for a much more accurate client-side token management and dynamic delay system than previously thought possible.
+*   The `MIN_TIME_SINCE_LAST_CALL_SECONDS` in `Keepa_Deals.py` would need to be re-evaluated to be the delay *between batch calls*.
+
+**Next Steps (Post-Current Test):**
+1.  Confirm the outcome of the current test (individual calls with 60s delay).
+2.  If proceeding with batch implementation: 
+    *   Prioritize verifying the exact token cost per ASIN for the *specific parameters* we use (`stats`, `offers`, `stock`, `buybox`, etc.) when called in a batch via direct HTTP.
+    *   Verify if `tokensLeft` and `refillIn` are present in the direct HTTP batch response.
+    *   Plan a phased implementation, starting with a new function for batch fetching via direct HTTP.

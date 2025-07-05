@@ -283,3 +283,75 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   If these direct fields are not present, referral fee information might also be speculatively found nested under an `fbaFees` object, similar to other fees (e.g., `product_data.get('fbaFees', {}).get('referralFeePercentage')` or `product_data.get('fbaFees', {}).get('referralFee', {}).get('percent')`).
     *   When implementing, check for the more precise `referralFeePercentage` first, then fall back to other known or speculative locations. The value is a direct percentage (e.g., 14.99 for 14.99%).
 
+## Keepa API Interaction Notes
+
+### Rate Limiting and Headers
+
+*   **No Server-Side Rate Limit Headers**: As of [mention date or task reference if possible, e.g., July 2024 analysis / Task X], it has been confirmed that the Keepa API **does not** return standard rate limit headers (e.g., `x-rate-limit-limit`, `x-rate-limit-remaining`, `x-rate-limit-reset`) in its responses.
+*   **Implications for Scripting**: 
+    *   The `rate_limit_info` dictionary (or similar structures in scripts attempting to parse these headers) will consistently reflect `{'limit': None, 'remaining': None, 'reset': None}` (or equivalent empty/null values).
+    *   Any client-side logic designed for dynamic rate limit adjustments based on these specific headers will be **ineffective** as it will not receive the necessary data from the API.
+    *   Strategies for avoiding 429 "Too Many Requests" errors must rely on conservative fixed delays between API calls (e.g., `MIN_TIME_SINCE_LAST_CALL_SECONDS`) and potentially client-side quota estimations if Keepa publishes separate, non-header-based usage limits.
+*   **Current Strategy**: The `Keepa_Deals.py` script has been modified to use a fixed delay between calls and does not attempt to parse or react to these non-existent headers for dynamic rate adjustments.
+
+## Keepa API - Potential for Batch Product Queries
+
+**Date of Research:** July 5, 2025 (via Grok, based on user query)
+
+**Finding:** Research indicates that the Keepa API **officially supports batch querying of product details for up to 100 ASINs in a single call**.
+
+**Methods Identified:**
+1.  **Direct HTTP Request:** The standard `product` endpoint (currently used for single ASINs in `Keepa_Deals.py`) reportedly accepts a comma-separated list of up to 100 ASINs in the `asin` parameter (e.g., `&asin=ASIN1,ASIN2,ASIN3...`).
+2.  **Python `keepa` Library:** The official `keepa` Python library has an `api.query(asins_list, ...)` method designed for batch requests.
+
+**Potential Benefits if Implemented:**
+*   Significant reduction in the number of API calls (e.g., from N calls to N/100 calls).
+*   Reduced network overhead.
+*   Potential for faster overall data retrieval if the rate limits for batch calls are favorable.
+*   Reports suggest token cost might be 1 token per ASIN within the batch, potentially more efficient than the current 2 tokens per ASIN for individual product detail fetches.
+
+**Open Questions / Areas for Verification (as of July 5, 2025):**
+*   **HTTP Batch Request - Token Cost Confirmation:** What is the exact token cost per ASIN when using the comma-separated list in the HTTP `product` endpoint? (Is it indeed 1 token per ASIN?)
+*   **HTTP Batch Request - Response Structure:** What is the exact JSON structure of the response when multiple ASINs are requested via the HTTP `product` endpoint? (e.g., is it `{"products": [product1, product2, ...]}`?)
+*   **HTTP Batch Request - Rate Limiting:** How are batch HTTP requests treated by Keepa's rate limiting? Does one batch call count as one request, or does it count as N requests internally for throttling purposes? What delay would be safe between batch calls?
+
+**Current Status (as of this note):**
+*   `Keepa_Deals.py` currently makes individual API calls for each ASIN's product details.
+*   Implementation of batch querying is pending further verification of the above questions and successful testing of the current individual-call fixed-delay strategy.
+
+## Keepa API - Batch Product Query Details (Follow-up Research)
+
+**Date of Research:** July 5, 2025 (via Grok, second query)
+**Source:** Primarily Keepa API documentation and community forums, focusing on direct HTTP implications and Python library behavior.
+
+**Key Verifications & New Details for Batch Queries:**
+
+1.  **Token Cost Breakdown:**
+    *   The base cost for an ASIN in a batch is **1 token**.
+    *   **Crucially, additional parameters like `offers` (2 extra tokens/ASIN) or `buybox` still apply their costs *per ASIN within the batch*.** There's no reduction in token cost per ASIN for the *same data parameters* when batching versus individual calls. The primary benefit is reduced HTTP overhead and potentially different call rate treatment.
+    *   Example: A request for 100 ASINs with parameters that cost X tokens per ASIN individually will still cost `100 * X` tokens in a batch (if X is the sum of base + parameter costs).
+
+2.  **Response Structure (Confirmed):**
+    *   The JSON response for a batch query includes a top-level `products` array. Each element in the array is a dictionary for an ASIN, containing details like `asin`, `title`, `data`, etc.
+    *   The response may also contain top-level keys like `tokensLeft` and `refillIn` (milliseconds), which could provide direct feedback on token status if present in direct HTTP calls.
+    *   Invalid ASINs in a batch return no data for that ASIN but still consume their token share.
+
+3.  **Rate Limiting Behavior & Safe Frequency:**
+    *   A batch request (e.g., for 100 ASINs) is treated as a **single HTTP request** by Keepa.
+    *   The primary rate limit is the overall token quota and its refill rate (typically 5% of max tokens per hour).
+    *   Explicit per-second/minute call limits are not documented, but 429 errors (`NOT_ENOUGH_TOKEN`) occur if the token bucket is empty.
+    *   A **safe frequency** suggested for batch calls (especially when using the Python library's `wait=True` parameter, which handles some throttling) is around **1 to 2 batch requests per minute**. This implies a delay of 30-60 seconds *between batch calls* could be a good starting point.
+    *   Standard advice is to use exponential backoff if 429s are encountered.
+
+**Implications for `Keepa_Deals.py` Strategy:**
+*   The major speed benefit of batching comes from processing up to 100 ASINs with the overhead of a single HTTP call, and potentially allowing a faster *effective* ASIN processing rate (e.g., 100 ASINs every 30-60 seconds vs. 1 ASIN every 60 seconds).
+*   The total number of tokens consumed for the same dataset and parameters will likely remain similar to individual calls.
+*   If direct HTTP batch calls also return `tokensLeft` and `refillIn`, this could allow for a much more accurate client-side token management and dynamic delay system than previously thought possible.
+*   The `MIN_TIME_SINCE_LAST_CALL_SECONDS` in `Keepa_Deals.py` would need to be re-evaluated to be the delay *between batch calls*.
+
+**Next Steps (Post-Current Test):**
+1.  Confirm the outcome of the current test (individual calls with 60s delay).
+2.  If proceeding with batch implementation: 
+    *   Prioritize verifying the exact token cost per ASIN for the *specific parameters* we use (`stats`, `offers`, `stock`, `buybox`, etc.) when called in a batch via direct HTTP.
+    *   Verify if `tokensLeft` and `refillIn` are present in the direct HTTP batch response.
+    *   Plan a phased implementation, starting with a new function for batch fetching via direct HTTP.
