@@ -1587,3 +1587,313 @@
 2025-07-04 16:48:08,607 INFO: Quota Check (after refill calc): Current available tokens: 121.00
 2025-07-04 16:48:31,036 INFO: Quota Check (entry): Current available tokens: 119.00, Last refill calc time: 2025-07-04 15:59:31
 2025-07-04 16:48:31,036 INFO: Quota Check (after refill calc): Current available tokens: 119.00
+2025-07-04 18:01:32,780 INFO: Quota Check (entry): Current available tokens: 300.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:01:32,780 INFO: Quota Check (after refill calc): Current available tokens: 300.00
+2025-07-04 18:01:32,781 INFO: Pre-emptive pause: Last call was 15.08s ago. Waiting for 4.92s.
+2025-07-04 18:01:48,831 INFO: Quota Check (entry): Current available tokens: 298.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:01:48,831 INFO: Quota Check (after refill calc): Current available tokens: 298.00
+2025-07-04 18:01:48,831 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:02:16,761 INFO: Quota Check (entry): Current available tokens: 296.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:02:16,761 INFO: Quota Check (after refill calc): Current available tokens: 296.00
+2025-07-04 18:02:16,761 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:02:41,443 INFO: Quota Check (entry): Current available tokens: 294.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:02:41,444 INFO: Quota Check (after refill calc): Current available tokens: 294.00
+2025-07-04 18:02:41,444 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:03:03,599 INFO: Quota Check (entry): Current available tokens: 292.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:03:03,599 INFO: Quota Check (after refill calc): Current available tokens: 292.00
+2025-07-04 18:03:03,599 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:03:31,660 INFO: Quota Check (entry): Current available tokens: 290.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:03:31,660 INFO: Quota Check (after refill calc): Current available tokens: 290.00
+2025-07-04 18:03:31,660 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:04:00,148 INFO: Quota Check (entry): Current available tokens: 288.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:04:00,148 INFO: Quota Check (after refill calc): Current available tokens: 288.00
+2025-07-04 18:04:00,148 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:04:31,007 INFO: Quota Check (entry): Current available tokens: 286.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:04:31,007 INFO: Quota Check (after refill calc): Current available tokens: 286.00
+2025-07-04 18:04:31,007 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:05:09,753 INFO: Quota Check (entry): Current available tokens: 284.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:05:09,753 INFO: Quota Check (after refill calc): Current available tokens: 284.00
+2025-07-04 18:05:09,753 INFO: Pre-emptive pause: Last call was 5.11s ago. Waiting for 14.89s.
+2025-07-04 18:05:38,127 INFO: Quota Check (entry): Current available tokens: 282.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:05:38,127 INFO: Quota Check (after refill calc): Current available tokens: 282.00
+2025-07-04 18:05:38,127 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:06:09,152 INFO: Quota Check (entry): Current available tokens: 280.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:06:09,152 INFO: Quota Check (after refill calc): Current available tokens: 280.00
+2025-07-04 18:06:09,152 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:06:37,235 INFO: Quota Check (entry): Current available tokens: 278.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:06:37,235 INFO: Quota Check (after refill calc): Current available tokens: 278.00
+2025-07-04 18:06:37,235 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:07:05,658 INFO: Quota Check (entry): Current available tokens: 276.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:07:05,659 INFO: Quota Check (after refill calc): Current available tokens: 276.00
+2025-07-04 18:07:05,659 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:07:31,259 INFO: Quota Check (entry): Current available tokens: 274.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:07:31,259 INFO: Quota Check (after refill calc): Current available tokens: 274.00
+2025-07-04 18:07:31,259 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:08:02,967 INFO: Quota Check (entry): Current available tokens: 272.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:08:02,967 INFO: Quota Check (after refill calc): Current available tokens: 272.00
+2025-07-04 18:08:02,967 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:08:31,203 INFO: Quota Check (entry): Current available tokens: 270.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:08:31,203 INFO: Quota Check (after refill calc): Current available tokens: 270.00
+2025-07-04 18:08:31,203 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:09:01,491 INFO: Quota Check (entry): Current available tokens: 268.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:09:01,491 INFO: Quota Check (after refill calc): Current available tokens: 268.00
+2025-07-04 18:09:01,491 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:09:28,297 INFO: Quota Check (entry): Current available tokens: 266.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:09:28,297 INFO: Quota Check (after refill calc): Current available tokens: 266.00
+2025-07-04 18:09:28,297 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:09:54,828 INFO: Quota Check (entry): Current available tokens: 264.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:09:54,828 INFO: Quota Check (after refill calc): Current available tokens: 264.00
+2025-07-04 18:09:54,828 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:10:22,720 INFO: Quota Check (entry): Current available tokens: 262.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:10:22,720 INFO: Quota Check (after refill calc): Current available tokens: 262.00
+2025-07-04 18:10:22,721 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:10:56,099 INFO: Quota Check (entry): Current available tokens: 260.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:10:56,099 INFO: Quota Check (after refill calc): Current available tokens: 260.00
+2025-07-04 18:10:56,099 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:11:20,978 INFO: Quota Check (entry): Current available tokens: 258.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:11:20,978 INFO: Quota Check (after refill calc): Current available tokens: 258.00
+2025-07-04 18:11:20,978 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:11:47,880 INFO: Quota Check (entry): Current available tokens: 256.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:11:47,880 INFO: Quota Check (after refill calc): Current available tokens: 256.00
+2025-07-04 18:11:47,880 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:12:13,227 INFO: Quota Check (entry): Current available tokens: 254.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:12:13,227 INFO: Quota Check (after refill calc): Current available tokens: 254.00
+2025-07-04 18:12:13,227 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:12:40,278 INFO: Quota Check (entry): Current available tokens: 252.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:12:40,278 INFO: Quota Check (after refill calc): Current available tokens: 252.00
+2025-07-04 18:12:40,278 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:13:11,775 INFO: Quota Check (entry): Current available tokens: 250.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:13:11,775 INFO: Quota Check (after refill calc): Current available tokens: 250.00
+2025-07-04 18:13:11,775 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:13:41,996 INFO: Quota Check (entry): Current available tokens: 248.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:13:41,996 INFO: Quota Check (after refill calc): Current available tokens: 248.00
+2025-07-04 18:13:41,996 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:14:13,534 INFO: Quota Check (entry): Current available tokens: 246.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:14:13,534 INFO: Quota Check (after refill calc): Current available tokens: 246.00
+2025-07-04 18:14:13,534 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:14:51,949 INFO: Quota Check (entry): Current available tokens: 244.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:14:51,949 INFO: Quota Check (after refill calc): Current available tokens: 244.00
+2025-07-04 18:14:51,949 INFO: Pre-emptive pause: Last call was 5.04s ago. Waiting for 14.96s.
+2025-07-04 18:15:17,165 INFO: Quota Check (entry): Current available tokens: 242.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:15:17,166 INFO: Quota Check (after refill calc): Current available tokens: 242.00
+2025-07-04 18:15:17,166 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:15:47,087 INFO: Quota Check (entry): Current available tokens: 240.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:15:47,087 INFO: Quota Check (after refill calc): Current available tokens: 240.00
+2025-07-04 18:15:47,087 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:16:20,714 INFO: Quota Check (entry): Current available tokens: 238.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:16:20,714 INFO: Quota Check (after refill calc): Current available tokens: 238.00
+2025-07-04 18:16:20,715 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:16:46,988 INFO: Quota Check (entry): Current available tokens: 236.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:16:46,988 INFO: Quota Check (after refill calc): Current available tokens: 236.00
+2025-07-04 18:16:46,988 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:17:12,337 INFO: Quota Check (entry): Current available tokens: 234.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:17:12,337 INFO: Quota Check (after refill calc): Current available tokens: 234.00
+2025-07-04 18:17:12,337 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:17:41,753 INFO: Quota Check (entry): Current available tokens: 232.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:17:41,753 INFO: Quota Check (after refill calc): Current available tokens: 232.00
+2025-07-04 18:17:41,753 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:18:10,028 INFO: Quota Check (entry): Current available tokens: 230.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:18:10,028 INFO: Quota Check (after refill calc): Current available tokens: 230.00
+2025-07-04 18:18:10,028 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:18:40,953 INFO: Quota Check (entry): Current available tokens: 228.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:18:40,953 INFO: Quota Check (after refill calc): Current available tokens: 228.00
+2025-07-04 18:18:40,953 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:19:08,021 INFO: Quota Check (entry): Current available tokens: 226.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:19:08,021 INFO: Quota Check (after refill calc): Current available tokens: 226.00
+2025-07-04 18:19:08,021 INFO: Pre-emptive pause: Last call was 5.04s ago. Waiting for 14.96s.
+2025-07-04 18:19:37,148 INFO: Quota Check (entry): Current available tokens: 224.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:19:37,148 INFO: Quota Check (after refill calc): Current available tokens: 224.00
+2025-07-04 18:19:37,148 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:20:02,697 INFO: Quota Check (entry): Current available tokens: 222.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:20:02,697 INFO: Quota Check (after refill calc): Current available tokens: 222.00
+2025-07-04 18:20:02,697 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:20:32,276 INFO: Quota Check (entry): Current available tokens: 220.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:20:32,276 INFO: Quota Check (after refill calc): Current available tokens: 220.00
+2025-07-04 18:20:32,276 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:20:59,442 INFO: Quota Check (entry): Current available tokens: 218.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:20:59,442 INFO: Quota Check (after refill calc): Current available tokens: 218.00
+2025-07-04 18:20:59,442 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:21:26,963 INFO: Quota Check (entry): Current available tokens: 216.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:21:26,963 INFO: Quota Check (after refill calc): Current available tokens: 216.00
+2025-07-04 18:21:26,963 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:21:54,524 INFO: Quota Check (entry): Current available tokens: 214.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:21:54,524 INFO: Quota Check (after refill calc): Current available tokens: 214.00
+2025-07-04 18:21:54,524 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:22:23,865 INFO: Quota Check (entry): Current available tokens: 212.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:22:23,865 INFO: Quota Check (after refill calc): Current available tokens: 212.00
+2025-07-04 18:22:23,865 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:22:49,743 INFO: Quota Check (entry): Current available tokens: 210.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:22:49,743 INFO: Quota Check (after refill calc): Current available tokens: 210.00
+2025-07-04 18:22:49,743 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:23:20,535 INFO: Quota Check (entry): Current available tokens: 208.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:23:20,535 INFO: Quota Check (after refill calc): Current available tokens: 208.00
+2025-07-04 18:23:20,535 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 18:23:54,318 INFO: Quota Check (entry): Current available tokens: 206.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:23:54,318 INFO: Quota Check (after refill calc): Current available tokens: 206.00
+2025-07-04 18:23:54,318 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:24:21,831 INFO: Quota Check (entry): Current available tokens: 204.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:24:21,831 INFO: Quota Check (after refill calc): Current available tokens: 204.00
+2025-07-04 18:24:21,831 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:24:50,544 INFO: Quota Check (entry): Current available tokens: 202.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:24:50,544 INFO: Quota Check (after refill calc): Current available tokens: 202.00
+2025-07-04 18:24:50,544 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:25:21,305 INFO: Quota Check (entry): Current available tokens: 200.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:25:21,305 INFO: Quota Check (after refill calc): Current available tokens: 200.00
+2025-07-04 18:25:21,305 INFO: Pre-emptive pause: Last call was 5.04s ago. Waiting for 14.96s.
+2025-07-04 18:26:02,227 INFO: Quota Check (entry): Current available tokens: 198.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:26:02,227 INFO: Quota Check (after refill calc): Current available tokens: 198.00
+2025-07-04 18:26:02,228 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 18:26:32,741 INFO: Quota Check (entry): Current available tokens: 196.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:26:32,742 INFO: Quota Check (after refill calc): Current available tokens: 196.00
+2025-07-04 18:26:32,742 INFO: Pre-emptive pause: Last call was 5.04s ago. Waiting for 14.96s.
+2025-07-04 18:27:04,512 INFO: Quota Check (entry): Current available tokens: 194.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:27:04,512 INFO: Quota Check (after refill calc): Current available tokens: 194.00
+2025-07-04 18:27:04,512 INFO: Pre-emptive pause: Last call was 5.12s ago. Waiting for 14.88s.
+2025-07-04 18:27:33,098 INFO: Quota Check (entry): Current available tokens: 192.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:27:33,099 INFO: Quota Check (after refill calc): Current available tokens: 192.00
+2025-07-04 18:27:33,099 INFO: Pre-emptive pause: Last call was 5.05s ago. Waiting for 14.95s.
+2025-07-04 18:28:04,384 INFO: Quota Check (entry): Current available tokens: 190.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:28:04,384 INFO: Quota Check (after refill calc): Current available tokens: 190.00
+2025-07-04 18:28:04,385 INFO: Pre-emptive pause: Last call was 5.09s ago. Waiting for 14.91s.
+2025-07-04 18:28:37,533 INFO: Processing ASIN 8419241237 (57/100)
+2025-07-04 18:28:37,533 INFO: Quota Check (entry): Current available tokens: 188.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 18:28:37,533 INFO: Quota Check (after refill calc): Current available tokens: 188.00
+2025-07-04 18:28:37,533 INFO: Pre-emptive pause: Last call was 5.04s ago. Waiting for 14.96s.
+2025-07-04 18:28:52,493 INFO: Fetching ASIN 8419241237 (57/100)
+2025-07-04 18:28:52,493 INFO: fetch_product: Attempt #1 for ASIN 8419241237 (days=365, offers=100, rating=1, history=1, no_cache=True)
+2025-07-04 18:28:52,493 DEBUG: fetch_product (Attempt #1): Making HTTP GET request for ASIN 8419241237 to https://api.keepa.com/product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=8419241237&stats=365&offers=100&rating=1&history=1&stock=1&buybox=1
+2025-07-04 18:28:52,876 DEBUG: fetch_product (Attempt #1): Response status 429 for ASIN 8419241237
+2025-07-04 18:28:52,877 ERROR: HTTP Fetch failed for ASIN 8419241237: 429 Client Error: Too Many Requests for url: https://api.keepa.com/product?key=bg9037ndr2jrlore45acr8a3gustia0tusdfk5e54g1le917nspnk9jiktp7b08b&domain=1&asin=8419241237&stats=365&offers=100&rating=1&history=1&stock=1&buybox=1
+2025-07-04 18:28:52,877 INFO: Token NOT consumed for ASIN 8419241237 due to fetch error (status: 429). Tokens remaining: 188.00
+2025-07-04 19:29:12,753 INFO: 429 Recovery: Pause complete for ASIN 8419241237. Attempting to update quota information.
+2025-07-04 19:29:12,754 INFO: Quota Check (entry): Current available tokens: 188.00, Last refill calc time: 2025-07-04 18:01:17
+2025-07-04 19:29:12,754 INFO: Quota Check (after refill calc): Current available tokens: 203.00
+2025-07-04 19:29:12,755 WARNING: Skipping data processing for ASIN 8419241237 for this cycle due to 429 error and post-error pause/quota update.
+2025-07-04 19:29:12,755 INFO: Quota Check (entry): Current available tokens: 203.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:29:12,755 INFO: Quota Check (after refill calc): Current available tokens: 203.00
+2025-07-04 19:29:28,195 INFO: Quota Check (entry): Current available tokens: 201.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:29:28,195 INFO: Quota Check (after refill calc): Current available tokens: 201.00
+2025-07-04 19:29:28,195 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:29:57,018 INFO: Quota Check (entry): Current available tokens: 199.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:29:57,018 INFO: Quota Check (after refill calc): Current available tokens: 199.00
+2025-07-04 19:29:57,018 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:30:23,929 INFO: Quota Check (entry): Current available tokens: 197.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:30:23,930 INFO: Quota Check (after refill calc): Current available tokens: 197.00
+2025-07-04 19:30:23,930 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:30:45,540 INFO: Quota Check (entry): Current available tokens: 195.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:30:45,540 INFO: Quota Check (after refill calc): Current available tokens: 195.00
+2025-07-04 19:30:45,540 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:31:11,213 INFO: Quota Check (entry): Current available tokens: 193.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:31:11,213 INFO: Quota Check (after refill calc): Current available tokens: 193.00
+2025-07-04 19:31:11,213 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:31:37,626 INFO: Quota Check (entry): Current available tokens: 191.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:31:37,626 INFO: Quota Check (after refill calc): Current available tokens: 191.00
+2025-07-04 19:31:37,626 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:32:07,155 INFO: Quota Check (entry): Current available tokens: 189.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:32:07,155 INFO: Quota Check (after refill calc): Current available tokens: 189.00
+2025-07-04 19:32:07,155 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:32:36,381 INFO: Quota Check (entry): Current available tokens: 187.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:32:36,381 INFO: Quota Check (after refill calc): Current available tokens: 187.00
+2025-07-04 19:32:36,381 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:32:57,377 INFO: Quota Check (entry): Current available tokens: 185.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:32:57,377 INFO: Quota Check (after refill calc): Current available tokens: 185.00
+2025-07-04 19:32:57,377 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:33:24,633 INFO: Quota Check (entry): Current available tokens: 183.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:33:24,633 INFO: Quota Check (after refill calc): Current available tokens: 183.00
+2025-07-04 19:33:24,634 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:33:52,499 INFO: Quota Check (entry): Current available tokens: 181.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:33:52,499 INFO: Quota Check (after refill calc): Current available tokens: 181.00
+2025-07-04 19:33:52,499 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:34:21,146 INFO: Quota Check (entry): Current available tokens: 179.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:34:21,146 INFO: Quota Check (after refill calc): Current available tokens: 179.00
+2025-07-04 19:34:21,146 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:34:47,705 INFO: Quota Check (entry): Current available tokens: 177.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:34:47,705 INFO: Quota Check (after refill calc): Current available tokens: 177.00
+2025-07-04 19:34:47,705 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:35:17,697 INFO: Quota Check (entry): Current available tokens: 175.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:35:17,697 INFO: Quota Check (after refill calc): Current available tokens: 175.00
+2025-07-04 19:35:17,697 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:35:44,734 INFO: Quota Check (entry): Current available tokens: 173.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:35:44,734 INFO: Quota Check (after refill calc): Current available tokens: 173.00
+2025-07-04 19:35:44,734 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:36:11,249 INFO: Quota Check (entry): Current available tokens: 171.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:36:11,249 INFO: Quota Check (after refill calc): Current available tokens: 171.00
+2025-07-04 19:36:11,249 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:36:41,159 INFO: Quota Check (entry): Current available tokens: 169.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:36:41,159 INFO: Quota Check (after refill calc): Current available tokens: 169.00
+2025-07-04 19:36:41,159 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:37:13,366 INFO: Quota Check (entry): Current available tokens: 167.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:37:13,366 INFO: Quota Check (after refill calc): Current available tokens: 167.00
+2025-07-04 19:37:13,366 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:37:42,304 INFO: Quota Check (entry): Current available tokens: 165.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:37:42,304 INFO: Quota Check (after refill calc): Current available tokens: 165.00
+2025-07-04 19:37:42,304 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:38:14,616 INFO: Quota Check (entry): Current available tokens: 163.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:38:14,616 INFO: Quota Check (after refill calc): Current available tokens: 163.00
+2025-07-04 19:38:14,616 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:38:42,134 INFO: Quota Check (entry): Current available tokens: 161.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:38:42,134 INFO: Quota Check (after refill calc): Current available tokens: 161.00
+2025-07-04 19:38:42,134 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:39:02,762 INFO: Quota Check (entry): Current available tokens: 159.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:39:02,762 INFO: Quota Check (after refill calc): Current available tokens: 159.00
+2025-07-04 19:39:02,762 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:39:30,311 INFO: Quota Check (entry): Current available tokens: 157.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:39:30,311 INFO: Quota Check (after refill calc): Current available tokens: 157.00
+2025-07-04 19:39:30,311 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:39:53,876 INFO: Quota Check (entry): Current available tokens: 155.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:39:53,876 INFO: Quota Check (after refill calc): Current available tokens: 155.00
+2025-07-04 19:39:53,876 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:40:22,613 INFO: Quota Check (entry): Current available tokens: 153.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:40:22,613 INFO: Quota Check (after refill calc): Current available tokens: 153.00
+2025-07-04 19:40:22,613 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:40:51,090 INFO: Quota Check (entry): Current available tokens: 151.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:40:51,090 INFO: Quota Check (after refill calc): Current available tokens: 151.00
+2025-07-04 19:40:51,091 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:41:23,075 INFO: Quota Check (entry): Current available tokens: 149.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:41:23,075 INFO: Quota Check (after refill calc): Current available tokens: 149.00
+2025-07-04 19:41:23,075 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:41:51,610 INFO: Quota Check (entry): Current available tokens: 147.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:41:51,610 INFO: Quota Check (after refill calc): Current available tokens: 147.00
+2025-07-04 19:41:51,610 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:42:18,882 INFO: Quota Check (entry): Current available tokens: 145.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:42:18,882 INFO: Quota Check (after refill calc): Current available tokens: 145.00
+2025-07-04 19:42:18,882 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:42:53,008 INFO: Quota Check (entry): Current available tokens: 143.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:42:53,008 INFO: Quota Check (after refill calc): Current available tokens: 143.00
+2025-07-04 19:42:53,008 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:43:17,106 INFO: Quota Check (entry): Current available tokens: 141.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:43:17,107 INFO: Quota Check (after refill calc): Current available tokens: 141.00
+2025-07-04 19:43:17,107 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:43:46,362 INFO: Quota Check (entry): Current available tokens: 139.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:43:46,362 INFO: Quota Check (after refill calc): Current available tokens: 139.00
+2025-07-04 19:43:46,362 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:44:16,601 INFO: Quota Check (entry): Current available tokens: 137.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:44:16,601 INFO: Quota Check (after refill calc): Current available tokens: 137.00
+2025-07-04 19:44:16,601 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:45:25,743 INFO: Quota Check (entry): Current available tokens: 135.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:45:25,743 INFO: Quota Check (after refill calc): Current available tokens: 135.00
+2025-07-04 19:45:25,743 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:45:56,195 INFO: Quota Check (entry): Current available tokens: 133.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:45:56,195 INFO: Quota Check (after refill calc): Current available tokens: 133.00
+2025-07-04 19:45:56,195 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:46:18,116 INFO: Quota Check (entry): Current available tokens: 131.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:46:18,116 INFO: Quota Check (after refill calc): Current available tokens: 131.00
+2025-07-04 19:46:18,116 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:46:45,529 INFO: Quota Check (entry): Current available tokens: 129.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:46:45,529 INFO: Quota Check (after refill calc): Current available tokens: 129.00
+2025-07-04 19:46:45,529 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:47:11,159 INFO: Quota Check (entry): Current available tokens: 127.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:47:11,159 INFO: Quota Check (after refill calc): Current available tokens: 127.00
+2025-07-04 19:47:11,159 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.
+2025-07-04 19:47:31,542 INFO: Quota Check (entry): Current available tokens: 125.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:47:31,542 INFO: Quota Check (after refill calc): Current available tokens: 125.00
+2025-07-04 19:47:31,542 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:47:58,205 INFO: Quota Check (entry): Current available tokens: 123.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:47:58,205 INFO: Quota Check (after refill calc): Current available tokens: 123.00
+2025-07-04 19:47:58,205 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:48:26,876 INFO: Quota Check (entry): Current available tokens: 121.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:48:26,876 INFO: Quota Check (after refill calc): Current available tokens: 121.00
+2025-07-04 19:48:26,876 INFO: Pre-emptive pause: Last call was 5.02s ago. Waiting for 14.98s.
+2025-07-04 19:48:57,651 INFO: Quota Check (entry): Current available tokens: 119.00, Last refill calc time: 2025-07-04 19:01:17
+2025-07-04 19:48:57,651 INFO: Quota Check (after refill calc): Current available tokens: 119.00
+2025-07-04 19:48:57,651 INFO: Pre-emptive pause: Last call was 5.03s ago. Waiting for 14.97s.

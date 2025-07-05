@@ -29,6 +29,14 @@ last_refill_calculation_time = time.time() # Initialize to script start time
 
 # Global dictionary to track attempts for fetch_product retries
 fetch_product_attempts = {}
+
+# --- Jules: Additional Throttling & Logging Constants ---
+MIN_TIME_SINCE_LAST_CALL_SECONDS = 20 # Minimum quiet time before a new API call
+POST_FETCH_SUCCESS_DELAY_SECONDS = 5  # Delay after a successful fetch (can be same as MIN_TIME_SINCE_LAST_CALL_SECONDS or different)
+POST_FETCH_ERROR_DELAY_SECONDS = 20 # Delay after a fetch that resulted in an error (e.g., 429, but also others)
+# Initialize global state for pre-emptive delay
+LAST_API_CALL_TIMESTAMP = 0 
+# --- End Additional Throttling & Logging Constants ---
 # --- End Local Quota Management ---
 
 # Logging for terminal and file output - starts
@@ -163,9 +171,22 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
             'remaining': response.headers.get('x-rate-limit-remaining'),
             'reset': response.headers.get('x-rate-limit-reset')
         }
-        logging.info(f"ASIN {asin} - Rate limit info: {rate_limit_info}")
+        # --- Jules: Log Keepa's reported remaining tokens vs script's view ---
+        try:
+            keepa_remaining_tokens = int(rate_limit_info['remaining'])
+            # Accessing global current_available_tokens for comparison
+            script_tokens = current_available_tokens 
+            token_discrepancy = script_tokens - keepa_remaining_tokens
+            logger.info(f"ASIN {asin} - Token Check: Keepa reports {keepa_remaining_tokens} remaining. Script calculated {script_tokens:.2f}. Discrepancy: {token_discrepancy:.2f}")
+            if abs(token_discrepancy) > MIN_QUOTA_THRESHOLD_BEFORE_PAUSE: # Using existing threshold for "significant"
+                 logger.warning(f"ASIN {asin} - SIGNIFICANT TOKEN DISCREPANCY: Keepa: {keepa_remaining_tokens}, Script: {script_tokens:.2f}, Diff: {token_discrepancy:.2f}")
+        except (ValueError, TypeError) as ve:
+            logger.warning(f"ASIN {asin} - Could not parse Keepa's remaining tokens: {rate_limit_info.get('remaining')}. Error: {ve}")
+        except Exception as ex_token_log:
+            logger.error(f"ASIN {asin} - Error during token discrepancy logging: {ex_token_log}")
+        # --- End Jules: Token Discrepancy Logging ---
         
-        time.sleep(2)  # Restore delay to avoid rate limits
+        # time.sleep(2) # This specific sleep is superseded by the global post-fetch delay in main()
         return product, rate_limit_info
     except requests.exceptions.RequestException as e:
         logging.error(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
@@ -303,9 +324,12 @@ def write_csv(rows, deals, diagnostic=False):
 
 # Chunk 4 starts
 def main():
-    global args
+    global args, LAST_API_CALL_TIMESTAMP # Added LAST_API_CALL_TIMESTAMP to globals used in main
     args = parser.parse_args() # Initialize global args
     logger = logging.getLogger('KeepaDeals') # Obtain logger instance
+    
+    LAST_API_CALL_TIMESTAMP = time.time() # Initialize to script start time, or 0 if preferred to ensure first call isn't delayed by this. Let's use current time.
+
     try:
 # Logging stuff - starts
         logger.info("Starting Keepa_Deals...") # Use logger instance
@@ -372,28 +396,39 @@ def main():
 
             # The old dynamic throttling logic based on current_rate_limit_info is now removed / superseded by update_and_check_quota
 
+            # --- Jules: Pre-emptive Dynamic Delay ---
+            current_time = time.time()
+            time_since_last_call = current_time - LAST_API_CALL_TIMESTAMP
+            if time_since_last_call < MIN_TIME_SINCE_LAST_CALL_SECONDS:
+                wait_duration = MIN_TIME_SINCE_LAST_CALL_SECONDS - time_since_last_call
+                logger.info(f"Pre-emptive pause: Last call was {time_since_last_call:.2f}s ago. Waiting for {wait_duration:.2f}s.")
+                time.sleep(wait_duration)
+            # --- End Pre-emptive Dynamic Delay ---
+
             logger.info(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})") # Use logger instance, ensure correct index and list
             print(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
-            product, rate_info = fetch_product(asin) # rate_info is legacy, no longer used for primary throttling
+            
+            product, rate_info = fetch_product(asin) # fetch_product now also logs token discrepancy
+            LAST_API_CALL_TIMESTAMP = time.time() # Update timestamp *after* the call attempt
 
-            # --- Jules: Increase inter-request delay to 20 seconds to further mitigate burst limits (EXPERIMENTAL) ---
-            logger.debug(f"Pausing for 20 seconds after ASIN {asin} fetch attempt (EXPERIMENTAL THROTTLING)...")
-            time.sleep(20)
-            # --- End Inter-Request Delay ---
-
-            # --- Jules: Decrement token only if fetch was successful ---
+            # --- Jules: Parameterized Post-Fetch Delay & Token Decrement ---
             global current_available_tokens # Ensure we're using the global
             if not product.get('error'):
                 current_available_tokens -= TOKEN_COST_PER_ASIN
                 logger.info(f"Token consumed for successful fetch of ASIN {asin}. Tokens remaining: {current_available_tokens:.2f}")
+                logger.debug(f"Pausing for {POST_FETCH_SUCCESS_DELAY_SECONDS}s after successful fetch of ASIN {asin}.")
+                time.sleep(POST_FETCH_SUCCESS_DELAY_SECONDS)
             else:
+                # This includes 429 errors and other fetch errors
                 logger.info(f"Token NOT consumed for ASIN {asin} due to fetch error (status: {product.get('status_code')}). Tokens remaining: {current_available_tokens:.2f}")
-            # --- End Decrement Logic ---
+                logger.debug(f"Pausing for {POST_FETCH_ERROR_DELAY_SECONDS}s after failed fetch of ASIN {asin}.")
+                time.sleep(POST_FETCH_ERROR_DELAY_SECONDS)
+            # --- End Parameterized Post-Fetch Delay & Token Decrement ---
             
-            # Handle 429 error specifically after fetch_product attempt
+            # Handle 429 error specifically after fetch_product attempt and initial post-error delay
             if product.get('error') and product.get('status_code') == 429:
-                logger.error(f"Received 429 (Too Many Requests) for ASIN {asin}. Initiating a longer pause of 1 hour.")
-                print(f"Rate limit hit hard for ASIN {asin}. Pausing for 1 hour to allow token replenishment...", flush=True)
+                logger.error(f"Received 429 (Too Many Requests) for ASIN {asin} even after pre-emptive and post-error ({POST_FETCH_ERROR_DELAY_SECONDS}s) pauses. Initiating 1-hour recovery pause.")
+                print(f"Rate limit 429 for ASIN {asin}. Pausing for 1 hour for token replenishment...", flush=True) # Simplified user message
                 time.sleep(QUOTA_REFILL_INTERVAL_SECONDS) # Pause for 1 hour (3600 seconds)
                 
                 # After the long pause, call update_and_check_quota to recalculate available tokens
