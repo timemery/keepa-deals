@@ -137,6 +137,7 @@ def fetch_product(asin, days=365, offers=100, rating=1, history=1):
         response = requests.get(url, headers=headers, timeout=60)
         
         logger.debug(f"fetch_product (Attempt #{attempt_num}): Response status {response.status_code} for ASIN {asin}")
+        logger.info(f"ASIN {asin} - ALL RESPONSE HEADERS (Successful or Error before raise_for_status): {response.headers}") # Jules: Log all headers
         response.raise_for_status() # Will raise HTTPError for 4xx/5xx, which is a RequestException
 
         # If raise_for_status() doesn't raise, then status_code is 200 or similar non-error

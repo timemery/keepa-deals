@@ -1,0 +1,75 @@
+Keepa Endpoint Notification.txt
+
+How to Use Keepa Webhook Endpoint
+Keepa’s webhook endpoint allows real-time notifications for events like token refills or low token thresholds, sent as JSON via HTTP POST to a user-specified HTTPS URL. This is more reliable than parsing headers in Keepa_Deals.py for token management, as it avoids rate-limiting issues (e.g., 429 errors) by proactively notifying your server.
+
+Steps:
+
+Create Webhook Endpoint:
+Use https://webhook.site to generate a free, unique HTTPS URL for testing.
+Copy the URL (e.g., https://webhook.site/12345).
+
+Configure on Keepa:
+Log into keepa.com, navigate to API settings.
+Paste the URL into the “Notification webhook endpoint” field.
+Click “Save”.
+Test Notification:
+Click “Send test notification” to verify setup.
+Check webhook.site for the JSON payload (e.g., token count, event type).
+Integrate in Script:
+For production, set up an HTTPS endpoint (e.g., using Flask in Python) to handle POST requests.
+Example Flask handler
+
+# Chunk 1 starts: Webhook handler (REFERENCE ONLY)
+from flask import Flask, request
+app = Flask(__name__)
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.json
+    print(f"Received: {data}")  # Log token event
+    return '', 200
+# Chunk 1 ends
+
+Analyze Payload:
+Inspect asin_000136068X_log_combined.txt for token-related logs.
+Update Keepa_Deals.py to pause on low-token notifications.
+Utility:
+
+Proactive Token Management: Avoid 429 errors by pausing fetches when tokens are low.
+Automation: Integrate with Discord or email for alerts.
+Reliability: More accurate than header parsing.
+Share:
+
+Webhook.site payload or errors.
+Token refresh plan.
+Notes:
+
+Backup config.json before changes.
+Verify Keepa_Deals_Export.csv for ASINs.
+Check https://github.com/timemery/keepa-deals/security/dependabot.
+If issues arise, share the webhook payload or logs. Great idea to explore this!
+
+-----------------------------------
+
+Actual generated URL: https://webhook.site/ceef202a-dc14-4283-b6be-0467a29334d3
+Added to the form on Keepa
+
+Saved the url, with this result:
+
+"Webhook URL updated!
+Your webhook URL was successfully updated."
+
+then tested it with this result:
+
+"Webhook test
+The server response status code to our test payload was: 200
+
+Note: Only the status code 200 will be interpreted as a success."
+
+Raw coontent displayed at webhook.site test URL:
+
+{"asin":"1449308929","title":"APIs: A Strategy Guide: Creating Channels with Application Programming Interfaces","image":"51RXC8YhjPL.jpg","createDate":7631684,"domainId":1,"notificationDomainId":1,"csvType":0,"trackingNotificationCause":1,"currentPrices":[1984,1454,1369,154741,2499,-1,-1,-1,-1,-1,-1,35,24,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],"sentNotificationVia":null,"metaData":"https://www.youtube.com/watch?v=DLzxrzFCyOs","trackingListName":null,"isDrop":null,"coupon":0}
+
+
+
+
