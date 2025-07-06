@@ -14,11 +14,11 @@ CSV_PATH = os.path.join(os.path.dirname(__file__), "Keepa_Deals_Export.csv")
 logger = logging.getLogger('KeepaDeals') # Use the same logger as in main()
 
 # --- Jules: Local Quota Management Constants & State ---
-MAX_QUOTA_TOKENS = 300
-HOURLY_REFILL_PERCENTAGE = 0.05
-TOKEN_COST_PER_ASIN = 2 # Corrected based on research: using 'offers' or 'buybox' param costs 2 tokens. We use both.
+MAX_QUOTA_TOKENS = 300 # This might be dynamically updated if API provides it, but keep as a fallback/default.
+HOURLY_REFILL_PERCENTAGE = 0.05 # This is a client-side estimation, API's refillRate might be more accurate.
+# TOKEN_COST_PER_ASIN = 2 # No longer used for decrementing; cost is informational from batch response.
 MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # Increased from 10 to 25 for a larger buffer
-QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour
+QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour (used for client-side refill estimate if API data is missing)
 DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes (remains the same for now)
 
 # Initialize global state variables for quota management
@@ -30,13 +30,18 @@ last_refill_calculation_time = time.time() # Initialize to script start time
 # Global dictionary to track attempts for fetch_product retries
 fetch_product_attempts = {}
 
-# --- Jules: Additional Throttling & Logging Constants ---
-MIN_TIME_SINCE_LAST_CALL_SECONDS = 60 # Minimum quiet time before a new API call (Increased due to no rate limit headers)
-POST_FETCH_SUCCESS_DELAY_SECONDS = 5  # Delay after a successful fetch (can be same as MIN_TIME_SINCE_LAST_CALL_SECONDS or different)
-POST_FETCH_ERROR_DELAY_SECONDS = 20 # Delay after a fetch that resulted in an error (e.g., 429, but also others)
+# --- Jules: Additional Throttling & Logging Constants (Old - To be removed or revised) ---
+# MIN_TIME_SINCE_LAST_CALL_SECONDS = 60 # Replaced by MIN_TIME_BETWEEN_BATCH_CALLS_SECONDS
+# POST_FETCH_SUCCESS_DELAY_SECONDS = 5  # No longer primary mechanism
+# POST_FETCH_ERROR_DELAY_SECONDS = 20 # No longer primary mechanism
 # Initialize global state for pre-emptive delay
-LAST_API_CALL_TIMESTAMP = 0 
+LAST_API_CALL_TIMESTAMP = 0 # Timestamp of the last API (batch) call
 # --- End Additional Throttling & Logging Constants ---
+
+# --- Jules: Batch Processing Constants ---
+BATCH_SIZE = 100 # Max ASINs per batch call (Keepa supports up to 100)
+MIN_TIME_BETWEEN_BATCH_CALLS_SECONDS = 30 # Initial conservative delay between batch calls
+# --- End Batch Processing Constants ---
 # --- End Local Quota Management ---
 
 # Logging for terminal and file output - starts
@@ -106,145 +111,152 @@ except Exception as e:
 # If the @retry decorator calls this function multiple times for the same ASIN,
 # we will see this log message repeated for that ASIN.
 
-@retry(stop_max_attempt_number=3, wait_fixed=10000)
-def fetch_product(asin, days=365, offers=100, rating=1, history=1):
-    global current_available_tokens # Moved to top of function for all reads/writes
-    # Increment and log attempt number for this ASIN
-    # This requires a way to store attempt counts across calls triggered by @retry for the same ASIN.
-    # A simple global dictionary can serve this purpose for now.
-    global fetch_product_attempts
-    if asin not in fetch_product_attempts:
-        fetch_product_attempts[asin] = 0
-    fetch_product_attempts[asin] += 1
-    attempt_num = fetch_product_attempts[asin]
+# @retry(stop_max_attempt_number=3, wait_fixed=10000) # Single ASIN fetch_product is no longer used.
+# def fetch_product(asin, days=365, offers=100, rating=1, history=1): # ... entire old function removed ...
+#     pass # Placeholder for removed function
 
-    logger.info(f"fetch_product: Attempt #{attempt_num} for ASIN {asin} (days={days}, offers={offers}, rating={rating}, history={history}, no_cache={args.no_cache})")
-
-    if not validate_asin(asin):
-        # Reset attempt count for this ASIN if it fails validation before any actual attempt
-        fetch_product_attempts[asin] = 0 # Or handle as needed - this error is pre-API call
-        logging.error(f"Invalid ASIN format: {asin}")
-        print(f"Invalid ASIN format: {asin}")
-        # Consistent return for validation failure
-        rate_limit_info_on_error = {'limit': None, 'remaining': None, 'reset': None, 'error_status_code': 'VALIDATION_ERROR'}
-        return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': 'VALIDATION_ERROR', 'message': 'Invalid ASIN format'}, rate_limit_info_on_error
-    
-    # print(f"Fetching ASIN {asin}...") # Replaced by logger above
-    url = f"https://api.keepa.com/product?key={api_key}&domain=1&asin={asin}&stats={days}&offers={offers}&rating={rating}&history={history}&stock=1&buybox=1"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/90.0.4430.212'}
-    try:
-        logger.debug(f"fetch_product (Attempt #{attempt_num}): Making HTTP GET request for ASIN {asin} to {url}")
-        response = requests.get(url, headers=headers, timeout=60)
-        
-        logger.debug(f"fetch_product (Attempt #{attempt_num}): Response status {response.status_code} for ASIN {asin}")
-        # Removed logging of ALL RESPONSE HEADERS as Keepa is confirmed not to send rate limit headers we were looking for.
-        response.raise_for_status() # Will raise HTTPError for 4xx/5xx, which is a RequestException
-
-        # If raise_for_status() doesn't raise, then status_code is 200 or similar non-error
-        fetch_product_attempts[asin] = 0 # Reset on success
-        data = response.json()
-        products = data.get('products', [])
-        if not products:
-            logging.error(f"No product data for ASIN {asin} despite 2xx status.")
-            print(f"No product data for ASIN {asin} despite 2xx status.")
-            rate_limit_info_on_error = { # Simplified rate_limit_info
-                'limit': None, 'remaining': None, 'reset': None,
-                'error_status_code': response.status_code
-            }
-            return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': response.status_code, 'message': 'No product data found in response'}, rate_limit_info_on_error
-        
-        product = products[0]
-        stats = product.get('stats', {})
-        current = stats.get('current', [-1] * 30)
-        offers = product.get('offers', []) if product.get('offers') is not None else []
-        logging.info(f"HTTP Stats for ASIN {asin}: keys={list(stats.keys())}, current={current}, current_length={len(current)}, offers_count={len(offers)}, stats_raw={stats}")
-        if len(current) < 11:
-            logging.warning(f"Short current array for ASIN {asin}: {current}")
-        if current[1] == -1:
-            logging.warning(f"Invalid Amazon - Current price for ASIN {asin}: current[1]={current[1]}")
-        
-        # Simplified rate_limit_info as Keepa does not send these headers.
-        rate_limit_info = {'limit': None, 'remaining': None, 'reset': None}
-        
-        # All logic related to parsing Keepa's x-rate-limit-* headers,
-        # token discrepancy checks, and dynamic token adjustments has been removed
-        # as it's confirmed Keepa does not provide these headers.
-
-        return product, rate_limit_info
-    except requests.exceptions.RequestException as e:
-        logging.error(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
-        print(f"HTTP Fetch failed for ASIN {asin}: {str(e)}")
-        status_code = e.response.status_code if e.response is not None else None
-        # Simplified rate_limit_info for errors
-        rate_limit_info = {
-            'limit': None, 'remaining': None, 'reset': None,
-            'error_status_code': status_code
-        }
-        # Removed specific logging for x-rate-limit-remaining on 429, as it's not expected.
-        # General 429 logging remains useful.
-        if status_code == 429:
-             logger.error(f"ASIN {asin} - 429 ERROR. Script tokens at time of call: {current_available_tokens:.2f}.")
-        return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': status_code}, rate_limit_info
-    except Exception as e:
-        logging.error(f"Generic Fetch failed for ASIN {asin}: {str(e)}")
-        print(f"Generic Fetch failed for ASIN {asin}: {str(e)}")
-        # For other exceptions, we might not have response headers
-        rate_limit_info = {'limit': None, 'remaining': None, 'reset': None, 'error_status_code': None}
-        return {'stats': {'current': [-1] * 30}, 'asin': asin, 'error': True, 'status_code': None}, rate_limit_info
-
-# --- Jules: Quota Management Function ---
+# --- Jules: Quota Management Function (Revised for Batch Processing) ---
 def update_and_check_quota(logger_instance):
     """
-    Updates the available token count based on hourly refill and pauses if tokens are low.
-    Uses and modifies global variables: current_available_tokens, last_refill_calculation_time.
+    Checks available token count and pauses if tokens are low.
+    Relies on `current_available_tokens` being updated from API responses primarily.
+    The refill calculation here is a fallback/client-side estimation, mainly for long pauses.
     """
     global current_available_tokens
     global last_refill_calculation_time
 
-    # Log entry state immediately
-    logger_instance.info(f"Quota Check (entry): Current available tokens: {current_available_tokens:.2f}, Last refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}")
+    logger_instance.info(f"Quota Check (entry): Current available tokens: {current_available_tokens:.2f}, Last client-side refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}")
 
+    # Client-side refill calculation (primarily for during long pauses like DEFAULT_LOW_QUOTA_PAUSE_SECONDS)
+    # This is a less critical part now that tokensLeft from API is the main source of truth.
     current_time = time.time()
     time_elapsed_seconds = current_time - last_refill_calculation_time
     
     if time_elapsed_seconds >= QUOTA_REFILL_INTERVAL_SECONDS:
         intervals_passed = int(time_elapsed_seconds // QUOTA_REFILL_INTERVAL_SECONDS)
-        
         if intervals_passed > 0:
             refill_amount_per_interval = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
-            total_refilled = intervals_passed * refill_amount_per_interval
+            total_refilled_estimate = intervals_passed * refill_amount_per_interval
             
-            # Store tokens before refill for logging
-            tokens_before_refill = current_available_tokens
-            current_available_tokens += total_refilled
-            if current_available_tokens > MAX_QUOTA_TOKENS:
+            tokens_before_client_refill = current_available_tokens
+            current_available_tokens += total_refilled_estimate
+            if current_available_tokens > MAX_QUOTA_TOKENS: # Cap at max quota
                 current_available_tokens = MAX_QUOTA_TOKENS
             
-            # Advance last_refill_calculation_time by the exact number of intervals processed
-            original_last_refill_time = last_refill_calculation_time
             last_refill_calculation_time += intervals_passed * QUOTA_REFILL_INTERVAL_SECONDS
-            
             logger_instance.info(
-                f"Quota Refill: Passed {intervals_passed} hour(s) since last calc (from {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(original_last_refill_time))}). "
-                f"Tokens before: {tokens_before_refill:.2f}. Added {total_refilled:.2f}. Tokens after: {current_available_tokens:.2f}. "
-                f"New last refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}"
+                f"Quota Refill (Client-side Est.): {intervals_passed} hour(s) passed since last client calc. "
+                f"Tokens before est. refill: {tokens_before_client_refill:.2f}. Estimated add: {total_refilled_estimate:.2f}. Tokens after est.: {current_available_tokens:.2f}. "
+                f"New last client-side refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}"
             )
     
-    logger_instance.info(f"Quota Check (after refill calc): Current available tokens: {current_available_tokens:.2f}")
+    logger_instance.info(f"Quota Check (after potential client-side refill calc): Current available tokens: {current_available_tokens:.2f}")
 
-    # Proactive Pause Logic
+    # Proactive Pause Logic (Primary role of this function now)
     if current_available_tokens < MIN_QUOTA_THRESHOLD_BEFORE_PAUSE:
         logger_instance.warning(
-            f"Low quota: {current_available_tokens:.2f} tokens remaining, which is below threshold {MIN_QUOTA_THRESHOLD_BEFORE_PAUSE}. "
+            f"Low quota: {current_available_tokens:.2f} tokens remaining, below threshold {MIN_QUOTA_THRESHOLD_BEFORE_PAUSE}. "
             f"Pausing for {DEFAULT_LOW_QUOTA_PAUSE_SECONDS / 60:.1f} minutes."
         )
         time.sleep(DEFAULT_LOW_QUOTA_PAUSE_SECONDS)
         
-        logger_instance.info(f"Quota: Pause complete. Attempting to re-check quota and potential refills...")
-        update_and_check_quota(logger_instance) # Recursive call to re-evaluate after pause
-    
+        # After the pause, recalculate client-side estimate for tokens that might have refilled *during* the pause.
+        # The next API call will provide the authoritative `tokensLeft`.
+        logger_instance.info(f"Quota: Pause complete. Recalculating client-side token estimate for time elapsed during pause.")
+        
+        time_elapsed_during_pause_and_more = time.time() - last_refill_calculation_time
+        if time_elapsed_during_pause_and_more >= QUOTA_REFILL_INTERVAL_SECONDS:
+            intervals_passed_during_pause = int(time_elapsed_during_pause_and_more // QUOTA_REFILL_INTERVAL_SECONDS)
+            if intervals_passed_during_pause > 0:
+                refill_during_pause_estimate = intervals_passed_during_pause * (MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE)
+                tokens_before_pause_refill_est = current_available_tokens
+                current_available_tokens += refill_during_pause_estimate
+                if current_available_tokens > MAX_QUOTA_TOKENS: current_available_tokens = MAX_QUOTA_TOKENS
+                last_refill_calculation_time += intervals_passed_during_pause * QUOTA_REFILL_INTERVAL_SECONDS
+                logger_instance.info(
+                    f"Quota: Client-side refill calculated for pause duration. Prev tokens: {tokens_before_pause_refill_est:.2f}. Estimated add: {refill_during_pause_estimate:.2f}. "
+                    f"Tokens now (est.): {current_available_tokens:.2f}. New last client calc: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}"
+                )
+        logger_instance.info(f"Quota Check (post-pause, pre-API call): Current available tokens (client est.): {current_available_tokens:.2f}")
     # This function doesn't return anything; it modifies globals and may pause.
-# --- End Quota Management Function ---
+# --- End Quota Management Function (Revised for Batch Processing) ---
+
+# --- Jules: New Batch Fetching Function ---
+def fetch_product_batch(asin_list, api_key_param, logger_instance):
+    """
+    Fetches product data for a list of ASINs in a single batch API call.
+    
+    Args:
+        asin_list (list): A list of ASIN strings.
+        api_key_param (str): The Keepa API key.
+        logger_instance (logging.Logger): Logger instance for logging.
+        
+    Returns:
+        tuple: (list_of_product_data, tokens_left, refill_in_ms, refill_rate, request_tokens_cost)
+               Returns ([], None, None, None, None) on failure.
+    """
+    if not asin_list:
+        logger_instance.warning("fetch_product_batch called with an empty ASIN list.")
+        return [], None, None, None, None
+
+    asins_str = ",".join(asin_list)
+    # Standard parameters from the single fetch_product function
+    # stats=365, offers=100, rating=1, history=1, stock=1, buybox=1
+    url = (f"https://api.keepa.com/product?key={api_key_param}&domain=1&asin={asins_str}"
+           f"&stats=365&offers=100&rating=1&history=1&stock=1&buybox=1")
+
+    logger_instance.info(f"fetch_product_batch: Requesting data for {len(asin_list)} ASINs: {asins_str[:100]}...") # Log first 100 chars of ASIN string
+    logger_instance.debug(f"fetch_product_batch: URL: {url}")
+
+    try:
+        response = requests.get(url, headers={'User-Agent': 'Keepa_Deals_Batch/1.0', 'Accept-Encoding': 'gzip'}, timeout=90) # Increased timeout for batch
+        logger_instance.debug(f"fetch_product_batch: Response status {response.status_code} for ASINs {asins_str[:50]}...")
+        
+        response.raise_for_status()  # Raises HTTPError for 4xx/5xx status codes
+
+        data = response.json()
+        
+        products = data.get('products', [])
+        tokens_left = data.get('tokensLeft')
+        refill_in_ms = data.get('refillIn')
+        refill_rate = data.get('refillRate')
+        request_tokens_cost = data.get('requestTokens') # Cost of this specific batch call
+
+        if request_tokens_cost is None: # If API doesn't return requestTokens, log a warning.
+            logger_instance.warning("fetch_product_batch: 'requestTokens' not found in API response. Token cost for this batch is unknown from API.")
+        
+        if not products and len(asin_list) > 0 : # If no products array but we requested ASINs
+             logger_instance.warning(f"fetch_product_batch: No 'products' array in response for ASINs {asins_str[:50]}... despite 2xx status. Full response keys: {list(data.keys())}")
+
+
+        # Log token information received
+        logger_instance.info(
+            f"fetch_product_batch: API Response Tokens: left={tokens_left}, refillIn(ms)={refill_in_ms}, "
+            f"refillRate={refill_rate}, requestCost={request_tokens_cost}"
+        )
+
+        return products, tokens_left, refill_in_ms, refill_rate, request_tokens_cost
+
+    except requests.exceptions.HTTPError as e:
+        logger_instance.error(f"fetch_product_batch: HTTP Error for ASINs {asins_str[:50]}... - {str(e)}")
+        if e.response is not None:
+            logger_instance.error(f"fetch_product_batch: Response status code: {e.response.status_code}")
+            logger_instance.error(f"fetch_product_batch: Response text: {e.response.text[:200]}...") # Log first 200 chars of error response
+            if e.response.status_code == 429:
+                # Specific handling or just logging is fine, main loop will also see error
+                logger_instance.error(f"fetch_product_batch: Received 429 (Too Many Requests).")
+        return [], None, None, None, None # Consistent error return
+        
+    except requests.exceptions.RequestException as e:
+        logger_instance.error(f"fetch_product_batch: Request Exception for ASINs {asins_str[:50]}... - {str(e)}")
+        return [], None, None, None, None
+    except json.JSONDecodeError as e:
+        logger_instance.error(f"fetch_product_batch: JSONDecodeError for ASINs {asins_str[:50]}... - {str(e)}. Response text: {response.text[:200]}...")
+        return [], None, None, None, None
+    except Exception as e:
+        logger_instance.error(f"fetch_product_batch: Generic Exception for ASINs {asins_str[:50]}... - {str(e)}")
+        return [], None, None, None, None
+# --- End New Batch Fetching Function ---
 
 # Chunk 2 ends
 
@@ -309,226 +321,243 @@ def write_csv(rows, deals, diagnostic=False):
 
 # Chunk 4 starts
 def main():
-    global args, LAST_API_CALL_TIMESTAMP # Added LAST_API_CALL_TIMESTAMP to globals used in main
+    global args, LAST_API_CALL_TIMESTAMP, current_available_tokens, last_refill_calculation_time # Added more globals
     args = parser.parse_args() # Initialize global args
     logger = logging.getLogger('KeepaDeals') # Obtain logger instance
     
-    LAST_API_CALL_TIMESTAMP = time.time() # Initialize to script start time, or 0 if preferred to ensure first call isn't delayed by this. Let's use current time.
+    LAST_API_CALL_TIMESTAMP = time.time() # Initialize to script start time
 
     try:
-# Logging stuff - starts
-        logger.info("Starting Keepa_Deals...") # Use logger instance
+        logger.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...", flush=True)
-        time.sleep(2)
+        time.sleep(1) # Reduced initial sleep
         
         all_deals = []
         page = 0
         while True:
             logger.info(f"Fetching deals page {page}...")
-            print(f"Fetching deals page {page}...", flush=True)
-            deals_page = fetch_deals_for_deals(page) # Consider passing args.no_cache if fetch_deals_for_deals needs it
+            # print(f"Fetching deals page {page}...", flush=True) # Less verbose console for deal fetching
+            deals_page = fetch_deals_for_deals(page) 
             if not deals_page:
                 logger.info(f"No more deals found on page {page}.")
-                print(f"No more deals found on page {page}.", flush=True)
                 break
             all_deals.extend(deals_page)
             logger.info(f"Fetched {len(deals_page)} deals from page {page}. Total deals so far: {len(all_deals)}")
-            print(f"Fetched {len(deals_page)} deals from page {page}. Total deals so far: {len(all_deals)}", flush=True)
             page += 1
-            time.sleep(1) # Add a small delay between page fetches if needed
+            time.sleep(0.5) # Small delay between deal page fetches
 
-        deals = all_deals # Use all_deals for processing
-        
-        # TEMPORARY: Limit to 100 deals for faster testing
-        MAX_DEALS_TO_PROCESS_FOR_TESTING = 100
-        if len(deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
-            logger.warning(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
-            print(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)
-            deals_to_process = deals[:MAX_DEALS_TO_PROCESS_FOR_TESTING]
+        # TEMPORARY: Limit deals for faster testing (adjust as needed for batch testing)
+        # MAX_DEALS_TO_PROCESS_FOR_TESTING = 100 # Original single ASIN test limit
+        MAX_DEALS_TO_PROCESS_FOR_TESTING = 250 # For testing a few batches
+        if len(all_deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
+            logger.warning(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(all_deals)} deals.")
+            deals_to_process_master_list = all_deals[:MAX_DEALS_TO_PROCESS_FOR_TESTING]
         else:
-            deals_to_process = deals
+            deals_to_process_master_list = all_deals
         # END TEMPORARY LIMIT
 
         rows = []
-        if not deals_to_process: # Check deals_to_process instead of deals
-            logger.warning("No deals fetched or all filtered out by temporary limit, writing diagnostic CSV") # Use logger instance
-            print("No deals fetched, writing diagnostic CSV", flush=True)
+        if not deals_to_process_master_list:
+            logger.warning("No deals fetched or all filtered out by temporary limit, writing diagnostic CSV")
             write_csv([], [], diagnostic=True)
             return
-        logger.debug(f"Deals ASINs: {[d.get('asin', '-') for d in deals_to_process[:5]]}") # Use logger instance, refer to deals_to_process
-        print(f"Deals ASINs: {[d.get('asin', '-') for d in deals_to_process[:5]]}", flush=True)
-        logger.info(f"Starting ASIN processing, found {len(deals_to_process)} deals (after potential temporary limit)") # Use logger instance
-        print(f"Starting ASIN processing, found {len(deals_to_process)} deals (after potential temporary limit)", flush=True)
-# Logging stuff - ends
-        for deal_idx, deal in enumerate(deals_to_process): # Iterate over deals_to_process
-            asin = deal.get('asin', '-')
-            if not validate_asin(asin):
-                logger.warning(f"Skipping invalid ASIN for deal {deal_idx+1}/{len(deals_to_process)}") # Use logger instance
-                # Add placeholder for invalid ASIN if we want to keep row counts consistent with deals_to_process
-                placeholder_row = {'ASIN': f"INVALID_ASIN_SKIPPED_{asin[:10]}"} # Truncate potentially long invalid ASIN
-                for header_key in HEADERS:
-                    if header_key not in placeholder_row:
-                        placeholder_row[header_key] = '-'
-                rows.append(placeholder_row)
-                continue
-            logger.info(f"Processing ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})") # Use logger instance
-            print(f"Processing ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
-            
-            # --- Jules: New Local Quota Management ---
-            # The logger instance is already available as 'logger' in this scope (main)
-            update_and_check_quota(logger) 
-            # --- End Local Quota Management ---
 
-            # The old dynamic throttling logic based on current_rate_limit_info is now removed / superseded by update_and_check_quota
+        logger.info(f"Collected {len(deals_to_process_master_list)} deals to process (after potential temporary limit).")
 
-            # --- Jules: Pre-emptive Dynamic Delay ---
-            current_time = time.time()
-            time_since_last_call = current_time - LAST_API_CALL_TIMESTAMP
-            if time_since_last_call < MIN_TIME_SINCE_LAST_CALL_SECONDS:
-                wait_duration = MIN_TIME_SINCE_LAST_CALL_SECONDS - time_since_last_call
-                logger.info(f"Pre-emptive pause: Last call was {time_since_last_call:.2f}s ago. Waiting for {wait_duration:.2f}s.")
-                time.sleep(wait_duration)
-            # --- End Pre-emptive Dynamic Delay ---
-
-            logger.info(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})") # Use logger instance, ensure correct index and list
-            print(f"Fetching ASIN {asin} ({deal_idx+1}/{len(deals_to_process)})", flush=True)
-            
-            product, rate_info = fetch_product(asin) # fetch_product now also logs token discrepancy
-            LAST_API_CALL_TIMESTAMP = time.time() # Update timestamp *after* the call attempt
-
-            # --- Jules: Parameterized Post-Fetch Delay & Token Decrement ---
-            global current_available_tokens # Ensure we're using the global
-            if not product.get('error'):
-                current_available_tokens -= TOKEN_COST_PER_ASIN
-                logger.info(f"Token consumed for successful fetch of ASIN {asin}. Tokens remaining: {current_available_tokens:.2f}")
-                logger.debug(f"Pausing for {POST_FETCH_SUCCESS_DELAY_SECONDS}s after successful fetch of ASIN {asin}.")
-                time.sleep(POST_FETCH_SUCCESS_DELAY_SECONDS)
+        # Create a dictionary to map ASINs back to their original deal objects
+        # This is important because the batch API returns product data which needs to be re-associated
+        # with the deal-specific information (like 'Deal found', 'last update' from deal object).
+        # We filter for valid ASINs here before adding to the dict.
+        asin_to_deal_map = {}
+        valid_asins_to_fetch = []
+        for deal_obj in deals_to_process_master_list:
+            asin = deal_obj.get('asin')
+            if validate_asin(asin):
+                if asin not in asin_to_deal_map: # Avoid duplicates, process first occurrence
+                    asin_to_deal_map[asin] = deal_obj
+                    valid_asins_to_fetch.append(asin)
+                else:
+                    logger.info(f"Duplicate ASIN {asin} found in deals list, will process based on first occurrence.")
             else:
-                # This includes 429 errors and other fetch errors
-                logger.info(f"Token NOT consumed for ASIN {asin} due to fetch error (status: {product.get('status_code')}). Tokens remaining: {current_available_tokens:.2f}")
-                logger.debug(f"Pausing for {POST_FETCH_ERROR_DELAY_SECONDS}s after failed fetch of ASIN {asin}.")
-                time.sleep(POST_FETCH_ERROR_DELAY_SECONDS)
-            # --- End Parameterized Post-Fetch Delay & Token Decrement ---
-            
-            # Handle 429 error specifically after fetch_product attempt and initial post-error delay
-            if product.get('error') and product.get('status_code') == 429:
-                logger.error(f"Received 429 (Too Many Requests) for ASIN {asin} even after pre-emptive and post-error ({POST_FETCH_ERROR_DELAY_SECONDS}s) pauses. Initiating 1-hour recovery pause.")
-                print(f"Rate limit 429 for ASIN {asin}. Pausing for 1 hour for token replenishment...", flush=True) # Simplified user message
-                time.sleep(QUOTA_REFILL_INTERVAL_SECONDS) # Pause for 1 hour (3600 seconds)
-                
-                # After the long pause, call update_and_check_quota to recalculate available tokens
-                # This will account for the tokens refilled during the 1-hour pause.
-                logger.info(f"429 Recovery: Pause complete for ASIN {asin}. Attempting to update quota information.")
-                update_and_check_quota(logger) # logger is in scope in main()
-
-                logger.warning(f"Skipping data processing for ASIN {asin} for this cycle due to 429 error and post-error pause/quota update.")
-                # Add a placeholder row for skipped ASINs to maintain CSV integrity
-                placeholder_row = {'ASIN': asin}
-                for header_key in HEADERS: # Assuming HEADERS is accessible
-                    if header_key not in placeholder_row:
-                        placeholder_row[header_key] = '-'
-                rows.append(placeholder_row)
-                continue # Skip to the next deal in the list after the long pause and quota update
-
-
-            # Jules: Modified for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
-            TEST_ASIN_FOR_RAW_LOG = '1562243179' # Target ASIN for raw data logging
-            if asin == TEST_ASIN_FOR_RAW_LOG:
-                # Ensure product is not None and is a dictionary before trying to dump it
-                if product and isinstance(product, dict) and not product.get('error'): # Check not error before logging
-                    logger.info(f"RAW_PRODUCT_DATA_{asin}: {json.dumps(product)}")
-                else:
-                    logger.info(f"RAW_PRODUCT_DATA_{asin}: Product data is not in the expected format, is None, or fetch error occurred. Data: {product}")
-
-            if product.get('error') or 'stats' not in product: # Check for error flag from fetch_product
-                logger.error(f"Incomplete or error in product data for ASIN {asin}. Product: {product}") # Use logger instance
-                # Add a placeholder row for ASINs with incomplete/error data after fetch attempt
-                placeholder_row = {'ASIN': asin}
+                logger.warning(f"Invalid ASIN '{asin}' found in deals list. Skipping. Deal: {deal_obj.get('title', 'N/A')}")
+                # Add placeholder for invalid ASIN from the master list to maintain CSV structure if needed,
+                # or decide to only include successfully processed ASINs in CSV.
+                # For now, we'll create placeholders for these pre-fetch validation failures.
+                placeholder_row = {'ASIN': f"INVALID_ASIN_SKIPPED_{str(asin)[:20]}"}
                 for header_key in HEADERS:
-                    if header_key not in placeholder_row:
-                        placeholder_row[header_key] = '-'
+                    if header_key not in placeholder_row: placeholder_row[header_key] = '-'
                 rows.append(placeholder_row)
-                continue
+        
+        logger.info(f"Processing {len(valid_asins_to_fetch)} unique and valid ASINs in batches.")
 
-            # Logging for Last Used price update from product_data
-            try:
-                if product and isinstance(product, dict) and \
-                   product.get('products') and isinstance(product['products'], list) and \
-                   len(product['products']) > 0 and isinstance(product['products'][0], dict) and \
-                   'csv' in product['products'][0] and isinstance(product['products'][0]['csv'], list) and \
-                   len(product['products'][0]['csv']) > 2 and \
-                   isinstance(product['products'][0]['csv'][2], list) and \
-                   len(product['products'][0]['csv'][2]) > 0:
+        for i in range(0, len(valid_asins_to_fetch), BATCH_SIZE):
+            asin_batch_list = valid_asins_to_fetch[i:i + BATCH_SIZE]
+            batch_number = (i // BATCH_SIZE) + 1
+            total_batches = (len(valid_asins_to_fetch) + BATCH_SIZE - 1) // BATCH_SIZE
+            
+            logger.info(f"Processing Batch {batch_number}/{total_batches} with {len(asin_batch_list)} ASINs.")
+
+            # --- Quota & Delay Management for Batch ---
+            update_and_check_quota(logger) # Check quota BEFORE making a call
+
+            current_time_for_batch = time.time()
+            time_since_last_batch_call = current_time_for_batch - LAST_API_CALL_TIMESTAMP
+            if time_since_last_batch_call < MIN_TIME_BETWEEN_BATCH_CALLS_SECONDS:
+                wait_duration = MIN_TIME_BETWEEN_BATCH_CALLS_SECONDS - time_since_last_batch_call
+                logger.info(f"Batch Pre-emptive Pause: Last batch call was {time_since_last_batch_call:.2f}s ago. Waiting for {wait_duration:.2f}s.")
+                time.sleep(wait_duration)
+            
+            # --- Fetch Batch Data ---
+            # api_key is global, logger is local 'logger'
+            batch_products_data, api_tokens_left, api_refill_in, api_refill_rate, api_request_cost = fetch_product_batch(asin_batch_list, api_key, logger)
+            LAST_API_CALL_TIMESTAMP = time.time() # Update timestamp *after* the batch call attempt
+
+            # --- Update Token Count from API Response ---
+            if api_tokens_left is not None:
+                logger.info(f"Batch API Call Token Update: Previous tokens: {current_available_tokens:.2f}. API reported tokensLeft: {api_tokens_left}. Updating.")
+                current_available_tokens = float(api_tokens_left) # Trust API response
+                # Log other token info if available
+                if api_refill_in is not None:
+                    logger.info(f"Batch API Call Token Info: refillIn(ms): {api_refill_in}, refillRate: {api_refill_rate}")
+                if api_request_cost is not None:
+                    logger.info(f"Batch API Call Token Info: This batch call cost: {api_request_cost} tokens.")
+                else: # Fallback if requestTokens is not in response (as seen in one test)
+                    # This is a less accurate fallback. The primary reliance is on tokensLeft.
+                    # If requestTokens is reliably absent, this part needs rethinking or removal.
+                    # For now, only log if it's missing.
+                    logger.warning("`requestTokens` was not available from `fetch_product_batch` response. Cannot confirm actual cost via this metric.")
+            else:
+                logger.warning("Batch API Call: `tokensLeft` not available from `fetch_product_batch`. Cannot update token count from API.")
+                # If tokensLeft is None, it implies an error in fetch_product_batch before/during API call or parsing.
+                # The function fetch_product_batch should log this.
+                # We might need to decrement tokens based on expected cost if the call was likely made but parsing failed.
+                # However, if fetch_product_batch returns [], None, ... it usually means a call failure where tokens might not have been consumed.
+                # For now, if tokensLeft is None, we don't adjust current_available_tokens, assuming the error prevented consumption or API didn't provide data.
+
+
+            # --- Process Products in the Batch ---
+            if not batch_products_data and isinstance(batch_products_data, list): # Empty list means error or no products
+                logger.error(f"Batch {batch_number}/{total_batches}: No product data returned or error in fetch_product_batch. Skipping processing for this batch's ASINs: {', '.join(asin_batch_list[:3])}...")
+                # Add placeholders for all ASINs in this failed batch
+                for asin_in_failed_batch in asin_batch_list:
+                    placeholder_row = {'ASIN': asin_in_failed_batch, 'Error': 'Batch fetch failed'}
+                    for header_key in HEADERS:
+                        if header_key not in placeholder_row: placeholder_row[header_key] = '-'
+                    rows.append(placeholder_row)
+                
+                # Check for 429 specifically (fetch_product_batch logs it, but main loop might need to react)
+                # This part is tricky as fetch_product_batch returns generic error indicators.
+                # We'd need more specific error propagation if we want a long pause here for 429.
+                # For now, the MIN_TIME_BETWEEN_BATCH_CALLS_SECONDS and quota check should handle most throttling.
+                # If a 429 did occur, tokensLeft *should* be low, triggering update_and_check_quota's pause.
+                continue # Move to the next batch
+
+            # Create a map of ASIN -> product_data for easier lookup from the batch results
+            product_data_map = {p.get('asin'): p for p in batch_products_data if p.get('asin')}
+
+            for asin_in_batch in asin_batch_list: # Iterate through the ASINs we *requested* for this batch
+                product = product_data_map.get(asin_in_batch)
+                deal_obj_for_asin = asin_to_deal_map.get(asin_in_batch) # Get the original deal object
+
+                if not deal_obj_for_asin: # Should not happen if valid_asins_to_fetch was built correctly
+                    logger.error(f"Critical error: No deal_obj found in asin_to_deal_map for ASIN {asin_in_batch}. Skipping.")
+                    placeholder_row = {'ASIN': asin_in_batch, 'Error': 'Internal map error'}
+                    for header_key in HEADERS:
+                        if header_key not in placeholder_row: placeholder_row[header_key] = '-'
+                    rows.append(placeholder_row)
+                    continue
+
+                if not product:
+                    logger.warning(f"No product data returned in batch for ASIN {asin_in_batch}. Adding placeholder.")
+                    # This can happen if an ASIN is invalid but was part of a successful batch call,
+                    # or if Keepa doesn't have data for it. Tokens for this ASIN were still consumed.
+                    placeholder_row = {'ASIN': asin_in_batch, 'Error': 'No data in batch response'}
+                    for header_key in HEADERS:
+                        if header_key not in placeholder_row: placeholder_row[header_key] = '-'
+                    rows.append(placeholder_row)
+                    continue
+                
+                # --- Standard Product Processing Logic (adapted from old loop) ---
+                logger.info(f"Processing data for ASIN {asin_in_batch} from batch {batch_number}/{total_batches}")
+
+                # Error flag in product data from Keepa (e.g. if ASIN is invalid on their end)
+                if product.get('error') or 'stats' not in product: 
+                    logger.error(f"Incomplete or error in product data for ASIN {asin_in_batch}. Product: {str(product)[:200]}")
+                    placeholder_row = {'ASIN': asin_in_batch, 'Error': 'API product error or no stats'}
+                    for header_key in HEADERS:
+                        if header_key not in placeholder_row: placeholder_row[header_key] = '-'
+                    rows.append(placeholder_row)
+                    continue
+
+                # Log raw product data for specific ASIN (for debugging, if needed)
+                # TEST_ASIN_FOR_RAW_LOG = '1562243179' 
+                # if asin_in_batch == TEST_ASIN_FOR_RAW_LOG:
+                #    logger.info(f"RAW_PRODUCT_DATA_{asin_in_batch}: {json.dumps(product)}")
+
+                row = {}
+                try:
+                    for header, func in zip(HEADERS, FUNCTION_LIST):
+                        if func:
+                            try:
+                                input_data_for_func = None
+                                # Determine input_data based on header (deal_obj_for_asin or product)
+                                if header in ['Deal found', 'last update', 'last price change']:
+                                    # These functions might need both deal and product, ensure they are updated
+                                    # For now, assuming 'last update' and 'last price change' use product,
+                                    # and 'Deal found' uses deal_obj_for_asin.
+                                    if header == 'Deal found':
+                                        input_data_for_func = deal_obj_for_asin
+                                        result = func(input_data_for_func, config, logger)
+                                    else: # 'last update', 'last price change'
+                                        input_data_for_func = deal_obj_for_asin # Original first arg
+                                        # These functions expect (deal, config, logger, product_data)
+                                        result = func(input_data_for_func, config, logger, product)
+                                else:
+                                    input_data_for_func = product # All other functions use product data
+                                    result = func(input_data_for_func)
+                                    
+                                # logger.debug(f"ASIN {asin_in_batch} - Header: {header}, Func: {func.__name__}, Result: {result}")
+                                row.update(result)
+                            except Exception as e:
+                                logger.error(f"Function {func.__name__} failed for ASIN {asin_in_batch} (header '{header}'): {str(e)}")
+                                row[header] = '-'
                     
-                    # Get the last entry from the "Used" price history (index 2 for USED)
-                    last_used_entry = product['products'][0]['csv'][2][-1]
-                    if isinstance(last_used_entry, list) and len(last_used_entry) > 0:
-                        last_used_price_ts_minutes = last_used_entry[0]
-                        logger.info(f"ASIN: {asin} - Last Used price update from product_data.csv[2]: {last_used_price_ts_minutes}")
-                    else:
-                        logger.warning(f"ASIN: {asin} - Last Used price entry in product_data.csv[2] is not a valid list or is empty.")
-                else:
-                    logger.warning(f"ASIN: {asin} - Could not retrieve valid product_data.csv[2] path for Used price history.")
-            except (KeyError, IndexError, TypeError) as e:
-                logger.warning(f"ASIN: {asin} - Could not retrieve last Used price update from product_data.csv[2]. Error: {type(e).__name__} - {e}")
-            
-            row = {}
-            try:
-                # Process all functions using FUNCTION_LIST
-                for header, func in zip(HEADERS, FUNCTION_LIST):
-                    if func:
-                        try:
-                            # Determine input_data based on header
-                            if header in ['Deal found', 'last update', 'last price change']:
-                                input_data = deal
-                            else:
-                                input_data = product
+                    non_hyphen_items = {k: v for k, v in row.items() if v != '-'}
+                    logger.info(f"ASIN {asin_in_batch}: Processed. Row non-hyphen count: {len(non_hyphen_items)}. Keys: {list(non_hyphen_items.keys())[:5]}")
+                    rows.append(row)
 
-                            # Call func with appropriate arguments
-                            if header == 'last update' or header == 'last price change': # Modified condition
-                                # input_data is 'deal', 'product' is the fetched product data
-                                # Both 'last update' and 'last price change' now expect product_data
-                                result = func(input_data, config, logger, product)
-                            elif header == 'Deal found':
-                                # input_data is 'deal'
-                                result = func(input_data, config, logger)
-                            else: # For all other functions, input_data is 'product'
-                                result = func(input_data)
-                                
-                            logger.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}") # Use logger instance
-                            row.update(result)
-                            logger.debug(f"Row after update for {header}: {row}") # Use logger instance
-                        except Exception as e:
-                            logger.error(f"Function {func.__name__} failed for ASIN {asin} processing header '{header}': {str(e)}") # Use logger instance
-                            row[header] = '-'
-                
-                # Detailed logging before appending the main data row
-                non_hyphen_items = {k: v for k, v in row.items() if v != '-'}
-                logger.info(f"ASIN {asin}: PRE-APPEND main row. Non-hyphen count: {len(non_hyphen_items)}. Keys: {list(non_hyphen_items.keys())}")
-                if not non_hyphen_items and asin == product.get('asin'): # If row is all hyphens but product was supposed to be valid
-                    logger.warning(f"ASIN {asin}: Row for a seemingly valid product is all hyphens before append. Product error flag: {product.get('error')}, Product status: {product.get('status_code')}")
+                except Exception as e:
+                    logger.error(f"Error processing functions for ASIN {asin_in_batch}: {str(e)}")
+                    placeholder_row = {'ASIN': asin_in_batch, 'Error': 'Function processing error'}
+                    for header_key in HEADERS:
+                        if header_key not in placeholder_row: placeholder_row[header_key] = '-'
+                    rows.append(placeholder_row)
+                    continue
+            # --- End of loop for ASINs within a batch ---
+        # --- End of loop for batches ---
 
-                rows.append(row)
-                logger.info(f"ASIN {asin}: POST-APPEND main row. `rows` list length: {len(rows)}")
+        # Pass the original deals_to_process_master_list for length comparison, or adjust write_csv if only `rows` is primary
+        # For now, to match original logic, we need a list of deal-like objects that correspond to `rows`.
+        # This is complex because rows are generated from valid_asins_to_fetch + placeholders for initial invalid.
+        # Simplest for now: write_csv should primarily rely on `rows` and derive its "deals" count from there.
+        # Or, we construct a "processed_deals_corresponding_to_rows" list.
+        # Let's adjust write_csv to be more flexible or pass only rows.
+        # For now, let's try to maintain some semblance of the original call.
+        # The `rows` list now contains dicts for all ASINs attempted (valid, invalid, fetch errors).
+        # The `deals_to_process_master_list` was the original source.
+        # A more robust write_csv would just take `rows` and `HEADERS`.
+        
+        # Create a simple list of deal-like objects for write_csv, matching the structure of `rows`
+        # This ensures that the number of "deals" matches the number of "rows" for write_csv's internal checks.
+        # Each item in `rows` should have an 'ASIN' key.
+        pseudo_deals_for_csv = [{'asin': r.get('ASIN', 'UNKNOWN')} for r in rows]
+        write_csv(rows, pseudo_deals_for_csv)
 
-            except Exception as e:
-                logger.error(f"Error processing ASIN {asin} (outer loop): {str(e)}") # Use logger instance
-                # Ensure a placeholder is added if this generic error occurs for an ASIN
-                # so row count matches deal count for deals_to_process
-                placeholder_row = {'ASIN': asin}
-                for header_key in HEADERS:
-                    if header_key not in placeholder_row:
-                        placeholder_row[header_key] = '-'
-                rows.append(placeholder_row)
-                continue
-        write_csv(rows, deals_to_process) # Use deals_to_process here
-        logger.info("Writing CSV...") # Use logger instance
-        print("Writing CSV...")
-        logger.info("Script completed!") # Use logger instance
+        logger.info("Script completed!")
         print("Script completed!")
-        print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}")
+        # print(f"Processed ASINs: {[row.get('ASIN', '-') for row in rows]}") # Can be very long
     except Exception as e:
-        logger.error(f"Main failed: {str(e)}") # Use logger instance
+        logger.error(f"Main failed: {str(e)}", exc_info=True) # Add exc_info for traceback
         print(f"Main failed: {str(e)}")
         sys.exit(1)
 # Chunk 4 ends
