@@ -357,48 +357,40 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   Plan a phased implementation, starting with a new function for batch fetching via direct HTTP.
 
 ---
-## Keepa API Token Costs & Batching Strategy (Learnings as of July 7-8, 2025)
+## Keepa API Token Costs & Batching Strategy (Learnings as of July 8, 2025 - Revised with Official Docs)
 
-**Token Cost Discoveries & Hypotheses:**
+**Token Cost Primary Source: `tokensConsumed` Field**
+*   The Keepa API (including `/product` and `/deal` endpoints) returns a `tokensConsumed` field in its JSON response. This field indicates the *actual* number of tokens consumed by that specific API call.
+*   **Crucially, this applies even to 429 error responses if they return a JSON body.**
+*   `Keepa_Deals.py` has been refactored to prioritize parsing and using this `tokensConsumed` value for all token deductions, making local accounting much more accurate.
 
-1.  **`/deal` Endpoint (e.g., `fetch_deals_for_deals` in `stable_deals.py`):**
-    *   If the `buybox` parameter is **not** included in the `selection` JSON (or explicitly set to `false`/`0`), the API call defaults to `buybox=false`.
-    *   Cost: **1 token per request/page**.
-    *   Our current `stable_deals.py` implementation correctly omits `buybox` from the `selection`, so it already benefits from this 1-token cost.
+**`/deal` Endpoint (e.g., `fetch_deals_for_deals`):**
+*   Cost: **1 token per request/page**. This is because the `buybox` parameter in the `selection` JSON defaults to `false` when omitted.
 
-2.  **`/product` Endpoint (e.g., `fetch_product_batch` in `Keepa_Deals.py`):**
-    *   Base cost: 1 token per ASIN.
-    *   `offers` parameter (e.g., `offers=100`): +1 token per ASIN (if `offers` > 0).
-    *   `buybox=1` parameter: +1 token per ASIN.
-    *   Other parameters like `stats`, `history`, `stock` might also have costs, but `offers` and `buybox` are significant.
-    *   **Current Hypothesis:** The effective cost for our `/product` calls (which use `stats`, `offers=100`, `rating=1`, `history=1`, `stock=1`, `buybox=1`) is **3 tokens per ASIN**.
-        *   This is revised from an earlier estimate of 2 tokens/ASIN.
-        *   The `TOKEN_COST_PER_ASIN` constant in `Keepa_Deals.py` has been updated to 3 to reflect this.
+**`/product` Endpoint (Batch ASIN Details Fetch):**
+*   The cost is **variable per ASIN** and primarily driven by the `offers` parameter when used.
+*   **Base Cost Waved with `offers`:** When `&offers=` is used with a positive integer, the default "1 token per ASIN" base cost for the product itself is **waived**.
+*   **`&offers=N` Cost:**
+    *   **6 tokens for every found offer page per product.** An offer page contains up to 10 offers.
+    *   Example: If `offers=100` is requested for an ASIN that has 25 actual offers, this requires 3 offer pages (10, 10, 5). Cost for offers for this ASIN = `3 * 6 = 18 tokens`.
+*   **`&buybox=1` Cost:**
+    *   **0 tokens (ignored)** when `&offers=` is also used, as the `offers` parameter already provides all Buy Box data.
+*   **`&stats=DAYS` Cost (e.g., `&stats=365`):**
+    *   **0 tokens.** Stats are derived from existing historical data.
+*   **`&history=1` (default to include history):**
+    *   **0 tokens.**
+*   **`&rating=1` Cost:**
+    *   **0 or 1 token per product**, consumed only if Keepa's rating/review data for the product was updated recently (<14 days).
+*   **`&stock=1` Cost (used with `&offers=`):**
+    *   **0 or 2 tokens per product**, consumed only if Keepa's stock data for the product was updated recently (<7 days).
 
-3.  **No `requestTokens` in `/product` or `/deal` Responses:**
-    *   The API responses for these endpoints **do not** include fields like `requestTokens` (actual cost of the call) or `tokensLeft`.
-    *   This necessitates **local simulation** of token availability, consumption, and refill in `Keepa_Deals.py`.
+*   **Pre-Call Estimation:** Since the actual cost (from `tokensConsumed`) is only known *after* a call, `Keepa_Deals.py` uses `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` (e.g., 15 tokens) for pre-call checks to decide if it should wait for refills. This is an estimate, and the actual deducted amount comes from `tokensConsumed`.
 
-**Batch Processing Strategy & Rate Limiting (`Keepa_Deals.py`):**
-
-*   **Batch Size:** `MAX_ASINS_PER_BATCH = 50` is currently being used. The API supports up to 100.
-*   **Inter-Call Delay:** `MIN_TIME_SINCE_LAST_CALL_SECONDS = 60` (1 minute) enforced between all API calls (both `/deal` and `/product` batches).
-*   **429 Error Handling (for `/product` batches):**
-    *   If a batch call receives a 429 "Too Many Requests" error:
-        *   The script attempts to retry the **same batch** up to 2 more times (3 total attempts).
-        *   **Exponential Backoff Pauses:**
-            *   After 1st failure (before 2nd attempt): Pause 15 minutes.
-            *   After 2nd failure (before 3rd attempt): Pause 30 minutes.
-        *   If the 3rd attempt also fails with a 429, the batch is skipped, and its ASINs are not processed.
-    *   This strategy has proven successful in processing 150 ASINs (3 batches of 50), with one batch succeeding on its 3rd attempt.
-
-**Local Token Management Enhancements (`Keepa_Deals.py`):**
-
-*   **Accurate Cost Deduction:**
-    *   1 token deducted per successful `fetch_deals_for_deals` call.
-    *   `TOKEN_COST_PER_ASIN` (now 3) * number of ASINs deducted per successful `fetch_product_batch` call.
-*   **Pre-Call Token Availability Check:**
-    *   Before any API call (`/deal` or `/product`), the script now checks if `current_available_tokens` (locally simulated) is sufficient for the estimated cost of the upcoming call.
-    *   If tokens are insufficient, it calculates the required wait time based on the hourly refill rate (`HOURLY_REFILL_PERCENTAGE`) and pauses execution until enough tokens are estimated to have refilled.
-    *   This is in addition to the general `MIN_QUOTA_THRESHOLD_BEFORE_PAUSE` check.
-*   **Objective:** These changes aim for a more accurate local token simulation to prevent knowingly exceeding quota and to manage API calls more sustainably during long runs.
+**Batch Processing & Rate Limiting Strategy (`Keepa_Deals.py`):**
+*   **Batch Size:** `MAX_ASINS_PER_BATCH = 50` (configurable, API max is 100).
+*   **Inter-Call Delay:** `MIN_TIME_SINCE_LAST_CALL_SECONDS = 60` between API calls.
+*   **429 Error Handling:**
+    *   Retries the *same batch* up to 2 more times (3 total attempts).
+    *   Exponential backoff pauses: 15 minutes after 1st failure, 30 minutes after 2nd.
+    *   If a 429 response includes `tokensConsumed > 0`, those tokens ARE deducted.
+*   **Token Refill Simulation:** Now based on **5 tokens per minute**, checked every 60 seconds, to more closely match Keepa's actual refill rate.

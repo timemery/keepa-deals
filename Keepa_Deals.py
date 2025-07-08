@@ -19,10 +19,10 @@ MAX_QUOTA_TOKENS = 300
 TOKENS_PER_MINUTE_REFILL = 5
 REFILL_CALCULATION_INTERVAL_SECONDS = 60 # Check for refills every minute
 
-TOKEN_COST_PER_ASIN = 5 # Revised based on detailed param review: 1(base)+1(stats)+1(rating)+1(history)+1(buybox)
-TOKEN_COST_PER_DEAL_PAGE = 1 # Assumed cost for /deal endpoint calls (since buybox=false by default)
+# TOKEN_COST_PER_ASIN = 5 # Replaced by ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH for pre-call checks
+ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 15 # Initial estimate for pre-call checks. Actual cost from API's 'tokensConsumed'.
+TOKEN_COST_PER_DEAL_PAGE = 1 # Cost for /deal endpoint calls (buybox=false by default)
 MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # General low quota pause trigger
-# QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour # Replaced by REFILL_CALCULATION_INTERVAL_SECONDS
 DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes
 
 # Initialize global state variables for quota management
@@ -291,29 +291,33 @@ def fetch_product_batch(asins_list, days=365, offers=100, rating=1, history=1):
         data = response.json()
         
         # Extract token and rate limit information if available
-        api_info = {
-            'requestTokens': data.get('requestTokens'), # This is the key field we need to check
-            'tokensLeft': data.get('tokensLeft'),     # Not expected for this endpoint
-            'refillIn': data.get('refillIn'),         # Not expected
-            'refillRate': data.get('refillRate'),       # Not expected
-            'error_status_code': None
-        }
-        
-        actual_token_cost = 0
-        if api_info['requestTokens'] is not None:
-            actual_token_cost = int(api_info['requestTokens'])
-            logger.info(f"Batch API call cost {actual_token_cost} tokens according to 'requestTokens' field.")
+        # Primary goal is to get 'tokensConsumed'
+        tokens_consumed_from_api = data.get('tokensConsumed')
+        actual_batch_cost = 0 # Default if not found or not applicable
+
+        if tokens_consumed_from_api is not None:
+            actual_batch_cost = int(tokens_consumed_from_api)
+            logger.info(f"Batch API call cost {actual_batch_cost} tokens according to 'tokensConsumed' field in response.")
         else:
-            # Estimate cost if not provided - this will be refined based on user testing
-            actual_token_cost = len(asins_list) * TOKEN_COST_PER_ASIN # Fallback estimation
-            logger.warning(f"'requestTokens' field not found in batch response. Using estimated cost: {actual_token_cost} tokens.")
+            # 'tokensConsumed' not found in a successful response. This would be unexpected.
+            # For now, fall back to estimation, but this needs monitoring.
+            # This part might be removed if Keepa ALWAYS returns tokensConsumed on success.
+            actual_batch_cost = len(asins_list) * ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH # Fallback estimation
+            logger.warning(f"'tokensConsumed' field NOT found in successful batch response. Using estimated cost: {actual_batch_cost} tokens. This is unexpected.")
+
+        # Store other API info if needed, primarily for error status now
+        api_info = {
+            'tokensConsumed': tokens_consumed_from_api, # Store what we got
+            'error_status_code': None # Will be set in except blocks if error
+            # 'tokensLeft', 'refillIn', 'refillRate' are not expected from /product
+        }
 
         products_data = data.get('products', [])
-        if not products_data and len(asins_list) > 0:
-            logger.error(f"No product data in batch response for ASINs {','.join(asins_list[:3])}... despite 2xx status.")
-            # Return a list of error objects, one for each ASIN requested in the batch
+        if not products_data and len(asins_list) > 0: # Successful call but no product data for any ASIN
+            logger.error(f"No product data in batch response for ASINs {','.join(asins_list[:3])}... despite 2xx status. Cost was {actual_batch_cost} tokens.")
             error_products = [{'asin': asin, 'error': True, 'status_code': response.status_code, 'message': 'No product data found in batch response'} for asin in asins_list]
-            return error_products, api_info, actual_token_cost
+            # actual_batch_cost here is what Keepa reported, even if no products were returned.
+            return error_products, api_info, actual_batch_cost
         
         # TODO: Potentially map products back to original ASINs if order is not guaranteed,
         # or if some ASINs in the request might be missing from the response.
@@ -327,22 +331,42 @@ def fetch_product_batch(asins_list, days=365, offers=100, rating=1, history=1):
     except requests.exceptions.RequestException as e:
         logger.error(f"HTTP Fetch failed for batch ASINs {','.join(asins_list[:3])}...: {str(e)}")
         status_code = e.response.status_code if e.response is not None else None
-        api_info_on_error = {'requestTokens': None, 'tokensLeft': None, 'refillIn': None, 'refillRate': None, 'error_status_code': status_code}
         
-        estimated_cost_on_error = len(asins_list) * TOKEN_COST_PER_ASIN # Use estimation for cost logging on error
-        if status_code == 429:
-             logger.error(f"Batch ASINs - 429 ERROR. Script tokens at time of call: {current_available_tokens:.2f}.")
+        tokens_consumed_on_error = 0 # Default if we can't parse it
+        if e.response is not None:
+            try:
+                error_data = e.response.json()
+                if error_data.get('tokensConsumed') is not None:
+                    tokens_consumed_on_error = int(error_data['tokensConsumed'])
+                    logger.info(f"HTTP error response included 'tokensConsumed': {tokens_consumed_on_error}.")
+                else:
+                    logger.warning(f"HTTP error response (status {status_code}) did not include 'tokensConsumed'. Assuming 0 for this failed attempt.")
+            except json.JSONDecodeError:
+                logger.warning(f"HTTP error response (status {status_code}) was not valid JSON. Assuming 0 tokens consumed for this failed attempt.")
         
-        # Return a list of error objects for each ASIN in the batch
-        error_products = [{'asin': asin, 'error': True, 'status_code': status_code, 'message': str(e)} for asin in asins_list]
-        return error_products, api_info_on_error, estimated_cost_on_error # Return estimated cost for accounting purposes
+        api_info_on_error = {
+            'tokensConsumed': tokens_consumed_on_error if status_code == 429 else None, # Only really relevant for 429s if we want to account for cost of failed call
+            'error_status_code': status_code
+        }
+        
+        # For accounting, the cost returned is what Keepa said it consumed, or 0 if unknown.
+        # The main loop will decide whether to deduct this based on the error type (e.g., deduct for 429 if tokensConsumed > 0).
+        cost_to_report = tokens_consumed_on_error 
 
-    except Exception as e:
+        if status_code == 429:
+             logger.error(f"Batch ASINs - 429 ERROR. Script tokens at time of call: {current_available_tokens:.2f}. Keepa reported {tokens_consumed_on_error} tokens consumed for this failed call.")
+        
+        error_products = [{'asin': asin, 'error': True, 'status_code': status_code, 'message': str(e)} for asin in asins_list]
+        return error_products, api_info_on_error, cost_to_report
+
+    except Exception as e: # Generic exceptions (e.g., JSONDecodeError for successful status but bad body, though less likely here)
         logger.error(f"Generic Fetch failed for batch ASINs {','.join(asins_list[:3])}...: {str(e)}")
-        api_info_on_error = {'requestTokens': None, 'tokensLeft': None, 'refillIn': None, 'refillRate': None, 'error_status_code': None}
-        estimated_cost_on_error = len(asins_list) * TOKEN_COST_PER_ASIN
-        error_products = [{'asin': asin, 'error': True, 'status_code': 'GENERIC_ERROR', 'message': str(e)} for asin in asins_list]
-        return error_products, api_info_on_error, estimated_cost_on_error
+        # For truly generic errors, we likely didn't make a Keepa call that would report tokensConsumed.
+        api_info_on_error = {'tokensConsumed': None, 'error_status_code': 'GENERIC_SCRIPT_ERROR'}
+        # Cost is unknown / 0 as it's likely a script-side issue before or after Keepa call.
+        cost_to_report_generic_error = 0 
+        error_products = [{'asin': asin, 'error': True, 'status_code': 'GENERIC_SCRIPT_ERROR', 'message': str(e)} for asin in asins_list]
+        return error_products, api_info_on_error, cost_to_report_generic_error
 # --- End Batch Product Fetch Function ---
 
 
@@ -428,11 +452,11 @@ def main():
             required_tokens_for_deal_page = TOKEN_COST_PER_DEAL_PAGE
             if current_available_tokens < required_tokens_for_deal_page:
                 tokens_needed = required_tokens_for_deal_page - current_available_tokens
-                hourly_refill_amount = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
+                refill_rate_per_minute = TOKENS_PER_MINUTE_REFILL 
                 wait_time_seconds = 0
-                if hourly_refill_amount > 0: # Avoid division by zero if refill is disabled
-                    wait_time_seconds = math.ceil((tokens_needed / hourly_refill_amount) * QUOTA_REFILL_INTERVAL_SECONDS)
-                else: # Should not happen if refill is configured, but as a fallback
+                if refill_rate_per_minute > 0: # Avoid division by zero 
+                    wait_time_seconds = math.ceil((tokens_needed / refill_rate_per_minute) * 60) # * 60 because rate is per minute
+                else: # Fallback if TOKENS_PER_MINUTE_REFILL is somehow 0
                     wait_time_seconds = DEFAULT_LOW_QUOTA_PAUSE_SECONDS 
                 
                 logger.warning(
@@ -539,14 +563,14 @@ def main():
             update_and_check_quota(logger) # General quota check and refill
 
             # Explicit pre-call check for product batch
-            required_tokens_for_batch = len(batch_asins) * TOKEN_COST_PER_ASIN
+            required_tokens_for_batch = len(batch_asins) * ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH # Use new estimate
             if current_available_tokens < required_tokens_for_batch:
                 tokens_needed_for_batch = required_tokens_for_batch - current_available_tokens
-                hourly_refill_amount_batch = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
+                refill_rate_per_minute_batch = TOKENS_PER_MINUTE_REFILL
                 wait_time_seconds_batch = 0
-                if hourly_refill_amount_batch > 0:
-                    wait_time_seconds_batch = math.ceil((tokens_needed_for_batch / hourly_refill_amount_batch) * QUOTA_REFILL_INTERVAL_SECONDS)
-                else: # Fallback, should not be reached if refill is configured
+                if refill_rate_per_minute_batch > 0:
+                    wait_time_seconds_batch = math.ceil((tokens_needed_for_batch / refill_rate_per_minute_batch) * 60) # * 60 because rate is per minute
+                else: # Fallback if TOKENS_PER_MINUTE_REFILL is somehow 0
                     wait_time_seconds_batch = DEFAULT_LOW_QUOTA_PAUSE_SECONDS
 
                 logger.warning(
@@ -595,7 +619,19 @@ def main():
                 continue # Continue to next iteration of while loop (either next batch or end)
 
             else: # Batch had a critical error
-                logger.error(f"Batch fetch critically failed for ASINs: {batch_asins[:3]}... Token NOT consumed by main loop (cost was {actual_batch_cost}, error status: {api_info.get('error_status_code')}).")
+                # actual_batch_cost here is the tokensConsumed reported by Keepa for the FAILED call, or 0 if it couldn't be determined.
+                if actual_batch_cost > 0:
+                    current_available_tokens -= actual_batch_cost
+                    logger.warning(
+                        f"Batch fetch critically failed (status: {api_info.get('error_status_code')}) but Keepa reported {actual_batch_cost} tokens consumed for this attempt. "
+                        f"Deducting. Tokens remaining: {current_available_tokens:.2f}."
+                    )
+                else:
+                    # Log that it failed but no tokens were reported consumed for *this specific failed attempt*
+                    logger.error(
+                        f"Batch fetch critically failed for ASINs: {batch_asins[:3]}... "
+                        f"No tokens reported by Keepa as consumed for this specific failed attempt (Reported cost for attempt: {actual_batch_cost}, status: {api_info.get('error_status_code')})."
+                    )
                 
                 if api_info.get('error_status_code') == 429:
                     if batch_retry_counts[batch_idx] < max_retries_for_batch: # max_retries_for_batch is 2 (for 3 total attempts)
