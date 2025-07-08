@@ -15,23 +15,25 @@ logger = logging.getLogger('KeepaDeals') # Use the same logger as in main()
 
 # --- Jules: Local Quota Management Constants & State ---
 MAX_QUOTA_TOKENS = 300
-HOURLY_REFILL_PERCENTAGE = 0.05
-TOKEN_COST_PER_ASIN = 2 # Corrected based on research: using 'offers' or 'buybox' param costs 2 tokens. We use both.
-MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # Increased from 10 to 25 for a larger buffer
-QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour
-DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes (remains the same for now)
+# HOURLY_REFILL_PERCENTAGE = 0.05 # Replaced by per-minute refill
+TOKENS_PER_MINUTE_REFILL = 5
+REFILL_CALCULATION_INTERVAL_SECONDS = 60 # Check for refills every minute
+
+TOKEN_COST_PER_ASIN = 5 # Revised based on detailed param review: 1(base)+1(stats)+1(rating)+1(history)+1(buybox)
+TOKEN_COST_PER_DEAL_PAGE = 1 # Assumed cost for /deal endpoint calls (since buybox=false by default)
+MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # General low quota pause trigger
+# QUOTA_REFILL_INTERVAL_SECONDS = 3600  # 1 hour # Replaced by REFILL_CALCULATION_INTERVAL_SECONDS
+DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes
 
 # Initialize global state variables for quota management
-# These will be modified by functions and within the main loop.
-# Consider refactoring to a class if state management becomes too complex.
 current_available_tokens = MAX_QUOTA_TOKENS
-last_refill_calculation_time = time.time() # Initialize to script start time
+last_refill_calculation_time = time.time()
 
 # Global dictionary to track attempts for fetch_product retries
 fetch_product_attempts = {}
 
 # --- Jules: Additional Throttling & Logging Constants ---
-MIN_TIME_SINCE_LAST_CALL_SECONDS = 60 # Minimum quiet time before a new API call (Increased due to no rate limit headers)
+MIN_TIME_SINCE_LAST_CALL_SECONDS = 60 
 # Single ASIN fetch delays
 POST_FETCH_SUCCESS_DELAY_SECONDS = 5  
 POST_FETCH_ERROR_DELAY_SECONDS = 20 
@@ -50,7 +52,7 @@ logging.basicConfig(
     format='%(asctime)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),  # Terminal output
-        logging.FileHandler('debug_log.txt')  # File output
+        logging.FileHandler('debug_log.txt', mode='w')  # File output, mode 'w' to overwrite
     ]
 )
 # Force flush for real-time output
@@ -212,36 +214,42 @@ def update_and_check_quota(logger_instance):
 
     current_time = time.time()
     time_elapsed_seconds = current_time - last_refill_calculation_time
-    
-    if time_elapsed_seconds >= QUOTA_REFILL_INTERVAL_SECONDS:
-        intervals_passed = int(time_elapsed_seconds // QUOTA_REFILL_INTERVAL_SECONDS)
+
+    # Check if enough time has passed for at least one refill calculation interval
+    if time_elapsed_seconds >= REFILL_CALCULATION_INTERVAL_SECONDS:
+        # Calculate how many refill intervals have passed
+        intervals_passed = int(time_elapsed_seconds // REFILL_CALCULATION_INTERVAL_SECONDS)
         
         if intervals_passed > 0:
-            refill_amount_per_interval = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
-            total_refilled = intervals_passed * refill_amount_per_interval
+            # Calculate tokens refilled based on per-minute rate and interval duration
+            # If REFILL_CALCULATION_INTERVAL_SECONDS is 60, then tokens_per_interval is TOKENS_PER_MINUTE_REFILL
+            # If interval is shorter, adjust accordingly (e.g. if 30s interval, tokens_per_interval = TOKENS_PER_MINUTE_REFILL / 2)
+            tokens_refilled_per_minute_interval = TOKENS_PER_MINUTE_REFILL * (REFILL_CALCULATION_INTERVAL_SECONDS / 60.0)
+            total_refilled = intervals_passed * tokens_refilled_per_minute_interval
             
-            # Store tokens before refill for logging
             tokens_before_refill = current_available_tokens
             current_available_tokens += total_refilled
             if current_available_tokens > MAX_QUOTA_TOKENS:
                 current_available_tokens = MAX_QUOTA_TOKENS
             
-            # Advance last_refill_calculation_time by the exact number of intervals processed
             original_last_refill_time = last_refill_calculation_time
-            last_refill_calculation_time += intervals_passed * QUOTA_REFILL_INTERVAL_SECONDS
+            last_refill_calculation_time += intervals_passed * REFILL_CALCULATION_INTERVAL_SECONDS # Advance by processed intervals
             
             logger_instance.info(
-                f"Quota Refill: Passed {intervals_passed} hour(s) since last calc (from {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(original_last_refill_time))}). "
+                f"Quota Refill: Processed {intervals_passed} interval(s) of {REFILL_CALCULATION_INTERVAL_SECONDS}s "
+                f"(from {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(original_last_refill_time))}). "
                 f"Tokens before: {tokens_before_refill:.2f}. Added {total_refilled:.2f}. Tokens after: {current_available_tokens:.2f}. "
                 f"New last refill calc time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_refill_calculation_time))}"
             )
-        # If no refill happened, this debug log confirms current token state before threshold check
         else:
-            logger_instance.debug(f"Quota Check: No refill interval passed. Current tokens: {current_available_tokens:.2f}")
-    
-    logger_instance.debug(f"Quota Check (after refill calc): Current available tokens: {current_available_tokens:.2f}") # Changed to debug
+            # This case should ideally not be hit if time_elapsed_seconds >= REFILL_CALCULATION_INTERVAL_SECONDS
+            logger_instance.debug(f"Quota Check: No full refill interval passed despite elapsed time. Current tokens: {current_available_tokens:.2f}")
+    else:
+        logger_instance.debug(f"Quota Check: Not enough time for a refill interval. Elapsed: {time_elapsed_seconds:.2f}s. Current tokens: {current_available_tokens:.2f}")
 
-    # Proactive Pause Logic
+    logger_instance.debug(f"Quota Check (after refill calc): Current available tokens: {current_available_tokens:.2f}")
+
+    # Proactive Pause Logic (remains the same, uses updated current_available_tokens)
     if current_available_tokens < MIN_QUOTA_THRESHOLD_BEFORE_PAUSE:
         logger_instance.warning(
             f"Low quota: {current_available_tokens:.2f} tokens remaining, which is below threshold {MIN_QUOTA_THRESHOLD_BEFORE_PAUSE}. "
@@ -401,24 +409,58 @@ def write_csv(rows, deals, diagnostic=False):
 
 # Chunk 4 starts
 def main():
-    global args, LAST_API_CALL_TIMESTAMP # Added LAST_API_CALL_TIMESTAMP to globals used in main
-    args = parser.parse_args() # Initialize global args
-    logger = logging.getLogger('KeepaDeals') # Obtain logger instance
+    global args, LAST_API_CALL_TIMESTAMP, current_available_tokens, last_refill_calculation_time # Added token globals
+    args = parser.parse_args()
+    logger = logging.getLogger('KeepaDeals')
     
-    LAST_API_CALL_TIMESTAMP = time.time() # Initialize to script start time, or 0 if preferred to ensure first call isn't delayed by this. Let's use current time.
+    LAST_API_CALL_TIMESTAMP = time.time()
 
     try:
-# Logging stuff - starts
-        logger.info("Starting Keepa_Deals...") # Use logger instance
+        logger.info("Starting Keepa_Deals...")
         print("Starting Keepa_Deals...", flush=True)
         time.sleep(2)
         
         all_deals = []
         page = 0
         while True:
+            # --- Pre-call check for fetch_deals_for_deals ---
+            update_and_check_quota(logger) # General quota check and refill
+            required_tokens_for_deal_page = TOKEN_COST_PER_DEAL_PAGE
+            if current_available_tokens < required_tokens_for_deal_page:
+                tokens_needed = required_tokens_for_deal_page - current_available_tokens
+                hourly_refill_amount = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
+                wait_time_seconds = 0
+                if hourly_refill_amount > 0: # Avoid division by zero if refill is disabled
+                    wait_time_seconds = math.ceil((tokens_needed / hourly_refill_amount) * QUOTA_REFILL_INTERVAL_SECONDS)
+                else: # Should not happen if refill is configured, but as a fallback
+                    wait_time_seconds = DEFAULT_LOW_QUOTA_PAUSE_SECONDS 
+                
+                logger.warning(
+                    f"Insufficient tokens for fetching deal page {page}. "
+                    f"Have: {current_available_tokens:.2f}, Need: {required_tokens_for_deal_page}. "
+                    f"Waiting for approx. {wait_time_seconds // 60} minutes for tokens to refill."
+                )
+                time.sleep(wait_time_seconds)
+                update_and_check_quota(logger) # Re-check quota after waiting
+
             logger.info(f"Fetching deals page {page}...")
             print(f"Fetching deals page {page}...", flush=True)
-            deals_page = fetch_deals_for_deals(page) # Consider passing args.no_cache if fetch_deals_for_deals needs it
+            
+            # MIN_TIME_SINCE_LAST_CALL_SECONDS check for deal calls
+            current_time_deal_call = time.time()
+            time_since_last_api_call = current_time_deal_call - LAST_API_CALL_TIMESTAMP
+            if time_since_last_api_call < MIN_TIME_SINCE_LAST_CALL_SECONDS:
+                deal_wait_duration = MIN_TIME_SINCE_LAST_CALL_SECONDS - time_since_last_api_call
+                logger.info(f"Pre-emptive pause for deal page fetch: Last API call was {time_since_last_api_call:.2f}s ago. Waiting {deal_wait_duration:.2f}s.")
+                time.sleep(deal_wait_duration)
+            
+            deals_page = fetch_deals_for_deals(page)
+            LAST_API_CALL_TIMESTAMP = time.time() # Update after the call
+
+            if deals_page: # Only deduct tokens if the call was presumably successful (returned data)
+                current_available_tokens -= TOKEN_COST_PER_DEAL_PAGE
+                logger.info(f"Token consumed for deal page {page}. Cost: {TOKEN_COST_PER_DEAL_PAGE}. Tokens remaining: {current_available_tokens:.2f}")
+            
             if not deals_page:
                 logger.info(f"No more deals found on page {page}.")
                 print(f"No more deals found on page {page}.", flush=True)
@@ -427,15 +469,15 @@ def main():
             logger.info(f"Fetched {len(deals_page)} deals from page {page}. Total deals so far: {len(all_deals)}")
             print(f"Fetched {len(deals_page)} deals from page {page}. Total deals so far: {len(all_deals)}", flush=True)
             page += 1
-            time.sleep(1) # Add a small delay between page fetches if needed
+            # The time.sleep(1) here is a small politeness delay, MIN_TIME_SINCE_LAST_CALL_SECONDS handles primary rate limiting.
 
-        deals = all_deals # Use all_deals for processing
+        deals = all_deals
         
-        # TEMPORARY: Limit to 100 deals for faster testing
-        MAX_DEALS_TO_PROCESS_FOR_TESTING = 10
+        # Default limit for testing, can be overridden by processing all deals if this section is commented out.
+        MAX_DEALS_TO_PROCESS_FOR_TESTING = 150 
         if len(deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
-            logger.warning(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
-            print(f"TEMPORARY TEST LIMIT: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)
+            logger.warning(f"TESTING LIMIT ACTIVE: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
+            print(f"TESTING LIMIT ACTIVE: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)
             deals_to_process = deals[:MAX_DEALS_TO_PROCESS_FOR_TESTING]
         else:
             deals_to_process = deals
@@ -454,7 +496,7 @@ def main():
 # Logging stuff - ends
 
         # --- Batch Processing Logic ---
-        MAX_ASINS_PER_BATCH = 100 # Keepa API limit for product endpoint
+        MAX_ASINS_PER_BATCH = 50 # Default for current testing phase
         
         valid_deals_to_process = []
         for deal_idx, deal_obj in enumerate(deals_to_process):
@@ -483,34 +525,49 @@ def main():
 
         all_fetched_products_map = {} # To store fetched product data by ASIN
 
-        for batch_idx, current_batch_deals in enumerate(asin_batches):
+        batch_idx = 0
+        max_retries_for_batch = 2 # Allows 3 attempts total (1 initial + 2 retries)
+        batch_retry_counts = [0] * len(asin_batches) # Track retries for each batch
+
+        while batch_idx < len(asin_batches):
+            current_batch_deals = asin_batches[batch_idx]
             batch_asins = [d['asin'] for d in current_batch_deals]
-            logger.info(f"Processing Batch {batch_idx + 1}/{len(asin_batches)} with {len(batch_asins)} ASINs: {batch_asins}")
+            
+            logger.info(f"Processing Batch {batch_idx + 1}/{len(asin_batches)} (Attempt {batch_retry_counts[batch_idx] + 1}) with {len(batch_asins)} ASINs: {batch_asins[:3]}...")
 
             # --- Quota Management & Throttling (Per Batch) ---
-            update_and_check_quota(logger)
-            
-            current_time = time.time()
-            time_since_last_call = current_time - LAST_API_CALL_TIMESTAMP
-            if time_since_last_call < MIN_TIME_SINCE_LAST_CALL_SECONDS: # This constant might need adjustment for batch calls
-                wait_duration = MIN_TIME_SINCE_LAST_CALL_SECONDS - time_since_last_call
-                logger.info(f"Pre-emptive pause for batch: Last call was {time_since_last_call:.2f}s ago. Waiting for {wait_duration:.2f}s.")
-                time.sleep(wait_duration)
+            update_and_check_quota(logger) # General quota check and refill
 
-            # Call the actual batch fetching function
-            # Parameters like days, offers, etc., are passed with default values for now.
-            # These can be made dynamic if needed per batch.
+            # Explicit pre-call check for product batch
+            required_tokens_for_batch = len(batch_asins) * TOKEN_COST_PER_ASIN
+            if current_available_tokens < required_tokens_for_batch:
+                tokens_needed_for_batch = required_tokens_for_batch - current_available_tokens
+                hourly_refill_amount_batch = MAX_QUOTA_TOKENS * HOURLY_REFILL_PERCENTAGE
+                wait_time_seconds_batch = 0
+                if hourly_refill_amount_batch > 0:
+                    wait_time_seconds_batch = math.ceil((tokens_needed_for_batch / hourly_refill_amount_batch) * QUOTA_REFILL_INTERVAL_SECONDS)
+                else: # Fallback, should not be reached if refill is configured
+                    wait_time_seconds_batch = DEFAULT_LOW_QUOTA_PAUSE_SECONDS
+
+                logger.warning(
+                    f"Insufficient tokens for product batch {batch_idx + 1}. "
+                    f"Have: {current_available_tokens:.2f}, Need: {required_tokens_for_batch}. "
+                    f"Waiting for approx. {wait_time_seconds_batch // 60} minutes for tokens to refill."
+                )
+                time.sleep(wait_time_seconds_batch)
+                update_and_check_quota(logger) # Re-check quota after specific wait
+
+            current_time_batch_call = time.time()
+            time_since_last_api_call_batch = current_time_batch_call - LAST_API_CALL_TIMESTAMP
+            if time_since_last_api_call_batch < MIN_TIME_SINCE_LAST_CALL_SECONDS:
+                batch_wait_duration = MIN_TIME_SINCE_LAST_CALL_SECONDS - time_since_last_api_call_batch
+                logger.info(f"Pre-emptive pause for product batch: Last API call was {time_since_last_api_call_batch:.2f}s ago. Waiting {batch_wait_duration:.2f}s.")
+                time.sleep(batch_wait_duration)
+
             batch_product_data_list, api_info, actual_batch_cost = fetch_product_batch(batch_asins)
-            
             LAST_API_CALL_TIMESTAMP = time.time()
-            global current_available_tokens
+            # global current_available_tokens # Already global from main's declaration
 
-            # Check if the batch fetch itself had a critical error (e.g., HTTP error)
-            # fetch_product_batch returns a list of error-like dicts if the whole call fails.
-            # A more robust check might be needed if partial success is possible at HTTP level.
-            # For now, if the first item has a 'status_code' that's not None and not 200, assume batch failure.
-            # Or, if api_info indicates an error status code directly from the batch call.
-            
             batch_had_critical_error = False
             if api_info.get('error_status_code') and api_info.get('error_status_code') != 200:
                 batch_had_critical_error = True
@@ -521,43 +578,59 @@ def main():
                 logger.info(f"Tokens consumed for BATCH. Cost: {actual_batch_cost}. Tokens remaining: {current_available_tokens:.2f}.")
                 logger.debug(f"Pausing for {POST_BATCH_SUCCESS_DELAY_SECONDS}s after successful batch fetch.")
                 time.sleep(POST_BATCH_SUCCESS_DELAY_SECONDS)
-            else:
-                logger.error(f"Batch fetch critically failed for ASINs: {batch_asins[:3]}... Token NOT consumed by main loop (cost was {actual_batch_cost}, error status: {api_info.get('error_status_code')}).")
-                logger.debug(f"Pausing for {POST_BATCH_ERROR_DELAY_SECONDS}s after failed batch fetch.")
-                time.sleep(POST_BATCH_ERROR_DELAY_SECONDS)
-                # Populate all_fetched_products_map with error objects for this batch
+
+                # Store successfully fetched products
+                temp_product_map = {p['asin']: p for p in batch_product_data_list if isinstance(p, dict) and 'asin' in p}
                 for deal_info in current_batch_deals:
-                    # Use the error structure returned by fetch_product_batch if available, else generic
-                    asin_error_obj = next((p for p in batch_product_data_list if isinstance(p, dict) and p.get('asin') == deal_info['asin']), None)
-                    if asin_error_obj and asin_error_obj.get('error'):
-                        all_fetched_products_map[deal_info['asin']] = asin_error_obj
-                    else: # Generic error if specific one not found (should not happen if fetch_product_batch is consistent)
-                        all_fetched_products_map[deal_info['asin']] = {'asin': deal_info['asin'], 'error': True, 'status_code': api_info.get('error_status_code', 'BATCH_CALL_FAILED'), 'message': 'Batch API call failed'}
-                continue # Move to the next batch
+                    asin_to_map = deal_info['asin']
+                    if asin_to_map in temp_product_map:
+                        all_fetched_products_map[asin_to_map] = temp_product_map[asin_to_map]
+                    else:
+                        logger.warning(f"ASIN {asin_to_map} was requested in batch but not found in response products. Marking as error.")
+                        all_fetched_products_map[asin_to_map] = {'asin': asin_to_map, 'error': True, 'status_code': 'MISSING_IN_BATCH_RESPONSE', 'message': 'ASIN not found in successful batch response products list.'}
+                
+                batch_idx += 1 # Move to next batch
+                if batch_idx < len(asin_batches): # Reset retry counter for the *next* batch
+                    batch_retry_counts[batch_idx] = 0 
+                continue # Continue to next iteration of while loop (either next batch or end)
 
-            # Store successfully fetched or individually errored (but batch call was OK) products in the map
-            # The batch_product_data_list might contain a mix if Keepa processes some ASINs and errors on others within a 200 OK response.
-            # Or, if fetch_product_batch synthesizes error objects for ASINs not found in a successful response.
-            temp_product_map = {p['asin']: p for p in batch_product_data_list if isinstance(p, dict) and 'asin' in p}
-
-            for deal_info in current_batch_deals:
-                asin_to_map = deal_info['asin']
-                if asin_to_map in temp_product_map:
-                    all_fetched_products_map[asin_to_map] = temp_product_map[asin_to_map]
-                else:
-                    # This ASIN was in the request but not in the response products list from a (nominally) successful batch call
-                    logger.warning(f"ASIN {asin_to_map} was requested in batch but not found in response products. Marking as error.")
-                    all_fetched_products_map[asin_to_map] = {'asin': asin_to_map, 'error': True, 'status_code': 'MISSING_IN_BATCH_RESPONSE', 'message': 'ASIN not found in successful batch response products list.'}
-            
-            # Handle 429 specifically (though fetch_product_batch also logs it)
-            # This check might be redundant if batch_had_critical_error covers it.
-            if api_info.get('error_status_code') == 429:
-                logger.error(f"Received 429 (Too Many Requests) for BATCH {batch_asins[:3]}... Initiating 1-hour recovery pause.")
-                # This pause might be better handled within fetch_product_batch or as part of general error handling for batch.
-                # For now, keeping a similar pattern.
-                time.sleep(QUOTA_REFILL_INTERVAL_SECONDS) 
-                update_and_check_quota(logger)
-
+            else: # Batch had a critical error
+                logger.error(f"Batch fetch critically failed for ASINs: {batch_asins[:3]}... Token NOT consumed by main loop (cost was {actual_batch_cost}, error status: {api_info.get('error_status_code')}).")
+                
+                if api_info.get('error_status_code') == 429:
+                    if batch_retry_counts[batch_idx] < max_retries_for_batch: # max_retries_for_batch is 2 (for 3 total attempts)
+                        batch_retry_counts[batch_idx] += 1 # Increment before using for pause logic
+                        
+                        pause_duration_seconds = 0
+                        if batch_retry_counts[batch_idx] == 1: # This is the first retry (2nd attempt overall)
+                            pause_duration_seconds = 900 # 15 minutes
+                        elif batch_retry_counts[batch_idx] == 2: # This is the second retry (3rd attempt overall)
+                            pause_duration_seconds = 1800 # 30 minutes
+                        
+                        logger.error(f"Batch API call received 429 error. Attempt {batch_retry_counts[batch_idx] + 1}/3 for this batch. Initiating {pause_duration_seconds // 60}-minute recovery pause.")
+                        time.sleep(pause_duration_seconds)
+                        logger.info(f"Recovery pause complete ({pause_duration_seconds // 60} mins). Updating quota before retrying batch.")
+                        update_and_check_quota(logger)
+                        # Loop continues, will retry current batch_idx
+                    else: # This means batch_retry_counts[batch_idx] was already 2, and the 3rd attempt also failed
+                        logger.error(f"Batch API call received 429 error on attempt 3/3 for batch {batch_idx + 1}. Max retries reached. Skipping this batch.")
+                        # Populate all_fetched_products_map with error objects for this skipped batch
+                        for deal_info in current_batch_deals:
+                            all_fetched_products_map[deal_info['asin']] = {'asin': deal_info['asin'], 'error': True, 'status_code': 429, 'message': 'Batch skipped after max retries due to 429 error'}
+                        batch_idx += 1 # Move to next batch
+                        if batch_idx < len(asin_batches): # Reset retry counter for the *next* batch
+                            batch_retry_counts[batch_idx] = 0
+                else: # Other critical error (not 429)
+                    logger.debug(f"Pausing for {POST_BATCH_ERROR_DELAY_SECONDS}s after failed batch fetch (non-429 error).")
+                    time.sleep(POST_BATCH_ERROR_DELAY_SECONDS)
+                    # Populate all_fetched_products_map with error objects for this failed batch
+                    for deal_info in current_batch_deals:
+                        error_msg_detail = api_info.get('message', 'Batch API call failed with non-429 error')
+                        all_fetched_products_map[deal_info['asin']] = {'asin': deal_info['asin'], 'error': True, 'status_code': api_info.get('error_status_code', 'BATCH_CALL_FAILED_NON_429'), 'message': error_msg_detail}
+                    batch_idx += 1 # Move to next batch
+                    if batch_idx < len(asin_batches): # Reset retry counter for the *next* batch
+                        batch_retry_counts[batch_idx] = 0
+                continue # Continue to next iteration of while loop
 
         # --- Process all deals using the fetched product data ---
         # Iterate through the original deals_to_process to maintain order and include placeholders for skipped ASINs
@@ -629,13 +702,25 @@ def main():
                 if not non_hyphen_items and asin == product.get('asin'):
                     logger.warning(f"ASIN {asin}: Row for valid product is all hyphens. Error: {product.get('error')}, Status: {product.get('status_code')}")
                 
+                # Ensure ASIN in the row is clean and correctly sourced from the iteration's 'asin' variable
+                # This 'asin' variable comes from valid_deals_to_process and is the definitive ASIN for this row.
+                if 'ASIN' not in row or row.get('ASIN') != asin:
+                    if 'ASIN' in row: # It exists but is different or formatted incorrectly
+                        logger.warning(
+                            f"ASIN {asin}: The 'ASIN' field in the processed row ('{row.get('ASIN')}') "
+                            f"differs from or is not the primary source ASIN ('{asin}'). Correcting."
+                        )
+                    else: # ASIN field was not populated by any function
+                        logger.debug(f"ASIN {asin}: 'ASIN' field not populated by functions. Setting from source ASIN.")
+                    row['ASIN'] = asin # Set/Overwrite with the clean source ASIN
+                
                 temp_rows_data.append({'original_index': deal_info['original_index'], 'data': row})
 
             except Exception as e:
                 logger.error(f"Error processing ASIN {asin} (outer loop): {e}")
                 placeholder_row_content = {'ASIN': asin}
-                else:
-                    logger.error(f"Invalid product data structure in batch response: {product_data}")
+                # The invalid 'else' block and the line below it were removed here.
+                # logger.error(f"Invalid product data structure in batch response: {product_data}")
 
 
         # --- Process all deals using the fetched product data ---

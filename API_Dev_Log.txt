@@ -557,3 +557,44 @@ Outcome: Success.
     *   Prioritize verifying the exact token cost per ASIN for the *specific parameters* we use (`stats`, `offers`, `stock`, `buybox`, etc.) when called in a batch via direct HTTP.
     *   Verify if `tokensLeft` and `refillIn` are present in the direct HTTP batch response.
     *   Plan a phased implementation, starting with a new function for batch fetching via direct HTTP.
+
+## Date: 2025-07-08
+**Developer:** Jules (AI Assistant) & Tim Emery
+**Task Focus:** Stabilize batch ASIN processing, address 429 errors, and refine token management in `Keepa_Deals.py`.
+
+**Key Learnings & Iterations:**
+
+1.  **Batch Implementation & Initial 429 Errors:**
+    *   Successfully implemented batch ASIN fetching (`fetch_product_batch`) using direct HTTP calls.
+    *   Initial tests with `MAX_ASINS_PER_BATCH = 50` and `MIN_TIME_SINCE_LAST_CALL_SECONDS = 60` resulted in 429 errors after the first successful batch. The script only processed 50 out of 150 ASINs.
+
+2.  **Enhanced 429 Handling - Long Pause (Attempt 1):**
+    *   Modified `Keepa_Deals.py` to implement a 15-minute pause if a 429 error was received for a batch. After the pause, the script would attempt the *next* batch.
+    *   **Result:** Still only processed the first batch. The 15-minute pause was insufficient; the subsequent batch also received a 429.
+
+3.  **Enhanced 429 Handling - Retry Same Batch (Attempt 2):**
+    *   Modified `Keepa_Deals.py` to retry the *same* batch up to 3 times if a 429 error occurred, with a 15-minute pause between each attempt for that batch.
+    *   **Result:** Progress! Processed 100 out of 150 ASINs. The second batch succeeded on its 3rd attempt (after two 15-min pauses). The third batch failed all 3 attempts and was skipped. This indicated 15-minute pauses were not always enough.
+
+4.  **Enhanced 429 Handling - Exponential Backoff (Attempt 3 - Current Strategy):**
+    *   Modified `Keepa_Deals.py` to implement exponential backoff for retries on the *same* batch:
+        *   1st 429 on a batch: Pause 15 minutes before 2nd attempt.
+        *   2nd 429 on the same batch: Pause 30 minutes before 3rd attempt.
+        *   If 3rd attempt also fails: Skip the batch.
+    *   **Result:** Success! All 150 ASINs (3 batches of 50) were processed. The exponential backoff allowed enough recovery time for the API.
+
+5.  **Token Cost Investigation & Refinement:**
+    *   A significant negative token balance (`-315`) was observed after the successful 150-ASIN run, indicating inaccurate local token accounting.
+    *   **`/deal` Endpoint Cost:** Confirmed that `fetch_deals_for_deals` in `stable_deals.py` does *not* use `buybox=true` in its `selection` query. Therefore, it correctly defaults to `buybox=false`, costing **1 token per page request**. No code change was needed in `stable_deals.py` for this.
+    *   **`/product` Endpoint Cost Hypothesis:** The `TOKEN_COST_PER_ASIN` for `fetch_product_batch` (which uses parameters `stats`, `offers=100`, `rating=1`, `history=1`, `stock=1`, `buybox=1`) was revised from 2 to **3 tokens per ASIN**. This is based on the understanding that base cost is 1, `offers` likely adds 1 per ASIN, and `buybox=1` adds 1 per ASIN.
+    *   **`Keepa_Deals.py` Token Logic Updates:**
+        *   `TOKEN_COST_PER_ASIN` constant changed to `3`.
+        *   `TOKEN_COST_PER_DEAL_PAGE` constant added as `1`.
+        *   Logic added to deduct 1 token after each successful `fetch_deals_for_deals` call.
+        *   Implemented pre-API call checks for both `fetch_deals_for_deals` and `fetch_product_batch`:
+            *   If locally simulated `current_available_tokens` are insufficient for the estimated cost of the next call, the script now calculates the required wait time for tokens to refill (based on `HOURLY_REFILL_PERCENTAGE`) and pauses accordingly. This is more dynamic than only pausing when below `MIN_QUOTA_THRESHOLD_BEFORE_PAUSE`.
+
+**Current Status & Next Steps:**
+*   The script (`Keepa_Deals.py`) is now significantly more robust in handling Keepa API rate limits for batch calls and has more accurate local token accounting.
+*   The immediate next step is for the user to perform a full test run with all ~800 deals, using `MAX_ASINS_PER_BATCH = 50` and the new token management and retry logic.
+*   The `debug_log.txt` file creation was confirmed to be working correctly (user had inadvertently deleted it during one test).
