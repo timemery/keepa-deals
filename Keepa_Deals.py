@@ -20,7 +20,7 @@ TOKENS_PER_MINUTE_REFILL = 5
 REFILL_CALCULATION_INTERVAL_SECONDS = 60 # Check for refills every minute
 
 # TOKEN_COST_PER_ASIN = 5 # Replaced by ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH for pre-call checks
-ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 15 # Initial estimate for pre-call checks. Actual cost from API's 'tokensConsumed'.
+ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 4 # Initial estimate for pre-call checks. Actual cost from API's 'tokensConsumed'.
 TOKEN_COST_PER_DEAL_PAGE = 1 # Cost for /deal endpoint calls (buybox=false by default)
 MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # General low quota pause trigger
 DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes
@@ -326,7 +326,7 @@ def fetch_product_batch(asins_list, days=365, offers=100, rating=1, history=1):
         # We need to ensure that the main loop can handle this (e.g. by creating placeholders for missing ASINs).
 
         logger.info(f"Successfully fetched data for {len(products_data)} products in batch for {len(asins_list)} requested ASINs.")
-        return products_data, api_info, actual_token_cost
+        return products_data, api_info, actual_batch_cost
 
     except requests.exceptions.RequestException as e:
         logger.error(f"HTTP Fetch failed for batch ASINs {','.join(asins_list[:3])}...: {str(e)}")
@@ -498,7 +498,7 @@ def main():
         deals = all_deals
         
         # Default limit for testing, can be overridden by processing all deals if this section is commented out.
-        MAX_DEALS_TO_PROCESS_FOR_TESTING = 150 
+        MAX_DEALS_TO_PROCESS_FOR_TESTING = 10000 
         if len(deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
             logger.warning(f"TESTING LIMIT ACTIVE: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
             print(f"TESTING LIMIT ACTIVE: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)
