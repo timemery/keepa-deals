@@ -591,3 +591,25 @@ Outcome: Success.
 
 **Next Steps:**
 *   User to perform a controlled test run (e.g., 150 deals, 50/batch) with these comprehensive changes. The main goals are to verify that `tokensConsumed` is used correctly, the local token count aligns better with Keepa's actual balance, and the script handles API interactions (including 429s) robustly and efficiently.
+
+Date: 2025-07-11
+Task: Correct Token Estimation Constant & Conduct Full Test Run of Keepa_Deals.py (Follow-up from Jules)
+Branch: jules/correct-token-est-full-test-v1
+
+Summary of Actions & Findings (Task leading to debug_log-bigrun.txt):
+1.  Set `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` to 4 in `Keepa_Deals.py`.
+2.  Identified and fixed a `NameError` in `fetch_product_batch` related to `actual_token_cost` vs `actual_batch_cost`.
+3.  You executed a full test run with these changes, processing 809 ASINs over approximately 25.75 hours (NoCache).
+    - Output: `Keepa_Deals_Export.csv` (800 rows, ~10 partially missing), `debug_log-bigrun.txt`.
+4.  Initial analysis of log excerpts showed `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 4` was significantly lower than actual batch costs (e.g., one batch of 50 ASINs cost 371 tokens, avg 7.42/ASIN). This caused the script to frequently enter token deficit, extending run time due to recovery pauses.
+5.  The script completed the full run, indicating robust error handling and token management logic, despite the underestimation.
+6.  Full analysis of `debug_log-bigrun.txt` is pending for the next task to determine a more accurate average token cost and investigate data integrity for a few reported missing rows/cells.
+
+Committed changes:
+- `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 4`
+- `NameError` fix in `fetch_product_batch`.
+
+Next Steps (New Task):
+- Detailed analysis of `debug_log-bigrun.txt`.
+- Update `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` based on full run data.
+- Investigate and address any data integrity issues from the CSV.

@@ -394,3 +394,12 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
     *   Exponential backoff pauses: 15 minutes after 1st failure, 30 minutes after 2nd.
     *   If a 429 response includes `tokensConsumed > 0`, those tokens ARE deducted.
 *   **Token Refill Simulation:** Now based on **5 tokens per minute**, checked every 60 seconds, to more closely match Keepa's actual refill rate.
+
+## Agent Performance Notes & Learnings
+- (Add this section if it doesn't exist)
+
+### Token Cost Estimation (Keepa_Deals.py)
+- **Updated: 2025-07-11**
+- The `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` constant is critical for efficient script operation.
+- This value should be periodically reviewed and adjusted based on analysis of `tokensConsumed` data from full runs, as actual API costs can vary.
+- Do not assume a low value; use data from `debug_log.txt` from substantial runs to inform this constant.
