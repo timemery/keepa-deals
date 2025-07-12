@@ -206,6 +206,8 @@ def get_asin(product):
 # Manufacturer starts
 def manufacturer(product):
     manufacturer_value = product.get('manufacturer', '-')
+    if not manufacturer_value or manufacturer_value.strip() == "": # Check if None, empty, or just whitespace
+        manufacturer_value = '-'
     result = {'Manufacturer': manufacturer_value}
     logger.debug(f"manufacturer result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
@@ -214,6 +216,8 @@ def manufacturer(product):
 # Brand starts
 def get_brand(product):
     brand_value = product.get('brand', '-')
+    if not brand_value or brand_value.strip() == "": # Check if None, empty, or just whitespace
+        brand_value = '-'
     result = {'Brand': brand_value}
     logger.debug(f"get_brand result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
@@ -226,6 +230,8 @@ def get_brand(product):
 # Author starts
 def author(product):
     author_value = product.get('author', '-')
+    if not author_value or author_value.strip() == "": # Check if None, empty, or just whitespace
+        author_value = '-'
     result = {'Author': author_value}
     logger.debug(f"author result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result
@@ -236,6 +242,8 @@ def author(product):
 # Binding starts
 def binding(product):
     binding_value = product.get('binding', '-')
+    if not binding_value or binding_value.strip() == "": # Check if None, empty, or just whitespace
+        binding_value = '-'
     result = {'Binding': binding_value}
     logger.debug(f"binding result for ASIN {product.get('asin', 'unknown')}: {result}")
     return result

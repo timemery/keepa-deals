@@ -403,3 +403,17 @@ When encountering `ImportError: cannot import name 'FUNCTION_LIST' from 'field_m
 - The `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` constant is critical for efficient script operation.
 - This value should be periodically reviewed and adjusted based on analysis of `tokensConsumed` data from full runs, as actual API costs can vary.
 - Do not assume a low value; use data from `debug_log.txt` from substantial runs to inform this constant.
+
+## Debugging Persistent or Recurring Errors
+
+**Date of Learning:** July 12, 2025
+
+**Issue:** A `TypeError` (incorrect number of arguments for `deal_found`) persisted across multiple test runs, even after a fix was thought to have been applied by removing a duplicated code block.
+
+**Root Cause:** The initial fix attempt was incomplete. The erroneous code block was either misidentified, or the edit was not applied correctly, causing the bug to remain in the script.
+
+**Key Learning & Principle:**
+
+1.  **Verify Fixes with Targeted Log Analysis:** When a specific error is reported in logs (e.g., a `TypeError` at a specific line or for a specific function), do not assume a fix is successful until a new test run's log is analyzed to confirm the *absence* of that specific error message. A general "it seems to work now" is insufficient.
+2.  **Trust the Latest Log:** The latest log is the ground truth. If an error that was supposedly fixed reappears in a new log, it means the fix was not effective. The investigation must restart by re-examining the code for the same error pattern, rather than assuming a new, different cause.
+3.  **Searching is a Key Tool:** Using precise searches to find specific error messages or ASINs in large log files is an essential and effective debugging strategy. When a narrow search returns no results, broaden the search (e.g., to just the ASIN) to confirm if the item was processed at all before concluding the specific error is gone.

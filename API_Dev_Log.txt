@@ -592,24 +592,81 @@ Outcome: Success.
 **Next Steps:**
 *   User to perform a controlled test run (e.g., 150 deals, 50/batch) with these comprehensive changes. The main goals are to verify that `tokensConsumed` is used correctly, the local token count aligns better with Keepa's actual balance, and the script handles API interactions (including 429s) robustly and efficiently.
 
-Date: 2025-07-11
-Task: Correct Token Estimation Constant & Conduct Full Test Run of Keepa_Deals.py (Follow-up from Jules)
-Branch: jules/correct-token-est-full-test-v1
+## Date: 2025-07-11
+**Task:** Correct Token Estimation Constant & Conduct Full Test Run of Keepa_Deals.py (Follow-up from Jules)
+**Branch:** jules/correct-token-est-full-test-v1
 
-Summary of Actions & Findings (Task leading to debug_log-bigrun.txt):
+**Summary of Actions & Findings (Task leading to debug_log-bigrun.txt):**
 1.  Set `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` to 4 in `Keepa_Deals.py`.
 2.  Identified and fixed a `NameError` in `fetch_product_batch` related to `actual_token_cost` vs `actual_batch_cost`.
-3.  You executed a full test run with these changes, processing 809 ASINs over approximately 25.75 hours (NoCache).
+3.  User executed a full test run with these changes, processing 809 ASINs over approximately 25.75 hours (NoCache).
     - Output: `Keepa_Deals_Export.csv` (800 rows, ~10 partially missing), `debug_log-bigrun.txt`.
 4.  Initial analysis of log excerpts showed `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 4` was significantly lower than actual batch costs (e.g., one batch of 50 ASINs cost 371 tokens, avg 7.42/ASIN). This caused the script to frequently enter token deficit, extending run time due to recovery pauses.
 5.  The script completed the full run, indicating robust error handling and token management logic, despite the underestimation.
 6.  Full analysis of `debug_log-bigrun.txt` is pending for the next task to determine a more accurate average token cost and investigate data integrity for a few reported missing rows/cells.
 
-Committed changes:
+**Committed changes:**
 - `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 4`
 - `NameError` fix in `fetch_product_batch`.
 
-Next Steps (New Task):
-- Detailed analysis of `debug_log-bigrun.txt`.
-- Update `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` based on full run data.
-- Investigate and address any data integrity issues from the CSV.
+## Date: 2025-07-12
+**Developer:** Jules (AI Assistant)
+**Task:** Analyze Full Test Run (`debug_log-bigrun.txt`) & Refine `Keepa_Deals.py` Token Management and Data Integrity.
+**Branch:** (Will be created upon submission)
+
+**Summary of Actions & Findings:**
+
+1.  **`ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` Update:**
+    *   Full analysis of `debug_log-bigrun.txt` (6MB) for token consumption was not feasible due to tool limitations with large file reads.
+    *   Based on user (Tim) input, `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` was updated from `4` to `6` in `Keepa_Deals.py`. This aims to provide a more realistic pre-call estimate to reduce token deficit pauses. Actual token deduction continues to use `tokensConsumed` from API responses.
+
+2.  **Data Integrity Investigation (`Keepa_Deals_Export-missingcontent.csv` & `debug_log-bigrun.txt` grep):**
+    *   Analyzed `Keepa_Deals_Export-missingcontent.csv` (10 rows with missing data) and used `grep` on `debug_log-bigrun.txt` for the affected ASINs.
+    *   Identified two primary script errors causing missing data:
+        *   **`TypeError: deal_found() takes from 1 to 3 positional arguments but 4 were given`**: Occurred during an initial processing pass for these ASINs.
+        *   **`NameError: name 'deal' is not defined`**: Occurred during a subsequent processing pass for the same ASINs when functions like `deal_found`, `last_update`, and `last_price_change` were called.
+    *   **Fixes Implemented in `Keepa_Deals.py`:**
+        *   Removed a duplicated and erroneous code block responsible for iterating `FUNCTION_LIST` (this block was causing the `TypeError` by incorrectly calling `deal_found` with 4 arguments).
+        *   In the remaining (intended) `FUNCTION_LIST` iteration block, corrected `input_data = deal` to `input_data = original_deal_obj`. This resolved the `NameError` as `original_deal_obj` holds the correct deal data in that scope.
+        *   These changes ensure that `deal_found` is called correctly and that `original_deal_obj` is properly referenced.
+
+3.  **CSV Row Construction Logic Review & Fix:**
+    *   Identified a significant bug where the final `rows` list passed to `write_csv` was not correctly incorporating all processed data and placeholders.
+    *   **Fix Implemented in `Keepa_Deals.py`:**
+        *   Removed premature addition of placeholders to the main `rows` list.
+        *   The script now uses `temp_rows_data` (which stores processed rows with their `original_index`) to build a `final_processed_rows` list.
+        *   This `final_processed_rows` list is initialized to the full length of `deals_to_process` and then populated. Any remaining `None` slots (for ASINs skipped very early, e.g., due to `validate_asin` failure) are filled with placeholders.
+        *   `write_csv` is now called with `final_processed_rows`, ensuring all deals are represented in the correct order.
+
+4.  **Other Script Review:**
+    *   Reviewed token refill logic and 429 error handling; these appear robust for the current batch processing flow.
+    *   The `fetch_product` function (single ASIN fetch) is not actively used in the main deal processing loop, so its 429 handling is less critical but noted.
+
+**Files Modified:**
+*   `Keepa_Deals.py`: Updated `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH`, removed duplicate code block, fixed `NameError`, and corrected CSV row construction logic.
+*   `API_Dev_Log.txt`: This entry added.
+
+**Next Steps:**
+*   User to test the modified script to confirm data integrity improvements and overall stability.
+*   Submit changes after successful testing.
+
+## Date: 2025-07-12
+**Developer:** Jules (AI Assistant)
+**Task:** Analyze Full Test Run (`debug_log-bigrun.txt`) & Refine `Keepa_Deals.py` Token Management and Data Integrity.
+**Branch:** jules/fix-data-integrity-and-token-est-v2
+
+**Summary of Actions & Findings:**
+
+1.  **`ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` Update:**
+    *   Full analysis of `debug_log-bigrun.txt` (6MB) for token consumption was not feasible due to my limitations with large file reads.
+    *   Based on your (Tim) input, I updated `ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH` from `4` to `6` in `Keepa_Deals.py`.
+
+2.  **Data Integrity Investigation & Fixes:**
+    *   Analysis of `debug_log-bigrun.txt` excerpts revealed a persistent `TypeError` for the `deal_found` function, which was the root cause for missing data in certain rows.
+    *   The fix involved a deep-dive into `Keepa_Deals.py` to locate and correct the specific function call that was passing an incorrect number of arguments. This required multiple iterations, as the initial fix was incomplete.
+    *   Also corrected a major structural bug in `Keepa_Deals.py` where the final list of rows for the CSV was not being assembled correctly, leading to missing rows. The logic now ensures all deals are represented in the final CSV in the correct order.
+    *   Minor tweak made to `stable_products.py` to ensure `Manufacturer`, `Brand`, `Author`, and `Binding` fields correctly show `'-'` for empty string values.
+
+**Outcome:**
+*   You confirmed that subsequent test runs no longer produced the `TypeError` and that the previously missing data is now correctly populated in the CSV export. The core data integrity issues are resolved.
+*   A new, minor issue (missing 'Deal found' column data) was identified and deferred to a future task.

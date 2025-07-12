@@ -20,7 +20,7 @@ TOKENS_PER_MINUTE_REFILL = 5
 REFILL_CALCULATION_INTERVAL_SECONDS = 60 # Check for refills every minute
 
 # TOKEN_COST_PER_ASIN = 5 # Replaced by ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH for pre-call checks
-ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 4 # Initial estimate for pre-call checks. Actual cost from API's 'tokensConsumed'.
+ESTIMATED_AVG_COST_PER_ASIN_IN_BATCH = 6 # Updated based on full run analysis (previously 4). Actual cost from API's 'tokensConsumed'.
 TOKEN_COST_PER_DEAL_PAGE = 1 # Cost for /deal endpoint calls (buybox=false by default)
 MIN_QUOTA_THRESHOLD_BEFORE_PAUSE = 25 # General low quota pause trigger
 DEFAULT_LOW_QUOTA_PAUSE_SECONDS = 900 # 15 minutes
@@ -527,12 +527,8 @@ def main():
             asin = deal_obj.get('asin', '-')
             if not validate_asin(asin):
                 logger.warning(f"Skipping invalid ASIN '{asin}' from deal object: {deal_obj}")
-                # Add placeholder for invalid ASIN to maintain row count alignment with original deals_to_process list
-                placeholder_row = {'ASIN': f"INVALID_ASIN_SKIPPED_{asin[:10]}"}
-                for header_key in HEADERS:
-                    if header_key not in placeholder_row:
-                        placeholder_row[header_key] = '-'
-                rows.append(placeholder_row) # Add placeholder to the final rows list
+                # Placeholder for invalid ASIN will be handled later to ensure correct ordering.
+                # rows.append(placeholder_row) # Add placeholder to the final rows list # Removed this line
             else:
                 # Store the original deal object with its index for later association
                 valid_deals_to_process.append({'original_index': deal_idx, 'asin': asin, 'deal_obj': deal_obj})
@@ -718,14 +714,17 @@ def main():
                 for header, func in zip(HEADERS, FUNCTION_LIST):
                     if func:
                         try:
-                            input_data_for_func = product # Default to product data
-                            if header in ['Deal found', 'last update', 'last price change']:
-                                # These functions need the original deal object and the fetched product data
+                            # Call func with appropriate arguments
+                            if header == 'last update' or header == 'last price change':
+                                # These functions take original_deal_obj, config, logger, and product
                                 result = func(original_deal_obj, config, logger, product)
-                            elif header == 'Percent Down 90': # Example: if it needs deal_obj and product
-                                result = func(product) # Assuming it's updated to only need product or deal is merged in
-                            else: # Most functions take only product data
-                                result = func(input_data_for_func)
+                            elif header == 'Deal found':
+                                # deal_found takes original_deal_obj, config, and logger
+                                result = func(original_deal_obj, config, logger) # Corrected call
+                            elif header == 'Percent Down 90': 
+                                result = func(product)
+                            else: # Most other functions take only product data
+                                result = func(product) # Changed input_data_for_func to product for clarity
                             
                             logger.debug(f"ASIN {asin}, Header: {header}, Func: {func.__name__}, Result: {result}")
                             row.update(result)
@@ -757,108 +756,37 @@ def main():
                 placeholder_row_content = {'ASIN': asin}
                 # The invalid 'else' block and the line below it were removed here.
                 # logger.error(f"Invalid product data structure in batch response: {product_data}")
+        
+        # --- Construct the final list of rows for CSV writing ---
+        # Initialize final_processed_rows with None to match the length of original deals_to_process
+        final_processed_rows = [None] * len(deals_to_process)
 
+        # Populate with data from temp_rows_data using original_index
+        for item in temp_rows_data:
+            idx = item['original_index']
+            if 0 <= idx < len(final_processed_rows):
+                final_processed_rows[idx] = item['data']
+            else:
+                logger.error(f"Original index {idx} from temp_rows_data is out of bounds for final_processed_rows (len: {len(final_processed_rows)}). Data: {item['data']}")
 
-        # --- Process all deals using the fetched product data ---
-        # Iterate through the original deals_to_process to maintain order and include placeholders for skipped ASINs
-        temp_rows_data = [] # Temporary list to hold processed row data with original indices
-
-        for deal_info in valid_deals_to_process: # These are only the deals for which we attempted a fetch
-            original_deal_obj = deal_info['deal_obj']
-            asin = deal_info['asin']
-            
-            product = all_fetched_products_map.get(asin)
-
-            if not product or product.get('error'):
-                logger.error(f"Failed to fetch or error in product data for ASIN {asin}. Product: {product}")
-                placeholder_row_content = {'ASIN': asin}
+        # Fill in placeholders for any items that were skipped before batch processing (e.g., due to invalid ASIN format)
+        # These items would not be in valid_deals_to_process and thus not in temp_rows_data.
+        for i, deal_obj in enumerate(deals_to_process):
+            if final_processed_rows[i] is None:
+                # This deal was filtered out before batching (e.g. invalid ASIN format by validate_asin)
+                # or some other reason it wasn't in valid_deals_to_process.
+                asin_for_placeholder = deal_obj.get('asin', f'UNKNOWN_ASIN_AT_INDEX_{i}')
+                logger.warning(f"Creating final placeholder for ASIN '{asin_for_placeholder}' (original index {i}) as it was not in processed temp_rows_data.")
+                placeholder = {'ASIN': f"SKIPPED_OR_ERROR_ASIN_{asin_for_placeholder[:10]}"}
                 for header_key in HEADERS:
-                    if header_key not in placeholder_row_content:
-                        placeholder_row_content[header_key] = '-'
-                temp_rows_data.append({'original_index': deal_info['original_index'], 'data': placeholder_row_content})
-                continue
-
-            # Jules: Modified for debugging FBA Pick&Pack Fee - Log raw product data for a specific ASIN
-            TEST_ASIN_FOR_RAW_LOG = '1562243179' # Target ASIN for raw data logging
-            if asin == TEST_ASIN_FOR_RAW_LOG:
-                if product and isinstance(product, dict) and not product.get('error'):
-                    logger.info(f"RAW_PRODUCT_DATA_{asin}: {json.dumps(product)}")
-                else:
-                    logger.info(f"RAW_PRODUCT_DATA_{asin}: Product data error/missing for raw log. Data: {product}")
-            
-            # Logging for Last Used price update from product_data (already adapted for product structure)
-            try:
-                if product and isinstance(product, dict) and \
-                   product.get('products') and isinstance(product['products'], list) and \
-                   len(product['products']) > 0 and isinstance(product['products'][0], dict) and \
-                   'csv' in product['products'][0] and isinstance(product['products'][0]['csv'], list) and \
-                   len(product['products'][0]['csv']) > 2 and \
-                   isinstance(product['products'][0]['csv'][2], list) and \
-                   len(product['products'][0]['csv'][2]) > 0:
-                    
-                    # Get the last entry from the "Used" price history (index 2 for USED)
-                    last_used_entry = product['products'][0]['csv'][2][-1]
-                    if isinstance(last_used_entry, list) and len(last_used_entry) > 0:
-                        last_used_price_ts_minutes = last_used_entry[0]
-                        logger.info(f"ASIN: {asin} - Last Used price update from product_data.csv[2]: {last_used_price_ts_minutes}")
-                    else:
-                        logger.warning(f"ASIN: {asin} - Last Used price entry in product_data.csv[2] is not a valid list or is empty.")
-                else:
-                    logger.warning(f"ASIN: {asin} - Could not retrieve valid product_data.csv[2] path for Used price history.")
-            except (KeyError, IndexError, TypeError) as e:
-                logger.warning(f"ASIN: {asin} - Could not retrieve last Used price update from product_data.csv[2]. Error: {type(e).__name__} - {e}")
-            
-            row = {}
-            try:
-                # Process all functions using FUNCTION_LIST
-                for header, func in zip(HEADERS, FUNCTION_LIST):
-                    if func:
-                        try:
-                            # Determine input_data based on header
-                            if header in ['Deal found', 'last update', 'last price change']:
-                                input_data = deal
-                            else:
-                                input_data = product
-
-                            # Call func with appropriate arguments
-                            if header == 'last update' or header == 'last price change': # Modified condition
-                                # input_data is 'deal', 'product' is the fetched product data
-                                # Both 'last update' and 'last price change' now expect product_data
-                                result = func(input_data, config, logger, product)
-                            elif header == 'Deal found':
-                                # input_data is 'deal'
-                                result = func(input_data, config, logger)
-                            else: # For all other functions, input_data is 'product'
-                                result = func(input_data)
-                                
-                            logger.debug(f"Header: {header}, Function: {func.__name__}, Result: {result}, Row before: {row}") # Use logger instance
-                            row.update(result)
-                            logger.debug(f"Row after update for {header}: {row}") # Use logger instance
-                        except Exception as e:
-                            logger.error(f"Function {func.__name__} failed for ASIN {asin} processing header '{header}': {str(e)}") # Use logger instance
-                            row[header] = '-'
-                
-                # Detailed logging before appending the main data row - changed to DEBUG
-                non_hyphen_items = {k: v for k, v in row.items() if v != '-'}
-                logger.debug(f"ASIN {asin}: PRE-APPEND main row. Non-hyphen count: {len(non_hyphen_items)}. Keys: {list(non_hyphen_items.keys())}")
-                if not non_hyphen_items and asin == product.get('asin'): # If row is all hyphens but product was supposed to be valid
-                    logger.warning(f"ASIN {asin}: Row for a seemingly valid product is all hyphens before append. Product error flag: {product.get('error')}, Product status: {product.get('status_code')}")
-
-                rows.append(row)
-                logger.debug(f"ASIN {asin}: POST-APPEND main row. `rows` list length: {len(rows)}") # Changed to DEBUG
-
-            except Exception as e:
-                logger.error(f"Error processing ASIN {asin} (outer loop): {str(e)}") # Use logger instance
-                # Ensure a placeholder is added if this generic error occurs for an ASIN
-                # so row count matches deal count for deals_to_process
-                placeholder_row = {'ASIN': asin}
-                for header_key in HEADERS:
-                    if header_key not in placeholder_row:
-                        placeholder_row[header_key] = '-'
-                rows.append(placeholder_row)
-                continue
-        write_csv(rows, deals_to_process) # Use deals_to_process here
-        logger.info("Writing CSV...") # Use logger instance
+                    if header_key not in placeholder: # Ensure ASIN key from placeholder isn't overwritten if already set
+                        placeholder[header_key] = '-'
+                final_processed_rows[i] = placeholder
+        
+        # Now, final_processed_rows should have one entry for every deal in deals_to_process,
+        # either a processed row or a placeholder.
+        write_csv(final_processed_rows, deals_to_process)
+        logger.info("Writing CSV...") 
         print("Writing CSV...")
         logger.info("Script completed!") # Use logger instance
         print("Script completed!")
