@@ -720,7 +720,7 @@ def main():
                                 result = func(original_deal_obj, config, logger, product)
                             elif header == 'Deal found':
                                 # deal_found takes original_deal_obj, config, and logger
-                                result = func(original_deal_obj, config, logger) # Corrected call
+                                result = func(original_deal_obj, config, logger)
                             elif header == 'Percent Down 90': 
                                 result = func(product)
                             else: # Most other functions take only product data
