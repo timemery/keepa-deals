@@ -35,8 +35,9 @@ This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to
    pip install -r requirements.txt
    deactivate
 
-# Expected outputs (when running Keepa_Deals.py): 
-### Keepa_Deals_Export.csv, debug_log.txt
+### Expected outputs (when running Keepa_Deals.py): 
+- ** Keepa_Deals_Export.csv
+- ** debug_log.txt
 
 ### Dependencies
 See `requirements.txt` for the full list. Key notes:
