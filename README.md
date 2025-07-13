@@ -36,8 +36,8 @@ This codebase includes scripts (`Keepa_Deals.py`, `stable_products.py`, etc.) to
    deactivate
 
 ### Expected outputs (when running Keepa_Deals.py): 
-- ** Keepa_Deals_Export.csv
-- ** debug_log.txt
+- **Keepa_Deals_Export.csv**
+- **debug_log.txt**
 
 ### Dependencies
 See `requirements.txt` for the full list. Key notes:
