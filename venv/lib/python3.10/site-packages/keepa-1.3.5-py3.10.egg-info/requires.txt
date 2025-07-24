@@ -1,0 +1,5 @@
+numpy>=1.9.3
+requests>=2.2
+tqdm
+aiohttp
+pandas

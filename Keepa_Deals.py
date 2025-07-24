@@ -112,7 +112,7 @@ except Exception as e:
 # If the @retry decorator calls this function multiple times for the same ASIN,
 # we will see this log message repeated for that ASIN.
 
-@retry(stop_max_attempt_number=3, wait_fixed=10000)
+@retry(stop_max_attempt_number=3, wait_fixed=10)
 def fetch_product(asin, days=365, offers=100, rating=1, history=1):
     global current_available_tokens # Moved to top of function for all reads/writes
     # Increment and log attempt number for this ASIN
@@ -498,7 +498,7 @@ def main():
         deals = all_deals
         
         # Default limit for testing, can be overridden by processing all deals if this section is commented out.
-        MAX_DEALS_TO_PROCESS_FOR_TESTING = 10000 
+        MAX_DEALS_TO_PROCESS_FOR_TESTING = 10 
         if len(deals) > MAX_DEALS_TO_PROCESS_FOR_TESTING:
             logger.warning(f"TESTING LIMIT ACTIVE: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.")
             print(f"TESTING LIMIT ACTIVE: Processing only the first {MAX_DEALS_TO_PROCESS_FOR_TESTING} of {len(deals)} deals.", flush=True)

@@ -229,7 +229,8 @@ from stable_products import (
     new_3rd_party_fbm_365_days_avg, # New, 3rd Party FBM - 365 days avg.
     used_like_new_365_days_avg, # Added import
     get_fba_pick_pack_fee, # Added import for FBA Pick&Pack Fee
-    get_referral_fee_percent # Added import for Referral Fee %
+    get_referral_fee_percent, # Added import for Referral Fee %
+    get_shipping_included
 )
 from stable_calculations import (
     percent_down_365,               # Percent Down 365
@@ -461,7 +462,7 @@ FUNCTION_LIST = [
     percent_down_365,               # Percent Down 365
     None,                           # Avg. Price 365
     None,                           # Price Now
-    None,                           # Price Now Source
+    get_shipping_included,          # Shipping Included
     deal_found,                     # Deal found
     amz_link,                       # AMZ link
     keepa_link,                     # Keepa Link

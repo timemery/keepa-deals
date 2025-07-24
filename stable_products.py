@@ -1802,4 +1802,30 @@ def get_referral_fee_percent(product_data):
         return {'Referral Fee %': '-'}
 # Referral Fee % ends
 
+# Shipping Included starts
+def get_shipping_included(product_data):
+    """
+    Checks if shipping is included in the price for the Used - Current offer.
+    Returns 'yes' or 'no'.
+    """
+    asin = product_data.get('asin', 'unknown')
+    logger.debug(f"ASIN {asin}: Checking for shipping included in Used - Current offer.")
+
+    # Check the offers for shipping cost
+    offers = product_data.get('offers', [])
+    if offers:
+        for offer in offers:
+            if offer.get('condition') == 'Used' and offer.get('shippingCost', -1) == 0:
+                logger.info(f"ASIN {asin}: Found a Used offer with shippingCost of 0, shipping is included.")
+                return {'Shipping Included': 'yes'}
+
+    # Check the buyBoxUsedShipping field
+    if product_data.get('stats', {}).get('buyBoxUsedShipping', -1) == 0:
+        logger.info(f"ASIN {asin}: Found buyBoxUsedShipping to be 0, shipping is included.")
+        return {'Shipping Included': 'yes'}
+
+    logger.info(f"ASIN {asin}: No indication of free shipping found for Used - Current offer.")
+    return {'Shipping Included': 'no'}
+# Shipping Included ends
+
 #### END of stable_products.py ####
